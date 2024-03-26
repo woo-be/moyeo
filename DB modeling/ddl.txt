@@ -8,7 +8,7 @@ DROP TABLE IF EXISTS alarm RESTRICT;
 DROP TABLE IF EXISTS review_scrap RESTRICT;
 
 -- 여행후기 좋아요
-DROP TABLE IF EXISTS review_good RESTRICT;
+DROP TABLE IF EXISTS review_like RESTRICT;
 
 -- 여행후기게시판댓글
 DROP TABLE IF EXISTS review_comment RESTRICT;
@@ -133,15 +133,15 @@ ALTER TABLE review_scrap
 	);
 
 -- 여행후기 좋아요
-CREATE TABLE review_good (
+CREATE TABLE review_like (
 	member_id       INTEGER NOT NULL COMMENT '회원 식별번호', -- 회원 식별번호
 	review_board_id INTEGER NOT NULL COMMENT '여행후기게시판번호' -- 여행후기게시판번호
 )
 COMMENT '여행후기 좋아요';
 
 -- 여행후기 좋아요
-ALTER TABLE review_good
-	ADD CONSTRAINT PK_review_good -- 여행후기 좋아요 기본키
+ALTER TABLE review_like
+	ADD CONSTRAINT PK_review_like -- 여행후기 좋아요 기본키
 	PRIMARY KEY (
 	member_id,       -- 회원 식별번호
 	review_board_id  -- 여행후기게시판번호
@@ -176,7 +176,6 @@ CREATE TABLE review_board (
 	title           VARCHAR(255) NOT NULL COMMENT '제목', -- 제목
 	created_date    DATETIME     NOT NULL DEFAULT now() COMMENT '게시일', -- 게시일
 	content         MEDIUMTEXT   NOT NULL COMMENT '내용', -- 내용
-	like_count      INTEGER      NOT NULL DEFAULT 0 COMMENT '좋아요수', -- 좋아요수
 	latitude        FLOAT        NOT NULL COMMENT '위도', -- 위도
 	longitude       FLOAT        NOT NULL COMMENT '경도', -- 경도
 	views           INTEGER      NOT NULL DEFAULT 0 COMMENT '조회수' -- 조회수
@@ -505,8 +504,8 @@ ALTER TABLE review_scrap
 	);
 
 -- 여행후기 좋아요
-ALTER TABLE review_good
-	ADD CONSTRAINT FK_member_TO_review_good -- 회원 -> 여행후기 좋아요
+ALTER TABLE review_like
+	ADD CONSTRAINT FK_member_TO_review_like -- 회원 -> 여행후기 좋아요
 	FOREIGN KEY (
 	member_id -- 회원 식별번호
 	)
@@ -515,8 +514,8 @@ ALTER TABLE review_good
 	);
 
 -- 여행후기 좋아요
-ALTER TABLE review_good
-	ADD CONSTRAINT FK_review_board_TO_review_good -- 여행후기게시판 -> 여행후기 좋아요
+ALTER TABLE review_like
+	ADD CONSTRAINT FK_review_board_TO_review_like -- 여행후기게시판 -> 여행후기 좋아요
 	FOREIGN KEY (
 	review_board_id -- 여행후기게시판번호
 	)
