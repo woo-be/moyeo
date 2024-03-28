@@ -71,7 +71,7 @@ CREATE TABLE member (
 	nickname     VARCHAR(50)  NOT NULL COMMENT '닉네임', -- 닉네임
 	birth_date   DATETIME     NOT NULL COMMENT '생년월일', -- 생년월일
 	gender       BOOLEAN      NOT NULL COMMENT '성별', -- 성별
-	profile      VARCHAR(255) NULL     COMMENT '프로필 사진', -- 프로필 사진
+	photo        VARCHAR(255) NULL     COMMENT '프로필 사진', -- 프로필 사진
 	introduce    TEXT         NOT NULL COMMENT '자기소개' -- 자기소개
 )
 COMMENT '회원';
