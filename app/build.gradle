@@ -1,24 +1,33 @@
 plugins {
-    // Apply the application plugin to add support for building a CLI application in Java.
-    id 'application'
+    id 'java'
+    id 'org.springframework.boot' version '2.7.18'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
+group = 'com.moyeo'
+version = '0.0.1-SNAPSHOT'
+
 repositories {
-    // Use Maven Central for resolving dependencies.
     mavenCentral()
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.3.2'
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
+
+    // AWS S3 API 라이브러리
+    implementation 'com.amazonaws:aws-java-sdk-s3:1.12.688'
 
 
-
-    // Use JUnit Jupiter for testing.
-    testImplementation libs.junit.jupiter
-
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-    // This dependency is used by the application.
-    implementation libs.guava
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
@@ -28,12 +37,17 @@ java {
     }
 }
 
-application {
-    // Define the main class for the application.
-    mainClass = 'com.moyeo.App'
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder-jammy-base:latest'
 }
 
 tasks.named('test') {
-    // Use JUnit Platform for unit tests.
     useJUnitPlatform()
+}
+
+// 자바 소스를 컴파일 할 때 적용할 옵션(Gradle 로 컴파일 할 때)
+tasks.withType(JavaCompile).configureEach {
+    // 프로젝트의 소스 파일 인코딩을 gradle에게 알려준다.
+    // $javac -encoding UTF-8 ..
+    options.encoding = 'UTF-8'
 }
