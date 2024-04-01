@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+</head>
+<body>
+
+<table border='1'>
+  <thead>
+  <tr>
+    <th>번호</th>
+    <th>제목</th>
+    <th>작성자</th>
+  </tr>
+  </thead>
+  <tbody>
+
+  <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
+    <td data-th-text="*{recruitBoardId}">1</td>
+    <td data-th-text="*{title}">제목</td>
+    <td data-th-text="*{writer.name}">작성자</td>
+  </tr>
+
+  </tbody>
+</table>
+
+</body>
+</html>

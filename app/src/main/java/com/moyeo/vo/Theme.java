@@ -14,6 +14,6 @@ public class Theme implements Serializable {
 
   private static final long serialVersionUID = 100L;
 
-  private int theme_id;         // 테마 식별자
-  private String theme_name;    // 테마 이름
+  private int themeId;         // 테마 식별자
+  private String themeName;    // 테마 이름
 }
