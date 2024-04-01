@@ -25,7 +25,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
   public RecruitBoard get(int no) {
-    return null;
+    return recruitBoardDao.findBy(no);
   }
 
   @Override
@@ -35,6 +35,6 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
   public int delete(int no) {
-    return 0;
+    return recruitBoardDao.delete(no);
   }
 }
