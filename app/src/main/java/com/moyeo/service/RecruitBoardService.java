@@ -4,8 +4,6 @@ import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 
 public interface RecruitBoardService {
-
-  // add list get update delete
   void add(RecruitBoard board);
 
   List<RecruitBoard> list();
