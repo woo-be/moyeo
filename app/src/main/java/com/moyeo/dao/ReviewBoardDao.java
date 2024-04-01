@@ -6,5 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface ReviewBoardDao {
-List<ReviewBoard> findAll();
+
+  void add(ReviewBoard reviewBoard);
+
+  List<ReviewBoard> findAll();
 }
