@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class RecuitLike implements Serializable {
+public class RecruitLike implements Serializable {
 
   private static final long serialVersionUID = 100L;
 

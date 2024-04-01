@@ -1,10 +1,17 @@
 package com.moyeo.service.impl;
 
+import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
+@Service
 public class DefaultRecruitBoardService implements RecruitBoardService {
+
+  private final RecruitBoardDao recruitBoardDao;
 
   @Override
   public void add(RecruitBoard board) {
@@ -13,7 +20,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
   public List<RecruitBoard> list() {
-    return null;
+    return recruitBoardDao.findAll();
   }
 
   @Override
