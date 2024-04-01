@@ -7,15 +7,15 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-//@AllArgsConstructor
-//@NoArgsConstructor
-//@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 @Data
 public class ReviewPhoto implements Serializable {
 
   private static final long serialVersionUID = 100L;
 
-  private String reviewPhotoId;    // 여행후기 사진 식별자
+  private int reviewPhotoId;    // 여행후기 사진 식별자
   private int reviewBoardId;    // 여행후기 게시판 식별자
-  private String photo;           // 여행후기 사진
+  private String photo;         // 여행후기 사진
 }

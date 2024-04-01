@@ -7,6 +7,11 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ReviewBoardDao {
-List<ReviewBoard> findAll();
-ReviewBoard findBy(@Param("reviewBoardId")int reviewBoardId);
+
+  void add(ReviewBoard reviewBoard);
+
+  List<ReviewBoard> findAll();
+  
+  ReviewBoard findBy(@Param("reviewBoardId")int reviewBoardId);
+
 }

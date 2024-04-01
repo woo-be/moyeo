@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.ReviewPhotoDao">
+
+  <resultMap id="ReviewPhotoMap" type="ReviewPhoto">
+    <id column="review_photo_id" property="reviewPhotoId"/>
+    <result column="review_board_id" property="reviewBoardId"/>
+    <result column="photo" property="filePath"/>
+  </resultMap>
+
+  <insert id="add" parameterType="ReviewPhoto">
+    insert into review_photo(review_board_id, photo)
+    values(#{reviewPhotoId},#{filePath})
+  </insert>
+
+  <insert id="addAll" parameterType="list">
+    insert into review_photo(review_board_id, photo)
+    values
+    <foreach collection="list" item="item" separator=",">
+    (#{reviewPhotoId},#{filePath})
+    </foreach>
+  </insert>
+
+</mapper>

@@ -32,5 +32,6 @@ public class ReviewBoard implements Serializable {
   private Member writer;
   private List<ReviewPhoto> photos;
 
+
 }
 

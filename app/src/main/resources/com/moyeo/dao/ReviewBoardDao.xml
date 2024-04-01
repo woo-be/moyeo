@@ -7,6 +7,7 @@
   <resultMap id="ReviewBoardMap" type="ReviewBoard">
     <id column="review_board_id" property="reviewBoardId"/>
     <result column="title" property="title"/>
+    <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
     <result column="views" property="views"/>
     <result column="c" property="likeCount"/>
@@ -25,6 +26,11 @@
     </collection>
 
   </resultMap>
+
+  <insert id="add" parameterType="ReviewBoard"
+    useGeneratedKeys="true" keyColumn="review_board_id" keyProperty="reviewBoardId">
+    insert into review_board(theme_id, member_id, region_id, title, content, latitude, longitude) values('1', '1', '1', #{title}, #{content}, '11.111', '111.111');
+  </insert>
 
   <select id="findAll" resultMap="ReviewBoardMap">
     select
