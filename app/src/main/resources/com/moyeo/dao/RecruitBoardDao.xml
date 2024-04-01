@@ -55,5 +55,29 @@
       rb.recruit_board_id desc
   </select>
 
+  <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rb.recruit_board_id,
+      rb.title,
+      reg.region_name,
+      rb.content,
+      rb.latitude,
+      rb.longitude,
+      rb.created_date,
+      rb.state,
+      rbp.recruit_photo_id,
+      rbp.photo
+    from
+      recruit_board rb
+      inner join region reg on rb.region_id=reg.region_id
+      inner join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
+    where
+      rb.recruit_board_id = #{value}
+  </select>
+  
+  <delete id="delete" parameterType="int">
+    delete from recruit_board
+    where recruit_board_id = #{value};
+  </delete>
 
 </mapper>
