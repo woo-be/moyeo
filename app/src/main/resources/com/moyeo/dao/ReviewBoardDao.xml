@@ -14,12 +14,15 @@
     <result column="region_name" property="regionName"/>
 
     <association property="writer" javaType="Member">
+      <id column="member_id" property="memberId"/>
       <result column="nickname" property="nickname"/>
     </association>
 
-    <association property="firstPhoto" javaType="ReviewPhoto">
-      <result column="photo" property="firstPhoto"/>
-    </association>
+    <collection property="photos" ofType="ReviewPhoto">
+      <id column="review_photo_id" property="reviewPhotoId"/>
+      <result column="review_board_id" property="reviewBoardId"/>
+      <result column="photo" property="photo"/>
+    </collection>
 
   </resultMap>
 
@@ -34,6 +37,7 @@
     m.nickname,
     t.theme_name,
     r.region_name,
+    rp.review_photo_id,
     rp.photo
     from
     review_board rb inner join member m on m.member_id = rb.member_id
@@ -43,6 +47,33 @@
     left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
     group by
     rb.review_board_id
+  </select>
+
+  <select id="findBy">
+    select
+      rb.review_board_id,
+      rb.title,
+      rb.created_date,
+      rb.content,
+      rb.latitude,
+      rb.longitude,
+      t.theme_name,
+      r.region_name,
+      rc.review_comment_id,
+      rc.content,
+      rc.created_date,
+      m.nickname,
+      m.profile,
+      rp.review_photo_id,
+      rp.photo
+    from
+      review_board rb inner join region r on rb.region_id=r.region_id
+      inner join theme t on rb.theme_id=t.theme_id
+      left outer join review_comment rc on rb.review_board_id=rc.review_board_id
+      left outer join member m on m.member_id=rc.member_id
+      left outer join review_photo rp on rp.review_board_id=rb.review_board_id
+    where
+      rb.review_board_id=#{reviewBoardId}
   </select>
 
 </mapper>

@@ -2,6 +2,7 @@ package com.moyeo.vo;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,8 +30,7 @@ public class ReviewBoard implements Serializable {
   private String themeName;
   private String regionName;
   private Member writer;
-  private ReviewPhoto firstPhoto;
-
+  private List<ReviewPhoto> photos;
 
 }
 
