@@ -5,4 +5,5 @@ import java.util.List;
 
 public interface ReviewBoardService {
 List<ReviewBoard> list();
+ReviewBoard get(int reviewBoardId);
 }
