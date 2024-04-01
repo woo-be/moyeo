@@ -1,28 +1,28 @@
 package com.moyeo.service.impl;
 
 import com.moyeo.service.RecruitBoardService;
-import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 
 public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
-  public void add(ReviewBoard board) {
+  public void add(RecruitBoard board) {
 
   }
 
   @Override
-  public List<ReviewBoard> list() {
+  public List<RecruitBoard> list() {
     return null;
   }
 
   @Override
-  public ReviewBoard get(int no) {
+  public RecruitBoard get(int no) {
     return null;
   }
 
   @Override
-  public int update(ReviewBoard board) {
+  public int update(RecruitBoard board) {
     return 0;
   }
 

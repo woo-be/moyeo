@@ -1,12 +1,17 @@
 package com.moyeo.dao;
 
-import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 
 public interface RecruitBoardDao {
-  void add(ReviewBoard reviewBoard);
-  List<ReviewBoard> findAll();
-  ReviewBoard findBy(int no);
-  int update(ReviewBoard reviewBoard);
+
+  void add(RecruitBoard reviewBoard);
+
+  List<RecruitBoard> findAll();
+
+  RecruitBoard findBy(int no);
+
+  int update(RecruitBoard recruitBoard);
+
   int delete(int no);
 }
