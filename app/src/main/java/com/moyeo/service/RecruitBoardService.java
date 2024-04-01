@@ -1,17 +1,18 @@
 package com.moyeo.service;
 
-import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 
 public interface RecruitBoardService {
-// add list get update delete
-  void add(ReviewBoard board);
 
-  List<ReviewBoard> list();
+  // add list get update delete
+  void add(RecruitBoard board);
 
-  ReviewBoard get(int no);
+  List<RecruitBoard> list();
 
-  int update(ReviewBoard board);
+  RecruitBoard get(int no);
+
+  int update(RecruitBoard board);
 
   int delete(int no);
 }
