@@ -55,4 +55,31 @@
     rb.review_board_id
   </select>
 
+  <select id="findBy">
+    select
+      rb.review_board_id,
+      rb.title,
+      rb.created_date,
+      rb.content,
+      rb.latitude,
+      rb.longitude,
+      t.theme_name,
+      r.region_name,
+      rc.review_comment_id,
+      rc.content,
+      rc.created_date,
+      m.nickname,
+      m.profile,
+      rp.review_photo_id,
+      rp.photo
+    from
+      review_board rb inner join region r on rb.region_id=r.region_id
+      inner join theme t on rb.theme_id=t.theme_id
+      left outer join review_comment rc on rb.review_board_id=rc.review_board_id
+      left outer join member m on m.member_id=rc.member_id
+      left outer join review_photo rp on rp.review_board_id=rb.review_board_id
+    where
+      rb.review_board_id=#{reviewBoardId}
+  </select>
+
 </mapper>

@@ -17,5 +17,5 @@ public class ReviewPhoto implements Serializable {
 
   private int reviewPhotoId;    // 여행후기 사진 식별자
   private int reviewBoardId;    // 여행후기 게시판 식별자
-  private String photo;
+  private String photo;         // 여행후기 사진
 }

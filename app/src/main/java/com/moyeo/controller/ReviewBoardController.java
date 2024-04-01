@@ -9,6 +9,8 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -56,6 +58,8 @@ public class ReviewBoardController {
 
     return "redirect:list";
   }
+
+  private static final Log log = LogFactory.getLog(ReviewBoardController.class);
 
   @GetMapping("list")
   public void list(Model model) {
