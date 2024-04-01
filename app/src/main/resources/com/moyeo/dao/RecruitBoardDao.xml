@@ -6,35 +6,31 @@
 <mapper namespace="com.moyeo.dao.RecruitBoardDao">
 
   <resultMap id="RecruitBoardMap" type="RecruitBoard">
-    <id column="recruit_board_id" property="recruit_board_id"/>
-    <result column="member_id" property="member"/>
-    <result column="region_id" property="region"/>
-    <result column="theme_id" property="theme"/>
+    <id column="recruit_board_id" property="recruitBoardId"/>
     <result column="title" property="title"/>
     <result column="content" property="content"/>
-    <result column="start_date" property="start_date"/>
-    <result column="end_date" property="end_date"/>
-    <result column="recruit_total" property="recruit_total"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="recruit_total" property="recruitTotal"/>
     <result column="deadline" property="deadline"/>
     <result column="state" property="state"/>
-    <result column="created_date" property="created_date"/>
+    <result column="created_date" property="createdDate"/>
     <result column="latitude" property="latitude"/>
     <result column="longitude" property="longitude"/>
     <result column="views" property="views"/>
     
-    <association property="member" javaType="Member">
-      <id column="member_id" property="member_id"/>
-      <result column="nickname" property="nickname"/>
+    <association property="writer" javaType="Member">
+      <id column="name" property="name"/>
     </association>
 
     <association property="region" javaType="Region">
-      <id column="region_id" property="region_id"/>
-      <result column="region_name" property="region_name"/>
+      <id column="region_id" property="regionId"/>
+      <result column="region_name" property="regionName"/>
     </association>
 
     <association property="theme" javaType="Theme">
-      <id column="theme_id" property="theme_id"/>
-      <result column="theme_name" property="theme_name"/>
+      <id column="theme_id" property="themeId"/>
+      <result column="theme_name" property="themeName"/>
     </association>
     
   </resultMap>
@@ -56,7 +52,7 @@
     group by
       rb.recruit_board_id
     order by
-      rb.recruit_board_id desc;
+      rb.recruit_board_id desc
   </select>
 
 

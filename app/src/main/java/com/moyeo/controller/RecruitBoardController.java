@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("recruit")
+@RequestMapping("/recruit")
 public class RecruitBoardController {
 
   private final RecruitBoardService recruitBoardService;
