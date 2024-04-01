@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moyeo.dao.ReviewBoardDao">
+
+  <resultMap id="ReviewBoardMap" type="ReviewBoard">
+    <id column="review_board_id" property="reviewBoardId"/>
+    <result column="title" property="title"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="views" property="views"/>
+    <result column="c" property="likeCount"/>
+    <result column="theme_name" property="themeName"/>
+    <result column="region_name" property="regionName"/>
+
+    <association property="writer" javaType="Member">
+      <result column="nickname" property="nickname"/>
+    </association>
+
+    <association property="firstPhoto" javaType="ReviewPhoto">
+      <result column="photo" property="firstPhoto"/>
+    </association>
+
+  </resultMap>
+
+  <select id="findAll" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.member_id,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    group by
+    rb.review_board_id
+  </select>
+
+</mapper>
