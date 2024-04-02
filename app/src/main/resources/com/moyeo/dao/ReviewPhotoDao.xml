@@ -8,7 +8,7 @@
   <resultMap id="ReviewPhotoMap" type="ReviewPhoto">
     <id column="review_photo_id" property="reviewPhotoId"/>
     <result column="review_board_id" property="reviewBoardId"/>
-    <result column="photo" property="filePath"/>
+    <result column="photo" property="photo"/>
   </resultMap>
 
   <insert id="add" parameterType="ReviewPhoto">
@@ -20,7 +20,7 @@
     insert into review_photo(review_board_id, photo)
     values
     <foreach collection="list" item="item" separator=",">
-    (#{reviewPhotoId},#{filePath})
+    (#{item.reviewBoardId},#{item.photo})
     </foreach>
   </insert>
 
