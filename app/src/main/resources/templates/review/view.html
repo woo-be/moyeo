@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="UTF-8">
-  <title>Title</title>
+  <meta charset='UTF-8'>
+  <title>모여</title>
 </head>
 <body>
 
+<form action="update" data-th-action="@{update}" data-th-object="${reviewBoard}"
+      enctype='multipart/form-data'
+      method='post'>
+  <div>
+    제목: <input data-th-value="*{title}" name='title' type='text' value="제목입니다.">
+  </div>
+  <div>
+    내용: <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
+  </div>
+
+  <div>
+    작성자: <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
+  </div>
+  <!--
+  <div>
+    댓글 작성자: <input data-th-value="*{commentMember.nickname}" readonly type='text' value="홍길동">
+  </div>
+  -->
+</form>
+<button>변경</button>
 </body>
 </html>

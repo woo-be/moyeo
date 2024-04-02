@@ -17,13 +17,13 @@
   <tbody>
   <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}" >
       <div style='border: 1px solid black; float:left'>
-        <a href="view.html">
+        <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}" href="view.html">
           <div style='border: 1px solid black; float:left'>
             <img data-th-if="*{photos[0].photo != null}" alt="여행 사진" src="*{photos[0].photo}">
             <img data-th-unless="*{photos[0].photo != null}" src="/static/img/default-review-photo.png" alt="여행 사진">
           </div>
           <div class="work-info" style='border: 1px solid black; float:left'>
-            <h3 data-th-href="@{view(no=*{reviewBoardId})}" data-th-text="*{title}">제목입니다</h3>
+            <h3 data-th-text="*{title}">제목입니다</h3>
             <span data-th-text="*{writer.nickname}">홍길동</span>
             <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
           </div>

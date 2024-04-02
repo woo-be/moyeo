@@ -31,6 +31,7 @@ public class ReviewBoard implements Serializable {
   private String regionName;
   private Member writer;
   private List<ReviewPhoto> photos;
+  private List<ReviewComment> commentList;
 
 
 }
