@@ -1,10 +1,11 @@
 package com.moyeo.service.impl;
 
-import com.moyeo.controller.ReviewBoardController;
 import com.moyeo.dao.ReviewBoardDao;
+import com.moyeo.dao.ReviewCommentDao;
 import com.moyeo.dao.ReviewPhotoDao;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.ReviewComment;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -17,8 +18,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class DefaultReviewBoardService implements ReviewBoardService {
 
+  private static final Log log = LogFactory.getLog(DefaultReviewBoardService.class);
   private final ReviewBoardDao reviewBoardDao;
   private final ReviewPhotoDao reviewPhotoDao;
+  private final ReviewCommentDao reviewCommentDao;
 
   @Transactional
   @Override
@@ -33,7 +36,6 @@ public class DefaultReviewBoardService implements ReviewBoardService {
       reviewPhotoDao.addAll(reviewBoard.getPhotos());
     }
   }
-  private static final Log log = LogFactory.getLog(DefaultReviewBoardService.class);
 
   @Override
   public List<ReviewBoard> list(int pageNo, int pageSize) {
@@ -42,7 +44,11 @@ public class DefaultReviewBoardService implements ReviewBoardService {
 
   @Override
   public ReviewBoard get(int reviewBoardId) {
-    return reviewBoardDao.findBy(reviewBoardId);
+    ReviewBoard reviewBoard = reviewBoardDao.findBy(reviewBoardId);
+    reviewBoard.setCommentList(reviewCommentDao.findAllByReviewId(reviewBoardId));
+    log.debug(String.format("asf211f1fds1f1f1dsf31dsf1s : %s", reviewBoardDao.findBy(reviewBoardId).getWriter().getNickname()));
+    return reviewBoard;
+
   }
 
   @Override

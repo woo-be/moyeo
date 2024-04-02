@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.moyeo.dao.ReviewCommentDao">
+
+  <resultMap id="reviewCommentMap" type="ReviewComment">
+
+    <id column="review_comment_id" property="reviewCommentId"/>
+    <result column="content" property="content"/>
+    <result column="created_date" property="createdDate"/>
+
+    <association property="commentMember" javaType="Member">
+      <id column="member_id" property="memberId"/>
+      <result column="nickname" property="nickname"/>
+      <result column="profile" property="photo"/>
+    </association>
+
+  </resultMap>
+
+  
+  <select id="findAllByReviewId" resultMap="reviewCommentMap" parameterType="int">
+    select
+      rc.review_comment_id,
+      m.member_id,
+      m.nickname,
+      m.profile,
+      rc.content,
+      rc.created_date
+    from
+      member m
+      inner join review_comment rc on m.member_id = rc.member_id
+    where
+      rc.review_board_id=#{reviewBoardId}
+  </select>
+  
+</mapper>

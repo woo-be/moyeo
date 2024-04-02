@@ -85,4 +85,8 @@ public class ReviewBoardController {
     model.addAttribute("numOfPage", numOfPage);
   }
 
+  @GetMapping("view")
+  public void reviewBoardGet(int reviewBoardId, Model model){
+    model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
+  }
 }
