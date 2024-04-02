@@ -11,6 +11,7 @@
     <result column="content" property="content"/>
     <result column="start_date" property="startDate"/>
     <result column="end_date" property="endDate"/>
+    <result column="current" property="current"/>
     <result column="recruit_total" property="recruitTotal"/>
     <result column="deadline" property="deadline"/>
     <result column="state" property="state"/>
@@ -33,6 +34,11 @@
       <result column="theme_name" property="themeName"/>
     </association>
     
+    <collection property="photos" ofType="RecruitPhoto">
+      <id column="recruit_photo_id" property="recruitPhotoId"/>
+      <result column="photo" property="photo"/>
+    </collection>
+    
   </resultMap>
 
   <select id="findAll" resultMap="RecruitBoardMap">
@@ -53,6 +59,9 @@
       rb.recruit_board_id
     order by
       rb.recruit_board_id desc
+    <!--    where-->
+    <!--      theme_id=? and region_id=?-->
+    limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
@@ -79,5 +88,9 @@
     delete from recruit_board
     where recruit_board_id = #{value};
   </delete>
+
+  <select id="countAll" resultType="int">
+    select count(*) from recruit_board;
+  </select>
 
 </mapper>

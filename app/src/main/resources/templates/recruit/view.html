@@ -19,24 +19,41 @@
     지역: <input data-th-value="*{region.regionName}" readonly type='text' value="서울특별시">
   </div>
   <div>
-    내용: <textarea data-th-text="*{content}" readonly name='content'>내용입니다.</textarea>
+    내용: <textarea data-th-value="*{content}" readonly name='content'>내용입니다.</textarea>
   </div>
   <div>
     작성일: <input data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
                 type='text' value="2024-03-27">
   </div>
   <div>
-    상태: <textarea data-th-text="*{state}" readonly name='text'>1</textarea>
+    상태: <textarea data-th-text="*{state}" readonly type='text'>1</textarea>
   </div>
   <div>
-    위도: <textarea data-th-text="*{latitude}" readonly name='text'>1</textarea>
+    위도: <textarea data-th-text="*{latitude}" readonly type='text'>1</textarea>
   </div>
   <div>
-    경도: <textarea data-th-text="*{longitude}" readonly name='text'>1</textarea>
+    경도: <textarea data-th-text="*{longitude}" readonly type='text'>1</textarea>
   </div>
   <div>
-    조회수: <textarea data-th-text="*{views}" readonly name='text'>243</textarea>
+    조회수: <textarea data-th-text="*{views}" readonly type='text'>243</textarea>
   </div>
+
+  <div>
+    첨부파일:
+<!--    <input multiple name="recruitPhotos" type="file">-->
+    <ul data-th-if="*{photos[0].photo}">
+      <li data-th-each="photo : *{photos}" data-th-object="${photo}">
+        <div>
+          파일명:
+          <a data-th-text="*{photo}" type='text' href="photo.html">photopath</a>
+          [<a href="photo_delete.html">삭제</a>]
+        </div>
+
+
+      </li>
+    </ul>
+  </div>
+
 
 
 </form>
