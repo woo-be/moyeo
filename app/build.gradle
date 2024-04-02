@@ -27,6 +27,8 @@ dependencies {
     // AWS S3 API 라이브러리
     implementation 'com.amazonaws:aws-java-sdk-s3:1.12.688'
 
+    // bootstrap 5.3 라이브러리
+    implementation 'org.webjars:bootstrap:5.3.0'
 
 }
 
