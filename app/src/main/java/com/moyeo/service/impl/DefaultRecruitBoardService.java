@@ -5,6 +5,7 @@ import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -19,8 +20,8 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public List<RecruitBoard> list() {
-    return recruitBoardDao.findAll();
+  public List<RecruitBoard> list(int pageNo, int pageSize) {
+    return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
   @Override
@@ -36,5 +37,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public int delete(int no) {
     return recruitBoardDao.delete(no);
+  }
+
+  @Override
+  public int countAll() {
+    return recruitBoardDao.countAll();
   }
 }

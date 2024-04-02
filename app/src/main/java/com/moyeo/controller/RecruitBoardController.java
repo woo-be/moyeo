@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -20,8 +21,30 @@ public class RecruitBoardController {
   private final RecruitBoardService recruitBoardService;
 
   @GetMapping("list")
-  public void list(Model model) {
-    model.addAttribute("list", recruitBoardService.list());
+  public void list(
+      Model model,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize) {
+
+    if (pageSize < 10 || pageSize > 20) {
+      pageSize = 10;
+    }
+    if (pageNo < 1){
+      pageNo = 1;
+    }
+
+    int numOfRecord = recruitBoardService.countAll();
+    int numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
+
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 
   public void add() {
