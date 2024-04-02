@@ -13,45 +13,39 @@
 <h1>게시글</h1>
 <p>새 글</p>
 <table border='1'>
-  <thead>
-  <tr>
-    <th>번호</th>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>등록일</th>
-    <th>사진</th>
-  </tr>
-  </thead>
+
   <tbody>
-
-  <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
-    <td data-th-text="*{reviewBoardId}">1</td>
-    <td><a data-th-href="@{view(no=*{reviewBoardId})}" data-th-text="*{title}"
-           href="view.html">제목입니다.</a></td>
-    <td data-th-text="*{writer.nickname}">홍길동</td>
-    <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</td>
-
-    <td>
-      <p data-th-if="*{photos[0].photo != null}" data-th-text="*{photos[0].photo}">여행사진</p>
-      <p data-th-unless="*{photos[0].photo != null}" data-th-text="여행사진">여행사진</p>
-    </td>
-
+  <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}" >
+      <div style='border: 1px solid black; float:left'>
+        <a href="view.html">
+          <div style='border: 1px solid black; float:left'>
+            <img data-th-if="*{photos[0].photo != null}" alt="여행 사진" src="*{photos[0].photo}">
+            <img data-th-unless="*{photos[0].photo != null}" src="/static/img/default-review-photo.png" alt="여행 사진">
+          </div>
+          <div class="work-info" style='border: 1px solid black; float:left'>
+            <h3 data-th-href="@{view(no=*{reviewBoardId})}" data-th-text="*{title}">제목입니다</h3>
+            <span data-th-text="*{writer.nickname}">홍길동</span>
+            <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
+          </div>
+        </a>
+      </div>
   </tr>
 
   </tbody>
 </table>
-<!--
+
 <p>
   [<a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(category=${category},pageNo=${pageNo}-1,pageSize=${pageSize})}"
+  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize})}"
      data-th-if="${pageNo > 1}"
      href="list.html">이전</a>]
   [<a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(category=${category},pageNo=${pageNo}+1,pageSize=${pageSize})}"
+  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize})}"
      data-th-if="${pageNo < numOfPage}"
      href="list.html">다음</a>]
 </p>
 
+<!--
 <div data-th-replace="footer :: footer">꼬리말</div>
 -->
 

@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -62,8 +63,26 @@ public class ReviewBoardController {
   private static final Log log = LogFactory.getLog(ReviewBoardController.class);
 
   @GetMapping("list")
-  public void list(Model model) {
-    model.addAttribute("list", reviewBoardService.list());
+  public void list(
+      @RequestParam(defaultValue = "6") int pageSize,
+      @RequestParam(defaultValue = "1")int pageNo,
+      Model model) {
+    if (pageSize < 3 || pageSize > 20) {
+      pageSize = 3;
+    }
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+    int numOfRecord = reviewBoardService.countAll();
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+    model.addAttribute("list", reviewBoardService.list(pageNo, pageSize));
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 
 }
