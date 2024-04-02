@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 @Data
-public class RecuitLike implements Serializable {
+public class RecruitLike implements Serializable {
 
   private static final long serialVersionUID = 100L;
 
-  private int recruit_board_id;     // 여행멤버모집게시글 식별자
-  private int member_id;            // 회원 식별자
+  private int recruitBoardId;     // 여행멤버모집게시글 식별자
+  private int memberId;            // 회원 식별자
 
 }

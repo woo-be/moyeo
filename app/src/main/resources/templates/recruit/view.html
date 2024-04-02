@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+</head>
+<body>
+
+<h1>게시글</h1>
+<form action="update" data-th-action="@{update}" data-th-object="${recruitboard}"
+      enctype='multipart/form-data'
+      method='post'>
+  <div>
+    번호: <input data-th-value="*{recruitBoardId}" readonly name='no' type='text' value='100'>
+  </div>
+  <div>
+    제목: <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">
+  </div>
+  <div>
+    지역: <input data-th-value="*{region.regionName}" readonly type='text' value="서울특별시">
+  </div>
+  <div>
+    내용: <textarea data-th-value="*{content}" readonly name='content'>내용입니다.</textarea>
+  </div>
+  <div>
+    작성일: <input data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
+                type='text' value="2024-03-27">
+  </div>
+  <div>
+    상태: <textarea data-th-text="*{state}" readonly type='text'>1</textarea>
+  </div>
+  <div>
+    위도: <textarea data-th-text="*{latitude}" readonly type='text'>1</textarea>
+  </div>
+  <div>
+    경도: <textarea data-th-text="*{longitude}" readonly type='text'>1</textarea>
+  </div>
+  <div>
+    조회수: <textarea data-th-text="*{views}" readonly type='text'>243</textarea>
+  </div>
+
+  <div>
+    첨부파일:
+<!--    <input multiple name="recruitPhotos" type="file">-->
+    <ul data-th-if="*{photos[0].photo}">
+      <li data-th-each="photo : *{photos}" data-th-object="${photo}">
+        <div>
+          파일명:
+          <a data-th-text="*{photo}" type='text' href="photo.html">photopath</a>
+          [<a href="photo_delete.html">삭제</a>]
+        </div>
+
+
+      </li>
+    </ul>
+  </div>
+
+
+
+</form>
+
+</body>
+</html>

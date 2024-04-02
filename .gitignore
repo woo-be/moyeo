@@ -560,4 +560,5 @@ gradle-app.setting
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,macos,linux,visualstudiocode,eclipse,intellij,java,c,c++,node,gradle,maven
 
+#ncp key
 ncp-secret.properties

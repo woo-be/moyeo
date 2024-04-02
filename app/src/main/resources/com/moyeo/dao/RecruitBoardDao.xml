@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.RecruitBoardDao">
+
+  <resultMap id="RecruitBoardMap" type="RecruitBoard">
+    <id column="recruit_board_id" property="recruitBoardId"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="current" property="current"/>
+    <result column="recruit_total" property="recruitTotal"/>
+    <result column="deadline" property="deadline"/>
+    <result column="state" property="state"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="latitude" property="latitude"/>
+    <result column="longitude" property="longitude"/>
+    <result column="views" property="views"/>
+    
+    <association property="writer" javaType="Member">
+      <id column="name" property="name"/>
+    </association>
+
+    <association property="region" javaType="Region">
+      <id column="region_id" property="regionId"/>
+      <result column="region_name" property="regionName"/>
+    </association>
+
+    <association property="theme" javaType="Theme">
+      <id column="theme_id" property="themeId"/>
+      <result column="theme_name" property="themeName"/>
+    </association>
+    
+    <collection property="photos" ofType="RecruitPhoto">
+      <id column="recruit_photo_id" property="recruitPhotoId"/>
+      <result column="photo" property="photo"/>
+    </collection>
+    
+  </resultMap>
+
+  <select id="findAll" resultMap="RecruitBoardMap">
+    select
+      rb.recruit_board_id,
+      rb.title,
+      m.name,
+      rb.views,
+      count(case when rm.state = 1 then 1 end) as current,
+      rb.recruit_total,
+      rb.state,
+      rb.created_date
+    from
+      recruit_board rb
+      inner join member m on rb.member_id = m.member_id
+      left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+    group by
+      rb.recruit_board_id
+    order by
+      rb.recruit_board_id desc
+    <!--    where-->
+    <!--      theme_id=? and region_id=?-->
+    limit #{rowCount} offset #{offset}
+  </select>
+
+  <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rb.recruit_board_id,
+      rb.title,
+      reg.region_name,
+      rb.content,
+      rb.latitude,
+      rb.longitude,
+      rb.created_date,
+      rb.state,
+      rbp.recruit_photo_id,
+      rbp.photo
+    from
+      recruit_board rb
+      inner join region reg on rb.region_id=reg.region_id
+      inner join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
+    where
+      rb.recruit_board_id = #{value}
+  </select>
+  
+  <delete id="delete" parameterType="int">
+    delete from recruit_board
+    where recruit_board_id = #{value};
+  </delete>
+
+  <select id="countAll" resultType="int">
+    select count(*) from recruit_board;
+  </select>
+
+</mapper>

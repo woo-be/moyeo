@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+</head>
+<body>
+<!--
+<div data-th-replace="header :: header">머리말</div>
+-->
+
+<form action="add" data-th-action="@{add}" method='post' enctype='multipart/form-data'>
+  <div>
+    제목: <input name='title' type='text'>
+  </div>
+  <div>
+    내용: <textarea name='content'></textarea>
+  </div>
+  <div>
+    첨부파일: <input multiple name='reviewPhotos' type='file'>
+  </div>
+  <div>
+    <button>등록</button>
+  </div>
+</form>
+
+<!--
+<div data-th-replace="footer :: footer">꼬리말</div>
+-->
+</body>
+</html>
