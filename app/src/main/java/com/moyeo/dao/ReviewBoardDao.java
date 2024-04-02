@@ -10,8 +10,9 @@ public interface ReviewBoardDao {
 
   void add(ReviewBoard reviewBoard);
 
-  List<ReviewBoard> findAll();
+  List<ReviewBoard> findAll(@Param("offset")int offset, @Param("rowCount")int rowCount);
   
   ReviewBoard findBy(@Param("reviewBoardId")int reviewBoardId);
 
+  int countAll();
 }

@@ -36,12 +36,17 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   private static final Log log = LogFactory.getLog(DefaultReviewBoardService.class);
 
   @Override
-  public List<ReviewBoard> list() {
-    return reviewBoardDao.findAll();
+  public List<ReviewBoard> list(int pageNo, int pageSize) {
+    return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
   @Override
   public ReviewBoard get(int reviewBoardId) {
     return reviewBoardDao.findBy(reviewBoardId);
+  }
+
+  @Override
+  public int countAll() {
+    return reviewBoardDao.countAll();
   }
 }

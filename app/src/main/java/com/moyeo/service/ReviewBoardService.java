@@ -7,6 +7,7 @@ public interface ReviewBoardService {
 
   void add(ReviewBoard reviewBoard);
 
-List<ReviewBoard> list();
-ReviewBoard get(int reviewBoardId);
+  List<ReviewBoard> list(int pageNo, int pageSize);
+  ReviewBoard get(int reviewBoardId);
+  int countAll();
 }
