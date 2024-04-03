@@ -101,14 +101,4 @@ public class ReviewBoardController {
 
     return "redirect:list";
   }
-
-  @PostMapping("comment/add")
-  public String commentAdd(int reviewBoardId, String reviewContent, HttpSession session) {
-
-    ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoardId)
-        .content(reviewContent).build();
-    reviewCommentService.add(reviewComment);
-
-    return "redirect:../view?reviewBoardId="+reviewBoardId;
-  }
 }
