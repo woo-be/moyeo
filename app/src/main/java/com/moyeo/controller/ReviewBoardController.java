@@ -1,16 +1,18 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.ReviewBoardService;
+import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.ReviewComment;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
-import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.catalina.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +26,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/review")
 public class ReviewBoardController {
 
+  private static final Log log = LogFactory.getLog(ReviewBoardController.class);
   private final ReviewBoardService reviewBoardService;
   private final StorageService storageService;
-  private String uploadDir = "review/";
+  private final ReviewCommentService reviewCommentService;
+  private final String uploadDir = "review/";
 
   @Value("${ncp.ss.bucketname}")
   private String bucketName;
@@ -60,12 +64,11 @@ public class ReviewBoardController {
     return "redirect:list";
   }
 
-  private static final Log log = LogFactory.getLog(ReviewBoardController.class);
 
   @GetMapping("list")
   public void list(
       @RequestParam(defaultValue = "6") int pageSize,
-      @RequestParam(defaultValue = "1")int pageNo,
+      @RequestParam(defaultValue = "1") int pageNo,
       Model model) {
     if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
@@ -86,7 +89,7 @@ public class ReviewBoardController {
   }
 
   @GetMapping("view")
-  public void reviewBoardGet(int reviewBoardId, Model model){
+  public void reviewBoardGet(int reviewBoardId, Model model) {
     model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
   }
 

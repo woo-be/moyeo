@@ -34,5 +34,19 @@
     where
       rc.review_board_id=#{reviewBoardId}
   </select>
+
+  <insert id="reviewCommentPost" parameterType="ReviewComment">
+    insert into
+      review_comment(
+      member_id,
+      review_board_id,
+      content
+    )
+    values(
+      '1',
+      #{reviewBoardId},
+      #{content}
+    )
+  </insert>
   
 </mapper>
