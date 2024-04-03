@@ -14,5 +14,7 @@ public interface ReviewBoardDao {
   
   ReviewBoard findBy(@Param("reviewBoardId")int reviewBoardId);
 
+  int delete(int reviewBoardId);
+
   int countAll();
 }

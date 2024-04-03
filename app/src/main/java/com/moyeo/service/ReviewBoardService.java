@@ -9,5 +9,7 @@ public interface ReviewBoardService {
 
   List<ReviewBoard> list(int pageNo, int pageSize);
   ReviewBoard get(int reviewBoardId);
+
+  int delete(int reviewBoardId);
   int countAll();
 }
