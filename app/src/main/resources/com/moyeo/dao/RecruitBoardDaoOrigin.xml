@@ -75,11 +75,7 @@
       rb.created_date,
       rb.state,
       rbp.recruit_photo_id,
-      rbp.photo,
-      rb.deadline,
-      rb.start_date,
-      rb.end_date,
-      rb.recruit_total
+      rbp.photo
     from
       recruit_board rb
       inner join region reg on rb.region_id=reg.region_id
@@ -125,22 +121,5 @@
       #{latitude},
       #{longitude})
   </insert>
-
-  <update id="update" parameterType="recruitBoard">
-    update recruit_board set
-      title=#{title},
-      state=#{state},
-      deadline=#{deadline},
-      start_date=#{startDate},
-      end_date=#{endDate},
-      recruit_total=#{recruitTotal},
-      region_id=#{region.regionId},
-      theme_id=#{theme.themeId},
-      content=#{content},
-      latitude=#{latitude},
-      longitude=#{longitude}
-    where
-      recruit_board_id=#{recruitBoardId}
-  </update>
 
 </mapper>

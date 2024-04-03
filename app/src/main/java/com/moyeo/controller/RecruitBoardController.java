@@ -5,7 +5,7 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
-import com.moyeo.vo.Region;
+import com.moyeo.vo.Theme;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -58,7 +58,6 @@ public class RecruitBoardController {
       RecruitBoard board,
       int regionId,
       int themeId) {
-
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
@@ -74,8 +73,21 @@ public class RecruitBoardController {
     return "redirect:list";
   }
 
-  @GetMapping("form")
-  public void form() {
+  @GetMapping("addForm")
+  public String addForm() throws Exception {
+    return "recruit/addForm";
+  }
+
+  @PostMapping("updateForm")
+  public String updateForm(int recruitBoardId, Model model) throws Exception {
+    RecruitBoard board = recruitBoardService.get(recruitBoardId);
+    log.debug(board);
+    model.addAttribute("board", board);
+    return "recruit/updateForm";
+  }
+
+  public void update(RecruitBoard board) {
+    recruitBoardService.update(board);
   }
 
   @GetMapping("view")
@@ -85,8 +97,6 @@ public class RecruitBoardController {
       throw new Exception("유효하지 않은 번호입니다.");
     }
     model.addAttribute("recruitboard", recruitBoard);
-  }
-  public void update() {
   }
 
   @GetMapping("delete")
