@@ -1,7 +1,11 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.service.RegionService;
+import com.moyeo.service.ThemeService;
+import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.Region;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,6 +23,8 @@ public class RecruitBoardController {
 
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
   private final RecruitBoardService recruitBoardService;
+  private final RegionService regionService;
+  private final ThemeService themeService;
 
   @GetMapping("list")
   public void list(
@@ -47,9 +53,28 @@ public class RecruitBoardController {
     model.addAttribute("numOfPage", numOfPage);
   }
 
-  public void add() {
+  @PostMapping("add")
+  public String add(
+      RecruitBoard board,
+      int regionId,
+      int themeId) {
+
+    board.setRegion(regionService.get(regionId));
+    board.setTheme(themeService.get(themeId));
+
+    // 임시 멤버 객체, 세션에서 받아오도록 해야 함.
+    Member loginUser = Member.builder()
+        .memberId(6)
+        .name("비트").build();
+
+    board.setWriter(loginUser);
+
+    recruitBoardService.add(board);
+
+    return "redirect:list";
   }
 
+  @GetMapping("form")
   public void form() {
   }
 

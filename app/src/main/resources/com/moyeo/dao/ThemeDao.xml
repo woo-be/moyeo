@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.ThemeDao">
+
+  <resultMap id="ThemeMap" type="theme">
+    <id column="theme_id" property="themeId"/>
+    <result column="theme_name" property="themeName"/>
+  </resultMap>
+
+  <select id="findBy" resultMap="ThemeMap" parameterType="int">
+    select
+      *
+    from
+      theme
+    where
+      theme_id=#{value}
+  </select>
+
+</mapper>

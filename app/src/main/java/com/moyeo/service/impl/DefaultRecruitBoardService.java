@@ -5,7 +5,6 @@ import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -16,7 +15,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
   public void add(RecruitBoard board) {
-
+    recruitBoardDao.add(board);
   }
 
   @Override
