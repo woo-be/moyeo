@@ -23,22 +23,65 @@
     values(#{email}, sha2(#{password},256), #{name}, #{nickname}, #{phoneNumber}, #{birthdate}, #{gender}, #{introduce})
   </insert>
 
-<!--  &lt;!&ndash; 회원 정보 수정 (회원수정) &ndash;&gt;-->
-<!--  <update id="update" parameterType="Member">-->
-<!--    update member set-->
-<!--    email=#{email},-->
-<!--    name=#{name},-->
-<!--    phonenumber=#{phonenumber},-->
-<!--    birthdate=#{birthdate},-->
-<!--    photo=#{photo}-->
-<!--    where-->
-<!--    member_no=#{no}-->
-<!--  </update>-->
+
+  <!-- 회원 정보 삭제 (회원탈퇴) -->
+  <delete id="delete" parameterType="int">
+    delete from members where member_id=#{value}
+  </delete>
 
 
-<!--  &lt;!&ndash; 회원 정보 삭제 (회원탈퇴) &ndash;&gt;-->
-<!--  <delete id="delete" parameterType="int">-->
-<!--    delete from members where memberid=#{value}-->
-<!--  </delete>-->
+  <!-- 회원 정보 수정 (회원수정) -->
+  <update id="update" parameterType="Member">
+    update member set
+    email=#{email},
+    name=#{name},
+    phone_number=#{phoneNumber},
+    birth_date=#{birthdate},
+    where
+    member_id=#{memberId}
+  </update>
+
+
+  <select id="findAll" resultMap="MemberMap">
+    select
+    member_no,
+    email,
+    name,
+    photo,
+    created_date
+    from
+    members
+  </select>
+
+
+  <select id="findBy" resultMap="MemberMap" parameterType="int">
+    select
+    member_no,
+    email,
+    name,
+    photo,
+    created_date
+    from
+    members
+    where
+    member_no=#{value}
+  </select>
+
+
+  <select id="findByEmailAndPassword" resultMap="MemberMap">
+    select
+    member_id,
+    email,
+    name,
+    nickname,
+    phone_number,
+    birth_date,
+    from
+    members
+    where
+    email= #{email}
+    and password=sha2(#{password},256)
+  </select>
+
 
 </mapper>
