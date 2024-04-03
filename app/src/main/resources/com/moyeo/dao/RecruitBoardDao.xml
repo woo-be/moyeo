@@ -93,4 +93,33 @@
     select count(*) from recruit_board;
   </select>
 
+  <insert id="add" parameterType="recruitBoard"
+    useGeneratedKeys="true" keyColumn="recruit_board_id" keyProperty="recruitBoardId">
+    insert
+    into recruit_board(
+      member_id,
+      region_id,
+      theme_id,
+      title,
+      content,
+      start_date,
+      end_date,
+      recruit_total,
+      deadline,
+      latitude,
+      longitude)
+    values(
+      #{writer.memberId},
+      #{region.regionId},
+      #{theme.themeId},
+      #{title},
+      #{content},
+      #{startDate},
+      #{endDate},
+      #{recruitTotal},
+      #{deadline},
+      #{latitude},
+      #{longitude})
+  </insert>
+
 </mapper>
