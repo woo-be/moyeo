@@ -49,6 +49,12 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     return reviewBoard;
   }
 
+  @Transactional
+  @Override
+  public int delete(int reviewBoardId) {
+    return reviewBoardDao.delete(reviewBoardId);
+  }
+
   @Override
   public int countAll() {
     return reviewBoardDao.countAll();

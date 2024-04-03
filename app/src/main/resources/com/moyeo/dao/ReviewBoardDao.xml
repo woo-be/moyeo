@@ -87,4 +87,9 @@
     select count(*) as c from review_board
   </select>
 
+  <delete id="delete" parameterType="int">
+    delete from review_board
+    where review_board_id=#{value}
+  </delete>
+
 </mapper>

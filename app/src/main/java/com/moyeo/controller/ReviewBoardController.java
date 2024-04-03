@@ -89,4 +89,13 @@ public class ReviewBoardController {
   public void reviewBoardGet(int reviewBoardId, Model model){
     model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
   }
+
+  @GetMapping("delete")
+  public String delete(
+      int reviewBoardId) throws Exception {
+
+    reviewBoardService.delete(reviewBoardId);
+
+    return "redirect:list";
+  }
 }
