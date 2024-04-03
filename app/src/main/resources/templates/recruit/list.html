@@ -3,6 +3,7 @@
 <head>
   <meta charset='UTF-8'>
 </head>
+
 <body>
 
 <table border='1'>
@@ -11,18 +12,42 @@
     <th>번호</th>
     <th>제목</th>
     <th>작성자</th>
+    <th>현재 인원</th>
+    <th>총 모집인원</th>
+    <th>모집상태</th>
+    <th>작성일자</th>
+    <th>조회수</th>
   </tr>
   </thead>
-  <tbody>
 
+  <tbody>
   <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
     <td data-th-text="*{recruitBoardId}">1</td>
-    <td data-th-text="*{title}">제목</td>
-    <td data-th-text="*{writer.name}">작성자</td>
+    <td data-th-text="*{title}">제목입니다</td>
+    <td data-th-text="*{writer.name}">홍길동</td>
+    <td data-th-text="*{current}">1</td>
+    <td data-th-text="*{recruitTotal}">4</td>
+    <td data-th-value="*{state}">true</td>
+    <td data-th-value="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+    <td data-th-text="*{views}">12</td>
   </tr>
-
   </tbody>
 </table>
+
+<p>
+  [
+  <a data-th-if="${pageNo <= 1}">이전</a>
+  <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+     data-th-if="${pageNo > 1}"
+     href="list">이전</a>
+  ]
+  [
+  <a data-th-if="${pageNo >= numOfPage}">다음</a>
+  <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+     data-th-if="${pageNo < numOfPage}"
+     href="list">다음</a>
+  ]
+</p>
 
 </body>
 </html>

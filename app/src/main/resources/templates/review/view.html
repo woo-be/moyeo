@@ -40,11 +40,14 @@
     <button>변경</button>
     <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>
   </div>
-  <!--
-  <div>
-    댓글 작성자: <input data-th-value="*{commentMember.nickname}" readonly type='text' value="홍길동">
-  </div>
-  -->
+  
+
+  <ul data-th-if="*{commentList != null}">
+    <li data-th-each="comment : *{commentList}" data-th-object="${comment}">
+      댓글 작성자: <input data-th-value="*{commentMember.nickname}" readonly type='text' value="홍길동">
+    </li>
+  </ul>
+
 </form>
 
 <script>

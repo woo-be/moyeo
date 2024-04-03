@@ -46,9 +46,7 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public ReviewBoard get(int reviewBoardId) {
     ReviewBoard reviewBoard = reviewBoardDao.findBy(reviewBoardId);
     reviewBoard.setCommentList(reviewCommentDao.findAllByReviewId(reviewBoardId));
-    log.debug(String.format("asf211f1fds1f1f1dsf31dsf1s : %s", reviewBoardDao.findBy(reviewBoardId).getWriter().getNickname()));
     return reviewBoard;
-
   }
 
   @Transactional
