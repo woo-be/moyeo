@@ -30,7 +30,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   @Override
   public int update(RecruitBoard board) {
-    return 0;
+    return recruitBoardDao.update(board);
   }
 
   @Override
