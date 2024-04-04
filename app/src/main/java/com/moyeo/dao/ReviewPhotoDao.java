@@ -11,4 +11,6 @@ public interface ReviewPhotoDao {
 
   int addAll(List<ReviewPhoto> photos);
 
+  int deleteAll(int reviewBoardId);
+
 }

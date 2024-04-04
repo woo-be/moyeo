@@ -9,4 +9,8 @@ import org.apache.ibatis.annotations.Param;
 public interface ReviewCommentDao {
   List<ReviewComment> findAllByReviewId(@Param("reviewBoardId")int reviewBoardId);
   void reviewCommentPost(ReviewComment reviewComment);
+
+  int delete(int reviewCommentId);
+
+  int deleteAll(int reviewBoardId);
 }

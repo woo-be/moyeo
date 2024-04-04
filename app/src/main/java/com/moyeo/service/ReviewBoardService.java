@@ -12,4 +12,5 @@ public interface ReviewBoardService {
 
   int delete(int reviewBoardId);
   int countAll();
+
 }

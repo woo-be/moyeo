@@ -10,6 +10,7 @@
     <id column="review_comment_id" property="reviewCommentId"/>
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
+    <result column="review_board_id" property="reviewBoardId"/>
 
     <association property="commentMember" javaType="Member">
       <id column="member_id" property="memberId"/>
@@ -23,6 +24,7 @@
   <select id="findAllByReviewId" resultMap="reviewCommentMap" parameterType="int">
     select
       rc.review_comment_id,
+      rc.review_board_id,
       m.member_id,
       m.nickname,
       m.profile,
@@ -48,5 +50,15 @@
       #{content}
     )
   </insert>
+
+  <delete id="delete" parameterType="int">
+    delete from review_comment
+    where review_comment_id=#{value}
+  </delete>
+
+  <delete id="deleteAll" parameterType="int">
+    delete from review_comment
+    where review_board_id=#{value}
+  </delete>
   
 </mapper>
