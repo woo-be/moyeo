@@ -59,7 +59,10 @@ public class RecruitBoardController {
   public String add(
       RecruitBoard board,
       int regionId,
-      int themeId) {
+      int themeId) throws Exception {
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("지역과 테마를 선택해주세요.");
+    }
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
@@ -88,8 +91,15 @@ public class RecruitBoardController {
     return "recruit/updateForm";
   }
 
-  public void update(RecruitBoard board) {
+  @PostMapping("update")
+  public String update(RecruitBoard board, int themeId, int regionId) throws Exception {
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("지역과 테마를 선택해주세요.");
+    }
+    board.setTheme(Theme.builder().themeId(themeId).build());
+    board.setRegion(Region.builder().regionId(regionId).build());
     recruitBoardService.update(board);
+    return "redirect:list";
   }
 
   @GetMapping("view")
