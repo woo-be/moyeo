@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+</head>
+<body>
+<h2>모집 게시판</h2>
+
+<form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
+  <h5>update form</h5>
+  <div>
+    제목: <input name="title" type="text" data-th-value="*{title}">
+  </div>
+  <div>
+    상태: <input name="state" type="radio" data-th-checked="*{state == true}">모집중
+    <input name="state" type="radio" data-th-checked="*{state == false}">마감
+  </div>
+  <div>
+    마감일: <input name="deadline" type="date" data-th-value=*{deadline}>
+  </div>
+  <div>
+    여행일자: <input name="startDate" type="date" data-th-value=*{startDate}> ~ <input name="endDate" type="date" data-th-value=*{endDate}>
+  </div>
+  <div>
+    모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
+  </div>
+  <div>
+    지역: <input name="regionId" type="radio" value="1" data-th-checked="*{region.regionName == '서울특별시'}">서울
+    <input name="regionId" type="radio" value="2" data-th-checked="*{region.regionName == '부산광역시'}">부산
+    <input name="regionId" type="radio" value="3" data-th-checked="*{region.regionName == '대구광역시'}">대구
+    <input name="regionId" type="radio" value="4" data-th-checked="*{region.regionName == '인천광역시'}">인천
+  </div>
+  <div>
+    테마: <input name="themeId" type="radio" value="1">힐링여행
+    <input name="themeId" type="radio" value="2">캠핑여행
+    <input name="themeId" type="radio" value="3">액티비티여행
+  </div>
+  <div>
+    내용: <textarea name="content" data-th-text=*{content}></textarea>
+  </div>
+  <div>
+    위도: <input name="latitude" type="text" data-th-value=*{latitude}>
+  </div>
+  <div>
+    경도: <input name="longitude" type="text" data-th-value=*{longitude}>
+  </div>
+  <div>
+    <button>등록</button>
+    <a href="list.html">취소</a>
+  </div>
+</form>
+
+</body>
+</html>

@@ -5,6 +5,8 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.Theme;
+import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -58,7 +60,6 @@ public class RecruitBoardController {
       RecruitBoard board,
       int regionId,
       int themeId) {
-
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
@@ -74,29 +75,61 @@ public class RecruitBoardController {
     return "redirect:list";
   }
 
-  @GetMapping("form")
-  public void form() {
+  @GetMapping("addForm")
+  public String addForm() throws Exception {
+    return "recruit/addForm";
+  }
+
+  @PostMapping("updateForm")
+  public String updateForm(int recruitBoardId, Model model) throws Exception {
+    RecruitBoard board = recruitBoardService.get(recruitBoardId);
+    log.debug(board);
+    model.addAttribute("board", board);
+    return "recruit/updateForm";
+  }
+
+  public void update(RecruitBoard board) {
+    recruitBoardService.update(board);
   }
 
   @GetMapping("view")
-  public void view(int no, Model model) throws Exception {
-    RecruitBoard recruitBoard = recruitBoardService.get(no);
+  public void view(int recruitBoardId, Model model) throws Exception {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
     model.addAttribute("recruitboard", recruitBoard);
-  }
-  public void update() {
+
+    // 여기다가 현재 로그인중인 멤버 정보 넘김
+    Member loginUser = Member.builder()
+        .memberId(6)
+        .name("비트").build();
+    model.addAttribute("loginUser", loginUser);
   }
 
   @GetMapping("delete")
-  public String delete(int no) throws Exception {
-    RecruitBoard recruitBoard = recruitBoardService.get(no);
+  public String delete(int recruitBoardId) throws Exception {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
-    recruitBoardService.delete(no);
+    recruitBoardService.delete(recruitBoardId);
     return "redirect:list";
+  }
+
+
+
+  @PostMapping("add/comment")
+  public void add(RecruitComment recruitComment, int recruitBoardId, Model model) {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    model.addAttribute("recruitComment", recruitComment);
+  }
+
+  @GetMapping("delete/comment")
+  public String commentDelete(int commentId) {
+    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
+    recruitBoardService.deleteComment(commentId);
+    return "redirect:view?boardId=" + boardId;  // 리디렉션 오류 (삭제완료)
   }
 }
