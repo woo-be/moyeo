@@ -83,7 +83,7 @@
     from
       recruit_board rb
       inner join region reg on rb.region_id=reg.region_id
-      inner join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
+      left outer join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
     where
       rb.recruit_board_id = #{value}
   </select>

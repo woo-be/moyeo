@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.RecruitCommentDao">
+  <resultMap id="RecruitCommentMap" type="RecruitComment">
+    <id column="recruit_comment_id" property="recruitCommentId"/>
+    <result column="content" property="content"/>
+    <result column="created_Date" property="createdDate"/>
+
+    <association property="recruitBoard" javaType="RecruitBoard">
+      <id column="recruit_board_id" property="recruitBoardId"/>
+    </association>
+
+    <association property="member" javaType="Member">
+      <id column="member_id" property="memberId"/>
+      <result column="name" property="name"/>
+      <result column="nickname" property="nickname"/>
+      <result column="profile" property="photo"/>
+    </association>
+  </resultMap>
+
+  <select id="findBy" resultMap="RecruitCommentMap">
+    select
+      rc.recruit_comment_id,
+      rc.recruit_board_id,
+      rc.member_id,
+      rc.content,
+      rc.created_date
+    from
+      recruit_comment rc
+    where
+      rc.recruit_comment_id=#{value}
+  </select>
+
+  <select id="findAllByRecruitBoardId" resultMap="RecruitCommentMap">
+    select
+      rc.recruit_comment_id,
+      rc.content,
+      rc.created_date,
+      m.nickname,
+      m.profile
+    from
+      recruit_comment rc
+      left join recruit_board rb on rb.recruit_board_id=rc.recruit_board_id
+      left join member m on rc.member_id = m.member_id
+    where
+      rb.recruit_board_id=#{value}
+  </select>
+
+  <delete id="delete" parameterType="int">
+    delete from recruit_comment where recruit_comment_id = #{value};
+  </delete>
+
+</mapper>

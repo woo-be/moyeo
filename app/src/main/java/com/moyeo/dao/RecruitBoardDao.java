@@ -11,8 +11,8 @@ public interface RecruitBoardDao {
   List<RecruitBoard> findAll(
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
-  RecruitBoard findBy(int no);
+  RecruitBoard findBy(int recruitBoardId);
   int update(RecruitBoard recruitBoard);
-  int delete(int no);
+  int delete(int boardId);
   int countAll();
 }

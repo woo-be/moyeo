@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+</head>
+<body>
+
+<form data-th-object="${loginUser}" enctype='multipart/form-data' method='post'>
+  <div>
+    프로필사진: <textarea data-th-text="*{photo}" readonly type='text'>프로필사진</textarea>
+    작성자: <textarea data-th-text="*{name}" readonly type='text'>홍길동</textarea>
+    내용: <input name="content" type="text">
+    <button>전송</button>
+  </div>
+</form>
+
+</body>
+</html>
