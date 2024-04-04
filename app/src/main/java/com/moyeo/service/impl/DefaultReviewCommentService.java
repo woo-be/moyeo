@@ -14,4 +14,9 @@ private final ReviewCommentDao reviewCommentDao;
   public void add(ReviewComment reviewComment) {
     reviewCommentDao.reviewCommentPost(reviewComment);
   }
+
+  @Override
+  public int update(ReviewComment reviewComment) {
+    return reviewCommentDao.reviewCommentUpdate(reviewComment);
+  }
 }

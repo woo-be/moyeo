@@ -62,12 +62,18 @@
         <!--
         <div style='float:left'>내용:</div>
         -->
-        <div style='margin-left:10px' data-th-text="*{content}"  value="댓글 내용입니다."></div>
+          <form data-th-action="@{../../comment/update}" action="view.html" method="post">
+            <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type='hidden'>
+            <input data-th-value="*{reviewCommentId}" name='reviewCommentId' type='hidden'>
+            <input name="content" style='margin-left:10px' data-th-value="*{content}"  value="댓글 내용입니다.">
+            <button>수정</button>
+            <!--data-th-href="@{../comment/update}" href="view.html"-->
+          </form>
       </li>
     </div>
   </ul>
 
-  <form action="commnet/add" data-th-action="@{../comment/add}" method='post'>
+  <form action="view.html" data-th-action="@{../comment/add}" method='post'>
     <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
     <div style='border: 1px solid black; float:none; width:900px'>
       <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>
@@ -89,7 +95,9 @@
   options.width = 900;
 
     $('#summernote').summernote(options).summernote("disable");
+
   });
+
 
 </script>
 
