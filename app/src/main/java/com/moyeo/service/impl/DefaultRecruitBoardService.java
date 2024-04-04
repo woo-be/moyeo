@@ -33,15 +33,8 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
-//    log.debug("boardId: " + recruitBoard.getRecruitBoardId());
-//    List<RecruitComment> commentList = recruitCommentDao.findAllByRecruitBoardId(boardId);
-//    if (commentList != null && commentList.size() > 0) {
-//      for (RecruitComment comment : commentList) {
-//        comment.setRecruitBoard(recruitBoard);
-//      }
-//      // YJ_TODO: 댓글 존재하지 않을 시 게시글 안나오는 문제 해결
-//      recruitBoard.setComments(recruitCommentDao.findAllByRecruitBoardId(boardId));
-//    }
+    recruitBoard.setComments(recruitCommentDao.findAllByRecruitBoardId(boardId));
+
     return recruitBoard;
   }
 
@@ -53,6 +46,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public int delete(int boardId) {
     return recruitBoardDao.delete(boardId);
+  }
+
+  @Override
+  public void addComment(RecruitComment comment) {
+    recruitCommentDao.add(comment);
   }
 
   @Override

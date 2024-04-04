@@ -3,13 +3,17 @@
 <head>
   <meta charset='UTF-8'>
   <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bootstrap 5 Example</title>
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
+<body  data-th-object="${recruitboard}">
 
-<h1>게시글</h1>
-<form action="update" data-th-action="@{updateForm}" data-th-object="${recruitboard}"
-      enctype='multipart/form-data'
-      method='post'>
+<div data-th-replace="header :: header">머리말</div>
+
+<form action="update" data-th-action="@{updateForm}"
+      enctype='multipart/form-data' method='post'>
   <div>
     번호: <input data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='text' value='100'>
   </div>
@@ -39,57 +43,54 @@
     조회수: <input data-th-value="*{views}" readonly type='text' name="views">
   </div>
 
-<!--  <div>-->
-<!--    첨부파일:-->
-<!--    <ul data-th-if="*{photos[0].photo != null}">-->
-<!--      <li data-th-each="photo : *{photos}" data-th-object="${photo}">-->
-<!--        <div>-->
-<!--          파일명:-->
-<!--          <a data-th-text="*{photo}" type='text' href="photo.html">photopath</a>-->
-<!--          [<a href="photo_delete.html">삭제</a>]-->
-<!--        </div>-->
-<!--      </li>-->
-<!--    </ul>-->
-<!--  </div>-->
+  <div>
+    첨부파일:
+    <ul data-th-if="*{photos}">
+      <li data-th-each="photo : *{photos}" data-th-object="${photo}">
+        <div>
+          파일명:
+          <a data-th-text="*{photo}" type='text' href="photo.html">photopath</a>
+          [<a href="photo_delete.html">삭제</a>]
+        </div>
+      </li>
+    </ul>
+  </div>
 
   <div>
     <button>수정</button>
     [<a data-th-href="@{delete(recruitBoardId=*{recruitBoardId})}" href="delete.html">삭제</a>]
   </div>
-
-<!--  <div>-->
-<!--    <form action="update" data-th-action="@{update}" data-th-object="${recruitboard}" method='post'>-->
-<!--      댓글-->
-<!--      <ul data-th-if="*{comments[0].recruitCommentId != null}">-->
-<!--        <li data-th-each="comment : *{comments}" data-th-object="${comment}">-->
-<!--          <div>-->
-<!--            프로필사진: <textarea data-th-text="*{member.photo}" readonly type='text'>홍길동</textarea>-->
-<!--            작성자: <textarea data-th-value="*{member.nickname}" readonly type='text'>홍길동</textarea>-->
-<!--            내용: <textarea data-th-text="*{content}" readonly type='text'>댓글내용</textarea>-->
-<!--            작성일: <textarea data-th-value="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly-->
-<!--                           type='text'>2024-04-03</textarea>-->
-<!--            <button>수정</button>-->
-<!--            <a html="delete.html">-->
-<!--              <button>삭제</button>-->
-<!--            </a>-->
-<!--          </div>-->
-<!--        </li>-->
-<!--      </ul>-->
-<!--    </form>-->
-
-<!--    <form data-th-object="${loginUser}" enctype='multipart/form-data' method='post'>-->
-<!--      <div>-->
-<!--        프로필사진: <textarea data-th-text="*{photo}" readonly type='text'>프로필사진</textarea>-->
-<!--        작성자: <textarea data-th-text="*{name}" readonly type='text'>홍길동</textarea>-->
-<!--        내용: <input name="content" type="text">-->
-<!--        <button>전송</button>-->
-<!--      </div>-->
-<!--    </form>-->
-<!--  </div>-->
-
 </form>
 
+<div>
+  <div>
+    댓글
+    <ul data-th-if="*{comments}">
+      <li data-th-each="comment : *{comments}" data-th-object="${comment}">
+        프로필사진: <textarea data-th-text="*{member.photo}" readonly type='text'>홍길동</textarea>
+        작성자: <textarea data-th-value="*{member.nickname}" readonly type='text'>홍길동</textarea>
+        내용: <textarea data-th-text="*{content}" readonly type='text'>댓글내용</textarea>
+        작성일: <textarea data-th-value="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
+                       type='text'>2024-04-03</textarea>
+        <button>수정</button>
+        <a html="delete.html">
+          <button>삭제</button>
+        </a>
+      </li>
+    </ul>
+  </div>
 
+  <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
+    <input data-th-value="${recruitboard.recruitBoardId}" type='hidden'>
+    <div>
+      <!--프로필사진: <input data-th-value="*{photo}" readonly type='text'/>-->
+      작성자: <input  data-th-value="*{name}" name="name" readonly type='text'/>
+      내용: <textarea name="content" type="text"></textarea>
+      <button>전송</button>
+    </div>
+  </form>
+</div>
 
 </body>
+<div data-th-replace="footer :: footer">꼬리말</div>
 </html>

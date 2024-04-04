@@ -8,6 +8,7 @@ import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.Theme;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -103,17 +104,18 @@ public class RecruitBoardController {
   }
 
   @GetMapping("view")
-  public void view(int recruitBoardId, Model model) throws Exception {
+  public void view(int recruitBoardId, Model model, HttpSession session) throws Exception {
+
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
     model.addAttribute("recruitboard", recruitBoard);
 
-    // 여기다가 현재 로그인중인 멤버 정보 넘김
-    Member loginUser = Member.builder()
-        .memberId(6)
-        .name("비트").build();
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      loginUser = Member.builder().name("로그인해주세요.").build();
+    }
     model.addAttribute("loginUser", loginUser);
   }
 
@@ -124,22 +126,36 @@ public class RecruitBoardController {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
+    // YJ_TODO: photo / comment 삭제 코드 추가
     recruitBoardService.delete(recruitBoardId);
     return "redirect:list";
   }
 
 
 
-  @PostMapping("add/comment")
-  public void add(RecruitComment recruitComment, int recruitBoardId, Model model) {
+  @PostMapping("comment/add")
+  public String commentAdd(Member member, RecruitComment recruitComment, int recruitBoardId, HttpSession session)
+      throws Exception {
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    model.addAttribute("recruitComment", recruitComment);
+    recruitComment.setRecruitBoard(recruitBoard);
+//    recruitBoardService.addComment(recruitComment);
+//    recruitComment.getRecruitBoard().setRecruitBoardId(recruitBoardId);
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인해주세요.");
+    }
+
+    log.debug(String.format("이름    게시글    %s         %s       %d",loginUser.getName(), recruitComment.getContent(), recruitBoardId));
+
+    recruitBoardService.addComment(recruitComment);
+    return "redirect:../../recruit/view?recruitBoardId="+recruitBoardId;
   }
 
-  @GetMapping("delete/comment")
-  public String commentDelete(int commentId) {
-    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
-    recruitBoardService.deleteComment(commentId);
-    return "redirect:view?boardId=" + boardId;  // 리디렉션 오류 (삭제완료)
-  }
+//  @GetMapping("comment/delete")
+//  public String commentDelete(int commentId) {
+//    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
+//    recruitBoardService.deleteComment(commentId);
+//    return "redirect:view?recruitBoardId=" + boardId;  // 리디렉션 오류 (삭제완료)
+//  }
 }
