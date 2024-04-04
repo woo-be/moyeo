@@ -32,9 +32,8 @@ public class ReviewCommentController {
   public String delete(int reviewCommentId, int reviewBoardId) {
     reviewCommentService.delete(reviewCommentId);
 
-
-
     return "redirect:../review/view?reviewBoardId=" + reviewBoardId;
+  }
 
   @PostMapping("update")
   public String commentUpdate(ReviewComment reviewComment) {

@@ -19,6 +19,7 @@ private final ReviewCommentDao reviewCommentDao;
 
   public int delete(int reviewCommentId) {
     return reviewCommentDao.delete(reviewCommentId);
+  }
 
   public int update(ReviewComment reviewComment) {
     return reviewCommentDao.reviewCommentUpdate(reviewComment);
