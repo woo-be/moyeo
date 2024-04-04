@@ -86,6 +86,7 @@
       recruit_board rb
       left join region reg on rb.region_id=reg.region_id
       left join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
+      left outer join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
     where
       rb.recruit_board_id = #{value}
   </select>

@@ -11,7 +11,7 @@ public interface RecruitPhotoDao {
 //
 //  int delete(int no);
 //
-//  int deleteAll(int recruitBoardNo);
+//  int deleteAll(int recruitBoardId);
 
 
 

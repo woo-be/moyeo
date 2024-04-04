@@ -24,4 +24,9 @@
     </foreach>
   </insert>
 
+  <delete id="deleteAll" parameterType="int">
+    delete from review_photo
+    where review_board_id=#{value}
+  </delete>
+
 </mapper>

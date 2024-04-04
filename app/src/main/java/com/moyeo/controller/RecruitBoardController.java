@@ -5,8 +5,9 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
-import com.moyeo.vo.Region;
 import com.moyeo.vo.Theme;
+import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.Region;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -102,23 +103,43 @@ public class RecruitBoardController {
   }
 
   @GetMapping("view")
-  public void view(int no, Model model) throws Exception {
-    RecruitBoard recruitBoard = recruitBoardService.get(no);
-    log.debug("view: " + recruitBoard);
+  public void view(int recruitBoardId, Model model) throws Exception {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
     model.addAttribute("recruitboard", recruitBoard);
+
+    // 여기다가 현재 로그인중인 멤버 정보 넘김
+    Member loginUser = Member.builder()
+        .memberId(6)
+        .name("비트").build();
+    model.addAttribute("loginUser", loginUser);
   }
 
   @GetMapping("delete")
-  public String delete(int no) throws Exception {
-    RecruitBoard recruitBoard = recruitBoardService.get(no);
+  public String delete(int recruitBoardId) throws Exception {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
-    recruitBoardService.delete(no);
+    recruitBoardService.delete(recruitBoardId);
     return "redirect:list";
+  }
+
+
+
+  @PostMapping("add/comment")
+  public void add(RecruitComment recruitComment, int recruitBoardId, Model model) {
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    model.addAttribute("recruitComment", recruitComment);
+  }
+
+  @GetMapping("delete/comment")
+  public String commentDelete(int commentId) {
+    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
+    recruitBoardService.deleteComment(commentId);
+    return "redirect:view?boardId=" + boardId;  // 리디렉션 오류 (삭제완료)
   }
 }

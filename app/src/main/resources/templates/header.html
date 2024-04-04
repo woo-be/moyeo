@@ -18,20 +18,16 @@
     </a>
 
     <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a href="#" class="nav-link px-2 link-dark">여행 후기</a></li>
-      <li><a href="#" class="nav-link px-2 link-dark">멤버 모집</a></li>
+      <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
+      <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
       <li><a href="#" class="nav-link px-2 link-dark">일정 관리</a></li>
-      <li><a href="/member/signup" class="nav-link px-2 link-dark">회원 가입</a></li>
-      <li><a data-th-href="@{../auth/form}"  class="nav-link px-2 link-dark">마이페이지</a></li>
-      <!--
-      <li><a href="#" class="nav-link px-2 link-dark">About</a></li>
-      href="/member/view"
-      -->
+      <li><a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a></li>
+      <li><a data-th-href="@{#}"  class="nav-link px-2 link-dark">마이페이지</a></li>
     </ul>
 
     <div class="col-md-3 text-end">
-      <a href="../auth/form"><button type="button" class="btn btn-outline-primary me-2" style="margin-right:100px">로그인</button></a>
-      <button type="button" class="btn btn-primary" style="margin-right:100px">로그아웃</button>
+      <a data-th-href="@{../auth/form}"><button type="button" class="btn btn-outline-primary me-2" style="margin-right:100px">로그인</button></a>
+      <a data-th-href="@{../../}"><button type="button" class="btn btn-primary" style="margin-right:100px">로그아웃</button></a>
     </div>
   </header>
 </body>

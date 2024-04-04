@@ -38,5 +38,7 @@ public class RecruitBoard implements Serializable {
   private float longitude;              // 경도
 
   private int views;                    // 여행멤버모집게시글 조회수
+
   private List<RecruitPhoto> photos;    // 여행멤버모집게시글 첨부사진
+  private List<RecruitComment> comments;// 여행멤버모집게시글 댓글
 }
