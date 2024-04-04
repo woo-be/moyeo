@@ -8,6 +8,7 @@
   <resultMap id="reviewCommentMap" type="ReviewComment">
 
     <id column="review_comment_id" property="reviewCommentId"/>
+    <result column="review_board_id" property="reviewBoardId"/>
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
 
@@ -23,6 +24,7 @@
   <select id="findAllByReviewId" resultMap="reviewCommentMap" parameterType="int">
     select
       rc.review_comment_id,
+      rc.review_board_id,
       m.member_id,
       m.nickname,
       m.profile,
@@ -48,5 +50,11 @@
       #{content}
     )
   </insert>
+
+  <update id="reviewCommentUpdate" parameterType="ReviewComment">
+    update review_comment
+    set content=#{content}
+    where review_comment_id=#{reviewCommentId}
+  </update>
   
 </mapper>
