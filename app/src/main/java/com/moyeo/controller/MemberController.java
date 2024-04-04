@@ -23,7 +23,11 @@ public class MemberController implements InitializingBean{
 
   private static final Log log = LogFactory.getLog(MemberController.class);
   private final MemberService memberService;
+  private final StorageService storageService;
+  private String uploadDir;
 
+  @Value("${ncp.ss.bucketname}")
+  private String bucketName;
 
   // 빈 초기화
   @Override
@@ -39,7 +43,11 @@ public class MemberController implements InitializingBean{
 
   // 회원가입 폼 제출
   @PostMapping("add")
-  public String add(Member member) throws Exception {
+  public String add(Member member, MultipartFile file) throws Exception {
+    if (file.getSize() > 0) {
+      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
+      member.setPhoto(filename);
+    }
 
     memberService.add(member);
     // 메인페이지로 이동

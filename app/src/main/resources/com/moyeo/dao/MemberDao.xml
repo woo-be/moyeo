@@ -26,7 +26,7 @@
 
   <!-- 회원 정보 삭제 (회원탈퇴) -->
   <delete id="delete" parameterType="int">
-    delete from members where member_id=#{value}
+    delete from member where member_id=#{value}
   </delete>
 
 
@@ -36,7 +36,7 @@
     email=#{email},
     name=#{name},
     phone_number=#{phoneNumber},
-    birth_date=#{birthdate},
+    birth_date=#{birthdate}
     where
     member_id=#{memberId}
   </update>
@@ -50,7 +50,7 @@
     photo,
     created_date
     from
-    members
+    member
   </select>
 
 
@@ -62,7 +62,7 @@
     photo,
     created_date
     from
-    members
+    member
     where
     member_no=#{value}
   </select>
@@ -75,9 +75,9 @@
     name,
     nickname,
     phone_number,
-    birth_date,
+    birth_date
     from
-    members
+    member
     where
     email= #{email}
     and password=sha2(#{password},256)
