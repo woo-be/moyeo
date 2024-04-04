@@ -55,15 +55,22 @@ public class AuthController {
       return "redirect:/home";
     } else {
       // 로그인 실패 시 로그인 페이지로 다시 이동
+      // 구현후 로그인이 실패되었습니다 메세지 나오게 설정하기!!
       return "redirect:/auth/form";
     }
   }
 
-  @GetMapping("logout")
-  public String logout(HttpSession session) throws Exception {
+  @GetMapping("/logout")
+  public String logout(HttpSession session, HttpServletResponse response) {
+    // 세션을 무효화하여 로그아웃
     session.invalidate();
+    // 쿠키를 삭제하기 위해 빈 문자열과 유효 시간을 0으로 설정
+    // 아이디 저장 나오게 하고싶으면 이부분 삭제
+    Cookie cookie = new Cookie("email", "");
+    cookie.setMaxAge(0);
+    response.addCookie(cookie);
+    // 로그아웃 후 리다이렉트
     return "redirect:/home";
   }
-
 
 }
