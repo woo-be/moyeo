@@ -41,7 +41,7 @@
   <div>
     첨부파일:
 <!--    <input multiple name="recruitPhotos" type="file">-->
-    <ul data-th-if="*{photos[0].photo}">
+    <ul data-th-if="*{photos}">
       <li data-th-each="photo : *{photos}" data-th-object="${photo}">
         <div>
           파일명:

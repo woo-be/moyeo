@@ -5,6 +5,7 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.Region;
 import com.moyeo.vo.Theme;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -57,7 +58,12 @@ public class RecruitBoardController {
   public String add(
       RecruitBoard board,
       int regionId,
-      int themeId) {
+      int themeId) throws Exception {
+    log.debug("themeId: " + themeId);
+    log.debug("regionId " + regionId);
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("테마지역0");
+    }
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
@@ -86,13 +92,24 @@ public class RecruitBoardController {
     return "recruit/updateForm";
   }
 
-  public void update(RecruitBoard board) {
+  @PostMapping("update")
+  public String update(RecruitBoard board, int themeId, int regionId) throws Exception {
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("지역 또는 테마를 선택해주세요.");
+    }
+    log.debug("themeId: " + themeId);
+    log.debug("regionId " + regionId);
+    board.setTheme(Theme.builder().themeId(themeId).build());
+    board.setRegion(Region.builder().regionId(regionId).build());
+    log.debug("update: " + board);
     recruitBoardService.update(board);
+    return "redirect:list";
   }
 
   @GetMapping("view")
   public void view(int no, Model model) throws Exception {
     RecruitBoard recruitBoard = recruitBoardService.get(no);
+    log.debug("view: " + recruitBoard);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
