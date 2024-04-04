@@ -2,10 +2,11 @@ package com.moyeo.service.impl;
 
 import com.moyeo.dao.ReviewBoardDao;
 import com.moyeo.dao.ReviewCommentDao;
+import com.moyeo.dao.ReviewLikeDao;
 import com.moyeo.dao.ReviewPhotoDao;
+import com.moyeo.dao.ReviewScrapDao;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.vo.ReviewBoard;
-import com.moyeo.vo.ReviewComment;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   private final ReviewBoardDao reviewBoardDao;
   private final ReviewPhotoDao reviewPhotoDao;
   private final ReviewCommentDao reviewCommentDao;
+  private final ReviewLikeDao reviewLikeDao;
+  private final ReviewScrapDao reviewScrapDao;
 
   @Transactional
   @Override
@@ -52,6 +55,10 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   @Transactional
   @Override
   public int delete(int reviewBoardId) {
+    reviewScrapDao.deleteAll(reviewBoardId);
+    reviewLikeDao.deleteAll(reviewBoardId);
+    reviewPhotoDao.deleteAll(reviewBoardId);
+    reviewCommentDao.deleteAll(reviewBoardId);
     return reviewBoardDao.delete(reviewBoardId);
   }
 
@@ -59,4 +66,6 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public int countAll() {
     return reviewBoardDao.countAll();
   }
+
+
 }

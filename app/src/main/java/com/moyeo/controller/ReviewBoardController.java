@@ -98,7 +98,6 @@ public class ReviewBoardController {
       int reviewBoardId) throws Exception {
 
     reviewBoardService.delete(reviewBoardId);
-
     return "redirect:list";
   }
 }

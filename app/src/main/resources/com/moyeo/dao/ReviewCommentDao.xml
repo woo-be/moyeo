@@ -11,6 +11,7 @@
     <result column="review_board_id" property="reviewBoardId"/>
     <result column="content" property="content"/>
     <result column="created_date" property="createdDate"/>
+    <result column="review_board_id" property="reviewBoardId"/>
 
     <association property="commentMember" javaType="Member">
       <id column="member_id" property="memberId"/>
@@ -51,10 +52,22 @@
     )
   </insert>
 
+
+  <delete id="delete" parameterType="int">
+    delete from review_comment
+    where review_comment_id=#{value}
+  </delete>
+
+  <delete id="deleteAll" parameterType="int">
+    delete from review_comment
+    where review_board_id=#{value}
+  </delete>
+
   <update id="reviewCommentUpdate" parameterType="ReviewComment">
     update review_comment
     set content=#{content}
     where review_comment_id=#{reviewCommentId}
   </update>
+
   
 </mapper>

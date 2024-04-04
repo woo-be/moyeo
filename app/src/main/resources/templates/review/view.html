@@ -57,7 +57,12 @@
         <div style='float:left'>작성자: </div>
         -->
         <div style='margin-left:10px;font-weight:bold; text-decoration: underline'  data-th-text="*{commentMember.nickname}"  value="홍길동"></div>
+        <div>
+          <a data-th-href="@{../comment/delete(reviewCommentId=*{reviewCommentId},reviewBoardId=*{reviewBoardId})}" href="view.html">[삭제]</a>
+
+        </div>
       </li>
+
       <li>
         <!--
         <div style='float:left'>내용:</div>
@@ -84,6 +89,9 @@
       <button style='padding:10px; margin:20px'>등록</button>
       </div>
     </div>
+
+
+
   </form>
 
 </div>

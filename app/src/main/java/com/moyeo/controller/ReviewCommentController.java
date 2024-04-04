@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -25,6 +26,16 @@ public class ReviewCommentController {
 
     return "redirect:../review/view?reviewBoardId="+reviewBoardId;
   }
+
+
+  @GetMapping("delete")
+  public String delete(int reviewCommentId, int reviewBoardId) {
+    reviewCommentService.delete(reviewCommentId);
+
+
+
+    return "redirect:../review/view?reviewBoardId=" + reviewBoardId;
+
   @PostMapping("update")
   public String commentUpdate(ReviewComment reviewComment) {
 
@@ -35,5 +46,6 @@ public class ReviewCommentController {
     reviewCommentService.update(reviewComment);
 
     return "redirect:../review/view?reviewBoardId="+reviewComment.getReviewBoardId();
+
   }
 }
