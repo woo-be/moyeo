@@ -58,8 +58,35 @@
       rb.review_board_id desc
     limit #{rowCount} offset #{offset}
   </select>
+  <select id="findAllByRegionId" parameterType="int" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.member_id,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.review_photo_id,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    where
+    rb.region_id=#{regionId}
+    group by
+    rb.review_board_id
+    order by
+    rb.review_board_id desc
+    limit #{rowCount} offset #{offset}
+  </select>
 
-  <select id="findBy" resultMap="ReviewBoardMap">
+  <select id="findBy" resultMap="ReviewBoardMap" parameterType="int">
     select
       rb.review_board_id,
       rb.title,
@@ -86,10 +113,27 @@
   <select id="countAll" resultType="int">
     select count(*) as c from review_board
   </select>
+  <select id="countAllByRegionId" resultType="int" parameterType="int">
+    select count(*) as c from review_board where region_id=#{regionId}
+  </select>
 
   <delete id="delete" parameterType="int">
     delete from review_board
     where review_board_id=#{value}
   </delete>
+
+  <update id="update" parameterType="ReviewBoard">
+    update review_board set
+      title=#{title},
+      content=#{content}
+<!--    rb.latitude,-->
+<!--    rb.longitude,-->
+<!--    t.theme_name,-->
+<!--    r.region_name,-->
+<!--    rp.review_photo_id,-->
+<!--    rp.photo-->
+    where
+      review_board_id=#{reviewBoardId}
+  </update>
 
 </mapper>

@@ -16,13 +16,12 @@ private final ReviewCommentDao reviewCommentDao;
   }
 
   @Override
-
   public int delete(int reviewCommentId) {
     return reviewCommentDao.delete(reviewCommentId);
   }
 
+  @Override
   public int update(ReviewComment reviewComment) {
     return reviewCommentDao.reviewCommentUpdate(reviewComment);
-
   }
 }

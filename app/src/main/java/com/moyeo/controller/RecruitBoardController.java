@@ -2,12 +2,14 @@ package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RegionService;
+import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.Theme;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -28,6 +30,7 @@ public class RecruitBoardController {
   private final RecruitBoardService recruitBoardService;
   private final RegionService regionService;
   private final ThemeService themeService;
+  private final StorageService storageService;
 
   @GetMapping("list")
   public void list(
@@ -119,14 +122,20 @@ public class RecruitBoardController {
   }
 
   @GetMapping("delete")
-  public String delete(int recruitBoardId) throws Exception {
+  public String delete(int recruitBoardId, HttpSession session) throws Exception {
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
-    // YJ_TODO: photo / comment 삭제 코드 추가
+//    Member loginUser = (Member) session.getAttribute("loginUser");
+//    if (loginUser == null || recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
+//      throw new Exception("권한이 없습니다.");
+//    }
+
+    // YJ_TODO: photo 삭제 코드 추가해야됨
     recruitBoardService.delete(recruitBoardId);
+
     return "redirect:list";
   }
 
@@ -136,7 +145,7 @@ public class RecruitBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      log.debug("로그인해주세요.");
+      log.debug("로그인해주세요.");  // .html에서 클릭했을 시 팝업 띄움
       return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
     }
 
@@ -153,7 +162,7 @@ public class RecruitBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null || loginUser.getMemberId() != recruitComment.getMember().getMemberId()) {
-      log.debug("권한이 없습니다.");
+      log.debug("권한이 없습니다."); // .html에서 클릭했을 시 팝업 띄움
       return "redirect:../../recruit/view?recruitBoardId=" + boardId;
     }
 
