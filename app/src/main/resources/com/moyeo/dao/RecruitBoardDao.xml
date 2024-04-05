@@ -55,12 +55,13 @@
       recruit_board rb
       inner join member m on rb.member_id = m.member_id
       left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+<!--      left join region reg on rb.region_id=reg.region_id-->
+<!--    where-->
+<!--      rb.region_id=1 and theme_id = ?-->
     group by
       rb.recruit_board_id
     order by
       rb.recruit_board_id desc
-    <!--    where-->
-    <!--      theme_id=? and region_id=?-->
     limit #{rowCount} offset #{offset}
   </select>
 
