@@ -77,15 +77,12 @@ public class ReviewBoardController {
     if (pageNo < 1) {
       pageNo = 1;
     }
-//    log.debug(String.format("regionId        %d =========================================", regionId));
 
     int numOfRecord = 0;
     if (regionId == 0 /*&& themeId == 0*/) {
       numOfRecord = reviewBoardService.countAll();
-//      log.debug(String.format("regionId        %d =========================================", regionId));
     } else if (regionId != 0) {
       numOfRecord = reviewBoardService.countAll(regionId);
-//      log.debug(String.format("regionId        %d =========================================", regionId));
     /*} else if (themeId!=0) {
       numOfRecord = reviewBoardService.countAll(themeId);
     } else if (regionId!=0 && themeId!=0) {
@@ -110,6 +107,7 @@ public class ReviewBoardController {
     } else if (regionId!=0 && themeId!=0) {
      model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, themeId));*/
     }
+
     model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
