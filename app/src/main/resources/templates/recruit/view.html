@@ -68,12 +68,12 @@
     <ul data-th-if="*{comments}">
       <li data-th-each="comment : *{comments}" data-th-object="${comment}">
         프로필사진: <textarea data-th-text="*{member.photo}" readonly type='text'>홍길동</textarea>
-        작성자: <textarea data-th-value="*{member.nickname}" readonly type='text'>홍길동</textarea>
+        작성자: <textarea data-th-text="*{member.nickname}" readonly type='text'>홍길동</textarea>
         내용: <textarea data-th-text="*{content}" readonly type='text'>댓글내용</textarea>
         작성일: <textarea data-th-value="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
                        type='text'>2024-04-03</textarea>
         <button>수정</button>
-        <a html="delete.html">
+        <a data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}" href="delete.html">
           <button>삭제</button>
         </a>
       </li>
@@ -81,9 +81,9 @@
   </div>
 
   <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-    <input data-th-value="${recruitboard.recruitBoardId}" type='hidden'>
+    <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId'>
     <div>
-      <!--프로필사진: <input data-th-value="*{photo}" readonly type='text'/>-->
+      프로필사진: <input data-th-value="*{photo}" readonly type='text'/>
       작성자: <input  data-th-value="*{name}" name="name" readonly type='text'/>
       내용: <textarea name="content" type="text"></textarea>
       <button>전송</button>
