@@ -81,7 +81,7 @@
   </div>
 
   <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-    <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId'>
+    <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
     <div>
       프로필사진: <input data-th-value="*{photo}" readonly type='text'/>
       작성자: <input  data-th-value="*{name}" name="name" readonly type='text'/>

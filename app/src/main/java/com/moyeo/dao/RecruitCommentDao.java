@@ -17,5 +17,5 @@ public interface RecruitCommentDao {
 
   int delete(int recruitCommentId);
 
-  int deleteAllByRecruitBoardId(int recruitBoardId);
+  int deleteAllCommentByRecruitBoardId(int recruitBoardId);
 }
