@@ -130,31 +130,34 @@ public class RecruitBoardController {
     return "redirect:list";
   }
 
-
-
   @PostMapping("comment/add")
-  public String commentAdd(Member member, RecruitComment recruitComment, int recruitBoardId, HttpSession session)
-      throws Exception {
+  public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) {
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    recruitComment.setRecruitBoard(recruitBoard);
-//    recruitBoardService.addComment(recruitComment);
-//    recruitComment.getRecruitBoard().setRecruitBoardId(recruitBoardId);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인해주세요.");
+      log.debug("로그인해주세요.");
+      return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
     }
 
-    log.debug(String.format("이름    게시글    %s         %s       %d",loginUser.getName(), recruitComment.getContent(), recruitBoardId));
-
+    recruitComment.setRecruitBoard(recruitBoard);
+    recruitComment.setMember(loginUser);
     recruitBoardService.addComment(recruitComment);
-    return "redirect:../../recruit/view?recruitBoardId="+recruitBoardId;
+    return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
   }
 
-//  @GetMapping("comment/delete")
-//  public String commentDelete(int commentId) {
-//    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
-//    recruitBoardService.deleteComment(commentId);
-//    return "redirect:view?recruitBoardId=" + boardId;  // 리디렉션 오류 (삭제완료)
-//  }
+  @GetMapping("comment/delete")
+  public String commentDelete(int recruitCommentId, HttpSession session) {
+    RecruitComment recruitComment = recruitBoardService.getComment(recruitCommentId);
+    int boardId = recruitComment.getRecruitBoard().getRecruitBoardId();
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null || loginUser.getMemberId() != recruitComment.getMember().getMemberId()) {
+      log.debug("권한이 없습니다.");
+      return "redirect:../../recruit/view?recruitBoardId=" + boardId;
+    }
+
+    recruitBoardService.deleteComment(recruitCommentId);
+    return "redirect:../../recruit/view?recruitBoardId=" + boardId;
+  }
 }
