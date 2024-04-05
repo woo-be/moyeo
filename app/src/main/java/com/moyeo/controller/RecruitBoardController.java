@@ -87,7 +87,6 @@ public class RecruitBoardController {
   @PostMapping("updateForm")
   public String updateForm(int recruitBoardId, Model model) throws Exception {
     RecruitBoard board = recruitBoardService.get(recruitBoardId);
-    log.debug(board);
     model.addAttribute("board", board);
     return "recruit/updateForm";
   }
