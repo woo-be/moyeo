@@ -4,12 +4,11 @@ import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.ReviewBoard;
-import com.moyeo.vo.ReviewComment;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.Session;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -69,6 +68,8 @@ public class ReviewBoardController {
   public void list(
       @RequestParam(defaultValue = "6") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "0", required = false) int regionId,
+      /*@RequestParam(required = false) int themeId,*/
       Model model) {
     if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
@@ -76,13 +77,40 @@ public class ReviewBoardController {
     if (pageNo < 1) {
       pageNo = 1;
     }
-    int numOfRecord = reviewBoardService.countAll();
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
+//    log.debug(String.format("regionId        %d =========================================", regionId));
+
+    int numOfRecord = 0;
+    if (regionId == 0 /*&& themeId == 0*/) {
+      numOfRecord = reviewBoardService.countAll();
+//      log.debug(String.format("regionId        %d =========================================", regionId));
+    } else if (regionId != 0) {
+      numOfRecord = reviewBoardService.countAll(regionId);
+//      log.debug(String.format("regionId        %d =========================================", regionId));
+    /*} else if (themeId!=0) {
+      numOfRecord = reviewBoardService.countAll(themeId);
+    } else if (regionId!=0 && themeId!=0) {
+      numOfRecord = reviewBoardService.countAll(regionId, themeId);*/
+    }
+
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) >= 0 ? 1 : 0);
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
-    model.addAttribute("list", reviewBoardService.list(pageNo, pageSize));
+
+    List<ReviewBoard> list;
+    if (regionId == 0 /*&& themeId == 0*/) {
+      list = reviewBoardService.list(pageNo, pageSize);
+      model.addAttribute("list", list);
+    } else if (regionId != 0) {
+      list = reviewBoardService.list(pageNo, pageSize, regionId);
+      model.addAttribute("list", list);
+    /*} else if (themeId!=0) {
+      model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, themeId));
+    } else if (regionId!=0 && themeId!=0) {
+     model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, themeId));*/
+    }
+    model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);

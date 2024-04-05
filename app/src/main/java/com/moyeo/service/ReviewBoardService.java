@@ -8,9 +8,11 @@ public interface ReviewBoardService {
   void add(ReviewBoard reviewBoard);
 
   List<ReviewBoard> list(int pageNo, int pageSize);
+  List<ReviewBoard> list(int pageNo, int pageSize, int regionId);
   ReviewBoard get(int reviewBoardId);
 
   int delete(int reviewBoardId);
   int countAll();
+  int countAll(int regionId);
 
 }
