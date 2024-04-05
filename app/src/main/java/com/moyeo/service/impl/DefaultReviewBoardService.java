@@ -67,5 +67,10 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     return reviewBoardDao.countAll();
   }
 
+  @Override
+  public int update(ReviewBoard reviewBoard) {
+    int count = reviewBoardDao.update(reviewBoard);
 
+    return count;
+  }
 }

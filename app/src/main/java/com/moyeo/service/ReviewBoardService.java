@@ -12,5 +12,5 @@ public interface ReviewBoardService {
 
   int delete(int reviewBoardId);
   int countAll();
-
+  int update(ReviewBoard reviewBoard);
 }

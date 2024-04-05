@@ -92,4 +92,18 @@
     where review_board_id=#{value}
   </delete>
 
+  <update id="update" parameterType="ReviewBoard">
+    update review_board set
+      title=#{title},
+      content=#{content}
+<!--    rb.latitude,-->
+<!--    rb.longitude,-->
+<!--    t.theme_name,-->
+<!--    r.region_name,-->
+<!--    rp.review_photo_id,-->
+<!--    rp.photo-->
+    where
+      review_board_id=#{reviewBoardId}
+  </update>
+
 </mapper>
