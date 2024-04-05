@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface RecruitPhotoDao {
+
 // add, list, delete
 //  void add(RecruitPhoto photo);
 //
@@ -12,7 +13,5 @@ public interface RecruitPhotoDao {
 //  int delete(int no);
 //
 //  int deleteAll(int recruitBoardId);
-
-
-
+  void deleteAllPhotoByRecruitBoardId(int boardId);
 }

@@ -59,4 +59,8 @@
     delete from recruit_comment where recruit_comment_id = #{value};
   </delete>
 
+  <delete id="deleteAllCommentByRecruitBoardId" parameterType="int">
+    delete from recruit_comment where recruit_board_id=#{value}
+  </delete>
+
 </mapper>

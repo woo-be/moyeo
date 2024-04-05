@@ -8,7 +8,17 @@
     <id column="recruit_photo_id" property="recruitPhotoId"/>
     <result column="recruit_id" property="recruitBoardId"/>
     <result column="photo" property="photo"/>
+
+    <association property="recruitBoard" javaType="RecruitBoard">
+      <id column="recruit_board_id" property="recruitBoardId"/>
+    </association>
   </resultMap>
+
+  <delete id="deleteAllPhotoByRecruitBoardId" parameterType="int">
+    delete from recruit_photo where recruit_id=#{value}
+  </delete>
+
+
 
 
 </mapper>
