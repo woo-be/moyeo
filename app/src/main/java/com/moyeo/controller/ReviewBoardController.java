@@ -3,6 +3,7 @@ package com.moyeo.controller;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
+import com.moyeo.vo.Member;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
@@ -44,6 +45,12 @@ public class ReviewBoardController {
       MultipartFile[] reviewPhotos,
       HttpSession session,
       Model model) throws Exception {
+
+//    Member loginUser = (Member) session.getAttribute("loginUser");
+//    if (loginUser == null) {
+//      throw new Exception("로그인하시기 바랍니다!");
+//    }
+//    reviewBoard.setWriter(loginUser);
 
     ArrayList<ReviewPhoto> photos = new ArrayList<>();
     for (MultipartFile file : reviewPhotos) {
@@ -126,4 +133,34 @@ public class ReviewBoardController {
     reviewBoardService.delete(reviewBoardId);
     return "redirect:list";
   }
+
+  @PostMapping("update")
+  public String update(
+      ReviewBoard reviewBoard,
+      MultipartFile[] reviewPhotos,
+      HttpSession session,
+      Model model) throws Exception {
+//    model.addAttribute("updateReviewBoard", reviewBoard);
+
+//    Member loginUser = (Member) session.getAttribute("loginUser");
+//    if (loginUser == null) {
+//      throw new Exception("로그인하시기 바랍니다!");
+//    }
+//
+//    ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+//    if (old == null) {
+//      throw new Exception("번호가 유효하지 않습니다.");
+//    } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
+//      throw new Exception("권한이 없습니다.");
+//    }
+    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+    reviewBoardService.update(reviewBoard);
+    return "redirect:list";
+  }
+
+  @PostMapping("updateForm")
+  public void updateForm(ReviewBoard reviewBoard, Model model){
+    model.addAttribute("updateReviewBoard", reviewBoard);
+    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+  };
 }

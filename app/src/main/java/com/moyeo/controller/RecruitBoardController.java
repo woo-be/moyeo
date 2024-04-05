@@ -8,6 +8,7 @@ import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.Theme;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -59,7 +60,10 @@ public class RecruitBoardController {
   public String add(
       RecruitBoard board,
       int regionId,
-      int themeId) {
+      int themeId) throws Exception {
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("지역과 테마를 선택해주세요.");
+    }
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
@@ -88,22 +92,30 @@ public class RecruitBoardController {
     return "recruit/updateForm";
   }
 
-  public void update(RecruitBoard board) {
+  @PostMapping("update")
+  public String update(RecruitBoard board, int themeId, int regionId) throws Exception {
+    if (themeId == 0 || regionId == 0) {
+      throw new Exception("지역과 테마를 선택해주세요.");
+    }
+    board.setTheme(Theme.builder().themeId(themeId).build());
+    board.setRegion(Region.builder().regionId(regionId).build());
     recruitBoardService.update(board);
+    return "redirect:list";
   }
 
   @GetMapping("view")
-  public void view(int recruitBoardId, Model model) throws Exception {
+  public void view(int recruitBoardId, Model model, HttpSession session) throws Exception {
+
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
     model.addAttribute("recruitboard", recruitBoard);
 
-    // 여기다가 현재 로그인중인 멤버 정보 넘김
-    Member loginUser = Member.builder()
-        .memberId(6)
-        .name("비트").build();
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      loginUser = Member.builder().name("로그인해주세요.").build();
+    }
     model.addAttribute("loginUser", loginUser);
   }
 
@@ -114,22 +126,39 @@ public class RecruitBoardController {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
+    // YJ_TODO: photo / comment 삭제 코드 추가
     recruitBoardService.delete(recruitBoardId);
     return "redirect:list";
   }
 
-
-
-  @PostMapping("add/comment")
-  public void add(RecruitComment recruitComment, int recruitBoardId, Model model) {
+  @PostMapping("comment/add")
+  public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) {
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    model.addAttribute("recruitComment", recruitComment);
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      log.debug("로그인해주세요.");
+      return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
+    }
+
+    recruitComment.setRecruitBoard(recruitBoard);
+    recruitComment.setMember(loginUser);
+    recruitBoardService.addComment(recruitComment);
+    return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
   }
 
-  @GetMapping("delete/comment")
-  public String commentDelete(int commentId) {
-    int boardId = recruitBoardService.getComment(commentId).getRecruitBoard().getRecruitBoardId();
-    recruitBoardService.deleteComment(commentId);
-    return "redirect:view?boardId=" + boardId;  // 리디렉션 오류 (삭제완료)
+  @GetMapping("comment/delete")
+  public String commentDelete(int recruitCommentId, HttpSession session) {
+    RecruitComment recruitComment = recruitBoardService.getComment(recruitCommentId);
+    int boardId = recruitComment.getRecruitBoard().getRecruitBoardId();
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null || loginUser.getMemberId() != recruitComment.getMember().getMemberId()) {
+      log.debug("권한이 없습니다.");
+      return "redirect:../../recruit/view?recruitBoardId=" + boardId;
+    }
+
+    recruitBoardService.deleteComment(recruitCommentId);
+    return "redirect:../../recruit/view?recruitBoardId=" + boardId;
   }
 }

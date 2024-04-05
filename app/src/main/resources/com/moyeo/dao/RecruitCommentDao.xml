@@ -21,6 +21,12 @@
     </association>
   </resultMap>
 
+  <insert id="add" parameterType="RecruitComment"
+    useGeneratedKeys="true" keyColumn="recruit_comment_id" keyProperty="recruitCommentId">
+    insert into recruit_comment(recruit_board_id,member_id,content)
+    values(#{recruitBoard.recruitBoardId},#{member.memberId},#{content})
+  </insert>
+
   <select id="findBy" resultMap="RecruitCommentMap">
     select
       rc.recruit_comment_id,

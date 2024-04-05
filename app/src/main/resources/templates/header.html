@@ -17,19 +17,28 @@
     <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"></use></svg>
   </a>
 
-  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
-    <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
-    <li><a href="#" class="nav-link px-2 link-dark">일정 관리</a></li>
-    <li><a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a></li>
-    <li><a data-th-href="@{#}"  class="nav-link px-2 link-dark">마이페이지</a></li>
-  </ul>
+    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+      <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
+      <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
+      <li><a href="#" class="nav-link px-2 link-dark">일정 관리</a></li>
+      <li data-th-unless="${session.loginUser != null}">
+        <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
+      </li>
+      <li data-th-if="${session.loginUser != null}">
+        <a data-th-href="@{../member/userInfo}" class="nav-link px-2 link-dark">마이페이지</a>
+      </li>
+    </ul>
 
-  <div class="col-md-3 text-end">
-    <a data-th-href="@{../auth/form}"><button type="button" class="btn btn-outline-primary me-2" style="margin-right:100px">로그인</button></a>
-    <a data-th-href="@{../../}"><button type="button" class="btn btn-primary" style="margin-right:100px">로그아웃</button></a>
-  </div>
-</header>
+    <div class="col-md-3 text-end">
+      <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
+      <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
+        <button type="button" class="btn btn-primary me-2">로그아웃</button>
+      </a>
+      <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
+        <button type="button" class="btn btn-outline-primary me-2">로그인</button>
+      </a>
+    </div>
+  </header>
 </body>
 
 </html>

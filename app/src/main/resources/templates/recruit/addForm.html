@@ -21,15 +21,28 @@
     모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2">
   </div>
   <div>
-    지역: <input name="regionId" type="radio" value="1">서울
+    지역: <!--<input name="regionId" type="radio" value="1">서울
     <input name="regionId" type="radio" value="2">부산
     <input name="regionId" type="radio" value="3">대구
-    <input name="regionId" type="radio" value="4">인천
+    <input name="regionId" type="radio" value="4">인천-->
+    <select name="regionId">
+      <option value="0">=== 선택 ===</option>
+      <option value="1">서울</option>
+      <option value="2">부산</option>
+      <option value="3">대구</option>
+      <option value="4">인천</option>
+    </select>
   </div>
   <div>
-    테마: <input name="themeId" type="radio" value="1">힐링여행
+    테마: <!--<input name="themeId" type="radio" value="1">힐링여행
     <input name="themeId" type="radio" value="2">캠핑여행
-    <input name="themeId" type="radio" value="3">액티비티여행
+    <input name="themeId" type="radio" value="3">액티비티여행-->
+    <select name="themeId">
+      <option value="0">=== 선택 ===</option>
+      <option value="1">힐링여행</option>
+      <option value="2">캠핑여행</option>
+      <option value="3">액티비티여행</option>
+    </select>
   </div>
   <div>
     내용: <textarea name="content"></textarea>

@@ -27,9 +27,10 @@
 <body>
 
 <div data-th-object="${reviewBoard}">
-<form action="update" data-th-action="@{update}"
+<form action="updateForm.html" data-th-action="@{updateForm}"
       enctype='multipart/form-data'
       method='post'>
+  <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
   <div>
     작성자: <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
   </div>
@@ -71,7 +72,7 @@
             <input data-th-value="*{reviewCommentId}" name='reviewCommentId' type='hidden'>
             <input name="content" style='margin-left:10px' data-th-value="*{content}"  value="댓글 내용입니다.">
             <button>수정</button>
-            <!--data-th-href="@{../comment/update}" href="view.html"-->
+            <!--data-th-href="@{../comment/update}" href="userInfo.html"-->
           </form>
       </li>
     </div>

@@ -24,4 +24,6 @@ public interface RecruitBoardService {
   RecruitComment getComment(int commentId);
 
   int deleteComment(int commentId);
+
+  void addComment(RecruitComment comment);
 }

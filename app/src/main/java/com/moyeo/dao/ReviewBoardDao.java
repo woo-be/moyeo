@@ -18,5 +18,10 @@ public interface ReviewBoardDao {
   int delete(int reviewBoardId);
 
   int countAll();
+
   int countAllByRegionId(@Param("regionId")int regionId);
+
+  int update(ReviewBoard reviewBoard);
+
+  ReviewBoard get(int id);
 }

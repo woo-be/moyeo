@@ -79,5 +79,8 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     return c;
   }
 
-
+  public int update(ReviewBoard reviewBoard) {
+    int count = reviewBoardDao.update(reviewBoard);
+    return count;
+  }
 }

@@ -3,6 +3,7 @@ package com.moyeo.controller;
 import com.moyeo.service.MemberService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -59,7 +59,7 @@ public class MemberController implements InitializingBean{
 
     memberService.update(member);
     // 업데이트 후 메인페이지로 이동
-    return "redirect:index.html";
+    return "redirect:../index.html";
   }
 
   @GetMapping("list")
@@ -69,13 +69,32 @@ public class MemberController implements InitializingBean{
   }
 
 
-  //    /member/view.html 에서 attribute로 member vo 보내주기
+  //    /member/userInfo.html 에서 attribute로 member vo 보내주기
   @GetMapping("view")
   public void view(Integer no, Model model) throws Exception {
 
     Member member = memberService.get(no);
 
     model.addAttribute("member", member);
+  }
+
+
+  // session에 로그인한 loginUser의 정보를 member에 포장해 member/userInfo로 보내준다.
+  @GetMapping("/userInfo")
+  public String userInfo(HttpSession session, Model model) {
+    // 세션에서 회원 정보 가져오기
+    Member member = (Member) session.getAttribute("loginUser");
+
+    if (member != null) {
+      // 세션에 저장된 회원 정보가 있을 경우 모델에 추가하여 userInfo로 전달
+      model.addAttribute("member", member);
+      // 회원 정보를 출력하는 페이지로 이동
+      return "member/userInfo";
+    } else {
+      // 세션에 저장된 회원 정보가 없을 경우 예외 처리 또는 다른 처리 수행
+      // 로그인 페이지로 리다이렉트 또는 다른 페이지로 이동
+      return "redirect:/auth/form";
+    }
   }
 
 
