@@ -28,9 +28,10 @@
 <div data-th-replace="header :: header">머리말</div>
 
 <div data-th-object="${reviewBoard}">
-<form action="update" data-th-action="@{update}"
+<form action="updateForm.html" data-th-action="@{updateForm}"
       enctype='multipart/form-data'
       method='post'>
+  <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
   <div>
     작성자: <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
   </div>
