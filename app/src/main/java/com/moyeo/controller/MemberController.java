@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -55,13 +56,33 @@ public class MemberController implements InitializingBean{
   }
 
   @PostMapping("update")
-  public String update(Member member) throws Exception {
+  public String update(Member member, MultipartFile file, HttpSession session) throws Exception {
+
+    Integer loginedMemberId = (Integer) session.getAttribute("loginedMemberId");
+
+    Member old = memberService.get(loginedMemberId);
+    if (old == null) {
+      throw new Exception("회원번호가 유효하지 않습니다");
+    }
+
+    if (file != null) {
+      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
+      member.setPhoto(filename);
+      storageService.delete(this.bucketName, this.uploadDir, old.getPhoto());
+    } else {
+      member.setPhoto(old.getPhoto());
+    }
+    // 이전 회원 정보의 회원번호를 그대로 사용하여 회원 정보를 업데이트합니다.
+    member.setMemberId(loginedMemberId);
 
     memberService.update(member);
+    session.removeAttribute("loginUser");
+    session.setAttribute("loginUser", member);
     // 업데이트 후 메인페이지로 이동
     return "redirect:../index.html";
   }
 
+  // 현재 사용 안함
   @GetMapping("list")
   public void list(Model model) {
     model.addAttribute("list", memberService.list());
@@ -69,7 +90,7 @@ public class MemberController implements InitializingBean{
   }
 
 
-  //    /member/userInfo.html 에서 attribute로 member vo 보내주기
+  //    /member/userInfo.html에 attribute로 member 보내주기
   @GetMapping("view")
   public void view(Integer no, Model model) throws Exception {
 
@@ -97,10 +118,13 @@ public class MemberController implements InitializingBean{
     }
   }
 
-
   //  /member/delete.html 에서
   @GetMapping("delete")
-  public String delete(int no) throws Exception {
+  public String delete(@RequestParam("id") Integer no, HttpSession session) throws Exception {
+    if (no == null) {
+      throw new IllegalArgumentException("회원번호가 유효하지 않습니다!!!!");
+    }
+
     Member member = memberService.get(no);
     if(member == null) {
      throw new Exception("회원번호가 유효하지 않습니다!!!!");
@@ -108,8 +132,12 @@ public class MemberController implements InitializingBean{
 
     memberService.delete(no);
 
+    String filename = member.getPhoto();
+    if (filename != null) {
+      storageService.delete(this.bucketName, this.uploadDir, member.getPhoto());
+    }
+    session.removeAttribute("loginUser");
+
     return "redirect:../index.html";
   }
-
-
 }
