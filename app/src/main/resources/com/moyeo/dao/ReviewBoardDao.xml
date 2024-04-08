@@ -98,7 +98,7 @@
       r.region_name,
       m.member_id,
       m.nickname,
-      m.profile,
+      m.photo,
       rp.review_photo_id,
       rp.photo
     from
@@ -132,6 +132,13 @@
 <!--    r.region_name,-->
 <!--    rp.review_photo_id,-->
 <!--    rp.photo-->
+    where
+      review_board_id=#{reviewBoardId}
+  </update>
+
+  <update id="increaseViews">
+    update review_board set
+      views = views+1
     where
       review_board_id=#{reviewBoardId}
   </update>

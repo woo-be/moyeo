@@ -75,7 +75,7 @@ public class ReviewBoardController {
   public void list(
       @RequestParam(defaultValue = "6") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "0", required = false) int regionId,
+      @RequestParam(defaultValue = "0", required = false) int regionId, // 원하는 지역 id를 요청
       /*@RequestParam(required = false) int themeId,*/
       Model model) {
     if (pageSize < 3 || pageSize > 20) {
@@ -85,6 +85,8 @@ public class ReviewBoardController {
       pageNo = 1;
     }
 
+    // 사용자가 원하는 지역 또는 테마를 경우의 수로 나눠서 후기 개수를 카운트
+    // 메소드 파라미터만 달라지기 때문에 오버로딩 해서 구현
     int numOfRecord = 0;
     if (regionId == 0 /*&& themeId == 0*/) {
       numOfRecord = reviewBoardService.countAll();
@@ -102,6 +104,8 @@ public class ReviewBoardController {
       pageNo = numOfPage;
     }
 
+    // 사용자가 원하는 지역 또는 테마를 경우의 수로 나눠서 후기 리스트를 가져온다.
+    // 메소드 파라미터만 달라지기 때문에 오버로딩 해서 구현
     List<ReviewBoard> list;
     if (regionId == 0 /*&& themeId == 0*/) {
       list = reviewBoardService.list(pageNo, pageSize);
@@ -123,6 +127,8 @@ public class ReviewBoardController {
 
   @GetMapping("view")
   public void reviewBoardGet(int reviewBoardId, Model model) {
+    // view를 요청 하면 후기 테이블에 views 컬럼에 1씩 증가한다
+    reviewBoardService.increaseViews(reviewBoardId);
     model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
   }
 
