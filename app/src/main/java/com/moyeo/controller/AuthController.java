@@ -51,6 +51,8 @@ public class AuthController {
     Member member = memberService.get(email, password);
     if (member != null) {
       session.setAttribute("loginUser", member);
+      session.setAttribute("loginedMemberId", member.getMemberId());
+      log.debug(String.format("컨텐트======================================\n%s", member.getIntroduce()));
       // 로그인 성공 시 home.html로 리디렉션
       return "redirect:/home";
     } else {
