@@ -18,22 +18,23 @@
 <p><a data-th-href="@{form}" href="form.html">새 글</a></p>
 <div style= 'display:flex'>
   <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}" >
-      <div style='border: 1px solid black; float:left'>
-        <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}" href="view.html">
-          <div style='border: 1px solid black; float:left'>
-            <!--
-            <img data-th-if="*{photos[0].photo != null}" alt="여행 사진" src="*{photos[0].photo}">
-            <img data-th-unless="*{photos[0].photo != null}" src="/static/img/default-review-photo.png" alt="여행 사진">
-            -->
-            <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height='200' src="/static/img/default-review-photo.png">
-          </div>
-          <div class="work-info" style='border: 1px solid black; float:none'>
-            <h3 data-th-text="*{title}">제목입니다</h3>
-            <span data-th-text="*{writer.nickname}">홍길동</span>
-            <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
-          </div>
-        </a>
-      </div>
+    <div style='border: 1px solid black; float:left'>
+      <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}" href="view.html">
+        <div style='border: 1px solid black; float:left'>
+          <!--
+          <img data-th-if="*{photos[0].photo != null}" alt="여행 사진" src="*{photos[0].photo}">
+          <img data-th-unless="*{photos[0].photo != null}" src="/static/img/default-review-photo.png" alt="여행 사진">
+          -->
+          <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height='200' src="/static/img/default-review-photo.png">
+        </div>
+        <div class="work-info" style='border: 1px solid black; float:none'>
+          <h3 data-th-text="*{title}">제목입니다</h3>
+          <p data-th-text="*{views}">조회수</p>
+          <span data-th-text="*{writer.nickname}">홍길동</span>
+          <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
+        </div>
+      </a>
+    </div>
   </tr>
 </div>
 

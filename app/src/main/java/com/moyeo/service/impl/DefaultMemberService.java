@@ -24,7 +24,7 @@ public class DefaultMemberService implements MemberService {
     memberDao.add(member);
   }
 
-
+  // email, password를 사용해 사용자 정보 가져오기
   @Override
   public Member get(String email, String password) {
     return memberDao.findByEmailAndPassword(email, password);
@@ -41,11 +41,13 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findAll();
   }
 
+  // 회원 정보 수정
   @Override
   public int update(Member member) {
     return memberDao.update(member);
   }
 
+  // 회원 탈퇴
   @Override
   public int delete(int no) {
     return memberDao.delete(no);

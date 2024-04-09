@@ -12,19 +12,19 @@ public interface MemberDao {
   void add(Member member);
 
   // memberid 찾을때
-  public int delete(int no);
+  int delete(int no);
 
   // xml에서 select list 받을때
-  public List<Member> findAll();
+  List<Member> findAll();
 
   // 정보 업데이트
-  public int update(Member member);
+  int update(Member member);
 
   // member_id 찾을때
-  public Member findBy(int no);
+  Member findBy(int no);
 
   // 로그인 할때
-  public Member findByEmailAndPassword(
+  Member findByEmailAndPassword(
       @Param("email") String email,
       @Param("password") String password);
 
