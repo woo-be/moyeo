@@ -74,7 +74,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public void plusViews(int boardId) {
+  public void plusViews(int boardId) { // 조회수 증가
     recruitBoardDao.plusViews(boardId);
   }
 }

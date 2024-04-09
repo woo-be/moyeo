@@ -148,6 +148,7 @@
       recruit_board_id=#{recruitBoardId}
   </update>
 
+  <!-- 조회수 증가 -->
   <update id="plusViews" parameterType="int">
     update
       recruit_board

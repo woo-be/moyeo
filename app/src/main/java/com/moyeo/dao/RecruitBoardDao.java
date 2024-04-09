@@ -19,5 +19,6 @@ public interface RecruitBoardDao {
   @Transactional
   int delete(int no);
   int countAll();
+  // 조회수 증가
   void plusViews(int boardId);
 }
