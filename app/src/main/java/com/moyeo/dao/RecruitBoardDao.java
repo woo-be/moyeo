@@ -12,6 +12,10 @@ public interface RecruitBoardDao {
   List<RecruitBoard> findAll(
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
+
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  List<RecruitBoard> findScrap(int memberId);
+
   RecruitBoard findBy(int no);
 
   int update(RecruitBoard recruitBoard);

@@ -13,6 +13,9 @@ public interface RecruitBoardService {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
 
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  List<RecruitBoard> scrapList(int memberId);
+
   RecruitBoard get(int boardId);
 
   int update(RecruitBoard board);

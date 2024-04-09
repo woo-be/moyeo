@@ -33,6 +33,12 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  @Override
+  public List<RecruitBoard> scrapList(int memberId) {
+    return recruitBoardDao.findScrap(memberId);
+  }
+
   @Override
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
