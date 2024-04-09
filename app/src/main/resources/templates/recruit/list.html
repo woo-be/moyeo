@@ -31,7 +31,7 @@
   <tbody>
   <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
     <td data-th-text="*{recruitBoardId}">1</td>
-    <td><a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+    <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
     <td data-th-text="*{writer.name}">홍길동</td>
     <td data-th-text="*{current}">1</td>
     <td data-th-text="*{recruitTotal}">4</td>

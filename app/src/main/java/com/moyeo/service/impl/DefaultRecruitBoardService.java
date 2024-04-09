@@ -72,4 +72,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int countAll() {
     return recruitBoardDao.countAll();
   }
+
+  @Override
+  public void plusViews(int boardId) {
+    recruitBoardDao.plusViews(boardId);
+  }
 }
+

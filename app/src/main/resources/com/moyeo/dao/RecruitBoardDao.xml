@@ -21,7 +21,8 @@
     <result column="views" property="views"/>
     
     <association property="writer" javaType="Member">
-      <id column="name" property="name"/>
+      <id column="member_id" property="memberId"/>
+      <result column="name" property="name"/>
     </association>
 
     <association property="region" javaType="Region">
@@ -82,7 +83,8 @@
       rb.end_date,
       rb.recruit_total,
       rb.region_id,
-      rb.theme_id
+      rb.theme_id,
+      rb.member_id
     from
       recruit_board rb
       left join region reg on rb.region_id=reg.region_id
@@ -144,6 +146,15 @@
       longitude=#{longitude}
     where
       recruit_board_id=#{recruitBoardId}
+  </update>
+
+  <update id="plusViews" parameterType="int">
+    update
+      recruit_board
+    set
+      views = views + 1
+    where
+      recruit_board_id=#{value};
   </update>
 
 </mapper>

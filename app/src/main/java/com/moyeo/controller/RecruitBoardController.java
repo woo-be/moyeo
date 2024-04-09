@@ -10,12 +10,16 @@ import com.moyeo.vo.Theme;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
 import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -63,51 +67,77 @@ public class RecruitBoardController {
   public String add(
       RecruitBoard board,
       int regionId,
-      int themeId) throws Exception {
+      int themeId,
+      HttpSession session) throws Exception {
+
+    // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
       throw new Exception("지역과 테마를 선택해주세요.");
     }
+
+    // 현재 로그인한 사용자로 board 객체의 writer를 세팅함.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    board.setWriter(loginUser);
+
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요한 서비스입니다.");
+    }
+
+    // board 객체의 regionId와 themeId를 세팅함.
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
-    // 임시 멤버 객체, 세션에서 받아오도록 해야 함.
-    Member loginUser = Member.builder()
-        .memberId(6)
-        .name("비트").build();
-
-    board.setWriter(loginUser);
-
+    // DBMS에 해당 게시물 업로드.
     recruitBoardService.add(board);
 
     return "redirect:list";
   }
 
   @GetMapping("addForm")
-  public String addForm() throws Exception {
-    return "recruit/addForm";
+  public void addForm() throws Exception {
   }
 
   @PostMapping("updateForm")
-  public String updateForm(int recruitBoardId, Model model) throws Exception {
+  public void updateForm(int recruitBoardId, Model model, HttpSession session) throws Exception {
+
+    // 로그인한 상태인지 아닌지 검사.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인 하시기 바랍니다.");
+    }
+
+    // boardId로 게시글을 찾음.
     RecruitBoard board = recruitBoardService.get(recruitBoardId);
-    log.debug("board: " + board);
+
+    // 해당 게시글의 작성자 정보와 로그인한 사용자의 정보가 일치하는지 검사.
+    if (board.getWriter().getMemberId() != loginUser.getMemberId()) {
+      throw new Exception("권한이 없습니다.");
+    }
+
+    // 해당 게시글을 "board"라는 이름으로 모델 객체에 저장.
     model.addAttribute("board", board);
-    return "recruit/updateForm";
   }
 
   @PostMapping("update")
   public String update(RecruitBoard board, int themeId, int regionId) throws Exception {
+
+    // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
       throw new Exception("지역과 테마를 선택해주세요.");
     }
+
+    // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
     board.setTheme(Theme.builder().themeId(themeId).build());
     board.setRegion(Region.builder().regionId(regionId).build());
+    // DBMS의 정보를 해당 board 객체로 수정함.
     recruitBoardService.update(board);
     return "redirect:list";
   }
 
   @GetMapping("view")
-  public void view(int recruitBoardId, Model model, HttpSession session) throws Exception {
+  public void view(int recruitBoardId, Model model,
+      HttpSession session
+  ) throws Exception {
 
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
@@ -121,6 +151,25 @@ public class RecruitBoardController {
     }
     model.addAttribute("loginUser", loginUser);
   }
+
+  @GetMapping("viewCountUp")
+  public String viewCountUp(int recruitBoardId,
+      @CookieValue(required = false) String views,
+      HttpServletResponse res) {
+    if (views == null || views.isEmpty()) {
+      Cookie cookie = new Cookie("views", "[" + recruitBoardId + "]");
+      res.addCookie(cookie);
+      recruitBoardService.plusViews(recruitBoardId);
+    } else {
+      if (!views.contains(String.valueOf(recruitBoardId))) {
+        Cookie cookie = new Cookie("views", views + "[" + recruitBoardId + "]");
+        res.addCookie(cookie);
+        recruitBoardService.plusViews(recruitBoardId);
+      }
+    }
+    return "redirect:view?recruitBoardId=" + recruitBoardId;
+  }
+
 
   @GetMapping("delete")
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
