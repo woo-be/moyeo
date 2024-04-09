@@ -6,14 +6,15 @@
 </head>
 <body>
 
-<form data-th-object="${loginUser}" enctype='multipart/form-data' method='post'>
-  <div>
-    프로필사진: <textarea data-th-text="*{photo}" readonly type='text'>프로필사진</textarea>
-    작성자: <textarea data-th-text="*{name}" readonly type='text'>홍길동</textarea>
-    내용: <input name="content" type="text">
-    <button>전송</button>
-  </div>
-</form>
+<div data-th-fragment="recruitcommentupdate">
+  <input data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
+  프로필사진: <input data-th-value="*{member.photo}" readonly type='text' value="프사"/>
+  작성자: <input data-th-value="*{member.nickname}" readonly type='text' value="닉네임"/>
+  내용: <input id="commentcontent" data-th-value="*{content}" type='text' name="content" value="내용"/>
+  작성일: <input data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
+              type='text' value="2024-04-03"/>
+  <button id="submitBtn" onclick="submitContent()">전송</button>
+</div>
 
 </body>
 </html>

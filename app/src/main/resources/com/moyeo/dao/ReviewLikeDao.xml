@@ -5,6 +5,10 @@
 
 <mapper namespace="com.moyeo.dao.ReviewLikeDao">
 
+  <insert id="add" parameterType="int">
+    insert into review_like(member_id, review_board_id) values(#{memberId},#{reviewBoardId});
+  </insert>
+
   <delete id="deleteAll" parameterType="int">
     delete from review_like
     where review_board_id=#{value}

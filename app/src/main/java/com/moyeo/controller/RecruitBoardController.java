@@ -205,6 +205,29 @@ public class RecruitBoardController {
     return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
   }
 
+  @PostMapping("comment/update")
+  public String commentUpdate(RecruitComment recruitComment, HttpSession session) throws Exception {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인하시기 바랍니다!");
+    }
+
+    RecruitComment old = recruitBoardService.getComment(recruitComment.getRecruitCommentId());
+
+    log.debug("recruitComment.getRecruitCommentId()" + recruitComment.getRecruitCommentId());
+
+    if (old.getMember().equals(loginUser)) {
+      throw new Exception("권한이 없습니다.");
+    }
+
+    recruitComment.setRecruitBoard(old.getRecruitBoard());
+    recruitComment.setMember(old.getMember());
+
+    recruitBoardService.updateComment(recruitComment);
+    return "redirect:../../recruit/view?recruitBoardId=" + recruitComment.getRecruitBoard().getRecruitBoardId();
+
+  }
+
   @GetMapping("comment/delete")
   public String commentDelete(int recruitCommentId, HttpSession session) {
     RecruitComment recruitComment = recruitBoardService.getComment(recruitCommentId);

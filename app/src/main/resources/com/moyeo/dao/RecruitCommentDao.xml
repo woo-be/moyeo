@@ -55,6 +55,13 @@
       rb.recruit_board_id=#{value}
   </select>
 
+  <update id="update" parameterType="RecruitComment">
+    update recruit_comment set
+      content=#{content}
+    where
+      recruit_comment_id=#{recruitCommentId}
+  </update>
+
   <delete id="delete" parameterType="int">
     delete from recruit_comment where recruit_comment_id = #{value};
   </delete>
