@@ -19,8 +19,8 @@
 
   <!-- 회원 정보 저장 (회원가입) -->
   <insert id="add" parameterType="Member">
-    insert into member(email, password, name, nickname, phone_number, birth_date, gender, introduce)
-    values(#{email}, sha2(#{password},256), #{name}, #{nickname}, #{phoneNumber}, #{birthdate}, #{gender}, #{introduce})
+    insert into member(email, password, name, nickname, phone_number, birth_date, gender, introduce, photo)
+    values(#{email}, sha2(#{password},256), #{name}, #{nickname}, #{phoneNumber}, #{birthdate}, #{gender}, #{introduce}, #{photo})
   </insert>
 
 
@@ -33,41 +33,43 @@
   <!-- 회원 정보 수정 (회원수정) -->
   <update id="update" parameterType="Member">
     update member set
-    email=#{email},
     name=#{name},
-    phone_number=#{phoneNumber},
-    birth_date=#{birthdate}
+    nickname=#{nickname},
+    introduce=#{introduce}
     where
     member_id=#{memberId}
   </update>
 
 
+  <!-- 회원 정보 가져오기 -->
   <select id="findAll" resultMap="MemberMap">
     select
-    member_no,
+    member_id,
     email,
     name,
     photo,
-    created_date
+    introduce
     from
     member
   </select>
 
 
+  <!-- 회원 번호로 정보 가져오기       현재는 사용안함!-->
   <select id="findBy" resultMap="MemberMap" parameterType="int">
     select
-    member_no,
+    member_id,
     email,
     name,
     photo,
-    created_date
+    introduce
     from
     member
     where
-    member_no=#{value}
+    member_id=#{value}
   </select>
 
 
+  <!-- email, password로 회원 정보 가져오기 -->
   <select id="findByEmailAndPassword" resultMap="MemberMap">
     select
     member_id,
@@ -75,7 +77,9 @@
     name,
     nickname,
     phone_number,
-    birth_date
+    birth_date,
+    introduce,
+    photo
     from
     member
     where

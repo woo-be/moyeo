@@ -17,7 +17,7 @@
       <id column="member_id" property="memberId"/>
       <result column="name" property="name"/>
       <result column="nickname" property="nickname"/>
-      <result column="profile" property="photo"/>
+      <result column="photo" property="photo"/>
     </association>
   </resultMap>
 
@@ -46,7 +46,7 @@
       rc.content,
       rc.created_date,
       m.nickname,
-      m.profile
+      m.photo
     from
       recruit_comment rc
       left join recruit_board rb on rb.recruit_board_id=rc.recruit_board_id
@@ -57,6 +57,10 @@
 
   <delete id="delete" parameterType="int">
     delete from recruit_comment where recruit_comment_id = #{value};
+  </delete>
+
+  <delete id="deleteAllCommentByRecruitBoardId" parameterType="int">
+    delete from recruit_comment where recruit_board_id=#{value}
   </delete>
 
 </mapper>

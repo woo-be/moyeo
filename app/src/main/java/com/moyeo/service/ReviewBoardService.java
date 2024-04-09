@@ -7,6 +7,7 @@ import java.util.List;
 public interface ReviewBoardService {
 
   void add(ReviewBoard reviewBoard);
+  void increaseViews(int reviewBoardId);
 
   List<ReviewBoard> list(int pageNo, int pageSize);
   List<ReviewBoard> list(int pageNo, int pageSize, int regionId);

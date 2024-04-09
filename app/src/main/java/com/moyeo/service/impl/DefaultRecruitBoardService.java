@@ -1,8 +1,8 @@
 package com.moyeo.service.impl;
 
-import com.moyeo.controller.RecruitBoardController;
 import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
+import com.moyeo.dao.RecruitPhotoDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
@@ -19,6 +20,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private static final Log log = LogFactory.getLog(DefaultRecruitBoardService.class);
   private final RecruitBoardDao recruitBoardDao;
   private final RecruitCommentDao recruitCommentDao;
+  private final RecruitPhotoDao recruitPhotoDao;
 
   @Override
   public void add(RecruitBoard board) {
@@ -43,8 +45,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoardDao.update(board);
   }
 
+  @Transactional
   @Override
   public int delete(int boardId) {
+    recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
+//    recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
     return recruitBoardDao.delete(boardId);
   }
 
@@ -67,4 +72,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int countAll() {
     return recruitBoardDao.countAll();
   }
+
+  @Override
+  public void plusViews(int boardId) {
+    recruitBoardDao.plusViews(boardId);
+  }
 }
+

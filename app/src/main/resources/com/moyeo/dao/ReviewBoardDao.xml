@@ -136,4 +136,11 @@
       review_board_id=#{reviewBoardId}
   </update>
 
+  <update id="increaseViews">
+    update review_board set
+      views = views+1
+    where
+      review_board_id=#{reviewBoardId}
+  </update>
+
 </mapper>

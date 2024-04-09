@@ -41,6 +41,11 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   }
 
   @Override
+  public void increaseViews(int reviewBoardId) {
+    reviewBoardDao.increaseViews(reviewBoardId);
+  }
+
+  @Override
   public List<ReviewBoard> list(int pageNo, int pageSize) {
     return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }

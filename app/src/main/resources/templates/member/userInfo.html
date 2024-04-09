@@ -12,36 +12,58 @@
 <div data-th-replace="header :: header">머리말</div>
 
 <h1>내 정보</h1>
+<form action="#" data-th-action="@{update}" data-th-object="${member}"
+      enctype='multipart/form-data'
+      method='post'>
   <div class="table-responsive">
     <div data-th-if="${member != null}">
-      <form data-th-object="${member}" method="get">
-        <div class="form-group">
-          <strong>이메일</strong>
-          <input type="text" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>이름</strong>
-          <input type="text" data-th-value="*{name}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>닉네임</strong>
-          <input type="text" data-th-value="*{nickname}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>휴대폰 번호</strong>
-          <input type="text" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>생일</strong>
-          <input type="text" data-th-value="*{birthdate}" class="form-control" style="width:300px;" readonly>
-        </div>
-      </form>
+      <div class="form-group">
+        <strong>사진</strong>
+        <img data-th-if="*{photo}"
+             data-th-src="@{'https://rljiyddk2675.edge.naverncp.com/68i0l8DhXa/member/' + *{photo}(type=f,w=20,h=20,ttype=jpg)}"
+             src="/img/default-photo.jpeg">
+        <img data-th-unless="*{photo}" src='/img/default-photo.jpeg' class="form-control" style="width:300px;">
+      </div>
+      <div class="form-group">
+        <strong>회원번호</strong>
+        <input type="hidden" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
+      </div>
+      <div class="form-group">
+        <strong>이메일</strong>
+        <input type="text" name="email" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
+      </div>
+      <div class="form-group">
+        <strong>이름</strong>
+        <input type="text" name="name" data-th-value="*{name}" class="form-control" style="width:300px;">
+      </div>
+      <div class="form-group">
+        <strong>닉네임</strong>
+        <input type="text" name="nickname" data-th-value="*{nickname}" class="form-control" style="width:300px;">
+      </div>
+      <div class="form-group">
+        <strong>휴대폰 번호</strong>
+        <input type="text" name="phoneNumber" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;">
+      </div>
+      <div class="form-group">
+        <strong>생일</strong>
+        <input type="text" name="birthdate" data-th-value="*{birthdate}" class="form-control" style="width:300px;">
+      </div>
+      <div class="form-group">
+        <strong>자기소개</strong>
+        <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;">
+      </div>
     </div>
   </div>
-<div data-th-if="${member == null}">
-  <p>No member information found.</p>
-</div>
+  <div>
+    <button type="submit">변경</button>
+    <a data-th-href="@{delete(id=*{memberId})}" href="delete.html">[삭제]</a>
+  </div>
+  <div data-th-if="${member == null}">
+    <p>No member information found.</p>
+  </div>
+</form>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
+
 </body>
 </html>

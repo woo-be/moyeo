@@ -3,6 +3,8 @@ package com.moyeo.service;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.ibatis.annotations.Param;
 
 public interface RecruitBoardService {
@@ -26,4 +28,7 @@ public interface RecruitBoardService {
   int deleteComment(int commentId);
 
   void addComment(RecruitComment comment);
+
+  // 조회수 증가
+  void plusViews(int boardId);
 }

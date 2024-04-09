@@ -19,4 +19,5 @@ public interface RecruitBoardDao {
   @Transactional
   int delete(int no);
   int countAll();
+  void plusViews(int boardId);
 }

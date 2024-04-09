@@ -2,12 +2,18 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
+
+<div data-th-replace="header :: header">머리말</div>
+
 <body>
 <h2>모집 게시판</h2>
 
 <form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
-  <h5>update form</h5>
   <input type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
   <div>
     제목: <input name="title" type="text" data-th-value="*{title}">
@@ -26,28 +32,74 @@
     모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
   </div>
   <div>
-    지역: <!--<input name="regionId" type="radio" data-th-checked="*{region.regionId == 1}" value="1">서울
-    <input name="regionId" type="radio" data-th-checked="*{region.regionId == 2}" value="2">부산
-    <input name="regionId" type="radio" data-th-checked="*{region.regionId == 3}" value="3">대구
-    <input name="regionId" type="radio" data-th-checked="*{region.regionId == 4}" value="4">인천-->
-    <select name="regionId">
+    지역:
+    <label for="regionId"></label>
+    <select name="regionId" id="regionId">
       <option value="0">=== 선택 ===</option>
       <option value="1">서울</option>
       <option value="2">부산</option>
       <option value="3">대구</option>
       <option value="4">인천</option>
     </select>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        let dropdown = document.getElementById("regionId");
+        let condition = [[${board.region.regionId}]];
+
+        switch (condition) {
+          case 1:
+            dropdown.value = "1";
+            break;
+          case 2:
+            dropdown.value = "2";
+            break;
+          case 3:
+            dropdown.value = "3";
+            break;
+          case 4:
+            dropdown.value = "4";
+            break;
+          default:
+            dropdown.value = "0";
+            break;
+        }
+      });
+    </script>
+
   </div>
   <div>
-    테마: <!--<input name="themeId" type="radio" data-th-checked="*{theme.themeId == 1}" value="1">힐링여행
-    <input name="themeId" type="radio" data-th-checked="*{theme.themeId == 2}" value="2">캠핑여행
-    <input name="themeId" type="radio" data-th-checked="*{theme.themeId == 3}" value="3">액티비티여행-->
-    <select name="themeId">
+    테마:
+    <label for="themeId"></label>
+    <select name="themeId" id="themeId">
       <option value="0">=== 선택 ===</option>
       <option value="1">힐링여행</option>
       <option value="2">캠핑여행</option>
       <option value="3">액티비티여행</option>
     </select>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        let dropdown = document.getElementById("themeId");
+        let condition = [[${board.theme.themeId}]];
+
+        switch (condition) {
+          case 1:
+            dropdown.value = "1";
+            break;
+          case 2:
+            dropdown.value = "2";
+            break;
+          case 3:
+            dropdown.value = "3";
+            break;
+          default:
+            dropdown.value = "0";
+            break;
+        }
+      });
+    </script>
+
   </div>
   <div>
     내용: <textarea name="content" data-th-text=*{content}></textarea>
@@ -77,4 +129,7 @@
 </form>
 
 </body>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
 </html>

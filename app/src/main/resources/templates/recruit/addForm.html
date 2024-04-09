@@ -2,12 +2,18 @@
 <html lang='en'>
 <head>
   <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
+
+<div data-th-replace="header :: header">머리말</div>
+
 <body>
 <h2>모집 게시판</h2>
 
 <form action="add" data-th-action="@{add}" method="post" enctype='multipart/form-data'>
-  <h5>add form</h5>
   <div>
     제목: <input name="title" type="text">
   </div>
@@ -21,10 +27,7 @@
     모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2">
   </div>
   <div>
-    지역: <!--<input name="regionId" type="radio" value="1">서울
-    <input name="regionId" type="radio" value="2">부산
-    <input name="regionId" type="radio" value="3">대구
-    <input name="regionId" type="radio" value="4">인천-->
+    지역:
     <select name="regionId">
       <option value="0">=== 선택 ===</option>
       <option value="1">서울</option>
@@ -34,9 +37,7 @@
     </select>
   </div>
   <div>
-    테마: <!--<input name="themeId" type="radio" value="1">힐링여행
-    <input name="themeId" type="radio" value="2">캠핑여행
-    <input name="themeId" type="radio" value="3">액티비티여행-->
+    테마:
     <select name="themeId">
       <option value="0">=== 선택 ===</option>
       <option value="1">힐링여행</option>
@@ -60,4 +61,7 @@
 </form>
 
 </body>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
+
 </html>
