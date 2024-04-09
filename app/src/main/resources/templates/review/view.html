@@ -46,7 +46,9 @@
     <button>변경</button>
     <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>
   </div>
-  
+
+  <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기" height= "4%" width= "4%" /></a>
+
 </form>
 
   <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none;">

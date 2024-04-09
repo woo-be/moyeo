@@ -1,8 +1,10 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.RegionService;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
+import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
@@ -34,6 +36,8 @@ public class ReviewBoardController {
   private final ReviewBoardService reviewBoardService;
   private final StorageService storageService;
   private final ReviewCommentService reviewCommentService;
+  private final RegionService regionService;
+  private final ThemeService themeService;
   private final String uploadDir = "review/";
 
   @Value("${ncp.ss.bucketname}")
@@ -58,24 +62,25 @@ public class ReviewBoardController {
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
-    for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
-      ReviewPhoto reviewPhoto = reviewPhotos.get(i);
-      if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
-        storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-        log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
-        reviewPhotos.remove(i);
+    if (reviewPhotos != null) {
+      for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
+        ReviewPhoto reviewPhoto = reviewPhotos.get(i);
+        if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
+          storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
+          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+          reviewPhotos.remove(i);
+        }
       }
-    }
-
-    if (reviewPhotos.size() > 0) {
-      reviewBoard.setPhotos(reviewPhotos);
+      if (reviewPhotos.size() > 0) {
+        reviewBoard.setPhotos(reviewPhotos);
+      }
     }
 
     reviewBoardService.add(reviewBoard);
 
     sessionStatus.setComplete();
 
-    return "redirect:list";
+    return "redirect:view?reviewBoardId="+ reviewBoard.getReviewBoardId();
   }
 
 
@@ -154,7 +159,7 @@ public class ReviewBoardController {
       HttpSession session,
       Model model,
       SessionStatus sessionStatus) throws Exception {
-    model.addAttribute("updateReviewBoard", reviewBoard);
+//    model.addAttribute("updateReviewBoard", reviewBoard);
 
 //    Member loginUser = (Member) session.getAttribute("loginUser");
 //    if (loginUser == null) {
@@ -162,6 +167,7 @@ public class ReviewBoardController {
 //    }
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+    log.debug(old);
 //    if (old == null) {
 //      throw new Exception("번호가 유효하지 않습니다.");
 //    } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
@@ -170,22 +176,24 @@ public class ReviewBoardController {
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
-    if (old.getPhotos().size() > 0) {
+    if (old.getPhotos().getFirst().getPhoto() != null) {
       reviewPhotos.addAll(old.getPhotos());
     }
 
-    for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
-      ReviewPhoto reviewPhoto = reviewPhotos.get(i);
-      if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
-        storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-        log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
-        reviewPhotos.remove(i);
-      }
-    }
 
-    if (reviewPhotos.size() > 0) {
-      reviewBoard.setPhotos(reviewPhotos);
-    }
+      for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
+        ReviewPhoto reviewPhoto = reviewPhotos.get(i);
+        if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
+          storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
+          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+          reviewPhotos.remove(i);
+        }
+      }
+
+      if (reviewPhotos.size() > 0) {
+        reviewBoard.setPhotos(reviewPhotos);
+      }
+
 
     reviewBoardService.update(reviewBoard);
 
@@ -193,18 +201,23 @@ public class ReviewBoardController {
 
 //    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
 //    reviewBoardService.update(reviewBoard);
-    return "redirect:list";
+    return "redirect:view?reviewBoardId="+ reviewBoard.getReviewBoardId();
   }
 
   @PostMapping("updateForm")
-  public void updateForm(ReviewBoard reviewBoard, Model model){
+  public void updateForm(ReviewBoard reviewBoard, Model model) {
     model.addAttribute("updateReviewBoard", reviewBoard);
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
-  };
+    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+  }
+
+  ;
 
   @PostMapping("photo/upload")
   @ResponseBody
-  public Object photoUpload(MultipartFile[] photos, HttpSession session, Model model) throws Exception {
+  public Object photoUpload(MultipartFile[] photos, HttpSession session, Model model)
+      throws Exception {
+
     ArrayList<ReviewPhoto> reviewPhotos = new ArrayList<>();
 
 //    Member loginUser = (Member) session.getAttribute("loginUser");
@@ -246,6 +259,6 @@ public class ReviewBoardController {
 
     storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
 
-    return "redirect:../view?no=" +photo.getReviewBoardId();
+    return "redirect:../view?no=" + photo.getReviewBoardId();
   }
 }
