@@ -55,11 +55,41 @@
 <script>
 
   $(document).ready(function() {
-  var options = new Object();
-  options.height = 300;
-  options.width = 900;
+  $('#summernote').summernote({
+  height : 300,
+  width : 900,
+  callbacks: {
+    onInit: function() {
+      console.log('Summernote is launched');
+    },
+    onImageUpload: function(photos) {
+      let data = new FormData();
+      for (const photo of photos) {
+        data.append("photos", photo);
+        }
+        $.ajax({
+          url: 'photo/upload',
+          type: 'POST',
+          dataType: 'json',
+          contentType: false,
+          processData: false,
+          data: data
+        })
+        .done(function(result) {
+<!--          if (result.length == 0) {-->
+<!--            alert('로그인 하세요!');-->
+<!--            return;-->
+<!--          }-->
 
-    $('#summernote').summernote(options);
+          for (const reviewPhoto of result) {
+            $('#summernote').summernote('insertImage',
+              'https://kr.object.ncloudstorage.com/moyeo-bucket/reivew/'
+              + reviewPhoto.photo);
+          }
+        });
+      }
+    }
+  });
   });
 
 </script>

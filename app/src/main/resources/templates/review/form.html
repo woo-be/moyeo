@@ -38,13 +38,44 @@
   <div>
     제목: <input name='title' type='text'>
   </div>
+  <div>
+    지역:
+    <select name="regionId">
+      <option value="0">===선택===</option>
+      <option value="1">서울특별시</option>
+      <option value="2">부산광역시</option>
+      <option value="3">대구광역시</option>
+      <option value="4">인천광역시</option>
+      <option value="5">광주광역시</option>
+      <option value="6">대전광역시</option>
+      <option value="7">울산광역시</option>
+      <option value="8">세종특별시</option>
+      <option value="9">경기도</option>
+      <option value="10">충청북도</option>
+      <option value="11">충청남도</option>
+      <option value="12">강원도</option>
+      <option value="13">전라북도</option>
+      <option value="14">전라남도</option>
+      <option value="15">경상북도</option>
+      <option value="16">경상남도</option>
+      <option value="17">제주도</option>
+    </select>
+    </div>
+      테마:
+      <select name="themeId">
+        <option value="0">===선택===</option>
+        <option value="1">힐링</option>
+        <option value="2">캠핑</option>
+        <option value="3">액티비티</option>
+      </select>
+  </div>
   <div id="map" style="width:500px;height:400px;"></div>
   <div>
     내용: <textarea name='content' id="summernote"></textarea>
   </div>
-  <div>
-    첨부파일: <input multiple name='reviewPhotos' type='file'>
-  </div>
+<!--  <div>-->
+<!--    첨부파일: <input multiple name='reviewPhotos' type='file'>-->
+<!--  </div>-->
   <div>
     <button>등록</button>
   </div>
@@ -55,13 +86,46 @@
 
 
 <script>
-
   $(document).ready(function() {
-  var options = new Object();
-  options.height = 300;
-  options.width = 900;
 
-    $('#summernote').summernote(options);
+    $('#summernote').summernote({
+      height: 300,
+      width: 500,
+
+  callbacks: {
+    onInit: function() {
+      console.log('Summernote 생성됨!');
+    },
+    onImageUpload: function(photos) {
+
+      let data = new FormData();
+      for (const photo of photos) {
+        data.append("photos", photo);
+      }
+      $.ajax({
+        url: 'photo/upload',
+        type: 'POST',
+        dataType: 'json',
+        contentType: false,
+        processData: false,
+        data: data
+      })
+      .done(function(result) {
+<!--        if (result.length == 0) {-->
+<!--          alert('로그인 하세요!');-->
+<!--          return;-->
+<!--        }-->
+
+        for (const reviewPhoto of result) {
+          $('#summernote').summernote('insertImage',
+            'https://kr.object.ncloudstorage.com/moyeo-bucket/review/'
+            + reviewPhoto.photo);
+        }
+      });
+    }
+  }
+    });
+
   });
 
   /* 네이버 지도API */
@@ -85,6 +149,7 @@
 
 
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
