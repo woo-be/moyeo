@@ -7,6 +7,7 @@
   <title>Bootstrap 5 Example</title>
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 </head>
 <body  data-th-object="${recruitboard}">
 
@@ -67,30 +68,78 @@
     댓글
     <ul data-th-if="*{comments}">
       <li data-th-each="comment : *{comments}" data-th-object="${comment}">
-        프로필사진: <textarea data-th-text="*{member.photo}" readonly type='text'>홍길동</textarea>
-        작성자: <textarea data-th-text="*{member.nickname}" readonly type='text'>홍길동</textarea>
-        내용: <textarea data-th-text="*{content}" readonly type='text'>댓글내용</textarea>
-        작성일: <textarea data-th-value="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
-                       type='text'>2024-04-03</textarea>
-        <button>수정</button>
-        <a data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}" href="delete.html">
-          <button>삭제</button>
-        </a>
+        <div id="commentviewform">
+          <input data-th-value="*{recruitCommentId}" type="hidden"/>
+          프로필사진: <input data-th-value="*{member.photo}" readonly type='text' value="프사"/>
+          작성자: <input data-th-value="*{member.nickname}" readonly type='text' value="닉네임"/>
+          내용: <input id="commentcontent" data-th-value="*{content}" readonly type='text' value="내용"/>
+          작성일: <input data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
+                      type='text' value="2024-04-03"/>
+          <button id="editBtn">수정</button>
+          <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
+             href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+        </div>
+        <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
+              action="view.html" method='post' style="display:none;">
+          <div id="updateform" data-th-replace="recruit/commentform :: recruitcommentupdate"></div>
+        </form>
+        <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
       </li>
     </ul>
   </div>
 
   <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
     <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
-    <div>
-      프로필사진: <input data-th-value="*{photo}" readonly type='text'/>
-      작성자: <input  data-th-value="*{name}" name="name" readonly type='text'/>
-      내용: <textarea name="content" type="text"></textarea>
-      <button>전송</button>
-    </div>
+    프로필사진: <input data-th-value="*{photo}" readonly type='text'/>
+    작성자: <input data-th-value="*{name}" name="name" readonly type='text'/>
+    내용: <textarea id="content" name="content" type="text"></textarea>
+    <button id="submit">전송</button>
   </form>
 </div>
 
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>
+
+<script>
+
+
+  // editBtn 클릭 시 실행될 함수
+  function editComment() {
+    // 클릭된 editBtn 요소의 부모 요소인 li 태그 선택
+    var listItem = event.target.closest("li");
+
+    var commentViewForm = listItem.querySelector("#commentviewform");
+    var updateCommentForm = listItem.querySelector("#updatecomment");
+    var cancelBtn = listItem.querySelector("#cancelBtn");
+    var submitBtn = listItem.querySelector("#submitBtn");
+
+    // commentViewForm-> none, updateCommentForm/cancelBtn-> block
+    commentViewForm.style.display = "none";
+    updateCommentForm.style.display = "block";
+    cancelBtn.style.display = "block";
+
+    // 전송 버튼에 클릭 이벤트 추가
+    submitBtn.addEventListener("click", function() {
+      commentViewForm.style.display = "block";
+      updateCommentForm.style.display = "none";
+      cancelBtn.style.display = "none";
+    });
+
+    // 취소 버튼에 클릭 이벤트 추가
+    cancelBtn.addEventListener("click", function() {
+      commentViewForm.style.display = "block";
+      updateCommentForm.style.display = "none";
+      cancelBtn.style.display = "none";
+    });
+  }
+
+  // 모든 editBtn 요소 찾기
+  var editBtns = document.querySelectorAll("#editBtn");
+
+  // 각 editBtn에 대해 이벤트 리스너 추가
+  editBtns.forEach(function(btn) {
+      btn.addEventListener("click", editComment);
+  });
+
+</script>
 </html>
