@@ -3,11 +3,12 @@ package com.moyeo.controller;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
-import com.moyeo.vo.Member;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -15,6 +16,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -127,9 +129,26 @@ public class ReviewBoardController {
 
   @GetMapping("view")
   public void reviewBoardGet(int reviewBoardId, Model model) {
-    // view를 요청 하면 후기 테이블에 views 컬럼에 1씩 증가한다
-    reviewBoardService.increaseViews(reviewBoardId);
     model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
+  }
+
+  @GetMapping("views")
+  public String viewsCount(
+      @CookieValue(required = false) String views,
+      HttpServletResponse response,
+      int reviewBoardId) {
+    if (views == null) {
+      Cookie cookie = new Cookie("views", ("[" + reviewBoardId + "]"));
+      response.addCookie(cookie);
+      // view를 요청 하면 후기 테이블에 views 컬럼에 1씩 증가한다
+      reviewBoardService.increaseViews(reviewBoardId);
+    } else if (!views.contains(String.valueOf(reviewBoardId))) {
+      Cookie cookie = new Cookie("views", views + ("[" + reviewBoardId + "]"));
+      response.addCookie(cookie);
+      // view를 요청 하면 후기 테이블에 views 컬럼에 1씩 증가한다
+      reviewBoardService.increaseViews(reviewBoardId);
+    }
+    return "redirect:view?reviewBoardId=" + reviewBoardId;
   }
 
   @GetMapping("delete")
@@ -159,14 +178,17 @@ public class ReviewBoardController {
 //    } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
 //      throw new Exception("권한이 없습니다.");
 //    }
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
     reviewBoardService.update(reviewBoard);
     return "redirect:list";
   }
 
   @PostMapping("updateForm")
-  public void updateForm(ReviewBoard reviewBoard, Model model){
+  public void updateForm(ReviewBoard reviewBoard, Model model) {
     model.addAttribute("updateReviewBoard", reviewBoard);
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
-  };
+    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+  }
+
 }

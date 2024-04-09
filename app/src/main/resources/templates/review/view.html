@@ -46,13 +46,15 @@
     <button>변경</button>
     <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>
   </div>
-  
+
+  <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%" width="4%"/></a>
+
 </form>
 
   <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none;">
     <div data-th-each="comment : *{commentList}" data-th-object="${comment}">
       <hr style='border: 1px solid black; width:900px'>
-      <li >
+      <li>
         <!--
         <div style='float:left'>작성자: </div>
         -->
