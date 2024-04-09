@@ -64,6 +64,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
+  public int updateComment(RecruitComment recruitComment) {
+    return recruitCommentDao.update(recruitComment);
+  }
+
+  @Override
   public int deleteComment(int commentId) {
     return recruitCommentDao.delete(commentId);
   }
