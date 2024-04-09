@@ -98,7 +98,7 @@
       r.region_name,
       m.member_id,
       m.nickname,
-      m.profile,
+      m.photo,
       rp.review_photo_id,
       rp.photo
     from

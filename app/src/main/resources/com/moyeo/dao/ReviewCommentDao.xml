@@ -16,7 +16,7 @@
     <association property="commentMember" javaType="Member">
       <id column="member_id" property="memberId"/>
       <result column="nickname" property="nickname"/>
-      <result column="profile" property="photo"/>
+      <result column="photo" property="photo"/>
     </association>
 
   </resultMap>
@@ -28,7 +28,7 @@
       rc.review_board_id,
       m.member_id,
       m.nickname,
-      m.profile,
+      m.photo,
       rc.content,
       rc.created_date
     from

@@ -83,4 +83,19 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     int count = reviewBoardDao.update(reviewBoard);
     return count;
   }
+
+  @Override
+  public List<ReviewPhoto> getReviewPhotos(int reviewBoardId) {
+    return reviewPhotoDao.findAllByReviewBoardId(reviewBoardId);
+  }
+
+  @Override
+  public ReviewPhoto getReviewPhoto(int reviewPhotoId) {
+    return reviewPhotoDao.findbyReviewPhotoId(reviewPhotoId);
+  }
+
+  @Override
+  public int deleteReviewPhoto(int reviewPhotoId) {
+    return reviewPhotoDao.delete(reviewPhotoId);
+  }
 }
