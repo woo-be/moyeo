@@ -22,6 +22,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitCommentDao recruitCommentDao;
   private final RecruitPhotoDao recruitPhotoDao;
 
+  @Transactional
   @Override
   public void add(RecruitBoard board) {
     recruitBoardDao.add(board);
@@ -40,6 +41,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoard;
   }
 
+  @Transactional
   @Override
   public int update(RecruitBoard board) {
     return recruitBoardDao.update(board);
