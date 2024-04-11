@@ -22,6 +22,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitCommentDao recruitCommentDao;
   private final RecruitPhotoDao recruitPhotoDao;
 
+  @Transactional
   @Override
   public void add(RecruitBoard board) {
     recruitBoardDao.add(board);
@@ -32,6 +33,12 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  @Override
+  public List<RecruitBoard> scrapList(int memberId) {
+    return recruitBoardDao.findScrap(memberId);
+  }
+
   @Override
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
@@ -40,6 +47,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoard;
   }
 
+  @Transactional
   @Override
   public int update(RecruitBoard board) {
     return recruitBoardDao.update(board);
@@ -79,7 +87,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public void plusViews(int boardId) {
+  public void plusViews(int boardId) { // 조회수 증가
     recruitBoardDao.plusViews(boardId);
   }
 }

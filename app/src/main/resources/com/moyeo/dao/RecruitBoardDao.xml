@@ -66,6 +66,24 @@
     limit #{rowCount} offset #{offset}
   </select>
 
+  <!--즐겨찾기 리스트, 미완성.-->
+  <select id="findScrap" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rcs.recruit_board_id,
+      rcb.title,
+      rcb.deadline,
+      rcb.recruit_total,
+      rcb.state,
+      count(case when rcm.state = 1 then 1 end) as current
+    from
+    member m
+      left outer join recruit_scrap rcs on m.member_id=rcs.member_id
+      inner join recruit_board rcb on rcb.recruit_board_id=rcs.recruit_board_id
+      left outer join recruit_member rcm on rcb.recruit_board_id=rcm.recruit_board_id
+    where
+      m.member_id=#{value};
+  </select>
+
   <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
     select
       rb.recruit_board_id,
@@ -148,6 +166,7 @@
       recruit_board_id=#{recruitBoardId}
   </update>
 
+  <!-- 조회수 증가 -->
   <update id="plusViews" parameterType="int">
     update
       recruit_board

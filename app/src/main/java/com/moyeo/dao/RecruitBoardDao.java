@@ -4,20 +4,24 @@ import com.moyeo.vo.RecruitBoard;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
-import org.springframework.transaction.annotation.Transactional;
 
 @Mapper
 public interface RecruitBoardDao {
-  @Transactional
+
   void add(RecruitBoard recruitBoard);
   List<RecruitBoard> findAll(
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
+
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  List<RecruitBoard> findScrap(int memberId);
+
   RecruitBoard findBy(int no);
-  @Transactional
+
   int update(RecruitBoard recruitBoard);
-  @Transactional
+
   int delete(int no);
   int countAll();
+  // 조회수 증가
   void plusViews(int boardId);
 }

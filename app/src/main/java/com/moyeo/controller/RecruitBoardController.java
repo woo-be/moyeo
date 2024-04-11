@@ -152,21 +152,24 @@ public class RecruitBoardController {
     model.addAttribute("loginUser", loginUser);
   }
 
+  // 조회수 증가시키는 요청핸들러?
   @GetMapping("viewCountUp")
   public String viewCountUp(int recruitBoardId,
-      @CookieValue(required = false) String views,
+      @CookieValue(required = false) String views, // 조회한 게시글 번호를 저장하는 쿠키
       HttpServletResponse res) {
-    if (views == null || views.isEmpty()) {
+    if (views == null || views.isEmpty()) { // 만약 쿠키가 없다면,
       Cookie cookie = new Cookie("views", "[" + recruitBoardId + "]");
       res.addCookie(cookie);
       recruitBoardService.plusViews(recruitBoardId);
     } else {
-      if (!views.contains(String.valueOf(recruitBoardId))) {
+      if (!views.contains(String.valueOf(recruitBoardId))) { // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 없다면,
         Cookie cookie = new Cookie("views", views + "[" + recruitBoardId + "]");
         res.addCookie(cookie);
         recruitBoardService.plusViews(recruitBoardId);
       }
     }
+    // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 있다면,
+    // 조회수를 증가시키지 않고 바로 view로 redirect 한다.
     return "redirect:view?recruitBoardId=" + recruitBoardId;
   }
 
