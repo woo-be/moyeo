@@ -54,20 +54,30 @@
   <!--즐겨찾기 리스트-->
   <select id="findAll" resultMap="RecruitBoardMap" parameterType="int">
     select
-    rcb.recruit_board_id,
-    rcb.title,
-    rcb.deadline,
-    rcb.state,
-    count(case when rcm.state = 1 then 1 end) as current,
-    rcb.recruit_total
+      rcb.recruit_board_id,
+      rcb.title,
+      rcb.deadline,
+      rcb.state,
+      count(case when rcm.state = 1 then 1 end) as current,
+      rcb.recruit_total
     from
-    recruit_board rcb
-    inner join recruit_scrap rcs on rcs.recruit_board_id = rcb.recruit_board_id
-    left join recruit_member rcm on rcm.recruit_board_id = rcb.recruit_board_id
+      recruit_board rcb
+      inner join recruit_scrap rcs on rcs.recruit_board_id = rcb.recruit_board_id
+      left join recruit_member rcm on rcm.recruit_board_id = rcb.recruit_board_id
     where
-    rcs.member_id = #{value}
+      rcs.member_id = #{value}
     group by
-    rcb.recruit_board_id
+      rcb.recruit_board_id
   </select>
+
+  <delete id="delete" parameterType="RecruitScrap">
+    delete
+    from
+      recruit_scrap
+    where
+      recruit_board_id = #{recruitBoardId}
+    and
+      member_id = #{memberId}
+  </delete>
 
 </mapper>

@@ -9,4 +9,6 @@ public interface RecruitScrapService {
   void add(RecruitScrap recruitScrap);
 
   List<RecruitBoard> list(int memberId);
+
+  void delete(RecruitScrap recruitScrap);
 }

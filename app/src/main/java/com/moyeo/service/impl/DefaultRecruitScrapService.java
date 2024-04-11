@@ -26,4 +26,9 @@ public class DefaultRecruitScrapService implements RecruitScrapService {
   public List<RecruitBoard> list(int memberId) {
     return recruitScrapDao.findAll(memberId);
   }
+
+  @Override
+  public void delete(RecruitScrap recruitScrap) {
+    recruitScrapDao.delete(recruitScrap);
+  }
 }
