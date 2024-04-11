@@ -140,4 +140,21 @@ public class MemberController implements InitializingBean{
 
     return "redirect:../index.html";
   }
+
+  @GetMapping("mypage")
+  public String mypage(HttpSession session, Model model) {
+    // 세션에서 회원 정보 가져오기
+    Member member = (Member) session.getAttribute("loginUser");
+
+    if (member != null) {
+      // 세션에 저장된 회원 정보가 있을 경우 모델에 추가하여 userInfo로 전달
+      model.addAttribute("member", member);
+      // 회원 정보를 출력하는 페이지로 이동
+      return "member/mypage";
+    } else {
+      // 세션에 저장된 회원 정보가 없을 경우 예외 처리 또는 다른 처리 수행
+      // 로그인 페이지로 리다이렉트 또는 다른 페이지로 이동
+      return "redirect:/auth/form";
+    }
+  }
 }
