@@ -6,9 +6,11 @@ import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.RecruitPhoto;
 import com.moyeo.vo.Theme;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.Region;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -24,10 +27,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
 @Controller
 @RequestMapping("/recruit")
+@SessionAttributes("recruitPhotos")
 public class RecruitBoardController {
 
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
@@ -35,6 +43,10 @@ public class RecruitBoardController {
   private final RegionService regionService;
   private final ThemeService themeService;
   private final StorageService storageService;
+  private final String uploadDir = "recruit/";
+
+  @Value("${ncp.ss.bucketname}")
+  private String bucketName;
 
   @GetMapping("list")
   public void list(
@@ -68,7 +80,8 @@ public class RecruitBoardController {
       RecruitBoard board,
       int regionId,
       int themeId,
-      HttpSession session) throws Exception {
+      HttpSession session,
+      SessionStatus sessionStatus) throws Exception {
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
@@ -87,8 +100,26 @@ public class RecruitBoardController {
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
 
+    // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
+    List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
+
+    for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
+      RecruitPhoto recruitPhoto = recruitPhotos.get(i);
+      if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
+        // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+        storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
+        recruitPhotos.remove(i);
+      }
+    }
+    if (recruitPhotos.size() > 0) {
+      board.setPhotos(recruitPhotos);
+    }
+
     // DBMS에 해당 게시물 업로드.
     recruitBoardService.add(board);
+
+    // 게시글을 등록하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
+    sessionStatus.setComplete();
 
     return "redirect:list";
   }
@@ -119,7 +150,23 @@ public class RecruitBoardController {
   }
 
   @PostMapping("update")
-  public String update(RecruitBoard board, int themeId, int regionId) throws Exception {
+  public String update(
+      RecruitBoard board,
+      int themeId,
+      int regionId,
+      HttpSession session,
+      SessionStatus sessionStatus) throws Exception {
+
+    // 로그인한 상태인지 아닌지 검사.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인 하시기 바랍니다.");
+    }
+
+    RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());
+    if (old == null) {
+      throw new Exception("유효하지 않은 번호입니다.");
+    }
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
@@ -129,8 +176,40 @@ public class RecruitBoardController {
     // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
     board.setTheme(Theme.builder().themeId(themeId).build());
     board.setRegion(Region.builder().regionId(regionId).build());
+
+    // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
+    List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
+
+    for (RecruitPhoto recruitPhoto : recruitPhotos) {
+      log.debug("recruitPhoto.id" + recruitPhoto.getRecruitPhotoId());
+    }
+
+    if (old.getPhotos().size() > 0) {
+      // 기존 게시글에 등록된 이미지 목록과 합친다.
+      recruitPhotos.addAll(old.getPhotos());
+    }
+
+    if (recruitPhotos != null) {
+      // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+      for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
+        RecruitPhoto recruitPhoto = recruitPhotos.get(i);
+        if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
+          storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
+          recruitPhotos.remove(i);
+        }
+      }
+    }
+
+    if (recruitPhotos.size() > 0) {
+      board.setPhotos(recruitPhotos);
+    }
+
     // DBMS의 정보를 해당 board 객체로 수정함.
     recruitBoardService.update(board);
+
+    // 게시글을 변경하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
+    sessionStatus.setComplete();
+
     return "redirect:list";
   }
 
@@ -176,18 +255,28 @@ public class RecruitBoardController {
 
   @GetMapping("delete")
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
+//    Member loginUser = (Member) session.getAttribute("loginUser");
+//    if (loginUser == null){
+//      throw new Exception("로그인해주세요");
+//    }
+
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
 
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null || recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
+//    if (recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
 //      throw new Exception("권한이 없습니다.");
 //    }
 
     // YJ_TODO: photo 삭제 코드 추가해야됨
+    List<RecruitPhoto> photos = recruitBoardService.getRecruitPhotos(recruitBoardId);
+
     recruitBoardService.delete(recruitBoardId);
+
+    for (RecruitPhoto photo : photos) {
+      storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
+    }
 
     return "redirect:list";
   }
@@ -217,8 +306,6 @@ public class RecruitBoardController {
 
     RecruitComment old = recruitBoardService.getComment(recruitComment.getRecruitCommentId());
 
-    log.debug("recruitComment.getRecruitCommentId()" + recruitComment.getRecruitCommentId());
-
     if (old.getMember().equals(loginUser)) {
       throw new Exception("권한이 없습니다.");
     }
@@ -244,5 +331,35 @@ public class RecruitBoardController {
 
     recruitBoardService.deleteComment(recruitCommentId);
     return "redirect:../../recruit/view?recruitBoardId=" + boardId;
+  }
+
+  @PostMapping("file/upload")
+  @ResponseBody
+  public Object fileUpload(MultipartFile[] files, HttpSession session, Model model) throws Exception {
+    // NCP Object Storage에 저장한 파일의 이미지 이름을 보관할 컬렉션을 준비한다.
+    ArrayList<RecruitPhoto> recruitPhotos = new ArrayList<>();
+
+    // 로그인 여부를 검사한다.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      // 로그인 하지 않았으면 빈 목록을 보낸다.
+      return recruitPhotos;
+    }
+
+    // 클라이언트가 보낸 멀티파트 파일을 NCP Object Storage에 업로드한다.
+    for (MultipartFile file : files) {
+      if (file.getSize() == 0) {
+        continue;
+      }
+      String filename = storageService.upload(this.bucketName, this.uploadDir, file);
+      recruitPhotos.add(RecruitPhoto.builder().photo(filename).build());
+    }
+
+    // 업로드한 파일 목록을 세션에 보관한다.
+    model.addAttribute("recruitPhotos", recruitPhotos);
+
+    // 클라이언트에서 이미지 이름을 가지고 <img> 태그를 생성할 수 있도록
+    // 업로드한 파일의 이미지 정보를 보낸다.
+    return recruitPhotos;
   }
 }

@@ -2,6 +2,7 @@ package com.moyeo.service;
 
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -23,6 +24,12 @@ public interface RecruitBoardService {
   int delete(int boardId);
 
   int countAll();
+
+  List<RecruitPhoto> getRecruitPhotos(int no);
+
+  RecruitPhoto getRecruitPhoto(int fileNo);
+
+  int deleteRecruitPhoto(int fileNo);
 
   RecruitComment getComment(int commentId);
 
