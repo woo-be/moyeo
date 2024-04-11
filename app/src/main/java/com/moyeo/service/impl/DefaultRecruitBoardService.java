@@ -6,6 +6,7 @@ import com.moyeo.dao.RecruitPhotoDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -26,6 +27,12 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public void add(RecruitBoard board) {
     recruitBoardDao.add(board);
+    if (board.getPhotos() != null && board.getPhotos().size() > 0) {
+      for (RecruitPhoto photo : board.getPhotos()) {
+        photo.setRecruitBoard(board);
+      }
+      recruitPhotoDao.addAll(board.getPhotos());
+    }
   }
 
   @Override
@@ -43,6 +50,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
     recruitBoard.setComments(recruitCommentDao.findAllByRecruitBoardId(boardId));
+    recruitBoard.setPhotos(recruitPhotoDao.findAllByBoardId(boardId));
 
     return recruitBoard;
   }
@@ -50,15 +58,40 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Transactional
   @Override
   public int update(RecruitBoard board) {
-    return recruitBoardDao.update(board);
+    int count = recruitBoardDao.update(board);
+    recruitPhotoDao.deleteAllPhotoByRecruitBoardId(board.getRecruitBoardId());
+
+    if (board.getPhotos() != null && board.getPhotos().size() > 0) {
+      for (RecruitPhoto recruitPhoto : board.getPhotos()) {
+        recruitPhoto.setRecruitBoard(board);
+      }
+      recruitPhotoDao.addAll(board.getPhotos());
+    }
+    return count;
   }
 
   @Transactional
   @Override
   public int delete(int boardId) {
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
-//    recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
+    recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
+
     return recruitBoardDao.delete(boardId);
+  }
+
+  @Override
+  public List<RecruitPhoto> getRecruitPhotos(int recruitBoardId) {
+    return recruitPhotoDao.findAllByBoardId(recruitBoardId);
+  }
+
+  @Override
+  public RecruitPhoto getRecruitPhoto(int recruitPhotoId) {
+    return recruitPhotoDao.findById(recruitPhotoId);
+  }
+
+  @Override
+  public int deleteRecruitPhoto(int recruitPhotoId) {
+    return recruitPhotoDao.delete(recruitPhotoId);
   }
 
   @Override

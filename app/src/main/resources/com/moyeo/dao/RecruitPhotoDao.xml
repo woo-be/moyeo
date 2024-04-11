@@ -6,7 +6,6 @@
 <mapper namespace="com.moyeo.dao.RecruitPhotoDao">
   <resultMap id="RecruitPhotoMap" type="RecruitPhoto">
     <id column="recruit_photo_id" property="recruitPhotoId"/>
-    <result column="recruit_id" property="recruitBoardId"/>
     <result column="photo" property="photo"/>
 
     <association property="recruitBoard" javaType="RecruitBoard">
@@ -14,11 +13,49 @@
     </association>
   </resultMap>
 
-  <delete id="deleteAllPhotoByRecruitBoardId" parameterType="int">
-    delete from recruit_photo where recruit_id=#{value}
+  <insert id="add" parameterType="RecruitPhoto">
+    insert into recruit_photo (photo,recruit_id)
+    values (#{photo},#{recruitBoard.recruitBoardId})
+  </insert>
+
+  <insert id="addAll" parameterType="list">
+    insert into recruit_photo (photo,recruit_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.photo},#{item.recruitBoard.recruitBoardId})
+    </foreach>
+  </insert>
+
+  <delete id="delete" parameterType="int">
+    delete from recruit_photo
+    where recruit_photo_id=#{value}
   </delete>
 
+  <delete id="deleteAllPhotoByRecruitBoardId" parameterType="int">
+    delete from recruit_photo
+    where recruit_id=#{value}
+  </delete>
 
+  <select id="findAllByBoardId" resultMap="RecruitPhotoMap" parameterType="int">
+    select
+      recruit_photo_id,
+      recruit_id,
+      photo
+    from
+      recruit_photo
+    where
+      recruit_id=#{value}
+  </select>
 
+  <select id="findById" resultMap="RecruitPhotoMap" parameterType="int">
+    select
+      recruit_photo_id,
+      recruit_id,
+      photo
+    from
+      recruit_photo
+    where
+      recruit_photo_id=#{value}
+  </select>
 
 </mapper>
