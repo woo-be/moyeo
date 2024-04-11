@@ -49,9 +49,9 @@ public class RecruitScrapController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
-    log.debug("scraplist:" + recruitBoardService.scrapList(loginUser.getMemberId()));
+    log.debug("scraplist:" + recruitScrapService.list(loginUser.getMemberId()));
 
-    model.addAttribute("scrapList", recruitBoardService.scrapList(loginUser.getMemberId()));
+    model.addAttribute("scrapList", recruitScrapService.list(loginUser.getMemberId()));
 
   }
 }
