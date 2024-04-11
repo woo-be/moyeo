@@ -23,7 +23,7 @@
     <collection property="photos" ofType="ReviewPhoto">
       <id column="review_photo_id" property="reviewPhotoId"/>
       <result column="review_board_id" property="reviewBoardId"/>
-      <result column="photo" property="photo"/>
+      <result column="review_photo" property="photo"/>
     </collection>
 
   </resultMap>
@@ -100,7 +100,7 @@
       m.nickname,
       m.photo,
       rp.review_photo_id,
-      rp.photo
+      rp.photo as review_photo
     from
       review_board rb inner join region r on rb.region_id=r.region_id
       inner join theme t on rb.theme_id=t.theme_id

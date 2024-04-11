@@ -1,6 +1,7 @@
 package com.moyeo.service;
 
 import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.ReviewPhoto;
 import java.util.List;
 
 public interface ReviewBoardService {
@@ -16,4 +17,9 @@ public interface ReviewBoardService {
   int countAll();
   int countAll(int regionId);
   int update(ReviewBoard reviewBoard);
+
+  List<ReviewPhoto> getReviewPhotos(int reviewBoardId);
+  ReviewPhoto getReviewPhoto(int reviewPhotoId);
+
+  int deleteReviewPhoto(int reviewPhotoId);
 }

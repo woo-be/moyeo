@@ -14,12 +14,14 @@
 
 
 <h1>게시글</h1>
+
 <div data-th-replace="region :: list">지역 리스트</div>
+
 <p><a data-th-href="@{form}" href="form.html">새 글</a></p>
 <div style= 'display:flex'>
   <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}" >
     <div style='border: 1px solid black; float:left'>
-      <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}" href="view.html">
+      <a data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
         <div style='border: 1px solid black; float:left'>
           <!--
           <img data-th-if="*{photos[0].photo != null}" alt="여행 사진" src="*{photos[0].photo}">

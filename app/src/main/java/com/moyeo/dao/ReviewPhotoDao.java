@@ -13,4 +13,10 @@ public interface ReviewPhotoDao {
 
   int deleteAll(int reviewBoardId);
 
+  int delete(int reviewPhotoId);
+
+  List<ReviewPhoto> findAllByReviewBoardId(int reviewBoardId);
+
+  ReviewPhoto findbyReviewPhotoId(int reviewPhotoId);
+
 }
