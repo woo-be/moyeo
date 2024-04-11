@@ -11,4 +11,6 @@ public interface RecruitScrapDao {
   void add(RecruitScrap recruitScrap);
 
   List<RecruitBoard> findAll(int memberId);
+
+  void delete(RecruitScrap recruitScrap);
 }
