@@ -2,7 +2,9 @@ package com.moyeo.service.impl;
 
 import com.moyeo.dao.RecruitScrapDao;
 import com.moyeo.service.RecruitScrapService;
+import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitScrap;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -18,5 +20,10 @@ public class DefaultRecruitScrapService implements RecruitScrapService {
   @Override
   public void add(RecruitScrap recruitScrap) {
     recruitScrapDao.add(recruitScrap);
+  }
+
+  @Override
+  public List<RecruitBoard> list(int memberId) {
+    return recruitScrapDao.findAll(memberId);
   }
 }
