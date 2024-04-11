@@ -66,6 +66,7 @@
     limit #{rowCount} offset #{offset}
   </select>
 
+  <!--즐겨찾기 리스트, 미완성.-->
   <select id="findScrap" resultMap="RecruitBoardMap" parameterType="int">
     select
       rcs.recruit_board_id,
