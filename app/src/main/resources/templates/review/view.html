@@ -31,11 +31,19 @@
       enctype='multipart/form-data'
       method='post'>
   <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
+  <input data-th-value="*{regionId}" name='regionId' type='hidden'>
+  <input data-th-value="*{themeId}" name='themeId' type='hidden'>
   <div>
     작성자: <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
   </div>
   <div>
     제목: <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">
+  </div>
+  <div>
+    지역 : <input data-th-value="*{regionName}" readonly type='text' value="지역">
+  </div>
+  <div>
+    테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">
   </div>
   <div>
     내용: <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
