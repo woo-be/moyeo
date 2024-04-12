@@ -73,7 +73,6 @@ public class ReviewBoardController {
     log.debug(reviewBoard.getThemeList());
     log.debug(reviewBoard.getLatitude());
     log.debug(reviewBoard.getLongitude());
-    log.debug(reviewBoard.getAddresses());
 
     if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
