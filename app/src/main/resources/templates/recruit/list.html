@@ -34,7 +34,7 @@
     <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
     <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
     <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
-    <td data-th-text="*{writer.name}">홍길동</td>
+    <td data-th-text="*{writer.nickname}">홍길동</td>
     <td data-th-text="*{current}">1</td>
     <td data-th-text="*{recruitTotal}">4</td>
     <td data-th-value="*{state}">true</td>
@@ -58,6 +58,43 @@
      href="list">다음</a>
   ]
 </p>
+
+<!-- 검색 -->
+<div>
+  <form method="get" action="list.html" data-th-action="@{list(filter=${filter},keyword=${keyword})}">
+    <label for="filter"></label>
+    <select name="filter" id="filter">
+      <option value="title">제목</option>
+      <option value="content">내용</option>
+      <option value="writer">작성자</option>
+    </select>
+    <input type="text" name="keyword" data-th-value="${keyword}">
+    <input type="submit">
+  </form>
+</div>
+
+<!-- 검색 필터 기본값 설정 자바 스크립트 -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  let dropdown = document.getElementById("filter");
+  let condition = "[[${filter}]]";
+
+  switch (condition) {
+    case "title":
+      dropdown.value = "title";
+      break;
+    case "content":
+      dropdown.value = "content";
+      break;
+    case "writer":
+      dropdown.value = "writer";
+      break;
+    default:
+      dropdown.value = "title";
+      break;
+  }
+});
+</script>
 
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>

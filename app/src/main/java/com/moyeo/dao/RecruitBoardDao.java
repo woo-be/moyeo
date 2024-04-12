@@ -13,8 +13,11 @@ public interface RecruitBoardDao {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
 
-  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
-  List<RecruitBoard> findScrap(int memberId);
+  List<RecruitBoard> findByKeyword(
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("filter") String filter,
+      @Param("keyword") String keyword);
 
   RecruitBoard findBy(int no);
 

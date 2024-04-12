@@ -52,7 +52,10 @@ public class RecruitBoardController {
   public void list(
       Model model,
       @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize) {
+      @RequestParam(defaultValue = "10") int pageSize,
+      @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
+      @RequestParam(required = false) String keyword // 검색어
+  ) {
 
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
@@ -68,12 +71,22 @@ public class RecruitBoardController {
       pageNo = numOfPage;
     }
 
-    // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
-    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
+    if (keyword == null) { // 검색어가 없을 때,
+      // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
+      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
 
+    } else { //  검색어가 있을 때,
+      if (filter.equals("writer")) { // 검색 필터가 작성자일 때,
+        filter = "m.nickname";
+      }
+      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, filter, keyword));
+
+    }
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("keyword", keyword); // 검색어
+    model.addAttribute("filter", filter); // 검색 필터(제목 | 내용 | 작성자)
   }
 
   @PostMapping("add")
