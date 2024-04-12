@@ -13,7 +13,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.ResponseBody;
+
 
 @RequiredArgsConstructor
 @Controller
@@ -22,6 +24,7 @@ public class MypageReviewController {
 
   private final static Log log = LogFactory.getLog(MypageReviewController.class);
   private final ReviewBoardService reviewBoardService;
+
 
 
   @GetMapping("scrap")
@@ -37,16 +40,34 @@ public class MypageReviewController {
       pageSize = 3;
     }
 
+
+  @GetMapping("posted")
+  public void reviewList(
+      @RequestParam(required = false, defaultValue = "1") int pageNo,
+      @RequestParam(required = false, defaultValue = "6") int pageSize,
+      HttpSession session,
+      Model model) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if (pageSize < 6 || pageSize > 20) {
+      pageSize = 6;
+    }
+
     if (pageNo < 1) {
       pageNo = 1;
     }
 
+
     int numOfRecord = reviewBoardService.countScrapByMember(loginUser.getMemberId());
+
+    int numOfRecord = reviewBoardService.countPostedByMember(loginUser.getMemberId());
+
     int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+
 
     List<ReviewBoard> scrapList = reviewBoardService.scrapList(loginUser.getMemberId(), pageNo, pageSize);
     model.addAttribute("scrapList", scrapList);
@@ -58,4 +79,14 @@ public class MypageReviewController {
   }
 }
 
+
+
+    List<ReviewBoard> reviewList = reviewBoardService.reviewList(loginUser.getMemberId(), pageSize, pageNo);
+    model.addAttribute("reviewList", reviewList);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("numOfPage", numOfPage);
+
+  }
+}
 

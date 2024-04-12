@@ -14,8 +14,12 @@ public interface RecruitBoardService {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
 
-  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
-  List<RecruitBoard> scrapList(int memberId);
+  // 검색어가 존재하는 리스트
+  List<RecruitBoard> list(
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("filter") String filter,
+      @Param("keyword") String keyword);
 
   RecruitBoard get(int boardId);
 
@@ -24,6 +28,10 @@ public interface RecruitBoardService {
   int delete(int boardId);
 
   int countAll();
+
+  int countByKeyword(
+      @Param("filter") String filter,
+      @Param("keyword") String keyword);
 
   List<RecruitPhoto> getRecruitPhotos(int no);
 

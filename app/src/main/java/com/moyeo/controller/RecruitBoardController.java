@@ -52,7 +52,10 @@ public class RecruitBoardController {
   public void list(
       Model model,
       @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "10") int pageSize) {
+      @RequestParam(defaultValue = "10") int pageSize,
+      @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
+      @RequestParam(required = false) String keyword // 검색어
+  ) {
 
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
@@ -61,18 +64,44 @@ public class RecruitBoardController {
       pageNo = 1;
     }
 
-    int numOfRecord = recruitBoardService.countAll();
-    int numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    int numOfPage = 1;
 
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
+    if (keyword == null || keyword.isEmpty()) { // 검색어가 없을 때,
+      // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
+
+      int numOfRecord = recruitBoardService.countAll();
+
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
+
+      log.debug("검색어 없음");
+      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
+
+    } else { //  검색어가 있을 때,
+      if (filter.equals("writer")) { // 검색 필터가 작성자일 때,
+        filter = "m.nickname";
+      }
+
+      int numOfRecord = recruitBoardService.countByKeyword(filter, keyword);
+
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
+
+      log.debug("검색어 있음");
+      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, filter, keyword));
+
     }
-
-    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
-
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("keyword", keyword); // 검색어
+    model.addAttribute("filter", filter); // 검색 필터(제목 | 내용 | 작성자)
   }
 
   @PostMapping("add")
@@ -177,11 +206,11 @@ public class RecruitBoardController {
     board.setTheme(Theme.builder().themeId(themeId).build());
     board.setRegion(Region.builder().regionId(regionId).build());
 
+    // 세션에서 사진 못가져오고있음
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
-
-    for (RecruitPhoto recruitPhoto : recruitPhotos) {
-      log.debug("recruitPhoto.id" + recruitPhoto.getRecruitPhotoId());
+    if (recruitPhotos == null) {
+      recruitPhotos = new ArrayList<>();
     }
 
     if (old.getPhotos().size() > 0) {
@@ -218,17 +247,18 @@ public class RecruitBoardController {
       HttpSession session
   ) throws Exception {
 
+    // 유효한 번호인지 검사
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
       throw new Exception("유효하지 않은 번호입니다.");
     }
-    model.addAttribute("recruitboard", recruitBoard);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       loginUser = Member.builder().name("로그인해주세요.").build();
     }
     model.addAttribute("loginUser", loginUser);
+    model.addAttribute("recruitboard", recruitBoard);
   }
 
   // 조회수 증가시키는 요청핸들러?
@@ -269,7 +299,6 @@ public class RecruitBoardController {
 //      throw new Exception("권한이 없습니다.");
 //    }
 
-    // YJ_TODO: photo 삭제 코드 추가해야됨
     List<RecruitPhoto> photos = recruitBoardService.getRecruitPhotos(recruitBoardId);
 
     recruitBoardService.delete(recruitBoardId);
@@ -281,72 +310,20 @@ public class RecruitBoardController {
     return "redirect:list";
   }
 
-  @PostMapping("comment/add")
-  public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) {
-    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      log.debug("로그인해주세요.");  // .html에서 클릭했을 시 팝업 띄움
-      return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
-    }
-
-    recruitComment.setRecruitBoard(recruitBoard);
-    recruitComment.setMember(loginUser);
-    recruitBoardService.addComment(recruitComment);
-    return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
-  }
-
-  @PostMapping("comment/update")
-  public String commentUpdate(RecruitComment recruitComment, HttpSession session) throws Exception {
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
-    }
-
-    RecruitComment old = recruitBoardService.getComment(recruitComment.getRecruitCommentId());
-
-    if (old.getMember().equals(loginUser)) {
-      throw new Exception("권한이 없습니다.");
-    }
-
-    recruitComment.setRecruitBoard(old.getRecruitBoard());
-    recruitComment.setMember(old.getMember());
-
-    recruitBoardService.updateComment(recruitComment);
-    return "redirect:../../recruit/view?recruitBoardId=" + recruitComment.getRecruitBoard().getRecruitBoardId();
-
-  }
-
-  @GetMapping("comment/delete")
-  public String commentDelete(int recruitCommentId, HttpSession session) {
-    RecruitComment recruitComment = recruitBoardService.getComment(recruitCommentId);
-    int boardId = recruitComment.getRecruitBoard().getRecruitBoardId();
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null || loginUser.getMemberId() != recruitComment.getMember().getMemberId()) {
-      log.debug("권한이 없습니다."); // .html에서 클릭했을 시 팝업 띄움
-      return "redirect:../../recruit/view?recruitBoardId=" + boardId;
-    }
-
-    recruitBoardService.deleteComment(recruitCommentId);
-    return "redirect:../../recruit/view?recruitBoardId=" + boardId;
-  }
-
   @PostMapping("file/upload")
   @ResponseBody
   public Object fileUpload(MultipartFile[] files, HttpSession session, Model model) throws Exception {
     // NCP Object Storage에 저장한 파일의 이미지 이름을 보관할 컬렉션을 준비한다.
     ArrayList<RecruitPhoto> recruitPhotos = new ArrayList<>();
 
-    // 로그인 여부를 검사한다.
+    // 로그인 여부 검사
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      // 로그인 하지 않았으면 빈 목록을 보낸다.
+      // 로그인 하지 않았으면 빈 목록 보냄
       return recruitPhotos;
     }
 
-    // 클라이언트가 보낸 멀티파트 파일을 NCP Object Storage에 업로드한다.
+    // 클라이언트가 보낸 멀티파트 파일을 NCP Object Storage에 업로드
     for (MultipartFile file : files) {
       if (file.getSize() == 0) {
         continue;
@@ -355,11 +332,10 @@ public class RecruitBoardController {
       recruitPhotos.add(RecruitPhoto.builder().photo(filename).build());
     }
 
-    // 업로드한 파일 목록을 세션에 보관한다.
+    // 업로드한 파일 목록을 세션에 보관
     model.addAttribute("recruitPhotos", recruitPhotos);
 
-    // 클라이언트에서 이미지 이름을 가지고 <img> 태그를 생성할 수 있도록
-    // 업로드한 파일의 이미지 정보를 보낸다.
+    // 클라이언트에서 이미지 이름을 가지고 <img> 태그를 생성할 수 있도록 업로드한 파일의 이미지 정보 보냄
     return recruitPhotos;
   }
 }
