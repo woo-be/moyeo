@@ -1,5 +1,7 @@
 package com.moyeo.vo;
 
+import com.amazonaws.services.s3.model.JSONType;
+import java.awt.Point;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,8 @@ public class ReviewBoard implements Serializable {
   private Member writer;
   private List<ReviewPhoto> photos;
   private List<ReviewComment> commentList;
-
+  private List<Integer> themeList;
+private JSONType addresses;
 
 }
 

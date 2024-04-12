@@ -2,6 +2,7 @@ package com.moyeo.service;
 
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,6 +14,9 @@ public interface RecruitBoardService {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount);
 
+  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  List<RecruitBoard> scrapList(int memberId);
+
   RecruitBoard get(int boardId);
 
   int update(RecruitBoard board);
@@ -20,6 +24,12 @@ public interface RecruitBoardService {
   int delete(int boardId);
 
   int countAll();
+
+  List<RecruitPhoto> getRecruitPhotos(int no);
+
+  RecruitPhoto getRecruitPhoto(int fileNo);
+
+  int deleteRecruitPhoto(int fileNo);
 
   RecruitComment getComment(int commentId);
 
