@@ -146,5 +146,33 @@
     where
       review_board_id=#{reviewBoardId}
   </update>
+  
+  <select id="reviewList" resultMap="ReviewBoardMap" parameterType="int">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    r.region_name,
+    rp.photo
+    from
+    member m
+    inner join review_board rb on m.member_id=rb.member_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rb.review_board_id=rp.review_board_id
+    where
+    m.member_id = #{memberId}
+    order by
+    rb.review_board_id desc
+    limit #{pageSize} offset #{offset}
+  </select>
+
+  <select id="countPostedByMember" resultType="int" parameterType="int">
+    select
+      count(review_board_id) as countPostedByMember
+    from
+      review_board
+    where
+      member_id=#{memberId};
+  </select>
 
 </mapper>
