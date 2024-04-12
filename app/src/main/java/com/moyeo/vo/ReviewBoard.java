@@ -25,8 +25,8 @@ public class ReviewBoard implements Serializable {
   private String title;           // 제목
   private Date createdDate;       // 게시일
   private String content;         // 내용
-  private float latitude;         // 위도
-  private float longitude;        // 경도
+  private double latitude;         // 위도
+  private double longitude;        // 경도
   private int views;              // 조회수
   private int likeCount;
   private String themeName;
@@ -35,7 +35,5 @@ public class ReviewBoard implements Serializable {
   private List<ReviewPhoto> photos;
   private List<ReviewComment> commentList;
   private List<Integer> themeList;
-private JSONType addresses;
-
 }
 
