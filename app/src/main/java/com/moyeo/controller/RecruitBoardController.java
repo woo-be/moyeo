@@ -64,21 +64,36 @@ public class RecruitBoardController {
       pageNo = 1;
     }
 
-    int numOfRecord = recruitBoardService.countAll();
-    int numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    int numOfPage = 1;
 
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
-
-    if (keyword == null) { // 검색어가 없을 때,
+    if (keyword == null || keyword.isEmpty()) { // 검색어가 없을 때,
       // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
+
+      int numOfRecord = recruitBoardService.countAll();
+
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
+
+      log.debug("검색어 없음");
       model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
 
     } else { //  검색어가 있을 때,
       if (filter.equals("writer")) { // 검색 필터가 작성자일 때,
         filter = "m.nickname";
       }
+
+      int numOfRecord = recruitBoardService.countByKeyword(filter, keyword);
+
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+      if (pageNo > numOfPage) {
+        pageNo = numOfPage;
+      }
+
+      log.debug("검색어 있음");
       model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, filter, keyword));
 
     }
