@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>테마</title>
+</head>
+<body data-th-fragment="themeList">
+<div>
+  테마:
+  <select name="themeId" id="themeId">
+    <option value="0">===선택===</option>
+    <option value="1">힐링</option>
+    <option value="2">캠핑</option>
+    <option value="3">액티비티</option>
+  </select>
+</div>
+
+<script>
+
+  document.addEventListener("DOMContentLoaded", function() {
+    let dropdown = document.getElementById("themeId");
+    let condition = [[${themeId}]];
+
+      switch (condition) {
+        case 1:
+          dropdown.value = "1";
+          break;
+        case 2:
+          dropdown.value = "2";
+          break;
+        case 3:
+          dropdown.value = "3";
+          break;
+        case 4:
+          dropdown.value = "4";
+          break;
+        default:
+          dropdown.value = "0";
+          break;
+      }
+  });
+</script>
+
+</body>
+</html>

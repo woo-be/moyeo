@@ -49,7 +49,9 @@ public class ReviewBoardController {
   private String bucketName;
 
   @GetMapping("form")
-  public void form() throws Exception {
+  public void form(Model model) throws Exception {
+    model.addAttribute("regionId",0);
+    model.addAttribute("themeId",0);
   }
 
   @PostMapping("add")
@@ -64,7 +66,8 @@ public class ReviewBoardController {
 //      throw new Exception("로그인하시기 바랍니다!");
 //    }
 //    reviewBoard.setWriter(loginUser);
-
+    Member writer = (Member) session.getAttribute("loginUser");
+    reviewBoard.setWriter(writer);
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
     log.debug(reviewBoard.getThemeList());
@@ -201,14 +204,17 @@ public class ReviewBoardController {
 //      throw new Exception("권한이 없습니다.");
 //    }
 
-
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
+    if (reviewPhotos == null) {
+      reviewPhotos = new ArrayList<>();
+    }
+
 
     if (old.getPhotos().getFirst().getPhoto() != null) {
       reviewPhotos.addAll(old.getPhotos());
     }
 
-
+    if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
@@ -221,6 +227,7 @@ public class ReviewBoardController {
       if (reviewPhotos.size() > 0) {
         reviewBoard.setPhotos(reviewPhotos);
       }
+    }
 
 
 
@@ -239,8 +246,10 @@ public class ReviewBoardController {
   @PostMapping("updateForm")
   public void updateForm(ReviewBoard reviewBoard, Model model) {
     model.addAttribute("updateReviewBoard", reviewBoard);
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
+    log.debug(String.format("%d      %s        %s       %d~~~~~~~~~~~~~~~~~~~~~~~~~~~",
+        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent(), reviewBoard.getThemeId()));
+    model.addAttribute("regionId",reviewBoard.getRegionId());
+    model.addAttribute("themeId",reviewBoard.getThemeId());
   }
 
 

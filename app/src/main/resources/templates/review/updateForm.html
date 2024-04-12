@@ -38,6 +38,8 @@
   <div>
     제목 <input data-th-value="*{title}" name='title' type='text' value="제목입니당.">
   </div>
+  <div data-th-replace="review/regionList :: regionList">지역리스트</div>
+  <div data-th-replace="review/themeList :: themeList">테마리스트</div>
   <div>
     내용: <textarea
       id="summernote"
@@ -81,10 +83,10 @@
 <!--            return;-->
 <!--          }-->
 
-          for (const reviewPhoto of result) {
-            $('#summernote').summernote('insertImage',
-              'https://kr.object.ncloudstorage.com/moyeo-bucket/reivew/'
-              + reviewPhoto.photo);
+ for (const reviewPhoto of result) {
+              $('#summernote').summernote('insertImage',
+                'https://kr.object.ncloudstorage.com/moyeo-bucket/review/'
+                + reviewPhoto.photo);
           }
         });
       }

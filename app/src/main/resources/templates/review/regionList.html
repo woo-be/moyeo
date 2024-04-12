@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body data-th-fragment="regionList">
+
+<div>
+  지역:
+  <select name="regionId" id="regionId">
+    <option value="0">===선택===</option>
+    <option value="1">서울특별시</option>
+    <option value="2">부산광역시</option>
+    <option value="3">대구광역시</option>
+    <option value="4">인천광역시</option>
+    <option value="5">광주광역시</option>
+    <option value="6">대전광역시</option>
+    <option value="7">울산광역시</option>
+    <option value="8">세종특별시</option>
+    <option value="9">경기도</option>
+    <option value="10">충청북도</option>
+    <option value="11">충청남도</option>
+    <option value="12">강원도</option>
+    <option value="13">전라북도</option>
+    <option value="14">전라남도</option>
+    <option value="15">경상북도</option>
+    <option value="16">경상남도</option>
+    <option value="17">제주도</option>
+  </select>
+</div>
+
+<script>
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    let dropdown = document.getElementById("regionId");
+    let condition = [[${regionId}]];
+
+      switch (condition) {
+        case 1:
+          dropdown.value = "1";
+          break;
+        case 2:
+          dropdown.value = "2";
+          break;
+        case 3:
+          dropdown.value = "3";
+          break;
+        case 4:
+          dropdown.value = "4";
+          break;
+        case 5:
+          dropdown.value = "5";
+          break;
+        case 6:
+          dropdown.value = "6";
+          break;
+        case 7:
+          dropdown.value = "7";
+          break;
+        case 8:
+          dropdown.value = "8";
+          break;
+        case 9:
+          dropdown.value = "9";
+          break;
+        case 10:
+          dropdown.value = "10";
+          break;
+        case 11:
+          dropdown.value = "11";
+          break;
+        case 12:
+          dropdown.value = "12";
+          break;
+        case 13:
+          dropdown.value = "13";
+          break;
+        case 14:
+          dropdown.value = "14";
+          break;
+        case 15:
+          dropdown.value = "15";
+          break;
+        case 16:
+          dropdown.value = "16";
+          break;
+        case 17:
+          dropdown.value = "17";
+          break;
+        default:
+          dropdown.value = "0";
+          break;
+      }
+  });
+</script>
+
+</body>
+</html>
