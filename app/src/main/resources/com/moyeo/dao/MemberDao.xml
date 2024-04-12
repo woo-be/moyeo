@@ -35,7 +35,8 @@
     update member set
     name=#{name},
     nickname=#{nickname},
-    introduce=#{introduce}
+    introduce=#{introduce},
+    photo=#{photo}
     where
     member_id=#{memberId}
   </update>
