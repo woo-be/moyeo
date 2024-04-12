@@ -40,10 +40,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
 
-  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
+  // 검색어가 존재하는 리스트
   @Override
-  public List<RecruitBoard> scrapList(int memberId) {
-    return recruitBoardDao.findScrap(memberId);
+  public List<RecruitBoard> list(int pageNo, int pageSize, String filter, String keyword) {
+    log.debug("offset = " + pageSize * (pageNo - 1) + ", rowCount = " + pageSize);
+    return recruitBoardDao.findByKeyword(pageSize * (pageNo - 1), pageSize, filter, keyword);
   }
 
   @Override
