@@ -49,9 +49,11 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public List<ReviewBoard> list(int pageNo, int pageSize) {
     return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
+
   @Override
   public List<ReviewBoard> list(int pageNo, int pageSize, int regionId) {
-    List<ReviewBoard> list = reviewBoardDao.findAllByRegionId(pageSize * (pageNo - 1), pageSize, regionId);
+    List<ReviewBoard> list = reviewBoardDao.findAllByRegionId(pageSize * (pageNo - 1), pageSize,
+        regionId);
     log.debug(list.getFirst());
     return list;
   }
@@ -112,5 +114,15 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   @Override
   public int deleteReviewPhoto(int reviewPhotoId) {
     return reviewPhotoDao.delete(reviewPhotoId);
+  }
+
+  @Override
+  public List<ReviewBoard> scrapList(int memberId, int pageNo, int pageSize) {
+    return reviewBoardDao.scrapList(memberId, pageSize, (pageNo * pageSize) - pageSize);
+  }
+
+  @Override
+  public int countScrapByMember(int memberId) {
+    return reviewBoardDao.countScrapByMember(memberId);
   }
 }
