@@ -29,6 +29,10 @@ public interface RecruitBoardService {
 
   int countAll();
 
+  int countByKeyword(
+      @Param("filter") String filter,
+      @Param("keyword") String keyword);
+
   List<RecruitPhoto> getRecruitPhotos(int no);
 
   RecruitPhoto getRecruitPhoto(int fileNo);

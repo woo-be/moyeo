@@ -25,6 +25,11 @@ public interface RecruitBoardDao {
 
   int delete(int no);
   int countAll();
+
+  int countByKeyword(
+      @Param("filter") String filter,
+      @Param("keyword") String keyword);
+
   // 조회수 증가
   void plusViews(int boardId);
 }

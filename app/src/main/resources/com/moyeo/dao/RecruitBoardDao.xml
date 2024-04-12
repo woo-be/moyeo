@@ -128,6 +128,16 @@
     select count(*) from recruit_board;
   </select>
 
+  <select id="countByKeyword" resultType="int">
+    select
+      count(*)
+    from
+      recruit_board rb
+      inner join member m on rb.member_id = m.member_id
+    where
+    ${filter} like concat('%',#{keyword},'%')
+  </select>
+
   <insert id="add" parameterType="recruitBoard"
     useGeneratedKeys="true" keyColumn="recruit_board_id" keyProperty="recruitBoardId">
     insert

@@ -121,6 +121,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
+  public int countByKeyword(String filter, String keyword) {
+    return recruitBoardDao.countByKeyword(filter, keyword);
+  }
+
+  @Override
   public void plusViews(int boardId) { // 조회수 증가
     recruitBoardDao.plusViews(boardId);
   }
