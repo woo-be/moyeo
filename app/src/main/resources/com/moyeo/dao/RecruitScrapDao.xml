@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.RecruitScrapDao">
+
+  <resultMap id="RecruitBoardMap" type="RecruitBoard">
+    <id column="recruit_board_id" property="recruitBoardId"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="current" property="current"/>
+    <result column="recruit_total" property="recruitTotal"/>
+    <result column="deadline" property="deadline"/>
+    <result column="state" property="state"/>
+    <result column="created_date" property="createdDate"/>
+    <result column="latitude" property="latitude"/>
+    <result column="longitude" property="longitude"/>
+    <result column="views" property="views"/>
+
+    <association property="writer" javaType="Member">
+      <id column="member_id" property="memberId"/>
+      <result column="name" property="name"/>
+    </association>
+
+    <association property="region" javaType="Region">
+      <id column="region_id" property="regionId"/>
+      <result column="region_name" property="regionName"/>
+    </association>
+
+    <association property="theme" javaType="Theme">
+      <id column="theme_id" property="themeId"/>
+      <result column="theme_name" property="themeName"/>
+    </association>
+
+    <collection property="photos" ofType="RecruitPhoto">
+      <id column="recruit_photo_id" property="recruitPhotoId"/>
+      <result column="photo" property="photo"/>
+    </collection>
+
+  </resultMap>
+
+  <!--즐겨찾기 추가-->
+  <insert id="add" parameterType="RecruitScrap">
+    insert
+    into recruit_scrap
+    values(
+      #{recruitBoardId},
+      #{memberId})
+  </insert>
+
+  <!--즐겨찾기 리스트-->
+  <select id="findAll" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rcb.recruit_board_id,
+      rcb.title,
+      rcb.deadline,
+      rcb.state,
+      count(case when rcm.state = 1 then 1 end) as current,
+      rcb.recruit_total
+    from
+      recruit_board rcb
+      inner join recruit_scrap rcs on rcs.recruit_board_id = rcb.recruit_board_id
+      left join recruit_member rcm on rcm.recruit_board_id = rcb.recruit_board_id
+    where
+      rcs.member_id = #{value}
+    group by
+      rcb.recruit_board_id
+  </select>
+
+  <delete id="delete" parameterType="RecruitScrap">
+    delete
+    from
+      recruit_scrap
+    where
+      recruit_board_id = #{recruitBoardId}
+    and
+      member_id = #{memberId}
+  </delete>
+
+</mapper>

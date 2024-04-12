@@ -4,10 +4,22 @@
   <meta charset='UTF-8'>
   <title>모여</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bootstrap 5 Example</title>
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <!-- include summernote css/js -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
+
+  <style>
+    body {
+      padding-left: 10px;
+    }
+  </style>
 </head>
 <body  data-th-object="${recruitboard}">
 
@@ -25,7 +37,7 @@
     지역: <input data-th-value="*{region.regionName}" readonly type='text' value="서울특별시">
   </div>
   <div>
-    내용: <textarea data-th-text="*{content}" readonly name='content'></textarea>
+    내용: <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
   </div>
   <div>
     작성일: <input name="createdDate" data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
@@ -45,21 +57,9 @@
   </div>
 
   <div>
-    첨부파일:
-    <ul data-th-if="*{photos}">
-      <li data-th-each="photo : *{photos}" data-th-object="${photo}">
-        <div>
-          파일명:
-          <a data-th-text="*{photo}" type='text' href="photo.html">photopath</a>
-          [<a href="photo_delete.html">삭제</a>]
-        </div>
-      </li>
-    </ul>
-  </div>
-
-  <div>
     <button>수정</button>
     [<a data-th-href="@{delete(recruitBoardId=*{recruitBoardId})}" href="delete.html">삭제</a>]
+    [<a data-th-href="@{../recruitScrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
   </div>
 </form>
 
@@ -139,6 +139,14 @@
   // 각 editBtn에 대해 이벤트 리스너 추가
   editBtns.forEach(function(btn) {
       btn.addEventListener("click", editComment);
+  });
+
+  $(document).ready(function() {
+    var options = new Object();
+    options.height = 300;
+    options.width = 900;
+
+    $('#summernote').summernote(options).summernote("disable");
   });
 
 </script>
