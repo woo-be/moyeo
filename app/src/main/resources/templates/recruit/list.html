@@ -12,21 +12,24 @@
 
 <body>
 
-<a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+<div data-th-replace="recruit/recruitregion :: recruitregionlist" data-th-object="${regionId}">지역</div>
 
-<table border='1'>
-  <thead>
-  <tr>
-    <th>번호</th>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>현재 인원</th>
-    <th>총 모집인원</th>
-    <th>모집상태</th>
-    <th>작성일자</th>
-    <th>조회수</th>
-  </tr>
-  </thead>
+<div>
+  <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+
+  <table border='1'>
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>현재 인원</th>
+      <th>총 모집인원</th>
+      <th>모집상태</th>
+      <th>작성일자</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
 
   <tbody>
   <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
@@ -44,20 +47,21 @@
   </tbody>
 </table>
 
-<p>
-  [
-  <a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},filter=${filter},keyword=${keyword})}"
-     data-th-if="${pageNo > 1}"
-     href="list">이전</a>
-  ]
-  [
-  <a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},filter=${filter},keyword=${keyword})}"
-     data-th-if="${pageNo < numOfPage}"
-     href="list">다음</a>
-  ]
-</p>
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
+</div>
 
 <!-- 검색 -->
 <div>
