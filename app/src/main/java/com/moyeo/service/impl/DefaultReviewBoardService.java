@@ -45,10 +45,6 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     reviewBoardDao.increaseViews(reviewBoardId);
   }
 
-  @Override
-  public List<ReviewBoard> reviewList(int memberId, int pageSize, int pageNo) {
-    return reviewBoardDao.reviewList(memberId, pageSize, (pageNo * pageSize) - pageSize);
-  }
 
   @Override
   public List<ReviewBoard> list(int pageNo, int pageSize) {
@@ -135,4 +131,10 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public int countScrapByMember(int memberId) {
     return reviewBoardDao.countScrapByMember(memberId);
   }
+
+  @Override
+  public List<ReviewBoard> reviewList(int memberId, int pageSize, int pageNo) {
+    return reviewBoardDao.reviewList(memberId, pageSize, (pageNo * pageSize) - pageSize);
+  }
+
 }

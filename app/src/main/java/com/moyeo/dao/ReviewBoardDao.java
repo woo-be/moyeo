@@ -21,14 +21,6 @@ public interface ReviewBoardDao {
 
   List<ReviewBoard> reviewList(@Param("memberId") int memberId, @Param("pageSize")int pageSize, @Param("offset")int offset);
 
-  List<ReviewBoard> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
-
-  List<ReviewBoard> findAllByRegionId(@Param("offset") int offset, @Param("rowCount") int rowCount,
-      @Param("regionId") int regionId);
-
-  ReviewBoard findBy(@Param("reviewBoardId") int reviewBoardId);
-
-
   int delete(int reviewBoardId);
 
   int countAll();
