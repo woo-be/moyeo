@@ -33,6 +33,10 @@ public class MemberController implements InitializingBean{
   // 빈 초기화
   @Override
   public void afterPropertiesSet() throws Exception {
+    this.uploadDir = "member/";
+
+    log.debug(String.format("uploadDir: %s", this.uploadDir));
+    log.debug(String.format("bucketname: %s", this.bucketName));
   }
 
 
@@ -78,8 +82,9 @@ public class MemberController implements InitializingBean{
     memberService.update(member);
     session.removeAttribute("loginUser");
     session.setAttribute("loginUser", member);
+
     // 업데이트 후 메인페이지로 이동
-    return "redirect:../index.html";
+    return "redirect:mypage";
   }
 
   // 현재 사용 안함
