@@ -39,6 +39,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public List<RecruitBoard> list(int pageNo, int pageSize) {
     return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
+  @Override
+  public List<RecruitBoard> list(int pageNo, int pageSize, int regionId) {
+    return recruitBoardDao.findAllByRegion(pageSize * (pageNo - 1), pageSize, regionId);
+  }
 
   // 검색어가 존재하는 리스트
   @Override
@@ -118,6 +122,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public int countAll() {
     return recruitBoardDao.countAll();
+  }
+
+  @Override
+  public int countAll(int regionId) {
+    return recruitBoardDao.countAllByRegion(regionId);
   }
 
   @Override

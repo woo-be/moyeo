@@ -53,6 +53,7 @@ public class RecruitBoardController {
       Model model,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize,
+      @RequestParam(defaultValue = "0", required = false) int regionId,
       @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
       @RequestParam(required = false) String keyword // 검색어
   ) {
@@ -69,16 +70,27 @@ public class RecruitBoardController {
     if (keyword == null || keyword.isEmpty()) { // 검색어가 없을 때,
       // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
 
-      int numOfRecord = recruitBoardService.countAll();
+    int numOfRecord;
+    if (regionId == 0) {
+      numOfRecord = recruitBoardService.countAll();
+    } else {
+      numOfRecord = recruitBoardService.countAll(regionId);
+    }
 
-      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
 
       if (pageNo > numOfPage) {
         pageNo = numOfPage;
       }
 
-      log.debug("검색어 없음");
+    log.debug("검색어 없음");
+    // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
+    // regionId가 0이면 전체 리스트, 아니면 선택한 지역의 리스트
+    if (regionId == 0) {
       model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
+    } else {
+      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId));
+    }
 
     } else { //  검색어가 있을 때,
       if (filter.equals("writer")) { // 검색 필터가 작성자일 때,
@@ -97,6 +109,7 @@ public class RecruitBoardController {
       model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, filter, keyword));
 
     }
+    model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
@@ -131,6 +144,9 @@ public class RecruitBoardController {
 
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
+    if (recruitPhotos == null) {
+      recruitPhotos = new ArrayList<>();
+    }
 
     for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
       RecruitPhoto recruitPhoto = recruitPhotos.get(i);

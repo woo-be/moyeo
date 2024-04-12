@@ -68,23 +68,49 @@
 
   <select id="findByKeyword" resultMap="RecruitBoardMap">
     select
-      rb.recruit_board_id,
-      rb.title,
-      m.nickname, <!-- name => nickname 으로 변경 -->
-      rb.views,
-      count(case when rm.state = 1 then 1 end) as current,
-      rb.recruit_total,
-      rb.state,
-      rb.created_date
+    rb.recruit_board_id,
+    rb.title,
+    m.nickname, <!-- name => nickname 으로 변경 -->
+    rb.views,
+    count(case when rm.state = 1 then 1 end) as current,
+    rb.recruit_total,
+    rb.state,
+    rb.created_date
     from
-      recruit_board rb
-      inner join member m on rb.member_id = m.member_id
-      left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+    recruit_board rb
+    inner join member m on rb.member_id = m.member_id
+    left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
     <!--      left join region reg on rb.region_id=reg.region_id-->
     <!--    where-->
     <!--      rb.region_id=1 and theme_id = ?-->
     where
-      ${filter} like concat('%',#{keyword},'%') <!--filter라는 이름의 필드에 keyword가 포함될 때, -->
+    ${filter} like concat('%',#{keyword},'%') <!--filter라는 이름의 필드에 keyword가 포함될 때, -->
+    group by
+    rb.recruit_board_id
+    order by
+    rb.recruit_board_id desc
+    limit #{rowCount} offset #{offset}
+  </select>
+
+  <select id="findAllByRegion" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rb.recruit_board_id,
+      rb.title,
+      m.nickname,
+      rb.views,
+      count(case when rm.state = 1 then 1 end) as current,
+      rb.recruit_total,
+      rb.state,
+      rb.created_date,
+      reg.region_name
+    from
+      recruit_board rb
+      inner join member m on rb.member_id = m.member_id
+      left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+      left join region reg on rb.region_id=reg.region_id
+    where
+      rb.region_id=#{regionId}
+      <!--    and theme_id = ?-->
     group by
       rb.recruit_board_id
     order by
@@ -126,6 +152,10 @@
 
   <select id="countAll" resultType="int">
     select count(*) from recruit_board;
+  </select>
+
+  <select id="countAllByRegion" resultType="int">
+    select count(*) from recruit_board where region_id=#{regionId};
   </select>
 
   <select id="countByKeyword" resultType="int">
