@@ -3,6 +3,7 @@ package com.moyeo.service;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface ReviewBoardService {
 
@@ -24,4 +25,8 @@ public interface ReviewBoardService {
   ReviewPhoto getReviewPhoto(int reviewPhotoId);
 
   int deleteReviewPhoto(int reviewPhotoId);
+
+  List<ReviewBoard> scrapList(int memberId, int pageNo, int pageSize);
+
+  int countScrapByMember(@Param("memberId")int memberId);
 }

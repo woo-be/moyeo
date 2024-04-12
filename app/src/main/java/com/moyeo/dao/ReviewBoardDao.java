@@ -12,6 +12,13 @@ public interface ReviewBoardDao {
 
   void increaseViews(int reviewBoardId);
 
+
+  List<ReviewBoard> scrapList(@Param("memberId")int memberId, @Param("pageSize")int pageSize, @Param("offset")int offset);
+  List<ReviewBoard> findAll(@Param("offset")int offset, @Param("rowCount")int rowCount);
+  List<ReviewBoard> findAllByRegionId(@Param("offset")int offset, @Param("rowCount")int rowCount, @Param("regionId") int regionId);
+  
+  ReviewBoard findBy(@Param("reviewBoardId")int reviewBoardId);
+
   List<ReviewBoard> reviewList(@Param("memberId") int memberId, @Param("pageSize")int pageSize, @Param("offset")int offset);
 
   List<ReviewBoard> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount);
@@ -20,6 +27,7 @@ public interface ReviewBoardDao {
       @Param("regionId") int regionId);
 
   ReviewBoard findBy(@Param("reviewBoardId") int reviewBoardId);
+
 
   int delete(int reviewBoardId);
 
@@ -31,4 +39,6 @@ public interface ReviewBoardDao {
   int update(ReviewBoard reviewBoard);
 
   ReviewBoard get(int id);
+
+  int countScrapByMember(@Param("memberId")int memberId);
 }

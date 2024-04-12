@@ -125,4 +125,14 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public int deleteReviewPhoto(int reviewPhotoId) {
     return reviewPhotoDao.delete(reviewPhotoId);
   }
+
+  @Override
+  public List<ReviewBoard> scrapList(int memberId, int pageNo, int pageSize) {
+    return reviewBoardDao.scrapList(memberId, pageSize, (pageNo * pageSize) - pageSize);
+  }
+
+  @Override
+  public int countScrapByMember(int memberId) {
+    return reviewBoardDao.countScrapByMember(memberId);
+  }
 }
