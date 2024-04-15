@@ -36,19 +36,8 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public List<RecruitBoard> list(int pageNo, int pageSize) {
-    return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
-  }
-  @Override
-  public List<RecruitBoard> list(int pageNo, int pageSize, int regionId) {
-    return recruitBoardDao.findAllByRegion(pageSize * (pageNo - 1), pageSize, regionId);
-  }
-
-  // 검색어가 존재하는 리스트
-  @Override
-  public List<RecruitBoard> list(int pageNo, int pageSize, String filter, String keyword) {
-    log.debug("offset = " + pageSize * (pageNo - 1) + ", rowCount = " + pageSize);
-    return recruitBoardDao.findByKeyword(pageSize * (pageNo - 1), pageSize, filter, keyword);
+  public List<RecruitBoard> list(int pageNo, int pageSize, int regionId, String filter, String keyword) {
+    return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, filter, keyword);
   }
 
   @Override
@@ -119,19 +108,8 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitCommentDao.delete(commentId);
   }
 
-  @Override
-  public int countAll() {
-    return recruitBoardDao.countAll();
-  }
-
-  @Override
-  public int countAll(int regionId) {
-    return recruitBoardDao.countAllByRegion(regionId);
-  }
-
-  @Override
-  public int countByKeyword(String filter, String keyword) {
-    return recruitBoardDao.countByKeyword(filter, keyword);
+  public int countAll(int regionId, String filter, String keyword) {
+    return recruitBoardDao.countAll(regionId, filter, keyword);
   }
 
   @Override
