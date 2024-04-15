@@ -98,11 +98,11 @@ public class ReviewBoardController {
 
   @GetMapping("list")
   public void list(
-      @RequestParam(required = false, defaultValue = "title") String filter,
-      @RequestParam(required = false, defaultValue = "") String keyword,
+      @RequestParam(required = false) String filter,
+      @RequestParam(required = false) String keyword,
       @RequestParam(defaultValue = "6") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
-      @RequestParam(defaultValue = "0", required = false) int regionId, // 원하는 지역 id를 요청
+      @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
       /*@RequestParam(required = false) int themeId,*/
       Model model) throws Exception {
     if (pageSize < 3 || pageSize > 20) {
@@ -112,39 +112,16 @@ public class ReviewBoardController {
       pageNo = 1;
     }
 
-    // 사용자가 원하는 지역 또는 테마를 경우의 수로 나눠서 후기 개수를 카운트
-    // 메소드 파라미터만 달라지기 때문에 오버로딩 해서 구현
-    int numOfRecord = 0;
-    if (regionId == 0 /*&& themeId == 0*/) {
-      numOfRecord = reviewBoardService.countAll();
-    } else if (regionId != 0) {
-      numOfRecord = reviewBoardService.countAll(regionId);
-    } /*else if (themeId!=0) {
-//      numOfRecord = reviewBoardService.countAll(themeId);
-//    } else if (regionId!=0 && themeId!=0) {
-//      numOfRecord = reviewBoardService.countAll(regionId, themeId);*/
-//    }
-
-    // 사용자가 원하는 지역 또는 테마를 경우의 수로 나눠서 후기 리스트를 가져온다.
-    // 메소드 파라미터만 달라지기 때문에 오버로딩 해서 구현
-    List<ReviewBoard> list = null;
-    if (regionId == 0 /*&& themeId == 0*/) {
-      list = reviewBoardService.list(pageNo, pageSize);
-      model.addAttribute("list", list);
-    } else if (regionId != 0) {
-      list = reviewBoardService.list(pageNo, pageSize, regionId);
-      model.addAttribute("list", list);
-    /*} else if (themeId!=0) {
-      model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, themeId));
-    } else if (regionId!=0 && themeId!=0) {
-     model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, themeId));*/
-    }
-
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) >= 0 ? 1 : 0);
+    int numOfPage = 1;
+    int numOfRecord = reviewBoardService.countAll(regionId, filter, keyword);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+
+    // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
+    model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, filter, keyword));
 
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
