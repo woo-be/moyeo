@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WebSocket Chat</title>
+  <script type="text/javascript">
+    var socket = new WebSocket("ws://localhost:8888/plan/chat");
+
+    socket.onopen = function(event) {
+      console.log("WebSocket 연결됨");
+    };
+
+    socket.onmessage = function(event) {
+      var message = event.data;
+      var chatBoc = document.getElementById("chatBox");
+      chatBox.innerHTML += "<p>" + message + "</p>";
+    };
+
+    function sendMessage() {
+      var inputMessage = document.getElementById("inputMessage").value;
+      socket.send(inputMessage);
+      document.getElementById("inputMessage").value = "";
+      console.log("메세지 보냄");
+    }
+  </script>
+</head>
+<body>
+  <div id="chatBox"></div>
+  <input type="text" id="inputMessage">
+  <button onclick="sendMessage()">Send</button>
+
+</body>
+</html>
