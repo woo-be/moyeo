@@ -50,19 +50,56 @@
 </div>
 </ul>
 
+<!-- 검색 -->
+<div>
+  <form method="get" action="list.html" data-th-action="@{list}">
+    <input type="hidden" name="regionId" data-th-value="${regionId}">
+    <label for="filter"></label>
+    <select name="filter" id="filter">
+      <option value="title">제목</option>
+      <option value="content">내용</option>
+      <option value="nickname">작성자</option>
+    </select>
+    <input type="text" name="keyword" data-th-value="${keyword}">
+    <input type="submit" data-th-value="검색">
+  </form>
+</div>
+
 <span>
   [<a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize},regionId=${regionId})}"
+  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize},regionId=${regionId},keyword=${keyword},filter=${filter})}"
      data-th-if="${pageNo > 1}"
      href="list.html" >이전</a>]
   [<a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize},regionId=${regionId})}"
+  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize},regionId=${regionId},keyword=${keyword},filter=${filter})}"
      data-th-if="${pageNo < numOfPage}"
      href="list.html">다음</a>]
 </span>
 
 
 <div data-th-replace="footer :: footer">꼬리말</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  let dropdown = document.getElementById("filter");
+  let condition = "[[${filter}]]";
+
+  switch (condition) {
+    case "title":
+      dropdown.value = "title";
+      break;
+    case "content":
+      dropdown.value = "content";
+      break;
+    case "nickname":
+      dropdown.value = "nickname";
+      break;
+    default:
+      dropdown.value = "title";
+      break;
+  }
+});
+</script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>

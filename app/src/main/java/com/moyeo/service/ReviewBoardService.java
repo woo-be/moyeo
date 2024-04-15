@@ -8,25 +8,31 @@ import org.apache.ibatis.annotations.Param;
 public interface ReviewBoardService {
 
   void add(ReviewBoard reviewBoard);
+
   void increaseViews(int reviewBoardId);
 
   List<ReviewBoard> reviewList(int memberId, int pageSize, int pageNo);
-  List<ReviewBoard> list(int pageNo, int pageSize);
-  List<ReviewBoard> list(int pageNo, int pageSize, int regionId);
+
+  List<ReviewBoard> list(int pageNo, int pageSize, int regionId, String filter, String keyword);
+
   ReviewBoard get(int reviewBoardId);
 
   int delete(int reviewBoardId);
-  int countAll();
-  int countAll(int regionId);
+
+  int countAll(int regionId, String filter, String keyword);
+
+
   int countPostedByMember(int memberId);
+
   int update(ReviewBoard reviewBoard);
 
   List<ReviewPhoto> getReviewPhotos(int reviewBoardId);
+
   ReviewPhoto getReviewPhoto(int reviewPhotoId);
 
   int deleteReviewPhoto(int reviewPhotoId);
 
   List<ReviewBoard> scrapList(int memberId, int pageNo, int pageSize);
 
-  int countScrapByMember(@Param("memberId")int memberId);
+  int countScrapByMember(@Param("memberId") int memberId);
 }
