@@ -53,10 +53,12 @@ public class RecruitBoardController {
       Model model,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize,
-      @RequestParam(defaultValue = "0", required = false) int regionId,
+      @RequestParam(defaultValue = "0") int regionId,
       @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
       @RequestParam(required = false) String keyword // 검색어
   ) {
+
+    log.debug(filter);
 
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
@@ -66,49 +68,16 @@ public class RecruitBoardController {
     }
 
     int numOfPage = 1;
-
-    if (keyword == null || keyword.isEmpty()) { // 검색어가 없을 때,
-      // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
-
-    int numOfRecord;
-    if (regionId == 0) {
-      numOfRecord = recruitBoardService.countAll();
-    } else {
-      numOfRecord = recruitBoardService.countAll(regionId);
-    }
-
+    int numOfRecord = recruitBoardService.countAll(regionId, filter, keyword);
     numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
 
-      if (pageNo > numOfPage) {
-        pageNo = numOfPage;
-      }
-
-    log.debug("검색어 없음");
-    // Model 객체를 이용해 컨트롤러에서 생성한 데이터를 View로 보내줌
-    // regionId가 0이면 전체 리스트, 아니면 선택한 지역의 리스트
-    if (regionId == 0) {
-      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize));
-    } else {
-      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId));
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
     }
 
-    } else { //  검색어가 있을 때,
-      if (filter.equals("writer")) { // 검색 필터가 작성자일 때,
-        filter = "m.nickname";
-      }
+    // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
+    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, filter, keyword));
 
-      int numOfRecord = recruitBoardService.countByKeyword(filter, keyword);
-
-      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
-
-      if (pageNo > numOfPage) {
-        pageNo = numOfPage;
-      }
-
-      log.debug("검색어 있음");
-      model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, filter, keyword));
-
-    }
     model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);

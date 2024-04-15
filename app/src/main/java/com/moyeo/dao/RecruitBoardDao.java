@@ -9,20 +9,13 @@ import org.apache.ibatis.annotations.Param;
 public interface RecruitBoardDao {
 
   void add(RecruitBoard recruitBoard);
+
   List<RecruitBoard> findAll(
       @Param("offset") int offset,
-      @Param("rowCount") int rowCount);
-
-  List<RecruitBoard> findByKeyword(
-      @Param("offset") int offset,
       @Param("rowCount") int rowCount,
-      @Param("filter") String filter,
-      @Param("keyword") String keyword);
-
-  List<RecruitBoard> findAllByRegion(
-      @Param("offset") int offset,
-      @Param("rowCount") int rowCount,
-      @Param("regionId") int regionId);
+      @Param("regionId")int regionId,
+      @Param("filter")String filter,
+      @Param("keyword")String keyword);
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트
   List<RecruitBoard> findScrap(int memberId);
@@ -33,13 +26,9 @@ public interface RecruitBoardDao {
 
   int delete(int no);
 
-  int countAll();
-
-  int countAllByRegion(int regionId);
-
-  int countByKeyword(
+  int countAll(@Param("regionId") int regionId,
       @Param("filter") String filter,
-      @Param("keyword") String keyword);
+      @Param("keyword")String keyword);
 
   // 조회수 증가
   void plusViews(int boardId);
