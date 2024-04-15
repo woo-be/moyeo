@@ -4,14 +4,13 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
-
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
-
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -50,8 +49,8 @@ public class ReviewBoardController {
 
   @GetMapping("form")
   public void form(Model model) throws Exception {
-    model.addAttribute("regionId",0);
-    model.addAttribute("themeId",0);
+    model.addAttribute("regionId", 0);
+    model.addAttribute("themeId", 0);
   }
 
   @PostMapping("add")
@@ -61,11 +60,12 @@ public class ReviewBoardController {
       SessionStatus sessionStatus,
       Model model) throws Exception {
 
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null) {
-//      throw new Exception("로그인하시기 바랍니다!");
-//    }
-//    reviewBoard.setWriter(loginUser);
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인하시기 바랍니다!");
+    }
+
+    reviewBoard.setWriter(loginUser);
     Member writer = (Member) session.getAttribute("loginUser");
     reviewBoard.setWriter(writer);
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
@@ -92,17 +92,19 @@ public class ReviewBoardController {
 
     sessionStatus.setComplete();
 
-    return "redirect:view?reviewBoardId="+ reviewBoard.getReviewBoardId();
+    return "redirect:view?reviewBoardId=" + reviewBoard.getReviewBoardId();
   }
 
 
   @GetMapping("list")
   public void list(
+      @RequestParam(required = false, defaultValue = "title") String filter,
+      @RequestParam(required = false, defaultValue = "") String keyword,
       @RequestParam(defaultValue = "6") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "0", required = false) int regionId, // 원하는 지역 id를 요청
       /*@RequestParam(required = false) int themeId,*/
-      Model model) {
+      Model model) throws Exception {
     if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
     }
@@ -117,21 +119,15 @@ public class ReviewBoardController {
       numOfRecord = reviewBoardService.countAll();
     } else if (regionId != 0) {
       numOfRecord = reviewBoardService.countAll(regionId);
-    /*} else if (themeId!=0) {
-      numOfRecord = reviewBoardService.countAll(themeId);
-    } else if (regionId!=0 && themeId!=0) {
-      numOfRecord = reviewBoardService.countAll(regionId, themeId);*/
-    }
-
-    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) >= 0 ? 1 : 0);
-
-    if (pageNo > numOfPage) {
-      pageNo = numOfPage;
-    }
+    } /*else if (themeId!=0) {
+//      numOfRecord = reviewBoardService.countAll(themeId);
+//    } else if (regionId!=0 && themeId!=0) {
+//      numOfRecord = reviewBoardService.countAll(regionId, themeId);*/
+//    }
 
     // 사용자가 원하는 지역 또는 테마를 경우의 수로 나눠서 후기 리스트를 가져온다.
     // 메소드 파라미터만 달라지기 때문에 오버로딩 해서 구현
-    List<ReviewBoard> list;
+    List<ReviewBoard> list = null;
     if (regionId == 0 /*&& themeId == 0*/) {
       list = reviewBoardService.list(pageNo, pageSize);
       model.addAttribute("list", list);
@@ -144,6 +140,14 @@ public class ReviewBoardController {
      model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, themeId));*/
     }
 
+    int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) >= 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("filter", filter);
+    model.addAttribute("keyword", keyword);
     model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
@@ -208,7 +212,6 @@ public class ReviewBoardController {
       reviewPhotos = new ArrayList<>();
     }
 
-
     if (old.getPhotos().getFirst().getPhoto() != null) {
       reviewPhotos.addAll(old.getPhotos());
     }
@@ -228,8 +231,6 @@ public class ReviewBoardController {
       }
     }
 
-
-
     log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
         reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
 
@@ -239,20 +240,19 @@ public class ReviewBoardController {
 
 //    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
 //    reviewBoardService.update(reviewBoard);
-    return "redirect:view?reviewBoardId="+ reviewBoard.getReviewBoardId();
+    return "redirect:view?reviewBoardId=" + reviewBoard.getReviewBoardId();
   }
 
   @PostMapping("updateForm")
   public void updateForm(ReviewBoard reviewBoard, Model model) {
     model.addAttribute("updateReviewBoard", reviewBoard);
     log.debug(String.format("%d      %s        %s       %d~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent(), reviewBoard.getThemeId()));
-    model.addAttribute("regionId",reviewBoard.getRegionId());
-    model.addAttribute("themeId",reviewBoard.getThemeId());
+        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent(),
+        reviewBoard.getThemeId()));
+    model.addAttribute("regionId", reviewBoard.getRegionId());
+    model.addAttribute("themeId", reviewBoard.getThemeId());
   }
 
-
- 
 
   @PostMapping("photo/upload")
   @ResponseBody

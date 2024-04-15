@@ -10,6 +10,7 @@ public interface ReviewBoardService {
   void increaseViews(int reviewBoardId);
 
   List<ReviewBoard> reviewList(int memberId, int pageSize, int pageNo);
+  List<ReviewBoard> list();
   List<ReviewBoard> list(int pageNo, int pageSize);
   List<ReviewBoard> list(int pageNo, int pageSize, int regionId);
   ReviewBoard get(int reviewBoardId);

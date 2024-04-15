@@ -51,6 +51,11 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   }
 
   @Override
+  public List<ReviewBoard> list() {
+    return reviewBoardDao.findAllNoPaging();
+  }
+
+  @Override
   public List<ReviewBoard> list(int pageNo, int pageSize) {
     return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize);
   }
