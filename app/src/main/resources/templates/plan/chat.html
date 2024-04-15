@@ -3,31 +3,45 @@
 <head>
   <meta charset="UTF-8">
   <title>WebSocket Chat</title>
+  <style>
+    .chat-container {
+      width: 400px;
+      height: 300px;
+      border: 1px solid #ccc;
+      overflow-y: scroll;
+    }
+    .chat-message {
+      padding: 5px;
+      margin-bottom: 5px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container" id="chatContainer"></div>
+  <input type="text" id="inputMessage">
+  <button onclick="sendMessage()">Send</button>
+
   <script type="text/javascript">
     var socket = new WebSocket("ws://localhost:8888/plan/chat");
 
-    socket.onopen = function(event) {
-      console.log("WebSocket 연결됨");
-    };
-
     socket.onmessage = function(event) {
       var message = event.data;
-      var chatBoc = document.getElementById("chatBox");
-      chatBox.innerHTML += "<p>" + message + "</p>";
+      var chatContainer = document.getElementById("chatContainer");
+      var messageElement = document.createElement("div");
+      messageElement.className = "chat-message";
+      messageElement.innerText = message;
+      charContainer.appendChild(messageElement);
+      chatContainer.scrollTop = chatContainer.scrollHeight;
     };
 
     function sendMessage() {
       var inputMessage = document.getElementById("inputMessage").value;
       socket.send(inputMessage);
       document.getElementById("inputMessage").value = "";
-      console.log("메세지 보냄");
     }
   </script>
-</head>
-<body>
-  <div id="chatBox"></div>
-  <input type="text" id="inputMessage">
-  <button onclick="sendMessage()">Send</button>
 
 </body>
 </html>
