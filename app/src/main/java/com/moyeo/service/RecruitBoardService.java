@@ -17,6 +17,9 @@ public interface RecruitBoardService {
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
+  // 멤버 목록에 내가 존재하는 리스트
+  List<RecruitBoard> list(int memberId);
+
   RecruitBoard get(int boardId);
 
   int update(RecruitBoard board);

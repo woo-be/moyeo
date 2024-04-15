@@ -71,6 +71,25 @@
     limit #{rowCount} offset #{offset}
   </select>
 
+
+  <select id="findAllByMemberId" resultMap="RecruitBoardMap" parameterType="int">
+    SELECT
+    rb.recruit_board_id,
+    rb.title,
+    rb.start_date,
+    rb.end_date,
+    r.region_name,
+    rp.photo
+    FROM
+    recruit_board rb
+    INNER JOIN region r ON r.region_id = rb.region_id
+    LEFT OUTER JOIN recruit_member rm ON rb.recruit_board_id = rm.recruit_board_id
+    LEFT OUTER JOIN recruit_photo rp ON rb.recruit_board_id = rp.recruit_id
+    WHERE
+    rm.state = 1
+    AND rm.member_id = #{memberId}
+  </select>
+
   <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
     select
       rb.recruit_board_id,

@@ -41,6 +41,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
+  public List<RecruitBoard> list(int memberId) {
+    return recruitBoardDao.findAllByMemberId(memberId);
+  }
+
+  @Override
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
     recruitBoard.setComments(recruitCommentDao.findAllByRecruitBoardId(boardId));
