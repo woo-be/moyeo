@@ -31,17 +31,14 @@
 
 <div class="myInfo">
   <h1>내 정보</h1>
-  <form data-th-object="${member}"
-        enctype='multipart/form-data'
-        method='post'>
-    <div class="table-responsive">
-      <div data-th-if="${member != null}">
+  <form data-th-object="${session.loginUser}" enctype='multipart/form-data' method='post'>
+    <div class="table-responsive"  data-th-if="${session.loginUser != null }">
         <div class="form-group">
           <strong>사진</strong>
-          <img data-th-if="*{photo}"
-               data-th-src="@{'https://rljiyddk2675.edge.naverncp.com/68i0l8DhXa/member/' + *{photo}(type=f,w=20,h=20,ttype=jpg)}"
-               src="/img/default-photo.jpeg">
-          <img data-th-unless="*{photo}" src='/img/default-photo.jpeg' class="form-control" style="width:300px;">
+          <p data-th-if="*{photo != null}"><img
+               data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=300,h=300,align=4,ttype=jpg)}"
+               src="/img/default-photo.jpeg"></p>
+          <img data-th-unless="*{photo != null}" src='/img/default-photo.jpeg' class="form-control" style="width:300px;">
         </div>
         <div class="form-group">
           <strong>회원번호</strong>
@@ -72,7 +69,6 @@
           <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;" readonly>
         </div>
       </div>
-    </div>
     <div data-th-if="${member == null}">
       <p>No member information found.</p>
     </div>

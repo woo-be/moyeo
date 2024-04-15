@@ -13,12 +13,6 @@
 <form action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
   <div class="container">
     <h1>회원가입</h1><br>
-    <!--
-    <div>
-      <label>사진</label>
-      <input type="file" class="form-control" name="photo">
-    </div>
-     -->
     <div>
       <label>이메일</label>
       <input type="text" class="form-control" name="email" placeholder="이메일" style="width:300px;">
@@ -37,7 +31,7 @@
     </div><br>
     <div>
       <label>휴대폰 번호</label>
-      <input type="text" class="form-control" name="phoneNumber" placeholder="휴대폰 번호" readonly>
+      <input type="text" class="form-control" name="phoneNumber" placeholder="휴대폰 번호" style="width:300px;">
     </div><br>
     <div>
       <label>생년월일</label>
@@ -45,21 +39,37 @@
     </div><br>
     <div>
       <label>성별</label><br>
-      남자 : <input type="radio"  name="gender" value="0" text="남자">
-      여자 : <input type="radio" name="gender" value="1" text="여자">
+        <div class="form-control" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        남자 : <input type="radio"  name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        여자 : <input type="radio" name="gender" value="1" text="여자">
+        </div>
     </div><br>
     <div>
       <label>자기소개</label>
       <input type="text" class="form-control" name="introduce" placeholder="자기소개" style="width:300px;height:300px;">
     </div><br>
     <div>
-      <label>사진</label>
-      <input name='file' type='file'>
-    </div><br>
+      <label for="file">사진</label>
+      <div id="image_container"></div>
+      <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file">
+    </div>
+    <br>
+    <script>
+      function setThumbnail(event) {
+          var reader = new FileReader();
 
+          reader.onload = function(event) {
+              var img = document.createElement("img");
+              img.setAttribute("src", event.target.result);
+              img.setAttribute("style", "width: 300px; height: 300;");
+              document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
+              document.getElementById("image_container").appendChild(img);
+          };
+          reader.readAsDataURL(event.target.files[0]);
+      }
+    </script>
     <button type="submit" class="btn btn-primary">가입 완료</button>
   </div>
 </form>
 </body>
-
 </html>

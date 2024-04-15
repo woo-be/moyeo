@@ -12,21 +12,24 @@
 
 <body>
 
-<a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+<div data-th-replace="recruit/recruitregion :: recruitregionlist" data-th-object="${regionId}">지역</div>
 
-<table border='1'>
-  <thead>
-  <tr>
-    <th>번호</th>
-    <th>제목</th>
-    <th>작성자</th>
-    <th>현재 인원</th>
-    <th>총 모집인원</th>
-    <th>모집상태</th>
-    <th>작성일자</th>
-    <th>조회수</th>
-  </tr>
-  </thead>
+<div>
+  <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+
+  <table border='1'>
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>작성자</th>
+      <th>현재 인원</th>
+      <th>총 모집인원</th>
+      <th>모집상태</th>
+      <th>작성일자</th>
+      <th>조회수</th>
+    </tr>
+    </thead>
 
   <tbody>
   <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
@@ -37,39 +40,41 @@
     <td data-th-text="*{writer.nickname}">홍길동</td>
     <td data-th-text="*{current}">1</td>
     <td data-th-text="*{recruitTotal}">4</td>
-    <td data-th-value="*{state}">true</td>
-    <td data-th-value="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+    <td data-th-text="*{state}">true</td> <!--data-th-value => data-th-text -->
+    <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
     <td data-th-text="*{views}">12</td>
   </tr>
   </tbody>
 </table>
 
-<p>
-  [
-  <a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},filter=${filter},keyword=${keyword})}"
-     data-th-if="${pageNo > 1}"
-     href="list">이전</a>
-  ]
-  [
-  <a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},filter=${filter},keyword=${keyword})}"
-     data-th-if="${pageNo < numOfPage}"
-     href="list">다음</a>
-  ]
-</p>
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId}, filter=${filter}, keyword=${keyword})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId}, filter=${filter}, keyword=${keyword})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
+</div>
 
 <!-- 검색 -->
 <div>
-  <form method="get" action="list.html" data-th-action="@{list(filter=${filter},keyword=${keyword})}">
+  <form method="get" action="list.html" data-th-action="@{list}">
+    <input type="hidden" name="regionId" data-th-value="${regionId}">
     <label for="filter"></label>
     <select name="filter" id="filter">
       <option value="title">제목</option>
       <option value="content">내용</option>
-      <option value="writer">작성자</option>
+      <option value="nickname">작성자</option>
     </select>
     <input type="text" name="keyword" data-th-value="${keyword}">
-    <input type="submit">
+    <input type="submit" data-th-value="검색">
   </form>
 </div>
 
@@ -86,8 +91,8 @@
     case "content":
       dropdown.value = "content";
       break;
-    case "writer":
-      dropdown.value = "writer";
+    case "nickname":
+      dropdown.value = "nickname";
       break;
     default:
       dropdown.value = "title";

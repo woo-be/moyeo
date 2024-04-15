@@ -12,14 +12,10 @@ public interface RecruitBoardService {
   List<RecruitBoard> list(
       // offset -> 몇 번째 row부터 출력할 지, limit-> 한 번에 몇 개 출력할지
       @Param("offset") int offset,
-      @Param("rowCount") int rowCount);
-
-  // 검색어가 존재하는 리스트
-  List<RecruitBoard> list(
-      @Param("offset") int offset,
       @Param("rowCount") int rowCount,
-      @Param("filter") String filter,
-      @Param("keyword") String keyword);
+      @Param("regionId")int regionId,
+      @Param("filter")String filter,
+      @Param("keyword")String keyword);
 
   RecruitBoard get(int boardId);
 
@@ -27,11 +23,9 @@ public interface RecruitBoardService {
 
   int delete(int boardId);
 
-  int countAll();
-
-  int countByKeyword(
-      @Param("filter") String filter,
-      @Param("keyword") String keyword);
+  int countAll(@Param("regionId") int regionId,
+      @Param("filter")String filter,
+      @Param("keyword")String keyword);
 
   List<RecruitPhoto> getRecruitPhotos(int no);
 
