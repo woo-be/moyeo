@@ -30,6 +30,8 @@ dependencies {
     // bootstrap 5.3 라이브러리
     implementation 'org.webjars:bootstrap:5.3.0'
 
+    // spring-boot-starter-websocket
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 }
 

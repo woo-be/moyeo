@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.PlanBoardDao">
+
+  <resultMap id="PlanBoardMap" type="PlanBoard">
+    <id column="plan_board_id" property="planBoardId"/>
+    <result column="recruit_board_id" property="recruitBoardId"/>
+    <result column="title" property="title"/>
+    <result column="content" property="content"/>
+    <result column="trip_date" property="tripDate"/>
+    <result column="latitude" property="latitude"/>
+    <result column="longitude" property="longitude"/>
+
+  </resultMap>
+
+  <select id="findAll" resultMap="PlanBoardMap">
+    select
+      *
+    from
+      plan_board
+    order by
+      plan_board_id desc
+  </select>
+
+</mapper>
