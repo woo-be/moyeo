@@ -13,6 +13,7 @@
 <body>
 
 <div data-th-replace="recruit/recruitregion :: recruitregionlist" data-th-object="${regionId}">지역</div>
+<div data-th-replace="recruit/recruittheme :: recruitthemelist" data-th-object="${themeId}">지역</div>
 
 <div>
   <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
@@ -50,13 +51,13 @@
   <p>
     [
     <a data-th-if="${pageNo <= 1}">이전</a>
-    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId}, filter=${filter}, keyword=${keyword})}"
+    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId}, filter=${filter}, keyword=${keyword})}"
        data-th-if="${pageNo > 1}"
        href="list">이전</a>
     ]
     [
     <a data-th-if="${pageNo >= numOfPage}">다음</a>
-    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId}, filter=${filter}, keyword=${keyword})}"
+    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId}, filter=${filter}, keyword=${keyword})}"
        data-th-if="${pageNo < numOfPage}"
        href="list">다음</a>
     ]

@@ -14,11 +14,15 @@ public interface RecruitBoardService {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount,
       @Param("regionId")int regionId,
+      @Param("themeId") int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
-  // 멤버 목록에 내가 존재하는 리스트
-  List<RecruitBoard> list(int memberId);
+  List<RecruitBoard> mypost(int memberId);  // 내가 생성한 모집
+
+  List<RecruitBoard> myrequest(int memberId); // 내가 신청한 모집
+
+  List<RecruitBoard> teamlist(int memberId);  // 멤버 목록에 내가 존재하는 모집글
 
   RecruitBoard get(int boardId);
 
@@ -26,7 +30,9 @@ public interface RecruitBoardService {
 
   int delete(int boardId);
 
-  int countAll(@Param("regionId") int regionId,
+  int countAll(
+      @Param("regionId") int regionId,
+      @Param("themeId") int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 

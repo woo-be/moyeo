@@ -69,7 +69,9 @@ public class MemberController implements InitializingBean{
       throw new Exception("회원번호가 유효하지 않습니다");
     }
 
-    if (file != null) {
+    log.debug(file);
+
+    if (file.getSize() > 0) {
       String filename = storageService.upload(this.bucketName, this.uploadDir, file);
       member.setPhoto(filename);
       storageService.delete(this.bucketName, this.uploadDir, old.getPhoto());

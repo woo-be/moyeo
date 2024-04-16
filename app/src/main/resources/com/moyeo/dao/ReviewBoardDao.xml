@@ -16,6 +16,7 @@
     <result column="region_name" property="regionName"/>
     <result column="theme_id" property="themeId"/>
     <result column="region_id" property="regionId"/>
+    <result column="address" property="address"/>
 
     <association property="writer" javaType="Member">
       <id column="member_id" property="memberId"/>
@@ -32,7 +33,7 @@
 
   <insert id="add" parameterType="ReviewBoard"
     useGeneratedKeys="true" keyColumn="review_board_id" keyProperty="reviewBoardId">
-    insert into review_board(theme_id, member_id, region_id, title, content, latitude, longitude) values(#{themeId}, #{writer.memberId}, #{regionId}, #{title}, #{content}, '11.111', '111.111');
+    insert into review_board(theme_id, member_id, region_id, title, content, latitude, longitude, address) values(#{themeId}, #{writer.memberId}, #{regionId}, #{title}, #{content}, #{latitude}, #{longitude}, #{address});
   </insert>
 
   <select id="findAll" resultMap="ReviewBoardMap">
@@ -79,6 +80,9 @@
       rb.content,
       rb.latitude,
       rb.longitude,
+      rb.views,
+      rb.address,
+      c,
       t.theme_id,
       t.theme_name,
       r.region_id,
@@ -93,6 +97,7 @@
       inner join theme t on rb.theme_id=t.theme_id
       left outer join member m on m.member_id=rb.member_id
       left outer join review_photo rp on rp.review_board_id=rb.review_board_id
+      left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
     where
       rb.review_board_id=#{reviewBoardId}
   </select>

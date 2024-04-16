@@ -24,7 +24,7 @@ public class MypagePlanController {
       throw new Exception("로그인이 필요한 서비스입니다.");
     }
 
-    model.addAttribute("list", recruitBoardService.list(loginUser.getMemberId()));
+    model.addAttribute("list", recruitBoardService.teamlist(loginUser.getMemberId()));
   }
 
 }

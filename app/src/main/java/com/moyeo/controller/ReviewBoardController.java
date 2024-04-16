@@ -62,7 +62,8 @@ public class ReviewBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
+      session.setAttribute("message", "로그인 해주세요");
+      session.setAttribute("replaceUrl", "/auth/form");
     }
 
     reviewBoard.setWriter(loginUser);
@@ -73,6 +74,7 @@ public class ReviewBoardController {
     log.debug(reviewBoard.getThemeList());
     log.debug(reviewBoard.getLatitude());
     log.debug(reviewBoard.getLongitude());
+    log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
 
     if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
@@ -133,7 +135,13 @@ public class ReviewBoardController {
 
   @GetMapping("view")
   public void reviewBoardGet(int reviewBoardId, Model model) {
-    model.addAttribute("reviewBoard", reviewBoardService.get(reviewBoardId));
+    ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
+    log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
+    if(reviewBoard.getAddress() == null){
+      reviewBoard.setAddress("서울특별시 용산구 한강대로 405");
+    }
+    model.addAttribute("reviewBoard", reviewBoard);
+    model.addAttribute("addr", reviewBoard.getAddress());
   }
 
   @GetMapping("views")

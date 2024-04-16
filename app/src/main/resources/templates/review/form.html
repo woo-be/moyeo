@@ -10,6 +10,7 @@
   <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 
 
   <!-- include libraries(jQuery, bootstrap) -->
@@ -28,8 +29,6 @@
   </style>
 
 
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bootstrap 5 Example</title>
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
@@ -47,6 +46,7 @@
   <div data-th-replace="review/themeList :: themeList">테마리스트</div>
   <br>
   <br>
+  주소 : <input id="addr" type="text" name="address">
   <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
   <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
   주소 검색:
@@ -185,6 +185,7 @@ function searchAddressToCoordinate(address) {
             item = response.v2.addresses[0],
             point = new naver.maps.Point(item.x, item.y);
 
+        document.getElementById("addr").value = item.roadAddress;
         document.getElementById("latitude").value = item.y;
         document.getElementById("longitude").value = item.x;
 

@@ -64,6 +64,9 @@
     <if test="regionId > 0">
       and rb.region_id=#{regionId}
     </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
     group by
       rb.recruit_board_id
     order by
@@ -71,23 +74,54 @@
     limit #{rowCount} offset #{offset}
   </select>
 
+  <select id="findByMemberId" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rb.recruit_board_id,
+      rb.title,
+      rb.deadline,
+      rb.state,
+      rb.recruit_total,
+      count(case when rm.state = 1 then 1 end) as current
+    from
+      recruit_board rb
+      inner join member m on m.member_id=rb.member_id
+      left outer join recruit_member rm on rb.recruit_board_id=rm.recruit_board_id
+    where
+      m.member_id=#{memberId}
+    group by
+      rb.recruit_board_id
+  </select>
 
-  <select id="findAllByMemberId" resultMap="RecruitBoardMap" parameterType="int">
+  <select id="findReqByMemberId" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rm.recruit_board_id,
+      rm.state,
+      rb.title,
+      rb.deadline
+    from
+      member m
+      inner join recruit_member rm on m.member_id=rm.member_id
+      inner join recruit_board rb on rb.recruit_board_id=rm.recruit_board_id
+    where
+      m.member_id=#{memberId}
+  </select>
+
+  <select id="findMyTeamByMemberId" resultMap="RecruitBoardMap" parameterType="int">
     SELECT
-    rb.recruit_board_id,
-    rb.title,
-    rb.start_date,
-    rb.end_date,
-    r.region_name,
-    rp.photo
+      rb.recruit_board_id,
+      rb.title,
+      rb.start_date,
+      rb.end_date,
+      r.region_name,
+      rp.photo
     FROM
-    recruit_board rb
-    INNER JOIN region r ON r.region_id = rb.region_id
-    LEFT OUTER JOIN recruit_member rm ON rb.recruit_board_id = rm.recruit_board_id
-    LEFT OUTER JOIN recruit_photo rp ON rb.recruit_board_id = rp.recruit_id
+      recruit_board rb
+      INNER JOIN region r ON r.region_id = rb.region_id
+      LEFT OUTER JOIN recruit_member rm ON rb.recruit_board_id = rm.recruit_board_id
+      LEFT OUTER JOIN recruit_photo rp ON rb.recruit_board_id = rp.recruit_id
     WHERE
-    rm.state = 1
-    AND rm.member_id = #{memberId}
+      rm.state = 1
+      AND rm.member_id = #{memberId}
   </select>
 
   <select id="findBy" resultMap="RecruitBoardMap" parameterType="int">
@@ -135,6 +169,9 @@
     </if>
     <if test="regionId > 0">
       and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
     </if>
   </select>
 

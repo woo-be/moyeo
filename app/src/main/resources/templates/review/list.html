@@ -40,7 +40,8 @@
         <div class="work-info" style='border: 1px solid black; float:none'>
           <h3 data-th-text="*{title}">제목입니다</h3>
           <p data-th-text="*{regionName}">지역</p>
-          <p data-th-text="*{views}">조회수</p>
+          조회수: <span data-th-text="*{views}">조회수</span><br>
+          좋아요수: <span data-th-text="*{likeCount}">좋아요수</span><br>
           <span data-th-text="*{writer.nickname}">홍길동</span>
           <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
         </div>
@@ -60,7 +61,7 @@
       <option value="content">내용</option>
       <option value="nickname">작성자</option>
     </select>
-    <input type="text" name="keyword" data-th-value="${keyword}">
+    <input type="search" name="keyword" data-th-value="${keyword}">
     <input type="submit" data-th-value="검색">
   </form>
 </div>

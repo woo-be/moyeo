@@ -60,6 +60,7 @@
     <button>수정</button>
     [<a data-th-href="@{delete(recruitBoardId=*{recruitBoardId})}" href="delete.html">삭제</a>]
     [<a data-th-href="@{../recruitScrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
+    [<a data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">신청하기</a>]
   </div>
 </form>
 
@@ -146,6 +147,7 @@
     var options = new Object();
     options.height = 300;
     options.width = 900;
+    options.toolbar = false;
 
     $('#summernote').summernote(options).summernote("disable");
   });

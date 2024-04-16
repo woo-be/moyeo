@@ -36,13 +36,23 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public List<RecruitBoard> list(int pageNo, int pageSize, int regionId, String filter, String keyword) {
-    return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, filter, keyword);
+  public List<RecruitBoard> list(int pageNo, int pageSize, int regionId, int themeId, String filter, String keyword) {
+    return recruitBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
   }
 
   @Override
-  public List<RecruitBoard> list(int memberId) {
-    return recruitBoardDao.findAllByMemberId(memberId);
+  public List<RecruitBoard> mypost(int memberId) {
+    return recruitBoardDao.findByMemberId(memberId);
+  }
+
+  @Override
+  public List<RecruitBoard> myrequest(int memberId) {
+    return recruitBoardDao.findReqByMemberId(memberId);
+  }
+
+  @Override
+  public List<RecruitBoard> teamlist(int memberId) {
+    return recruitBoardDao.findMyTeamByMemberId(memberId);
   }
 
   @Override
@@ -113,8 +123,8 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     return recruitCommentDao.delete(commentId);
   }
 
-  public int countAll(int regionId, String filter, String keyword) {
-    return recruitBoardDao.countAll(regionId, filter, keyword);
+  public int countAll(int regionId, int themeId, String filter, String keyword) {
+    return recruitBoardDao.countAll(regionId, themeId, filter, keyword);
   }
 
   @Override
