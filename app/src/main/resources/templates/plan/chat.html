@@ -24,7 +24,7 @@
   <button onclick="sendMessage()">Send</button>
 
   <script type="text/javascript">
-    var socket = new WebSocket("ws://localhost:8888/plan/chat");
+    var socket = new WebSocket("ws://localhost:8888/chat");
 
     socket.onmessage = function(event) {
       var message = event.data;
