@@ -46,7 +46,7 @@
       content
     )
     values(
-      '1',
+      #{commentMember.memberId},
       #{reviewBoardId},
       #{content}
     )

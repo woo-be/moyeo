@@ -1,6 +1,7 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.ReviewCommentService;
+import com.moyeo.vo.Member;
 import com.moyeo.vo.ReviewComment;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +21,16 @@ public class ReviewCommentController {
   @PostMapping("add")
   public String commentAdd(int reviewBoardId, String reviewContent, HttpSession session) {
 
+    Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if(loginUser == null){
+      session.setAttribute("message", "로그인 해주세요");
+      session.setAttribute("replaceUrl", "/auth/form");
+    }
+
     ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoardId)
-        .content(reviewContent).build();
+        .content(reviewContent).commentMember(loginUser).build();
+
     reviewCommentService.add(reviewComment);
 
     return "redirect:../review/view?reviewBoardId="+reviewBoardId;
