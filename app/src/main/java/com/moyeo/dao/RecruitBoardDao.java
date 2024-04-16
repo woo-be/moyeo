@@ -17,21 +17,22 @@ public interface RecruitBoardDao {
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
-  List<RecruitBoard> findAllByMemberId(int memberId);
+  List<RecruitBoard> findByMemberId(int memberId);
 
-  // 로그인한 사용자가 즐겨찾기한 게시글 리스트
-  List<RecruitBoard> findScrap(int memberId);
+  List<RecruitBoard> findReqByMemberId(int memberId);
+
+  List<RecruitBoard> findMyTeamByMemberId(int memberId);
 
   RecruitBoard findBy(int no);
 
   int update(RecruitBoard recruitBoard);
 
   int delete(int no);
-
   int countAll(@Param("regionId") int regionId,
       @Param("filter") String filter,
       @Param("keyword")String keyword);
 
   // 조회수 증가
+
   void plusViews(int boardId);
 }
