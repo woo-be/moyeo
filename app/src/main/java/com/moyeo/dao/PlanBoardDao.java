@@ -9,4 +9,8 @@ public interface PlanBoardDao {
 
   List<PlanBoard> findAll();
 
+  PlanBoard findBy(int planBoardId);
+
+
+
 }
