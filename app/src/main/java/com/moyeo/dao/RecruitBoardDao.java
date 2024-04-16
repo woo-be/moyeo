@@ -14,6 +14,7 @@ public interface RecruitBoardDao {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount,
       @Param("regionId")int regionId,
+      @Param("themeId")int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
@@ -28,7 +29,9 @@ public interface RecruitBoardDao {
   int update(RecruitBoard recruitBoard);
 
   int delete(int no);
-  int countAll(@Param("regionId") int regionId,
+  int countAll(
+      @Param("regionId") int regionId,
+      @Param("themeId") int themeId,
       @Param("filter") String filter,
       @Param("keyword")String keyword);
 
