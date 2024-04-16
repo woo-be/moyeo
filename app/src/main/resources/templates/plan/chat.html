@@ -24,7 +24,11 @@
   <button onclick="sendMessage()">Send</button>
 
   <script type="text/javascript">
-    var socket = new WebSocket("ws://localhost:8888/plan/chat");
+    const socket = new WebSocket("ws://localhost:8888/chat");
+
+    socket.onopen = function(event) {
+      console.log("WebSocket 연결이 열렸습니다.");
+    };
 
     socket.onmessage = function(event) {
       var message = event.data;
@@ -32,7 +36,7 @@
       var messageElement = document.createElement("div");
       messageElement.className = "chat-message";
       messageElement.innerText = message;
-      charContainer.appendChild(messageElement);
+      chatContainer.appendChild(messageElement);
       chatContainer.scrollTop = chatContainer.scrollHeight;
     };
 
