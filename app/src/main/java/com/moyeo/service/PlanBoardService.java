@@ -7,4 +7,6 @@ public interface PlanBoardService {
 
   List<PlanBoard> list();
 
+  PlanBoard get(int planBoardId);
+
 }

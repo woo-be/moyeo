@@ -25,4 +25,12 @@
       plan_board_id desc
   </select>
 
+  <select id="findBy" resultMap="PlanBoardMap" parameterType="int">
+    select
+      *
+    from
+      plan_board
+    where
+      plan_board_id=#{planBoardId}
+  </select>
 </mapper>
