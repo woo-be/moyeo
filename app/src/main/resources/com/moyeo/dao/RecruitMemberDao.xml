@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.RecruitMemberDao">
+
+  <!--모집 신청하기-->
+  <insert id="add" parameterType="int">
+    insert
+    into
+      recruit_member(
+        recruit_board_id,
+        member_id)
+      values(
+        #{recruitBoardId},
+        #{memberId})
+  </insert>
+
+</mapper>
