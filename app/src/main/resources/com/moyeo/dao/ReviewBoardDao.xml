@@ -25,7 +25,7 @@
     <collection property="photos" ofType="ReviewPhoto">
       <id column="review_photo_id" property="reviewPhotoId"/>
       <result column="review_board_id" property="reviewBoardId"/>
-      <result column="review_photo" property="photo"/>
+      <result column="photo" property="photo"/>
     </collection>
 
   </resultMap>
