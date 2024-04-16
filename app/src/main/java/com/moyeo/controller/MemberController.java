@@ -71,7 +71,7 @@ public class MemberController implements InitializingBean{
 
     log.debug(file);
 
-    if (file != null) {
+    if (file.getSize() > 0) {
       String filename = storageService.upload(this.bucketName, this.uploadDir, file);
       member.setPhoto(filename);
       storageService.delete(this.bucketName, this.uploadDir, old.getPhoto());
