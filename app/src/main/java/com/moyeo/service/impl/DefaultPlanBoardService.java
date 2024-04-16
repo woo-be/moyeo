@@ -15,4 +15,10 @@ public class DefaultPlanBoardService implements PlanBoardService {
   public List<PlanBoard> list() {
     return planBoardDao.findAll();
   }
+
+  @Override
+  public PlanBoard get(int planBoardId) {
+    PlanBoard planBoard = planBoardDao.findBy(planBoardId);
+    return planBoard;
+  }
 }
