@@ -159,7 +159,10 @@ public class RecruitBoardController {
     }
 
     // 해당 게시글을 "board"라는 이름으로 모델 객체에 저장.
+    // regionId와 themeId도 별도로 저장.
     model.addAttribute("board", board);
+    model.addAttribute("regionId", board.getRegion().getRegionId());
+    model.addAttribute("themeId", board.getTheme().getThemeId());
   }
 
   @PostMapping("update")
