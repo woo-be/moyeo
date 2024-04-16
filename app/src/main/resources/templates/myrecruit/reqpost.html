@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <div data-th-replace="header :: header">머리말</div>
+</head>
+
+<body>
+<p>마이페이지</p>
+<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+
+<div>
+  <table border='1'>
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>마감일자</th>
+      <th>수락 여부</th>
+      <th>팀스페이스</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr data-th-each="recruitboard : ${myrequest}" data-th-object="${recruitboard}">
+      <td data-th-text="*{recruitBoardId}">1</td>
+      <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+      <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
+      <td data-th-text="*{state}">true</td>
+      <td><button>이동</button></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+<div data-th-replace="footer :: footer">꼬리말</div>
+</html>
