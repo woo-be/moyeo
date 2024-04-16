@@ -52,6 +52,7 @@ public class RecruitBoardController {
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "10") int pageSize,
       @RequestParam(defaultValue = "0") int regionId,
+      @RequestParam(defaultValue = "0") int themeId,
       @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
       @RequestParam(required = false) String keyword // 검색어
   ) {
@@ -66,7 +67,7 @@ public class RecruitBoardController {
     }
 
     int numOfPage = 1;
-    int numOfRecord = recruitBoardService.countAll(regionId, filter, keyword);
+    int numOfRecord = recruitBoardService.countAll(regionId, themeId, filter, keyword);
     numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
 
     if (pageNo > numOfPage) {
@@ -74,7 +75,7 @@ public class RecruitBoardController {
     }
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
-    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, filter, keyword));
+    model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
 
     model.addAttribute("regionId", regionId);
     model.addAttribute("pageNo", pageNo);

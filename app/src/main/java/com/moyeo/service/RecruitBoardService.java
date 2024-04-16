@@ -14,6 +14,7 @@ public interface RecruitBoardService {
       @Param("offset") int offset,
       @Param("rowCount") int rowCount,
       @Param("regionId")int regionId,
+      @Param("themeId") int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
@@ -29,7 +30,9 @@ public interface RecruitBoardService {
 
   int delete(int boardId);
 
-  int countAll(@Param("regionId") int regionId,
+  int countAll(
+      @Param("regionId") int regionId,
+      @Param("themeId") int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
