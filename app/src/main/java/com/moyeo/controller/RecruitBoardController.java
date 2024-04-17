@@ -57,8 +57,6 @@ public class RecruitBoardController {
       @RequestParam(required = false) String keyword // 검색어
   ) {
 
-    log.debug(filter);
-
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
     }
@@ -109,6 +107,8 @@ public class RecruitBoardController {
     // board 객체의 regionId와 themeId를 세팅함.
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
+
+    log.debug("board = " + board);
 
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
@@ -244,6 +244,9 @@ public class RecruitBoardController {
     if (loginUser == null) {
       loginUser = Member.builder().name("로그인해주세요.").build();
     }
+
+    log.debug(recruitBoard);
+
     model.addAttribute("loginUser", loginUser);
     model.addAttribute("recruitboard", recruitBoard);
   }
