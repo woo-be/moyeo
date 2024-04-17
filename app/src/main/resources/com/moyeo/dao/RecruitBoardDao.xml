@@ -19,6 +19,7 @@
     <result column="latitude" property="latitude"/>
     <result column="longitude" property="longitude"/>
     <result column="views" property="views"/>
+    <result column="address" property="address"/>
     
     <association property="writer" javaType="Member">
       <id column="member_id" property="memberId"/>
@@ -142,7 +143,8 @@
       rb.recruit_total,
       rb.region_id,
       rb.theme_id,
-      rb.member_id
+      rb.member_id,
+      rb.address
     from
       recruit_board rb
       left join region reg on rb.region_id=reg.region_id
@@ -189,7 +191,8 @@
       recruit_total,
       deadline,
       latitude,
-      longitude)
+      longitude,
+      address)
     values(
       #{writer.memberId},
       #{region.regionId},
@@ -201,7 +204,8 @@
       #{recruitTotal},
       #{deadline},
       #{latitude},
-      #{longitude})
+      #{longitude},
+      #{address})
   </insert>
 
   <update id="update" parameterType="recruitBoard">
