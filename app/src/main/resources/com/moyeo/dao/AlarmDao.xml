@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.AlarmDao">
+  <resultMap id="AlarmMap" type="Alarm">
+    <id column="alarm_id" property="alarmId"/>
+    <result column="content" property="content"/>
+  </resultMap>
+
+
+<select id="findAll" parameterType="int" resultMap="AlarmMap">
+  select
+    alarm_id,
+    content
+  from
+    alarm
+  where
+    member_id=#{memberId}
+</select>
+
+</mapper>
