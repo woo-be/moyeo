@@ -5,12 +5,10 @@
   <title>모여</title>
 
   <!-- 네이버 지도 API -->
-  <!--<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56"></script>-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 
   <!-- include libraries(jQuery, bootstrap) -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -60,6 +58,9 @@
     <div>
       테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">
     </div>
+    주소 : <input id="addr" type="text" name="address">
+    <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
+    <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>
       지도 : <div id="map" style="width:500px;height:400px;"></div>
     <div>
       내용 : <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
@@ -143,6 +144,7 @@
   var options = new Object();
   options.height = 300;
   options.width = 900;
+  options.toolbar = false;
 
     $('#summernote').summernote(options).summernote("disable");
 
@@ -219,6 +221,10 @@
           var htmlAddresses = [],
               item = response.v2.addresses[0],
               point = new naver.maps.Point(item.x, item.y);
+
+          document.getElementById("addr").value = item.roadAddress;
+          document.getElementById("latitude").value = item.y;
+          document.getElementById("longitude").value = item.x;
 
           if (item.roadAddress) {
               htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
