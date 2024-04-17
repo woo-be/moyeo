@@ -76,6 +76,7 @@ public class RecruitBoardController {
     model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
 
     model.addAttribute("regionId", regionId);
+    model.addAttribute("themeId", themeId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);

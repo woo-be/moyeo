@@ -59,6 +59,9 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public RecruitBoard get(int boardId) {
     RecruitBoard recruitBoard = recruitBoardDao.findBy(boardId);
     recruitBoard.setComments(recruitCommentDao.findAllByRecruitBoardId(boardId));
+    if (recruitBoard.getComments() != null && recruitBoard.getComments().size()>0 ){
+      log.debug("photoId: "+ recruitBoard.getComments().getFirst().getMember().getPhoto());
+    }
     recruitBoard.setPhotos(recruitPhotoDao.findAllByBoardId(boardId));
 
     return recruitBoard;

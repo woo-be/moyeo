@@ -32,32 +32,33 @@
     </tr>
     </thead>
 
-  <tbody>
-  <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
-    <td data-th-text="*{recruitBoardId}">1</td>
-    <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
-    <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-    <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
-    <td data-th-text="*{writer.nickname}">홍길동</td>
-    <td data-th-text="*{current}">1</td>
-    <td data-th-text="*{recruitTotal}">4</td>
-    <td data-th-text="*{state}">true</td> <!--data-th-value => data-th-text -->
-    <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
-    <td data-th-text="*{views}">12</td>
-  </tr>
-  </tbody>
-</table>
+    <tbody>
+    <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
+      <td data-th-text="*{recruitBoardId}">1</td>
+      <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
+      <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
+      <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+      <td data-th-text="*{writer.nickname}">홍길동</td>
+      <td data-th-text="*{current}">1</td>
+      <td data-th-text="*{recruitTotal}">4</td>
+      <td data-th-text="*{state}">true</td> <!--data-th-value => data-th-text -->
+      <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
+      <td data-th-text="*{views}">12</td>
+    </tr>
+    </tbody>
+
+  </table>
 
   <p>
     [
     <a data-th-if="${pageNo <= 1}">이전</a>
-    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId}, filter=${filter}, keyword=${keyword})}"
+    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
        data-th-if="${pageNo > 1}"
        href="list">이전</a>
     ]
     [
     <a data-th-if="${pageNo >= numOfPage}">다음</a>
-    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId}, filter=${filter}, keyword=${keyword})}"
+    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
        data-th-if="${pageNo < numOfPage}"
        href="list">다음</a>
     ]
@@ -68,6 +69,7 @@
 <div>
   <form method="get" action="list.html" data-th-action="@{list}">
     <input type="hidden" name="regionId" data-th-value="${regionId}">
+    <input type="hidden" name="themeId" data-th-value="${themeId}">
     <label for="filter"></label>
     <select name="filter" id="filter">
       <option value="title">제목</option>

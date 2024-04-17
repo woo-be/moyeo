@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/recruitScrap")
+@RequestMapping("/myrecruit/scrap")
 public class RecruitScrapController {
 
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
@@ -39,11 +39,11 @@ public class RecruitScrapController {
     // 해당 객체를 recruit_scrap에 추가.
     recruitScrapService.add(recruitScrap);
     // list 페이지로 리다이렉트(임시)
-    return "redirect:list";
+    return "redirect:";
   }
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트
-  @GetMapping("list")
+  @GetMapping("")
   public void scrapList(HttpSession session, Model model) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -79,6 +79,6 @@ public class RecruitScrapController {
     }
 
     // list로 리다이렉트(임시), 추후에 마이페이지에서 사용.
-    return "redirect:list";
+    return "redirect:";
   }
 }
