@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class RecruitCommentController {
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
   private final RecruitBoardService recruitBoardService;
-  private final RegionService regionService;
-  private final ThemeService themeService;
   private final StorageService storageService;
   private final String uploadDir = "recruit/";
 
