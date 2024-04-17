@@ -128,12 +128,9 @@
     update review_board set
       title=#{title},
       content=#{content},
-<!--    rb.latitude,-->
-<!--    rb.longitude,-->
-    region_id=#{regionId},
-    theme_id=#{themeId}
-<!--    rp.review_photo_id,-->
-<!--    rp.photo-->
+      address=#{address},
+      region_id=#{regionId},
+      theme_id=#{themeId}
     where
       review_board_id=#{reviewBoardId}
   </update>
