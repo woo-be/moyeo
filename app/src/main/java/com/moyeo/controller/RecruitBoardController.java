@@ -162,6 +162,8 @@ public class RecruitBoardController {
       throw new Exception("권한이 없습니다.");
     }
 
+    log.debug(board);
+
     // 해당 게시글을 "board"라는 이름으로 모델 객체에 저장.
     // regionId와 themeId도 별도로 저장.
     model.addAttribute("board", board);
