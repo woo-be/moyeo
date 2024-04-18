@@ -3,6 +3,7 @@ package com.moyeo.service.impl;
 import com.moyeo.dao.MemberDao;
 import com.moyeo.service.MemberService;
 import com.moyeo.vo.Member;
+import java.sql.Date;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -51,6 +52,12 @@ public class DefaultMemberService implements MemberService {
   @Override
   public int delete(int no) {
     return memberDao.delete(no);
+  }
+
+
+  @Override
+  public Member get(String phoneNumber, String name, Date birthdate) {
+    return memberDao.findByEmail(phoneNumber, name, birthdate);
   }
 
 
