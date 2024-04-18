@@ -1,11 +1,13 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.service.RecruitMemberService;
 import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
 import com.moyeo.vo.Region;
 import com.moyeo.vo.Theme;
@@ -40,6 +42,7 @@ public class RecruitBoardController {
   private final RecruitBoardService recruitBoardService;
   private final RegionService regionService;
   private final ThemeService themeService;
+  private final RecruitMemberService recruitMemberService;
   private final StorageService storageService;
   private final String uploadDir = "recruit/";
 
@@ -243,7 +246,13 @@ public class RecruitBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      loginUser = Member.builder().name("로그인해주세요.").build();
+      loginUser = Member.builder().name("로그인해주세요.").build(); // memberId = 0
+
+    } else { // 로그인 상태일 때, 신청 여부 파악하는 코드
+
+      RecruitMember recruitMember = recruitMemberService.findBy(loginUser.getMemberId(),
+          recruitBoardId);
+      model.addAttribute("recruitMember", recruitMember);
     }
 
     log.debug(recruitBoard);
