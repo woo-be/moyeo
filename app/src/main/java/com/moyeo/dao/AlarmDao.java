@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 @Mapper
 public interface AlarmDao {
   List<Alarm> findAll(@Param("memberId")int memberId);
+
+  void add(Alarm alarm);
 }

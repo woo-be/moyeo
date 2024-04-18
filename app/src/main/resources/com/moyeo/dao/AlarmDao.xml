@@ -20,4 +20,8 @@
     member_id=#{memberId}
 </select>
 
+  <insert id="add" parameterType="Alarm">
+    insert into alarm(member_id, content) values(#{memberId}, #{content});
+  </insert>
+
 </mapper>

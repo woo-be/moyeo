@@ -15,4 +15,9 @@ public class DefaultAlarmService implements AlarmService {
   public List<Alarm> list(int memberId) {
     return alarmDao.findAll(memberId);
   }
+
+  @Override
+  public void add(Alarm alarm) {
+    alarmDao.add(alarm);
+  }
 }
