@@ -3,6 +3,9 @@ package com.moyeo.controller;
 import com.moyeo.service.MemberService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -42,7 +45,7 @@ public class MemberController implements InitializingBean{
 
   // 회원가입 폼 불러오기
   @GetMapping("signup")
-  public void form() throws Exception {
+  public void signup() throws Exception {
   }
 
 
@@ -164,4 +167,22 @@ public class MemberController implements InitializingBean{
       return "redirect:/auth/form";
     }
   }
+
+  // 회원가입 폼 불러오기
+  @GetMapping("findEmail")
+  public void findEmail() throws Exception {
+  }
+
+  @PostMapping("findByEmail")
+  public void findByEmail(Member member, Model model) throws ParseException {
+    Member findMember = memberService.get(member.getPhoneNumber(), member.getName(), member.getBirthdate());
+
+    log.debug(String.format("%s     %s        %S",member.getPhoneNumber(), member.getName(), member.getBirthdate()));
+
+    model.addAttribute("findMember", findMember);
+
+  }
+
+
+
 }

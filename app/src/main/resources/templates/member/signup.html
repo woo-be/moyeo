@@ -5,17 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>header</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
-    .invalid-feedback {
-        display: block;
-        width: 100%;
-        margin-top: .25rem;
-        font-size: .875em;
-        color: red;
-    }
-    .footer {
-      position: static;
-    }
+  .footer {
+    position: static;
+  }
   </style>
 </head>
 
@@ -38,59 +32,60 @@
 
                 <div class="col-12">
                   <label for="email" class="form-label">로그인 이메일</label>
-                  <input type="text" class="form-control" name="email" id="email" placeholder="이메일" style="width:300px;" required="">
-                  <div class="invalid-feedback email-feedback">Please enter a valid Email address!</div>
+                  <input type="text" class="form-control needs-validation" name="email" id="email" placeholder="이메일" style="width:300px;" required>
+                  <div id="email-error" class="invalid-feedback">Please, enter your login email!</div>
                 </div>
 
                 <div class="col-12">
-                  <label for="name" class="form-label">이름</label>
-                  <input type="text" class="form-control" name="name" id="name" placeholder="이름" style="width:300px;" required="">
-                  <div class="invalid-feedback">Please, enter your name!</div>
+                  <label for="username" class="form-label">이름</label>
+                  <input type="text" class="form-control" name="name" id="username" placeholder="이름" style="width:300px;" required>
+                  <div id="username-error" class="invalid-feedback">Please, enter your login name!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="nickname" class="form-label">닉네임</label>
-                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임" style="width:300px;">
-                    <div class="invalid-feedback">Please choose a nickname.</div>
+                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임" style="width:300px;" required>
+                    <div id="nickname-error" class="invalid-feedback">Please choose a nickname.</div>
                 </div>
 
                 <div class="col-12">
-                  <label for="yourPassword" class="form-label">비밀번호</label>
-                  <input type="password" class="form-control" name="password" id="yourPassword" placeholder="비밀번호" style="width:300px;">
-                  <div class="invalid-feedback">Please enter your password!</div>
+                  <label for="password" class="form-label">비밀번호</label>
+                  <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호" style="width:300px;" required>
+                  <div id="password-error" class="invalid-feedback">Please enter your password!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="phoneNumber" class="form-label">휴대폰 번호</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" style="width:300px;">
-                  <div class="invalid-feedback">Please enter a valid phoneNumber!</div>
+                  <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" style="width:300px;" required>
+                  <div id="phoneNumber-error" class="invalid-feedback">Please enter a valid phoneNumber!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="birth" class="form-label">생년월일</label>
-                  <input type="date" class="form-control" name="birthdate" id="birth" placeholder="yyyy-MM-dd" style="width:300px;">
-                  <div class="invalid-feedback">Please enter a valid birth!</div>
+                  <input type="date" class="form-control" name="birthdate" id="birth" placeholder="yyyy-MM-dd" style="width:300px;" required>
+                  <div id="birth-error" class="invalid-feedback">Please enter a valid birth!</div>
                 </div>
 
                 <div class="col-12">
                   <label class="form-label">성별</label>
-                  <div class="form-control" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    남자 : <input type="radio"  name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    여자 : <input type="radio" name="gender" value="1" text="여자">
-                  </div>
-                  <div class="invalid-feedback">Please enter a valid gender!</div>
+                    <div class="form-control" id="gender" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      남자 : <input type="radio" name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      여자 : <input type="radio" name="gender" value="1" text="여자">
+                    </div>
+                  <div id="gender-error" class="invalid-feedback">Please enter a valid gender!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="introduce" class="form-label">자기소개</label>
-                  <input type="text" class="form-control" name="introduce"id="introduce"  placeholder="자기소개" style="width:300px;height:300px;">
-                  <div class="invalid-feedback">Please enter a valid introduce!</div>
+                  <input type="text" class="form-control" name="introduce" id="introduce" placeholder="자기소개" style="width:300px;height:300px;" required>
+                  <div id="introduce-error" class="invalid-feedback">Please enter a valid introduce!</div>
                 </div>
 
                 <div>
                   <label for="file">사진</label>
                   <div id="image_container"></div>
-                  <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file">
+                  <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file" required>
+                  <div id="file-error" class="invalid-feedback">사진을 추가해주세요!</div>
                 </div><br>
 
                 <div class="col-12">
@@ -101,23 +96,8 @@
                   </div>
                 </div>
 
-                <script>
-                  function setThumbnail(event) {
-                      var reader = new FileReader();
-
-                      reader.onload = function(event) {
-                          var img = document.createElement("img");
-                          img.setAttribute("src", event.target.result);
-                          img.setAttribute("style", "width: 300px; height: 300;");
-                          document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
-                          document.getElementById("image_container").appendChild(img);
-                      };
-                      reader.readAsDataURL(event.target.files[0]);
-                  }
-                </script>
-
                 <div class="col-12"><br>
-                  <button class="btn btn-primary w-100" type="submit">회원 가입하기</button>
+                  <button class="btn btn-primary w-100" id="signupBtn" type="submit">회원 가입하기</button>
                 </div>
                 <div class="col-12"><br>
                   <p class="small mb-0">이미 계정이 있나요? <a href="/auth/form">Log in</a></p>
@@ -131,76 +111,59 @@
   </form>
 </main>
 
-<div data-th-replace="footer :: footer">꼬리말</div>
-</body>
+<script>
+  // 사진추가 해주는 스크립트
+  function setThumbnail(event) {
+    var reader = new FileReader();
 
+    reader.onload = function(event) {
+      var img = document.createElement("img");
+      img.setAttribute("src", event.target.result);
+      img.setAttribute("style", "width: 300px; height: 300;");
+      document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
+      document.getElementById("image_container").appendChild(img);
+    };
+    reader.readAsDataURL(event.target.files[0]);
+  }
 
-<!--
-<body>
-<form action="add" data-th-action="@{add}" enctype='multipart/form-data' method='post'>
-  <div class="container">
-    <h1>회원가입</h1><br>
-    <div>
-      <label>이메일</label>
-      <input type="text" class="form-control" name="email" placeholder="이메일" style="width:300px;">
-    </div><br>
-    <div>
-      <label>이름</label>
-      <input type="text" class="form-control" name="name" placeholder="이름" style="width:300px;">
-    </div><br>
-    <div>
-      <label>닉네임</label>
-      <input type="text" class="form-control" name="nickname" placeholder="닉네임" style="width:300px;">
-    </div><br>
-    <div>
-      <label>비밀번호</label>
-      <input type="password" class="form-control" name="password" placeholder="비밀번호" style="width:300px;">
-    </div><br>
-    <div>
-      <label>휴대폰 번호</label>
-      <input type="text" class="form-control" name="phoneNumber" placeholder="휴대폰 번호" style="width:300px;">
-    </div><br>
-    <div>
-      <label>생년월일</label>
-      <input type="date" class="form-control" name="birthdate" placeholder="yyyy-MM-dd" style="width:300px;">
-    </div><br>
-    <div>
-      <label>성별</label><br>
-        <div class="form-control" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        남자 : <input type="radio"  name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-        여자 : <input type="radio" name="gender" value="1" text="여자">
-        </div>
-    </div><br>
-    <div>
-      <label>자기소개</label>
-      <input type="text" class="form-control" name="introduce" placeholder="자기소개" style="width:300px;height:300px;">
-    </div><br>
-    <div>
-      <label for="file">사진</label>
-      <div id="image_container"></div>
-      <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file">
-    </div>
-    <br>
-    <script>
-      function setThumbnail(event) {
-          var reader = new FileReader();
+  // 빈칸이 있으면 오류출력해주는 스크립트
+  var btn = document.getElementById("signupBtn");
+  var fields = [
+      { input: document.getElementById("email"), error: document.getElementById("email-error"), errorMessage: "아이디를 입력하세요!" },
+      { input: document.getElementById("password"), error: document.getElementById("password-error"), errorMessage: "비밀번호를 입력하세요!" },
+      { input: document.getElementById("username"), error: document.getElementById("username-error"), errorMessage: "이름을 입력하세요!" },
+      { input: document.getElementById("nickname"), error: document.getElementById("nickname-error"), errorMessage: "닉네임을 입력하세요!" },
+      { input: document.getElementById("phoneNumber"), error: document.getElementById("phoneNumber-error"), errorMessage: "휴대폰 번호를 입력하세요!" },
+      { input: document.getElementById("birth"), error: document.getElementById("birth-error"), errorMessage: "생년월일을 입력하세요!" },
+      { input: document.getElementById("gender"), error: document.getElementById("gender-error"), errorMessage: "성별을 선택하세요!" },
+      { input: document.getElementById("introduce"), error: document.getElementById("introduce-error"), errorMessage: "자기소개를 작성해주세요!" }
+  ];
 
-          reader.onload = function(event) {
-              var img = document.createElement("img");
-              img.setAttribute("src", event.target.result);
-              img.setAttribute("style", "width: 300px; height: 300;");
-              document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
-              document.getElementById("image_container").appendChild(img);
-          };
-          reader.readAsDataURL(event.target.files[0]);
+  btn.addEventListener('click', function(event) {
+      fields.forEach(function(field) {
+          if (field.input.value === '') {
+              field.error.innerHTML = field.errorMessage;
+              field.error.style.display = "block";
+              event.preventDefault();
+          } else {
+              field.error.innerHTML = ""; // 오류 메세지 지우기
+              field.error.style.display = "none"; // 오류 메세지 숨기기
+          }
+      });
+
+      // 성별관련 radio 버튼 관련
+      var genderInputs = document.querySelectorAll('input[name="gender"]:checked');
+      if (!genderInputs.length) {
+          var genderError = document.getElementById("gender-error");
+          genderError.innerHTML = "성별을 선택하세요!";
+          genderError.style.display = "block";
+          event.preventDefault();
       }
-    </script>
-    <button type="submit" class="btn btn-primary">가입 완료</button>
-  </div>
-</form>
+  });
+
+</script>
+
 <div data-th-replace="footer :: footer">꼬리말</div>
 </body>
--->
-
 
 </html>

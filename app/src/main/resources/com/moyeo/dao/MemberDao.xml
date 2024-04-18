@@ -55,7 +55,7 @@
   </select>
 
 
-  <!-- 회원 번호로 정보 가져오기       현재는 사용안함!-->
+  <!-- 회원 번호로 정보 가져오기 -->
   <select id="findBy" resultMap="MemberMap" parameterType="int">
     select
     member_id,
@@ -87,6 +87,20 @@
     email= #{email}
     and password=sha2(#{password},256)
   </select>
+
+  <select id="findByEmail" resultMap="MemberMap">
+    select
+    member_id,
+    email
+    from
+    member
+    where
+    name=#{name}
+    and phone_number=#{phoneNumber}
+    and birth_date=#{birthdate}
+  </select>
+
+
 
 
 </mapper>
