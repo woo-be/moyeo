@@ -220,7 +220,8 @@
       theme_id=#{theme.themeId},
       content=#{content},
       latitude=#{latitude},
-      longitude=#{longitude}
+      longitude=#{longitude},
+      address=#{address}
     where
       recruit_board_id=#{recruitBoardId}
   </update>
