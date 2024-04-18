@@ -5,6 +5,12 @@
 
 <mapper namespace="com.moyeo.dao.RecruitMemberDao">
 
+  <resultMap id="RecruitMemberMap" type="RecruitMember">
+    <id column="recruit_Board_id" property="recruitBoardId"/>
+    <id column="member_id" property="memberId"/>
+    <result column="state" property="state"/>
+  </resultMap>
+
   <!--모집 신청하기-->
   <insert id="add" parameterType="int">
     insert
@@ -16,5 +22,26 @@
         #{recruitBoardId},
         #{memberId})
   </insert>
+
+  <select id="findBy" resultMap="RecruitMemberMap">
+    select
+      *
+    from
+      recruit_member
+    where
+      member_id = #{memberId}
+    and
+      recruit_board_id = #{recruitBoardId}
+  </select>
+
+  <delete id="delete">
+    delete
+    from
+      recruit_member
+    where
+      member_id = #{memberId}
+    and
+      recruit_board_id = #{recruitBoardId}
+  </delete>
 
 </mapper>
