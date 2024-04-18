@@ -25,8 +25,6 @@ public class AlarmController {
   @ResponseBody
   public List<Alarm> list(HttpSession session) {
     Member loginUser = (Member) session.getAttribute("loginUser");
-    List<Alarm> list = alarmService.list(loginUser.getMemberId());
-    log.debug(String.format("%d      %s ",list.getFirst().getAlarmId(), list.getFirst().getContent()));
-    return list;
+    return alarmService.list(loginUser.getMemberId());
   }
 }

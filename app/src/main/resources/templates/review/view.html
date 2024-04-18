@@ -66,12 +66,10 @@
       내용 : <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
     </div>
 
-
-    <div>
       <button>변경</button>
-      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>
-    </div>
-
+<!--      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>-->
+  </form>
+      <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
 
     <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
         data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"
@@ -80,9 +78,6 @@
     <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
         data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"
         width="4%"/></a>
-
-
-  </form>
 
   <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none;">
     <div data-th-each="comment : *{commentList}" data-th-object="${comment}">
@@ -331,6 +326,23 @@
 
   naver.maps.onJSContentLoaded = initGeocoder;
 
+</script>
+<script>
+<!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
+  function reviewDelete(reviewBoardId){
+      var reply = confirm("후기를 삭제 하겠습니까?");
+      if (reply) {
+          $.ajax({
+              url: "delete?reviewBoardId="+reviewBoardId,
+              type: 'GET',
+              contentType: false,
+              processData: false
+          })
+          .done(function(responseUrl) {
+              window.location.href = responseUrl;
+          })
+      }
+  }
 </script>
 
 
