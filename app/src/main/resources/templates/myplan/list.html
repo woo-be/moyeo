@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <div data-th-replace="header :: header">머리말</div>
+
+  <style>
+    tr div {
+      border: 1px solid black;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<p>마이페이지</p>
+<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+
+<div class="container">
+  <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
+    <div style="border: 1px solid black; width: 350px; display: inline-block;">
+      <p data-th-text="*{recruitBoardId}">1</p>
+      <p><a data-th-text="*{title}" href="view.html">제목입니다</a></p>
+      <p data-th-value="*{#dates.format(startDate,'yyyy-MM-dd')}">2024-01-01</p>
+      <p data-th-value="*{#dates.format(endDate,'yyyy-MM-dd')}">2024-12-31</p>
+      <p data-th-text="*{region.regionName}">서울특별시</p>
+      <!--      <td data-th-value="*{photo}">true</td>-->
+    </div>
+  </tr>
+</div>
+</body>
+<div data-th-replace="footer :: footer">꼬리말</div>
+</html>
