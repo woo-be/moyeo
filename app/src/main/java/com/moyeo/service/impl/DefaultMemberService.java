@@ -60,5 +60,15 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByEmail(phoneNumber, name, birthdate);
   }
 
+  // 비밀번호를 바꾸기 위해 필요한 정보찾기
+  @Override
+  public Member findBy(String email, String name, String phoneNumber, Date birthdate) {
+    return memberDao.matchPassword(email, phoneNumber, name, birthdate);
+  }
 
+  // 비밀번호 변경을 위해 member 를 update
+  @Override
+  public int updatePassword(Member member) {
+    return memberDao.updatePassword(member);
+  }
 }

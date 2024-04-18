@@ -36,7 +36,8 @@
     name=#{name},
     nickname=#{nickname},
     introduce=#{introduce},
-    photo=#{photo}
+    photo=#{photo},
+    phone_number=#{phoneNumber}
     where
     member_id=#{memberId}
   </update>
@@ -101,6 +102,34 @@
   </select>
 
 
+  <select id="matchPassword" resultMap="MemberMap">
+    select
+    *
+    from
+    member
+    where
+    email=#{email}
+    and name=#{name}
+    and phone_number=#{phoneNumber}
+    and birth_date=#{birthdate}
+  </select>
 
+
+  <update id="updatePassword" parameterType="Member">
+    update member
+    set
+    password =
+    <if test="password != ''">
+      sha2(#{password}, 256)
+    </if>
+    <if test="password == ''">
+      sha2('1111', 256)
+    </if>
+    where
+    email = #{email}
+    and name = #{name}
+    and phone_number = #{phoneNumber}
+    and birth_date = #{birthdate}
+  </update>
 
 </mapper>
