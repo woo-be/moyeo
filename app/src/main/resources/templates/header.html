@@ -37,7 +37,7 @@
     </li>
   </ul>
 
-  <button data-th-onclick="openPopup()" onclick="openPopup()">알림</button>
+  <button data-th-onclick="openPopup()" onclick="openPopup()" type="button" class="btn btn-outline-primary me-2">알림</button>
 
   <div class="col-md-3 text-end">
     <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
@@ -49,27 +49,24 @@
     </a>
   </div>
 
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script>
-    console.log('alarm 생성됨!');
-    function openPopup() {
-  $.ajax({
-    url: "http://localhost:8888/alarm/list",
-    method: "GET",
-    success: function(response) {
-      var popup = window.open("", "_blank", "width=300,height=200");
-      popup.document.write("<h1>알림 리스트</h1>");
-      //popup.document.write(response);
-      for (const alarm of response) {
-          popup.document.write("<div>" + alarm.content + "</div>");
-        }
-    },
-    error: function(xhr, status, error) {
-      console.error(error);
-    }
-  });
-}
+
+function openPopup() {
+    $.ajax({
+        url: '/alarm/list',
+        type: 'GET',
+        contentType: false,
+        processData: false,
+      })
+      .done(function(response) {
+          var popup = window.open("", "_blank", "width=300,height=200");
+          popup.document.write("<h1>알림 리스트</h1>");
+          for (const alarm of response) {
+            popup.document.write("<a href='home' target='_blank'><div>" + alarm.content + "</div></a>");
+          }
+       }
+    )
+  }
 
   </script>
 </header>

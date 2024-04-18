@@ -8,4 +8,5 @@ public interface AlarmService {
 
   List<Alarm> list(int memberId);
 
+  void add(Alarm alarm);
 }
