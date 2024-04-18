@@ -9,4 +9,7 @@ public interface AlarmService {
   List<Alarm> list(int memberId);
 
   void add(Alarm alarm);
+  int update(int alarmId);
+
+  boolean getStatus(int alarmId);
 }
