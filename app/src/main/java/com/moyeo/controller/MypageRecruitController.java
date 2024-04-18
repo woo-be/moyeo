@@ -1,8 +1,10 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.service.RecruitMemberService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.RecruitMember;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +30,21 @@ public class MypageRecruitController {
       throw new Exception("로그인 하시기 바랍니다.");
     }
     model.addAttribute("mypost", recruitBoardService.mypost(loginUser.getMemberId()));
+  }
+
+  @GetMapping("posted/appl")
+  public void appllist(Model model, int recruitBoardId, HttpSession session) throws Exception {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인 하시기 바랍니다.");
+    }
+
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    if (!recruitBoard.getWriter().equals(loginUser)) {
+      throw new Exception("권한이 없습니다.");
+    }
+
+    model.addAttribute("applicants", recruitBoardService.findAllApplicant(recruitBoardId));
   }
 
   @GetMapping("reqpost")
