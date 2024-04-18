@@ -11,12 +11,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @RequiredArgsConstructor
 @Controller
-@RequestMapping("member")
+@RequestMapping("myplan")
 public class MypagePlanController {
 
   private final RecruitBoardService recruitBoardService;
 
-  @GetMapping("myplan")
+  @GetMapping("list")
   public void list(Model model, HttpSession session) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");

@@ -1,6 +1,7 @@
 package com.moyeo.dao;
 
 import com.moyeo.vo.Member;
+import java.sql.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -26,6 +27,16 @@ public interface MemberDao {
   // 로그인 할때
   Member findByEmailAndPassword(
       @Param("email") String email,
-      @Param("password") String password);
+      @Param("password") String password
+  );
+
+
+  Member findByEmail(
+      @Param("phoneNumber") String phoneNumber,
+      @Param("name") String name,
+      @Param("birthdate") Date birthdate
+  );
+
+
 
 }

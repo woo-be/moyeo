@@ -1,6 +1,7 @@
 package com.moyeo.service;
 
 import com.moyeo.vo.Member;
+import java.sql.Date;
 import java.util.List;
 
 public interface MemberService {
@@ -17,7 +18,7 @@ public interface MemberService {
 
   int delete(int no);
 
-  // 페이징처리할때 사용
-//  int countAll();
+  Member get(String phoneNumber, String name, Date birthdate);
+
 
 }
