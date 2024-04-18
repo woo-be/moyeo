@@ -32,21 +32,6 @@ public class MypageRecruitController {
     model.addAttribute("mypost", recruitBoardService.mypost(loginUser.getMemberId()));
   }
 
-  @GetMapping("posted/appl")
-  public void appllist(Model model, int recruitBoardId, HttpSession session) throws Exception {
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new Exception("로그인 하시기 바랍니다.");
-    }
-
-    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    if (!recruitBoard.getWriter().equals(loginUser)) {
-      throw new Exception("권한이 없습니다.");
-    }
-
-    model.addAttribute("applicants", recruitBoardService.findAllApplicant(recruitBoardId));
-  }
-
   @GetMapping("reqpost")
   public void myrequest(Model model, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");

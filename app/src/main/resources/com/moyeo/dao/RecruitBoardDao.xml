@@ -40,21 +40,6 @@
       <id column="recruit_photo_id" property="recruitPhotoId"/>
       <result column="photo" property="photo"/>
     </collection>
-
-    <collection property="members" ofType="RecruitMembers">
-      <id column="recruit_board_id" property="recruitBoardId"/>
-      <result column="member_id" property="memberId"/>
-      <result column="state" property="state"/>
-    </collection>
-
-<!--    <association property="member" javaType="Member">-->
-<!--      <id column="member_id" property="memberId"/>-->
-<!--      <result column="nickname" property="nickname"/>-->
-<!--      <result column="email" property="email"/>-->
-<!--      <result column="birth_date" property="birthDate"/>-->
-<!--      <result column="introduce" property="introduce"/>-->
-<!--      <result column="gender" property="gender"/>-->
-<!--    </association>-->
     
   </resultMap>
 
