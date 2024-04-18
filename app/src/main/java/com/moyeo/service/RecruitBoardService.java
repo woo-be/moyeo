@@ -2,6 +2,7 @@ package com.moyeo.service;
 
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
@@ -52,4 +53,6 @@ public interface RecruitBoardService {
 
   // 조회수 증가
   void plusViews(int boardId);
+
+  List<RecruitMember> findAllApplicant(int recruitBoardId);
 }

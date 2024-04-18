@@ -6,8 +6,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
   <div data-th-replace="header :: header">머리말</div>
+
+  <style>
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 
 <body>
@@ -22,8 +35,8 @@
       <th>제목</th>
       <th>기한</th>
       <th>모집상태</th>
-      <th>현재 인원</th>
-      <th>총 모집인원</th>
+      <th>모집현황</th>
+      <th>신청자 확인</th>
     </tr>
     </thead>
 
@@ -31,15 +44,37 @@
     <tr data-th-each="recruitboard : ${mypost}" data-th-object="${recruitboard}">
       <td data-th-text="*{recruitBoardId}">1</td>
       <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
-      <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
-      <td data-th-text="*{state}">true</td> <!--data-th-value => data-th-text -->
-      <td data-th-text="*{current}">1</td>
-      <td data-th-text="*{recruitTotal}">4</td>
+      <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
+      <td data-th-if="*{state == true}">모집중</td>
+      <td data-th-if="*{state == false}">모집완료</td>
+      <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+      <td data-th-if="*{state == true}" id="checkBtn"><button>확인</button></td>
     </tr>
     </tbody>
   </table>
+
+<!--  <div class="popup-wrap" id="popup">-->
+<!--    <div class="popup">-->
+<!--      <div>-->
+<!--        내용-->
+<!--      </div>-->
+<!--    </div>-->
+<!--    <div class="popup-foot">-->
+<!--      <span class="pop-btn confirm" id="confirm">닫기</span>-->
+<!--    </div>-->
+<!--  </div>-->
 </div>
 
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>
+
+<!--<script>-->
+<!--  var checkBtn = document.querySelectorAll("#checkBtn");-->
+<!--  checkBtn.forEach(function(btn){-->
+<!--    btn.addEventListener("click", checkApplicants);-->
+<!--  });-->
+<!--  function checkApplicants(){-->
+<!--    alert('Hi');-->
+<!--  }-->
+<!--</script>-->
 </html>

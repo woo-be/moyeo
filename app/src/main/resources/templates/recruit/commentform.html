@@ -8,10 +8,14 @@
 
 <div data-th-fragment="recruitcommentupdate">
   <input data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
-  프로필사진: <input data-th-value="*{member.photo}" readonly type='text' value="프사"/>
+  <a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
+    <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+  </a>
+  <a data-th-unless="*{member.photo}" href="/img/default-photo.jpeg">
+    <img height='20px' src="/img/default-photo.jpeg">
+  </a>
   작성자: <input data-th-value="*{member.nickname}" readonly type='text' value="닉네임"/>
   내용: <input id="commentcontent" data-th-value="*{content}" type='text' name="content" value="내용"/>
-  <button id="submitBtn" onclick="submitContent()">전송</button>
 </div>
 
 </body>
