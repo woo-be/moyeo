@@ -2,6 +2,7 @@ package com.moyeo.controller;
 
 import com.moyeo.service.RecruitScrapService;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitScrap;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,10 @@ public class RecruitScrapController {
   @GetMapping("add")
   public String add(int recruitBoardId, HttpSession session) throws Exception {
 
-    // 로그인하지 않으면 예외 발생.
+    // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인이 필요한 서비스입니다.");
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
     }
 
     // recruitScrap 객체 생성
@@ -44,9 +45,13 @@ public class RecruitScrapController {
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트
   @GetMapping("")
-  public void scrapList(HttpSession session, Model model) {
+  public void scrapList(HttpSession session, Model model)  throws Exception{
 
+    // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+    }
 
     // 즐겨찾기 리스트를 모델객체의 scarpList에 담음.
     model.addAttribute("scrapList", recruitScrapService.list(loginUser.getMemberId()));
@@ -59,7 +64,7 @@ public class RecruitScrapController {
 
     // 아무것도 선택하지 않았다면 예외 발생
     if(scrapRecruitBoardIds == null || scrapRecruitBoardIds.isEmpty()) {
-      throw new Exception("삭제할 즐겨찾기 항목을 선택해 주세요.");
+      throw new Exception("삭제할 즐겨찾기 항목을 선택해 주세요."); // MoyeoError로 에러 페이지 처리 요망.
     }
 
     // 각 번호들을 ','를 기준으로 분리하여 배열로 저장한다.

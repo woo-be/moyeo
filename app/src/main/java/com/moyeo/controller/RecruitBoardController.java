@@ -6,6 +6,7 @@ import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
@@ -23,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Controller
@@ -97,15 +100,17 @@ public class RecruitBoardController {
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
-      throw new Exception("지역과 테마를 선택해주세요.");
+      throw new MoyeoError("지역과 테마를 선택해주세요.", "addform");
     }
+
+
 
     // 현재 로그인한 사용자로 board 객체의 writer를 세팅함.
     Member loginUser = (Member) session.getAttribute("loginUser");
     board.setWriter(loginUser);
 
     if (loginUser == null) {
-      throw new Exception("로그인이 필요한 서비스입니다.");
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
     }
 
     // board 객체의 regionId와 themeId를 세팅함.
@@ -142,7 +147,13 @@ public class RecruitBoardController {
   }
 
   @GetMapping("addForm")
-  public void addForm() throws Exception {
+  public void addForm(HttpSession session) throws Exception {
+
+    // 로그인한 상태인지 아닌지 검사.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+    }
   }
 
   @PostMapping("updateForm")
@@ -151,7 +162,7 @@ public class RecruitBoardController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인 하시기 바랍니다.");
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
     }
 
     // boardId로 게시글을 찾음.
@@ -159,7 +170,7 @@ public class RecruitBoardController {
 
     // 해당 게시글의 작성자 정보와 로그인한 사용자의 정보가 일치하는지 검사.
     if (board.getWriter().getMemberId() != loginUser.getMemberId()) {
-      throw new Exception("권한이 없습니다.");
+      throw new MoyeoError("권한이 없습니다.", "view?recruitBoardId=" + recruitBoardId);
     }
 
     log.debug(board);
@@ -182,19 +193,17 @@ public class RecruitBoardController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      session.setAttribute("message", "로그인 하시기 바랍니다.");
-      session.setAttribute("replaceUrl", "/auth/login");
-      throw new Exception("");
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
     }
 
     RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());
     if (old == null) {
-      throw new Exception("유효하지 않은 번호입니다.");
+      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
     }
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
-      throw new Exception("지역과 테마를 선택해주세요.");
+      throw new MoyeoError("지역과 테마를 선택해주세요.", "view?recruitBoardId=" + board.getRecruitBoardId());
     }
 
     // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
@@ -245,7 +254,7 @@ public class RecruitBoardController {
     // 유효한 번호인지 검사
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
-      throw new Exception("유효하지 않은 번호입니다.");
+      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
     }
 
     Member loginUser = (Member) session.getAttribute("loginUser");
@@ -258,8 +267,6 @@ public class RecruitBoardController {
           recruitBoardId);
       model.addAttribute("recruitMember", recruitMember);
     }
-
-    log.debug(recruitBoard);
 
     model.addAttribute("loginUser", loginUser);
     model.addAttribute("recruitboard", recruitBoard);
@@ -289,19 +296,20 @@ public class RecruitBoardController {
 
   @GetMapping("delete")
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null){
-//      throw new Exception("로그인해주세요");
-//    }
+    // 로그인한 상태인지 아닌지 검사.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+    }
 
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
-      throw new Exception("유효하지 않은 번호입니다.");
+      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
     }
 
-//    if (recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
-//      throw new Exception("권한이 없습니다.");
-//    }
+    if (recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
+      throw new MoyeoError("권한이 없습니다.", "view?recruitBoardId=" + recruitBoardId);
+    }
 
     List<RecruitPhoto> photos = recruitBoardService.getRecruitPhotos(recruitBoardId);
 
