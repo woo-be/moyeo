@@ -30,6 +30,7 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   @Override
   public List<RecruitBoard> list(int memberId) {
     return recruitMemberDao.findAll(memberId);
+  }
 
   @Transactional
   @Override
