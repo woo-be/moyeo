@@ -11,6 +11,14 @@
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
+  <!-- 네이버 지도 API -->
+  <!--<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56"></script>-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
+  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
+
   <!-- include summernote css/js -->
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
@@ -36,12 +44,21 @@
   <div>
     지역: <input data-th-value="*{region.regionName}" readonly type='text' value="서울특별시">
   </div>
+  지도 : <div id="map" style="width:500px;height:400px;"></div>
   <div>
     내용: <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
   </div>
   <div>
-    작성일: <input name="createdDate" data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
-                type='text' value="2024-03-27">
+    작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+  </div>
+  <div>
+    마감기한: <span data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</span>
+  </div>
+  <div>
+    시작일자: <span data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</span>
+  </div>
+  <div>
+    종료일자: <span data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</span>
   </div>
   <div>
     상태: <input data-th-value="*{state}" readonly type='text' name="state">
@@ -59,8 +76,17 @@
   <div>
     <button>수정</button>
     [<a data-th-href="@{delete(recruitBoardId=*{recruitBoardId})}" href="delete.html">삭제</a>]
-    [<a data-th-href="@{../recruitScrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
-    [<a data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">신청하기</a>]
+    [<a data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
+    <div data-th-if="${loginUser.memberId != 0}" style="display:inline"> <!--로그인상태일 때,-->
+      <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
+        <button type="button">신청하기</button></a>
+      <div data-th-if="${recruitMember} != null" style="display:inline">
+        <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">
+          <button type="button">신청취소</button></a>
+        <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>
+        <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>
+      </div>
+    </div>
   </div>
 </form>
 
@@ -71,11 +97,15 @@
       <li data-th-each="comment : *{comments}" data-th-object="${comment}">
         <div id="commentviewform">
           <input data-th-value="*{recruitCommentId}" type="hidden"/>
-          프로필사진: <input data-th-value="*{member.photo}" readonly type='text' value="프사"/>
-          작성자: <input data-th-value="*{member.nickname}" readonly type='text' value="닉네임"/>
+          <a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
+            <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+          </a>
+          <a data-th-unless="*{member.photo}" href="/img/default-photo.jpeg">
+            <img height='20px' src="/img/default-photo.jpeg">
+          </a>
+          작성자: <span data-th-text="*{member.nickname}"></span>
           내용: <input id="commentcontent" data-th-value="*{content}" readonly type='text' value="내용"/>
-          작성일: <input data-th-text="${#dates.format(createdDate,'yyyy-MM-dd')}" readonly
-                      type='text' value="2024-04-03"/>
+          작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
           <button id="editBtn">수정</button>
           <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
              href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
@@ -83,6 +113,7 @@
         <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
               action="view.html" method='post' style="display:none;">
           <div id="updateform" data-th-replace="recruit/commentform :: recruitcommentupdate"></div>
+          <button id="submitBtn" onclick="submitContent()">전송</button>
         </form>
         <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
       </li>
@@ -91,18 +122,31 @@
 
   <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
     <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
-    프로필사진: <input data-th-value="*{photo}" readonly type='text'/>
+    <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
+      <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+    </a>
+    <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
+      <img height='40px' src="/img/default-photo.jpeg">
+    </a>
+    <input data-th-value="*{photo}" type='hidden'>
     작성자: <input data-th-value="*{name}" name="name" readonly type='text'/>
     내용: <textarea id="content" name="content" type="text"></textarea>
     <button id="submit">전송</button>
   </form>
 </div>
-
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
 
+
+  // 모든 editBtn 요소 찾기
+  var editBtns = document.querySelectorAll("#editBtn");
+
+  // 각 editBtn에 대해 이벤트 리스너 추가
+  editBtns.forEach(function(btn) {
+      btn.addEventListener("click", editComment);
+  });
 
   // editBtn 클릭 시 실행될 함수
   function editComment() {
@@ -134,14 +178,6 @@
     });
   }
 
-  // 모든 editBtn 요소 찾기
-  var editBtns = document.querySelectorAll("#editBtn");
-
-  // 각 editBtn에 대해 이벤트 리스너 추가
-  editBtns.forEach(function(btn) {
-      btn.addEventListener("click", editComment);
-  });
-
   // summernote 사용 설정
   $(document).ready(function() {
     var options = new Object();
@@ -151,6 +187,179 @@
 
     $('#summernote').summernote(options).summernote("disable");
   });
+
+</script>
+
+<script>
+  <!-- 지도에서 검색 후 위도, 경도 가지고 오기-->
+
+
+    var map = new naver.maps.Map("map", {
+      center: new naver.maps.LatLng(37.3595316, 127.1052133),
+      zoom: 15,
+      mapTypeControl: true
+  });
+
+  var infoWindow = new naver.maps.InfoWindow({
+      anchorSkew: true,
+      maxWidth: 100
+  });
+
+  map.setCursor('pointer');
+
+  function searchCoordinateToAddress(latlng) {
+
+      infoWindow.close();
+
+      naver.maps.Service.reverseGeocode({
+          coords: latlng,
+          orders: [
+              naver.maps.Service.OrderType.ADDR,
+              naver.maps.Service.OrderType.ROAD_ADDR
+          ].join(',')
+      }, function(status, response) {
+          if (status === naver.maps.Service.Status.ERROR) {
+              return alert('Something Wrong!');
+          }
+
+          var items = response.v2.results,
+              address = '',
+              htmlAddresses = [];
+
+          for (var i=0, ii=items.length, item, addrType; i<ii; i++) {
+              item = items[i];
+              address = makeAddress(item) || '';
+              addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '[지번 주소]';
+
+              htmlAddresses.push((i+1) +'. '+ addrType +' '+ address);
+          }
+
+          infoWindow.setContent([
+              '<div style="padding:10px;min-width:200px;line-height:150%;">',
+              '<h4 style="margin-top:5px;">검색 좌표</h4><br />',
+              htmlAddresses.join('<br />'),
+              '</div>'
+          ].join('\n'));
+
+          infoWindow.open(map, latlng);
+      });
+  }
+
+  function searchAddressToCoordinate(address) {
+      naver.maps.Service.geocode({
+          query: address
+      }, function(status, response) {
+          if (status === naver.maps.Service.Status.ERROR) {
+              return alert('Something Wrong!');
+          }
+
+          if (response.v2.meta.totalCount === 0) {
+              return alert('totalCount' + response.v2.meta.totalCount);
+          }
+
+          var htmlAddresses = [],
+              item = response.v2.addresses[0],
+              point = new naver.maps.Point(item.x, item.y);
+
+          if (item.roadAddress) {
+              htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
+          }
+
+          if (item.jibunAddress) {
+              htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
+          }
+
+          infoWindow.setContent([
+              '<div style="padding:10px;min-width:200px;line-height:150%;">',
+              '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
+              htmlAddresses.join('<br />'),
+              '</div>'
+          ].join('\n'));
+
+          map.setCenter(point);
+          infoWindow.open(map, point);
+      });
+  }
+
+  function initGeocoder() {
+      searchAddressToCoordinate('[[${recruitboard.address}]]');
+  }
+
+  function makeAddress(item) {
+      if (!item) {
+          return;
+      }
+
+      var name = item.name,
+          region = item.region,
+          land = item.land,
+          isRoadAddress = name === 'roadaddr';
+
+      var sido = '', sigugun = '', dongmyun = '', ri = '', rest = '';
+
+      if (hasArea(region.area1)) {
+          sido = region.area1.name;
+      }
+
+      if (hasArea(region.area2)) {
+          sigugun = region.area2.name;
+      }
+
+      if (hasArea(region.area3)) {
+          dongmyun = region.area3.name;
+      }
+
+      if (hasArea(region.area4)) {
+          ri = region.area4.name;
+      }
+
+      if (land) {
+          if (hasData(land.number1)) {
+              if (hasData(land.type) && land.type === '2') {
+                  rest += '산';
+              }
+
+              rest += land.number1;
+
+              if (hasData(land.number2)) {
+                  rest += ('-' + land.number2);
+              }
+          }
+
+          if (isRoadAddress === true) {
+              if (checkLastString(dongmyun, '면')) {
+                  ri = land.name;
+              } else {
+                  dongmyun = land.name;
+                  ri = '';
+              }
+
+              if (hasAddition(land.addition0)) {
+                  rest += ' ' + land.addition0.value;
+              }
+          }
+      }
+
+      return [sido, sigugun, dongmyun, ri, rest].join(' ');
+  }
+
+  function hasArea(area) {
+      return !!(area && area.name && area.name !== '');
+  }
+
+  function hasData(data) {
+      return !!(data && data !== '');
+  }
+
+  function checkLastString (word, lastString) {
+      return new RegExp(lastString + '$').test(word);
+  }
+
+  function hasAddition (addition) {
+      return !!(addition && addition.value);
+  }
+
+  naver.maps.onJSContentLoaded = initGeocoder;
 
 </script>
 </html>

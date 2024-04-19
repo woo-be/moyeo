@@ -30,15 +30,17 @@ public class RecruitBoard implements Serializable {
   private int current;                  // 현재 인원
   private int recruitTotal;             // 모집 인원
   private Date deadline;                // 모집 마감일자
-  private boolean state;                // 모집 상태
+  private Boolean state;                // 모집 상태-> 0418 boolean에서 Boolean으로 변경 (null 처리 필요)
 
   private Date createdDate;             // 여행멤버모집게시물 작성일자
 
   private float latitude;               // 위도
   private float longitude;              // 경도
+  private String address;
 
   private int views;                    // 여행멤버모집게시글 조회수
 
   private List<RecruitPhoto> photos;    // 여행멤버모집게시글 첨부사진
   private List<RecruitComment> comments;// 여행멤버모집게시글 댓글
+  private List<RecruitMember> applicants;  // 여행멤버모집게시글 참여자
 }

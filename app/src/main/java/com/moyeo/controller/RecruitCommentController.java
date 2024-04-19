@@ -24,8 +24,6 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 public class RecruitCommentController {
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
   private final RecruitBoardService recruitBoardService;
-  private final RegionService regionService;
-  private final ThemeService themeService;
   private final StorageService storageService;
   private final String uploadDir = "recruit/";
 
@@ -54,8 +52,7 @@ public class RecruitCommentController {
     }
 
     RecruitComment old = recruitBoardService.getComment(recruitComment.getRecruitCommentId());
-
-    if (old.getMember().equals(loginUser)) {
+    if (old.getMember().getMemberId() != loginUser.getMemberId()) {
       throw new Exception("권한이 없습니다.");
     }
 
@@ -64,7 +61,6 @@ public class RecruitCommentController {
 
     recruitBoardService.updateComment(recruitComment);
     return "redirect:../../recruit/view?recruitBoardId=" + recruitComment.getRecruitBoard().getRecruitBoardId();
-
   }
 
   @GetMapping("delete")

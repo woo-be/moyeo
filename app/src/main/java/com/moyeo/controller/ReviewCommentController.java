@@ -1,7 +1,10 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.ReviewCommentService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewComment;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -18,8 +22,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ReviewCommentController {
   private final Log log = LogFactory.getLog(ReviewCommentController.class);
   private final ReviewCommentService reviewCommentService;
+  private final AlarmService alarmService;
   @PostMapping("add")
-  public String commentAdd(int reviewBoardId, String reviewContent, HttpSession session) {
+  public String commentAdd(ReviewBoard reviewBoard, @RequestParam("reviewContent") String reviewContent, HttpSession session) {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
@@ -28,12 +33,21 @@ public class ReviewCommentController {
       session.setAttribute("replaceUrl", "/auth/form");
     }
 
-    ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoardId)
+    ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoard.getReviewBoardId())
         .content(reviewContent).commentMember(loginUser).build();
 
-    reviewCommentService.add(reviewComment);
+    Alarm alarm = Alarm.builder().memberId(reviewBoard.getMemberId()).content(
+        "<td>"+
+        reviewBoard.getReviewBoardId()+
+            "번 후기에 댓글을 등록했습니다.</td><td><a href='/review/view?reviewBoardId="+
+            reviewBoard.getReviewBoardId()+
+            "&alarmId="
+    ).build();
 
-    return "redirect:../review/view?reviewBoardId="+reviewBoardId;
+    reviewCommentService.add(reviewComment);
+    alarmService.add(alarm);
+
+    return "redirect:../review/view?reviewBoardId="+reviewBoard.getReviewBoardId();
   }
 
 

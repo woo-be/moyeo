@@ -1,6 +1,7 @@
 package com.moyeo.vo;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class RecruitMember implements Serializable {
 
   private int recruitBoardId;     // 여행멤버모집게시글 식별자
   private int memberId;            // 회원 식별자
-  private boolean state;            // 여행 멤버 상태
+  private Boolean state;            // 여행 멤버 상태
 
+  private Member member;
 }

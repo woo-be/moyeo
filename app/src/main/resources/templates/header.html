@@ -5,40 +5,82 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>header</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+<!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
+<!--          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"-->
+<!--          crossorigin="anonymous"></script>-->
+
 </head>
 
 
 <body>
-<header class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
-        data-th-fragment="header">
-  <a href="/" class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
+<header
+    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom"
+    data-th-fragment="header">
+  <a href="/"
+     class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
     <img src="/img/home.png" alt="" width="110" height="60">
   </a>
 
-    <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-      <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
-      <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
-      <li><a data-th-href="@{../recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
-      <li data-th-unless="${session.loginUser != null}">
-        <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
-      </li>
-      <li data-th-if="${session.loginUser != null}">
-        <a data-th-href="@{../member/mypage}" class="nav-link px-2 link-dark">마이페이지</a>
-      </li>
-    </ul>
 
-    <div class="col-md-3 text-end">
-      <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
-      <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
-        <button type="button" class="btn btn-primary me-2">로그아웃</button>
-      </a>
-      <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
-        <button type="button" class="btn btn-outline-primary me-2">로그인</button>
-      </a>
-    </div>
-  </header>
+  <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+    <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
+    <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
+    <li><a data-th-href="@{../recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
+    <li data-th-unless="${session.loginUser != null}">
+      <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
+    </li>
+    <li data-th-if="${session.loginUser != null}">
+      <a data-th-href="@{../member/mypage}" class="nav-link px-2 link-dark">마이페이지</a>
+    </li>
+  </ul>
+
+  <button data-th-if="${session.loginUser != null}" data-th-onclick="openPopup()" onclick="openPopup()" type="button" class="btn btn-outline-primary me-2">알림</button>
+
+  <div class="col-md-3 text-end">
+    <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
+    <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
+      <button type="button" class="btn btn-primary me-2">로그아웃</button>
+    </a>
+    <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
+      <button type="button" class="btn btn-outline-primary me-2">로그인</button>
+    </a>
+  </div>
+
+  <script>
+
+function openPopup() {
+    $.ajax({
+        url: '/alarm/list',
+        type: 'GET',
+        contentType: false,
+        processData: false
+      })
+      .done(function(response) {
+          var popup = window.open("", "_blank", "width=500,height=500");
+          popup.document.write("<h1>알림 리스트</h1>");
+          if(response == null){
+            popup.document.write("<p>알림이 없습니다.</p>");
+          }else{
+            popup.document.write("<style>table {width: 100%;border-collapse: collapse;}th, td {border: 1px solid black;padding: 8px;text-align: center;}</style>");
+            popup.document.write("<table><tr><th>내용</th><th>이동</th><th>읽음</th></tr>");
+            for (const alarm of response) {
+              popup.document.write("<tr>");
+              popup.document.write(alarm.content);
+              popup.document.write("</tr>");
+            }
+            popup.document.write("</table>");
+          }
+       });
+  }
+
+  </script>
+</header>
+
+
 </body>
 
 </html>

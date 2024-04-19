@@ -52,7 +52,7 @@ public class RecruitMemberController {
     log.debug(list);
 
     model.addAttribute("list", list);
-    log.debug(String.format("%s@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@", list.getFirst().getTitle()));
+    log.debug(String.format("%s", list.getFirst().getTitle()));
   }
 
   @GetMapping("test")
@@ -60,5 +60,18 @@ public class RecruitMemberController {
 
 
   };
+
+  @GetMapping("delete")
+  public String delete(int recruitBoardId, HttpSession session) throws Exception{ // 모집 신청 취소하기
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new Exception("로그인이 필요한 서비스입니다.");
+    }
+
+    recruitMemberService.delete(recruitBoardId, loginUser.getMemberId());
+
+    return "redirect:/recruit/view?recruitBoardId=" + recruitBoardId;
+  }
 
 }

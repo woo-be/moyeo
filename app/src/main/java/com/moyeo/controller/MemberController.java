@@ -3,12 +3,17 @@ package com.moyeo.controller;
 import com.moyeo.service.MemberService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -42,7 +47,7 @@ public class MemberController implements InitializingBean{
 
   // 회원가입 폼 불러오기
   @GetMapping("signup")
-  public void form() throws Exception {
+  public void signup() throws Exception {
   }
 
 
@@ -164,4 +169,58 @@ public class MemberController implements InitializingBean{
       return "redirect:/auth/form";
     }
   }
+
+  // 회원가입 폼 불러오기
+  @GetMapping("findEmail")
+  public void findEmail() throws Exception {
+  }
+
+  @PostMapping("findByEmail")
+  public void findByEmail(Member member, Model model) {
+    Member findMember = memberService.get(member.getPhoneNumber(), member.getName(), member.getBirthdate());
+
+    log.debug(String.format("%s     %s        %S",member.getPhoneNumber(), member.getName(), member.getBirthdate()));
+
+    model.addAttribute("findMember", findMember);
+
+  }
+
+  // 비밀번호 update하기위해 개인정보입력 form 출력
+  @GetMapping("findPassword")
+  public void findPassword() throws Exception{
+  }
+
+  // findPassword.html에서 post방식으로 정보를 받아서 => updatePassword.html으로 정보를 보내준다
+  @PostMapping("findPassword")
+  public String searchPassword(@RequestParam("email") String email,
+                              @RequestParam("phoneNumber") String phoneNumber,
+                              @RequestParam("name") String name,
+                              @RequestParam("birthdate") Date birthdate,
+                              Model model, HttpSession session) {
+    Member updatedMember = memberService.findBy(email, name, phoneNumber, birthdate);
+    if(updatedMember == null){
+      // 에러
+    }
+    session.setAttribute("updatedMember", updatedMember);
+
+    return "redirect:/member/updatePassword";
+  }
+
+  // updatePassword.html form을 가져온다.
+  @GetMapping("updatePassword")
+  public void updatePassword() {
+  }
+
+  // updatePassword.html에 적힌 정보를 newPassword에 정보를 가지고와 member에 newPassword를 넣어준다.
+  @PostMapping("updatePassword")
+  public String updatePassword(Member member, Model model, @RequestParam("newPassword")String newPassword) {
+    member.setPassword(newPassword);
+    memberService.updatePassword(member);
+
+//    if(updatedMember == null){
+//      // 에러
+//    }
+    return "redirect:/home";
+  }
+
 }

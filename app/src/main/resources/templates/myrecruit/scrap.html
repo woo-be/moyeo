@@ -6,6 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .footer {
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 
 <div data-th-replace="header :: header">머리말</div>
@@ -18,8 +27,7 @@
   <thead>
   <tr>
     <th>제목</th>
-    <th>현재 인원</th>
-    <th>총 모집인원</th>
+    <th>모집현황</th>
     <th>모집상태</th>
     <th>기한</th>
   </tr>
@@ -27,11 +35,11 @@
 
   <tbody>
   <tr data-th-each="recruitboard : ${scrapList}" data-th-object="${recruitboard}">
-    <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="../recruit/view.html">제목입니다</a></td>
-    <td data-th-text="*{current}">1</td>
-    <td data-th-text="*{recruitTotal}">4</td>
-    <td data-th-value="*{state}">true</td>
-    <td data-th-value="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
+    <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="../recruit/view.html">제목입니다</a></td>
+    <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+    <td data-th-if="*{state == true}">모집중</td>
+    <td data-th-if="*{state == false}">모집완료</td>
+    <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
   </tr>
   </tbody>
 </table>

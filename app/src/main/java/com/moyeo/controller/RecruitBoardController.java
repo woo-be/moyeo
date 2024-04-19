@@ -1,11 +1,13 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.service.RecruitMemberService;
 import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
 import com.moyeo.vo.Region;
 import com.moyeo.vo.Theme;
@@ -40,6 +42,7 @@ public class RecruitBoardController {
   private final RecruitBoardService recruitBoardService;
   private final RegionService regionService;
   private final ThemeService themeService;
+  private final RecruitMemberService recruitMemberService;
   private final StorageService storageService;
   private final String uploadDir = "recruit/";
 
@@ -56,8 +59,6 @@ public class RecruitBoardController {
       @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
       @RequestParam(required = false) String keyword // 검색어
   ) {
-
-    log.debug(filter);
 
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
@@ -78,6 +79,7 @@ public class RecruitBoardController {
     model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
 
     model.addAttribute("regionId", regionId);
+    model.addAttribute("themeId", themeId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
@@ -109,6 +111,8 @@ public class RecruitBoardController {
     // board 객체의 regionId와 themeId를 세팅함.
     board.setRegion(regionService.get(regionId));
     board.setTheme(themeService.get(themeId));
+
+    log.debug("board = " + board);
 
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
     List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
@@ -158,8 +162,13 @@ public class RecruitBoardController {
       throw new Exception("권한이 없습니다.");
     }
 
+    log.debug(board);
+
     // 해당 게시글을 "board"라는 이름으로 모델 객체에 저장.
+    // regionId와 themeId도 별도로 저장.
     model.addAttribute("board", board);
+    model.addAttribute("regionId", board.getRegion().getRegionId());
+    model.addAttribute("themeId", board.getTheme().getThemeId());
   }
 
   @PostMapping("update")
@@ -239,8 +248,17 @@ public class RecruitBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      loginUser = Member.builder().name("로그인해주세요.").build();
+      loginUser = Member.builder().name("로그인해주세요.").build(); // memberId = 0
+
+    } else { // 로그인 상태일 때, 신청 여부 파악하는 코드
+
+      RecruitMember recruitMember = recruitMemberService.findBy(loginUser.getMemberId(),
+          recruitBoardId);
+      model.addAttribute("recruitMember", recruitMember);
     }
+
+    log.debug(recruitBoard);
+
     model.addAttribute("loginUser", loginUser);
     model.addAttribute("recruitboard", recruitBoard);
   }

@@ -5,12 +5,10 @@
   <title>모여</title>
 
   <!-- 네이버 지도 API -->
-  <!--<script type="text/javascript" src="https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56"></script>-->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
   <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
   <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>
-  <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
 
   <!-- include libraries(jQuery, bootstrap) -->
   <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
@@ -60,17 +58,18 @@
     <div>
       테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">
     </div>
+    주소 : <input id="addr" type="text" name="address">
+    <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
+    <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>
       지도 : <div id="map" style="width:500px;height:400px;"></div>
     <div>
       내용 : <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
     </div>
 
-
-    <div>
       <button>변경</button>
-      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>
-    </div>
-
+<!--      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>-->
+  </form>
+      <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
 
     <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
         data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"
@@ -79,9 +78,6 @@
     <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
         data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"
         width="4%"/></a>
-
-
-  </form>
 
   <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none;">
     <div data-th-each="comment : *{commentList}" data-th-object="${comment}">
@@ -121,6 +117,7 @@
 
   <form action="view.html" data-th-action="@{../comment/add}" method='post'>
     <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
+    <input data-th-value="*{writer.memberId}" name='memberId' type='hidden'>
     <div style='border: 1px solid black; float:none; width:900px'>
       <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>
         댓글 내용
@@ -143,6 +140,7 @@
   var options = new Object();
   options.height = 300;
   options.width = 900;
+  options.toolbar = false;
 
     $('#summernote').summernote(options).summernote("disable");
 
@@ -219,6 +217,10 @@
           var htmlAddresses = [],
               item = response.v2.addresses[0],
               point = new naver.maps.Point(item.x, item.y);
+
+          document.getElementById("addr").value = item.roadAddress;
+          document.getElementById("latitude").value = item.y;
+          document.getElementById("longitude").value = item.x;
 
           if (item.roadAddress) {
               htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
@@ -324,6 +326,24 @@
 
   naver.maps.onJSContentLoaded = initGeocoder;
 
+</script>
+<script>
+<!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
+  function reviewDelete(reviewBoardId){
+      var reply = confirm("후기를 삭제 하겠습니까?");
+      if (reply) {
+          $.ajax({
+              url: "delete?reviewBoardId="+reviewBoardId,
+              type: 'GET',
+              contentType: false,
+              processData: false
+          })
+          .done(function(responseUrl) {
+              window.alert("삭제되었습니다.");
+              window.location.href = responseUrl;
+          })
+      }
+  }
 </script>
 
 
