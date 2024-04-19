@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.moyeo.dao.MaterialPhotoDao">
+
+  <resultMap id="MaterialPhotoMap" type="MaterialPhoto">
+    <id column="material_photo_id" property="materialPhotoId"/>
+    <result column="material_id" property="materialId"/>
+    <result column="material_photo" property="materialPhoto"/>
+  </resultMap>
+
+  <insert id="add" parameterType="MaterialPhoto">
+    insert into
+      material_photo(material_photo_id, material_photo)
+      values(#{materialPhotoId}, #{materialPhoto})
+  </insert>
+
+</mapper>
