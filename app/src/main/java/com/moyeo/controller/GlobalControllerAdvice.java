@@ -1,8 +1,8 @@
 package com.moyeo.controller;
 
+import com.moyeo.vo.MoyeoError;
 import java.beans.PropertyEditorSupport;
 import java.sql.Date;
-import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,11 +22,11 @@ public class GlobalControllerAdvice {
   }
 
   @ExceptionHandler
-  public ModelAndView exceptionHandler(Exception e, HttpSession session) {
+  public ModelAndView exceptionHandler(MoyeoError e) {
     ModelAndView mv = new ModelAndView();
 
-    mv.addObject("message", session.getAttribute("message"));
-    mv.addObject("replaceUrl", session.getAttribute("replaceUrl"));
+    mv.addObject("message", e.getMsg());
+    mv.addObject("replaceUrl", e.getUrl());
 
     mv.setViewName("error");
     return mv;
