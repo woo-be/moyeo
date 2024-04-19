@@ -44,6 +44,9 @@
   <div>
     지역: <input data-th-value="*{region.regionName}" readonly type='text' value="서울특별시">
   </div>
+  <div>
+    테마: <input data-th-value="*{theme.themeName}" readonly type="text" value="힐링">
+  </div>
   지도 : <div id="map" style="width:500px;height:400px;"></div>
   <div>
     내용: <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
@@ -183,6 +186,7 @@
     options.height = 300;
     options.width = 900;
     options.toolbar = false;
+    options.disableDragAndDrop = true;
 
     $('#summernote').summernote(options).summernote("disable");
   });
