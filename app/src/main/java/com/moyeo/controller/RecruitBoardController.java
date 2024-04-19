@@ -182,7 +182,9 @@ public class RecruitBoardController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인 하시기 바랍니다.");
+      session.setAttribute("message", "로그인 하시기 바랍니다.");
+      session.setAttribute("replaceUrl", "/auth/login");
+      throw new Exception("");
     }
 
     RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());

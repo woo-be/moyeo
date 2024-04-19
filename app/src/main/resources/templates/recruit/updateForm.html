@@ -24,12 +24,13 @@
         padding-left: 10px;
     }
 
-    .footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
+<!-- footer가 화면에 고정된 상태로 아래 버튼을 가려 주석처리함 -->
+<!--    .footer {-->
+<!--      position: fixed;-->
+<!--      left: 0;-->
+<!--      bottom: 0;-->
+<!--      width: 100%;-->
+<!--    }-->
   </style>
 
 
@@ -74,17 +75,17 @@
   <div>
     내용: <textarea id="summernote" name="content" data-th-text="*{content}"></textarea>
   </div>
-  <div>
-    위도: <input name="latitude" type="text" data-th-value=*{latitude}>
-  </div>
-  <div>
-    경도: <input name="longitude" type="text" data-th-value=*{longitude}>
-  </div>
+<!--  <div>-->
+<!--    위도: <input name="latitude" type="text" data-th-value=*{latitude}>-->
+<!--  </div>-->
+<!--  <div>-->
+<!--    경도: <input name="longitude" type="text" data-th-value=*{longitude}>-->
+<!--  </div>-->
   <div>
   </div>
   <div>
     <button>등록</button>
-    <a href="list.html">취소</a>
+    <a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" href="list.html">취소</a>
   </div>
 </form>
 
