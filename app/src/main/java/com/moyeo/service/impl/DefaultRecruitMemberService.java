@@ -3,6 +3,7 @@ package com.moyeo.service.impl;
 import com.moyeo.dao.RecruitMemberDao;
 import com.moyeo.service.RecruitMemberService;
 import com.moyeo.vo.RecruitMember;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -31,5 +32,10 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   @Override
   public RecruitMember findBy(int memberId, int recruitBoardId) {
     return recruitMemberDao.findBy(memberId, recruitBoardId);
+  }
+
+  @Override
+  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
+    return recruitMemberDao.findAllApplicant(recruitBoardId);
   }
 }

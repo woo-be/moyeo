@@ -9,6 +9,15 @@
     <id column="recruit_Board_id" property="recruitBoardId"/>
     <id column="member_id" property="memberId"/>
     <result column="state" property="state"/>
+
+    <association property="member" javaType="Member">
+      <id column="memberId" property="memberId"/>
+      <result column="nickname" property="nickname"/>
+      <result column="email" property="email"/>
+      <result column="birth_date" property="birthdate"/>
+      <result column="introduce" property="introduce"/>
+      <result column="gender" property="gender"/>
+    </association>
   </resultMap>
 
   <!--모집 신청하기-->
@@ -43,5 +52,21 @@
     and
       recruit_board_id = #{recruitBoardId}
   </delete>
+
+  <select id="findAllApplicant" resultMap="RecruitMemberMap" parameterType="int">
+    select
+      rcm.member_id,
+      m.nickname,
+      m.email,
+      m.birth_date,
+      m.introduce,
+      m.gender
+    from
+      recruit_board rcb
+      left outer join recruit_member rcm on rcb.recruit_board_id=rcm.recruit_board_id
+      inner join member m on rcm.member_id=m.member_id
+    where
+      rcb.recruit_board_id=1 and rcm.state is null
+  </select>
 
 </mapper>
