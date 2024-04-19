@@ -5,6 +5,12 @@
 
 <mapper namespace="com.moyeo.dao.RecruitMemberDao">
 
+
+  <resultMap id="recruitMemberMap" type="recruitBoard">
+  <id column="recruit_board_id" property="recruitBoardId"/>
+  <result column="title" property="title"/>
+  </resultMap>
+
   <resultMap id="RecruitMemberMap" type="RecruitMember">
     <id column="recruit_Board_id" property="recruitBoardId"/>
     <id column="member_id" property="memberId"/>
@@ -18,6 +24,7 @@
       <result column="introduce" property="introduce"/>
       <result column="gender" property="gender"/>
     </association>
+
   </resultMap>
 
   <!--모집 신청하기-->
@@ -31,6 +38,20 @@
         #{recruitBoardId},
         #{memberId})
   </insert>
+
+
+  <select id="findAll" resultMap="recruitMemberMap" parameterType="int">
+    select
+      *
+    from
+      recruit_member rm
+      left join recruit_board rb on rm.recruit_board_id = rb.recruit_board_id
+    where
+      rm.member_id = #{memberId}
+    order by
+      rb.recruit_board_id desc
+  </select>
+
 
   <select id="findBy" resultMap="RecruitMemberMap">
     select
@@ -68,5 +89,6 @@
     where
       rcb.recruit_board_id=1 and rcm.state is null
   </select>
+
 
 </mapper>

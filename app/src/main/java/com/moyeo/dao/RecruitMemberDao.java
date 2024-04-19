@@ -1,5 +1,8 @@
 package com.moyeo.dao;
 
+
+import com.moyeo.vo.RecruitBoard;
+
 import com.moyeo.vo.RecruitMember;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,6 +16,9 @@ public interface RecruitMemberDao {
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
 
+
+  List<RecruitBoard> findAll(@Param("memberId") int memberId);
+
   void delete(
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
@@ -22,4 +28,5 @@ public interface RecruitMemberDao {
       @Param("recruitBoardId") int recruitBoardId);
 
   List<RecruitMember> findAllApplicant(int recruitBoardId);
+
 }

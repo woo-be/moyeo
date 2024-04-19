@@ -2,6 +2,9 @@ package com.moyeo.service.impl;
 
 import com.moyeo.dao.RecruitMemberDao;
 import com.moyeo.service.RecruitMemberService;
+
+import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.RecruitMember;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +25,11 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   public void add(int recruitBoardId, int memberId) { // 모집 신청하기
     recruitMemberDao.add(recruitBoardId, memberId);
   }
+
+
+  @Override
+  public List<RecruitBoard> list(int memberId) {
+    return recruitMemberDao.findAll(memberId);
 
   @Transactional
   @Override
