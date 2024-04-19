@@ -1,5 +1,6 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.RegionService;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
@@ -10,7 +11,6 @@ import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -42,6 +42,7 @@ public class ReviewBoardController {
   private final ReviewCommentService reviewCommentService;
   private final RegionService regionService;
   private final ThemeService themeService;
+  private final AlarmService alarmService;
   private final String uploadDir = "review/";
 
   @Value("${ncp.ss.bucketname}")
@@ -123,7 +124,8 @@ public class ReviewBoardController {
     }
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
-    model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, filter, keyword));
+    model.addAttribute("list",
+        reviewBoardService.list(pageNo, pageSize, regionId, filter, keyword));
 
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
@@ -134,12 +136,20 @@ public class ReviewBoardController {
   }
 
   @GetMapping("view")
-  public void reviewBoardGet(int reviewBoardId, Model model) {
+  public void reviewBoardGet(int reviewBoardId, @RequestParam(required = false, defaultValue = "0") int alarmId,
+      Model model) {
     ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
     log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
-    if(reviewBoard.getAddress() == null){
+    if (reviewBoard.getAddress() == null) {
       reviewBoard.setAddress("서울특별시 용산구 한강대로 405");
     }
+
+    if(alarmId != 0){
+      if(!alarmService.getStatus(alarmId)){
+        alarmService.update(alarmId);
+      }
+    }
+
     model.addAttribute("reviewBoard", reviewBoard);
     model.addAttribute("addr", reviewBoard.getAddress());
   }
@@ -160,15 +170,17 @@ public class ReviewBoardController {
       // view를 요청 하면 후기 테이블에 views 컬럼에 1씩 증가한다
       reviewBoardService.increaseViews(reviewBoardId);
     }
+
     return "redirect:view?reviewBoardId=" + reviewBoardId;
   }
 
   @GetMapping("delete")
+  @ResponseBody
   public String delete(
       int reviewBoardId) throws Exception {
 
     reviewBoardService.delete(reviewBoardId);
-    return "redirect:list";
+    return "/review/list";
   }
 
   @PostMapping("update")

@@ -116,6 +116,7 @@
         <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
               action="view.html" method='post' style="display:none;">
           <div id="updateform" data-th-replace="recruit/commentform :: recruitcommentupdate"></div>
+          <button id="submitBtn" onclick="submitContent()">전송</button>
         </form>
         <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
       </li>

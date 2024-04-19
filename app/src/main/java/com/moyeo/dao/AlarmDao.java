@@ -11,4 +11,8 @@ public interface AlarmDao {
   List<Alarm> findAll(@Param("memberId")int memberId);
 
   void add(Alarm alarm);
+
+  boolean getStatus(int alarmId);
+
+  int statusUpdate(int alarmId);
 }

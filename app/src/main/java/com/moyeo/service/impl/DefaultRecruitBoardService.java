@@ -6,6 +6,7 @@ import com.moyeo.dao.RecruitPhotoDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
+import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -133,6 +134,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public void plusViews(int boardId) { // 조회수 증가
     recruitBoardDao.plusViews(boardId);
+  }
+
+  @Override
+  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
+    return recruitBoardDao.findAllApplicant(recruitBoardId);
   }
 }
 

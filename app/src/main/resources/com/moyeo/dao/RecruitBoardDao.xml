@@ -238,4 +238,27 @@
       recruit_board_id=#{value};
   </update>
 
+
+  <select id="findAllApplicant" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rcb.recruit_board_id,
+      rcb.deadline,
+      rcb.state,
+      rcb.recruit_total,
+      m.nickname,
+      m.email,
+      m.birth_date,
+      m.introduce,
+      m.gender,
+      t.theme_name
+    from
+      recruit_board rcb
+      left outer join recruit_member rcm on rcb.recruit_board_id=rcm.recruit_board_id
+      inner join member m on rcm.member_id=m.member_id
+      inner join interest_theme it on m.member_id=it.member_id
+      inner join theme t on it.theme_id=t.theme_id
+    where
+      rcb.recruit_board_id=#{recruitBoardId} and rcm.state is null
+  </select>
+
 </mapper>

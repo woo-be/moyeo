@@ -37,6 +37,15 @@ public interface MemberDao {
       @Param("birthdate") Date birthdate
   );
 
+  // 비밀번호 변경하기 위해 필요한 정보 찾기
+  Member matchPassword(
+      @Param("email") String email,
+      @Param("phoneNumber") String phoneNumber,
+      @Param("name") String name,
+      @Param("birthdate") Date birthdate);
 
+
+  // 비밀번호 변경을 위해 member 를 update
+  int updatePassword(Member member);
 
 }
