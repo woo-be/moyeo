@@ -48,4 +48,8 @@ public interface MemberDao {
   // 비밀번호 변경을 위해 member 를 update
   int updatePassword(Member member);
 
+  Member matchByEmail(
+      @Param("email") String email
+  );
+
 }

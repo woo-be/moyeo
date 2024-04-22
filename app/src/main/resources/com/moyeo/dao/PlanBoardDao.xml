@@ -11,21 +11,18 @@
     <result column="title" property="title"/>
     <result column="content" property="content"/>
     <result column="trip_date" property="tripDate"/>
-    <result column="trip_order" property="tripOrder"/>
     <result column="latitude" property="latitude"/>
     <result column="longitude" property="longitude"/>
 
   </resultMap>
 
-  <select id="findAll" resultMap="PlanBoardMap" parameterType="int">
+  <select id="findAll" resultMap="PlanBoardMap">
     select
       *
     from
       plan_board
-    where
-      recruit_board_id=#{value}
     order by
-      plan_board_id
+      plan_board_id desc
   </select>
 
   <select id="findBy" resultMap="PlanBoardMap" parameterType="int">
@@ -34,38 +31,6 @@
     from
       plan_board
     where
-      plan_board_id=#{value}
-  </select>
-
-  <insert id="add" parameterType="PlanBoard"
-    useGeneratedKeys="true" keyColumn="plan_board_id" keyProperty="planBoardId">
-    insert into plan_board(
-    recruit_board_id,
-    title,
-    content,
-    trip_date,
-    trip_order,
-    latitude,
-    longitude)
-    values(
-    #{recruitBoardId},
-    #{title},
-    #{content},
-    #{tripDate},
-    #{tripOrder},
-    1,
-    1)
-  </insert>
-
-  <update id="update" parameterType="PlanBoard">
-    update plan_board set
-      title=#{title},
-      content=#{content},
-      trip_date=#{tripDate},
-      trip_order=#{tripOrder}
-<!--      latitude=#{latitude},-->
-<!--      longitude=#{longitude}-->
-    where
       plan_board_id=#{planBoardId}
-  </update>
+  </select>
 </mapper>

@@ -32,13 +32,13 @@
 
                 <div class="col-12">
                   <label for="email" class="form-label">로그인 이메일</label>
-                  <input type="text" class="form-control needs-validation" name="email" id="email" placeholder="이메일" style="width:300px;" required>
+                  <input type="text" class="form-control needs-validation" name="email" id="email" placeholder="이메일" style="width:300px;" data-th-value="${newMember.email}" required>
                   <div id="email-error" class="invalid-feedback">Please, enter your login email!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="username" class="form-label">이름</label>
-                  <input type="text" class="form-control" name="name" id="username" placeholder="이름" style="width:300px;" required>
+                  <input type="text" class="form-control" name="name" id="username" placeholder="이름" style="width:300px;" data-th-value="${newMember.name}" required>
                   <div id="username-error" class="invalid-feedback">Please, enter your login name!</div>
                 </div>
 
