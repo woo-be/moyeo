@@ -1,6 +1,7 @@
 package com.moyeo.vo;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,5 +21,5 @@ public class Material implements Serializable {
   private String content;           // 준비물 내용
   private int count;                // 준비물 수량
   private boolean state;            // 준비물 상태
-
+  private List<MaterialPhoto> photos;
 }
