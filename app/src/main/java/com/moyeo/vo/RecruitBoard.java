@@ -42,5 +42,5 @@ public class RecruitBoard implements Serializable {
 
   private List<RecruitPhoto> photos;    // 여행멤버모집게시글 첨부사진
   private List<RecruitComment> comments;// 여행멤버모집게시글 댓글
-  private List<RecruitMember> applicants;  // 여행멤버모집게시글 참여자
+  private List<RecruitMember> members;  // 여행멤버모집게시글 댓글
 }

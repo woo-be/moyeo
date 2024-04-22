@@ -135,5 +135,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public void plusViews(int boardId) { // 조회수 증가
     recruitBoardDao.plusViews(boardId);
   }
+
+  @Override
+  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
+    return recruitBoardDao.findAllApplicant(recruitBoardId);
+  }
 }
 
