@@ -53,4 +53,6 @@ public interface RecruitBoardService {
 
   // 조회수 증가
   void plusViews(int boardId);
+
+  List<RecruitMember> findAllApplicant(int recruitBoardId);
 }

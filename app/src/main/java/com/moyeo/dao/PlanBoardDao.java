@@ -7,13 +7,9 @@ import org.apache.ibatis.annotations.Mapper;
 @Mapper
 public interface PlanBoardDao {
 
-  List<PlanBoard> findAll(int recruitBoardId);
+  List<PlanBoard> findAll();
 
   PlanBoard findBy(int planBoardId);
-
-  void add(PlanBoard planBoard);
-
-  int update(PlanBoard planBoard);
 
 
 
