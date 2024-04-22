@@ -6,6 +6,7 @@ import com.moyeo.service.ReviewBoardService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
@@ -106,7 +107,7 @@ public class ReviewBoardController {
       @RequestParam(defaultValue = "6") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
-      /*@RequestParam(required = false) int themeId,*/
+      @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
       Model model) throws Exception {
     if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
@@ -116,7 +117,7 @@ public class ReviewBoardController {
     }
 
     int numOfPage = 1;
-    int numOfRecord = reviewBoardService.countAll(regionId, filter, keyword);
+    int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
     numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
 
     if (pageNo > numOfPage) {
@@ -125,7 +126,7 @@ public class ReviewBoardController {
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
     model.addAttribute("list",
-        reviewBoardService.list(pageNo, pageSize, regionId, filter, keyword));
+        reviewBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
 
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
@@ -136,7 +137,8 @@ public class ReviewBoardController {
   }
 
   @GetMapping("view")
-  public void reviewBoardGet(int reviewBoardId, @RequestParam(required = false, defaultValue = "0") int alarmId,
+  public void reviewBoardGet(int reviewBoardId,
+      @RequestParam(required = false, defaultValue = "0") int alarmId,
       Model model) {
     ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
     log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
@@ -144,8 +146,8 @@ public class ReviewBoardController {
       reviewBoard.setAddress("서울특별시 용산구 한강대로 405");
     }
 
-    if(alarmId != 0){
-      if(!alarmService.getStatus(alarmId)){
+    if (alarmId != 0) {
+      if (!alarmService.getStatus(alarmId)) {
         alarmService.update(alarmId);
       }
     }
@@ -177,7 +179,40 @@ public class ReviewBoardController {
   @GetMapping("delete")
   @ResponseBody
   public String delete(
-      int reviewBoardId) throws Exception {
+      int reviewBoardId,
+      HttpSession session
+  ) throws Exception {
+
+    ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return "-1";
+    } else {
+      if (reviewBoard == null) {
+        return "-2";
+      } else if (reviewBoard.getWriter().getMemberId() != loginUser.getMemberId()) {
+        return "-3";
+      }
+    }
+
+    List<Alarm> alarmList = alarmService.listAll();
+    // 관련 없는 알림을 제거해야 하는 리스트
+    List<Alarm> removeAlarm = new ArrayList<>();
+    // 관련 알림 내용
+    String removeStr = reviewBoardId + "번 후기에";
+    // 관련 없는 알림 리스트
+    for (Alarm alarm : alarmList) {
+      if (!alarm.getContent().contains(removeStr)) {
+        removeAlarm.add(alarm);
+      }
+    }
+    // 관련 없는 알림 리스트를 제거
+    alarmList.removeAll(removeAlarm);
+    // 후기 삭제 할 때 삭제 해야하는 알림 제거
+    for (Alarm alarm : alarmList) {
+      alarmService.delete(alarm.getAlarmId());
+    }
 
     reviewBoardService.delete(reviewBoardId);
     return "/review/list";
@@ -189,20 +224,10 @@ public class ReviewBoardController {
       HttpSession session,
       Model model,
       SessionStatus sessionStatus) throws Exception {
-//    model.addAttribute("updateReviewBoard", reviewBoard);
 
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null) {
-//      throw new Exception("로그인하시기 바랍니다!");
-//    }
+    model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
-    log.debug(old);
-//    if (old == null) {
-//      throw new Exception("번호가 유효하지 않습니다.");
-//    } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
-//      throw new Exception("권한이 없습니다.");
-//    }
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
@@ -235,17 +260,26 @@ public class ReviewBoardController {
 
     sessionStatus.setComplete();
 
-//    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
-//    reviewBoardService.update(reviewBoard);
     return "redirect:view?reviewBoardId=" + reviewBoard.getReviewBoardId();
   }
 
   @PostMapping("updateForm")
-  public void updateForm(ReviewBoard reviewBoard, Model model) {
+  public void updateForm(ReviewBoard reviewBoard, Model model, HttpSession session)
+      throws MoyeoError {
     model.addAttribute("updateReviewBoard", reviewBoard);
-    log.debug(String.format("%d      %s        %s       %d~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent(),
-        reviewBoard.getThemeId()));
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new MoyeoError("로그인하시기 바랍니다!", "/auth/form");
+    } else {
+      ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+      if (old == null) {
+        throw new MoyeoError("번호가 유효하지 않습니다.", "/home");
+      } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
+        throw new MoyeoError("권한이 없습니다.", "view?reviewBoardId=" + reviewBoard.getReviewBoardId());
+      }
+    }
+
     model.addAttribute("regionId", reviewBoard.getRegionId());
     model.addAttribute("themeId", reviewBoard.getThemeId());
   }
@@ -258,10 +292,10 @@ public class ReviewBoardController {
 
     ArrayList<ReviewPhoto> reviewPhotos = new ArrayList<>();
 
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null) {
-//      return reviewPhotos;
-//    }
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      return reviewPhotos;
+    }
 
     for (MultipartFile photo : photos) {
       if (photo.getSize() == 0) {

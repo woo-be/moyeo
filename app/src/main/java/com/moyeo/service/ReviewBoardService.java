@@ -13,13 +13,13 @@ public interface ReviewBoardService {
 
   List<ReviewBoard> reviewList(int memberId, int pageSize, int pageNo);
 
-  List<ReviewBoard> list(int pageNo, int pageSize, int regionId, String filter, String keyword);
+  List<ReviewBoard> list(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword);
 
   ReviewBoard get(int reviewBoardId);
 
   int delete(int reviewBoardId);
 
-  int countAll(int regionId, String filter, String keyword);
+  int countAll(int regionId, int themeId, String filter, String keyword);
 
 
   int countPostedByMember(int memberId);

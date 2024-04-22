@@ -123,8 +123,8 @@
         댓글 내용
       </div>
       <div>
-        <input style='width:700px; height:100px; margin:20px' name='reviewContent'
-               placeholder="로그인 해주세요.">
+        <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">
+        <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">
         <button style='padding:10px; margin:20px'>등록</button>
       </div>
     </div>
@@ -339,7 +339,20 @@
               processData: false
           })
           .done(function(responseUrl) {
-              window.location.href = responseUrl;
+              // 권한을 체크
+              if(responseUrl == '-1'){
+                window.alert("로그인이 필요합니다.");
+                window.location.href = '/auth/form';
+              }else if(responseUrl == '-2'){
+                window.alert("번호가 옳지 않습니다.");
+                window.location.href = 'view?reviewBoardId='+reviewBoardId;
+              }else if(responseUrl == '-3'){
+                window.alert("권한이 없습니다.");
+                window.location.href = 'view?reviewBoardId='+reviewBoardId;
+              }else{
+                window.alert("삭제되었습니다.");
+                window.location.href = responseUrl;
+              }
           })
       }
   }

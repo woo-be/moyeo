@@ -23,6 +23,7 @@
 <h1>게시글</h1>
 
 <div data-th-replace="region :: list" class="box" >지역 리스트</div>
+<div data-th-replace="themeList :: themelist" data-th-object="${themeId}">테마</div>
 
 <p><a data-th-href="@{form}" href="form.html">새 글</a></p>
 <ul>
@@ -31,11 +32,8 @@
     <div style='border: 1px solid black; float:left'>
       <a data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
         <div style='border: 1px solid black; flex'>
-
           <img data-th-if="*{photos[0].photo}" alt="여행 사진" data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
           <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;" data-th-src="@{/img/default-review-photo.png}" src="/static/img/default-review-photo.png" alt="여행 사진">
-
-          <!--<img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height='200' src="/static/img/default-review-photo.png">-->
         </div>
         <div class="work-info" style='border: 1px solid black; float:none'>
           <h3 data-th-text="*{title}">제목입니다</h3>
@@ -55,6 +53,7 @@
 <div>
   <form method="get" action="list.html" data-th-action="@{list}">
     <input type="hidden" name="regionId" data-th-value="${regionId}">
+    <input type="hidden" name="themeId" data-th-value="${themeId}">
     <label for="filter"></label>
     <select name="filter" id="filter">
       <option value="title">제목</option>

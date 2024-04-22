@@ -15,4 +15,6 @@ public interface AlarmDao {
   boolean getStatus(int alarmId);
 
   int statusUpdate(int alarmId);
+  int delete(int alarmId);
+  List<Alarm> listAll();
 }
