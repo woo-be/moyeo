@@ -52,6 +52,7 @@
     )
   </insert>
 
+
   <delete id="delete" parameterType="int">
     delete from review_comment
     where review_comment_id=#{value}

@@ -19,13 +19,12 @@
 
 <h1>게시글</h1>
 
-<p><a data-th-href="@{form(recruitBoardId=${recruitBoardId})}" href="form.html">새 글</a></p>
-<p><a data-th-href="@{/material/list(recruitBoardId=${recruitBoardId})}" href="list.html">준비물</a></p>
+<p><a data-th-href="@{form}" href="form.html">새 글</a></p>
 <ul>
   <div class="container">
     <tr data-th-each="planBoard : ${list}" data-th-object="${planBoard}">
       <div style='board: 1px solid black; float:left'>
-        <a data-th-href="@{view(planBoardId=*{planBoardId})}" href="view.html">
+        <a data-th-href="@{views(planBoardId=*{planBoardId})}" href="view.html">
           <div style='board: 1px solid black; flex'>
             <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height="200" src="/static/img/default-review-photo.png">
           </div>
@@ -38,8 +37,6 @@
     </tr>
   </div>
 </ul>
-
-
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

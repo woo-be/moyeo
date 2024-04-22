@@ -47,7 +47,18 @@ public class MemberController implements InitializingBean{
 
   // 회원가입 폼 불러오기
   @GetMapping("signup")
-  public void signup() throws Exception {
+  public String signup(HttpSession session, Model model) throws Exception {
+    Member newMember = (Member) session.getAttribute("newMember");
+
+    if (newMember == null) {
+      // newMember가 존재하지 않으면 빈 문자열로 초기화된 Member 객체를 사용합니다.
+      newMember = new Member();
+      newMember.setName("");
+      newMember.setEmail("");
+    }
+
+    model.addAttribute("newMember", newMember); // newMember를 모델에 추가합니다.
+    return "member/signup"; // 회원가입 페이지로 이동합니다.
   }
 
 

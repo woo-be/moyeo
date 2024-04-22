@@ -25,11 +25,10 @@
     <img src="/img/home.png" alt="" width="110" height="60">
   </a>
 
-
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
     <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
     <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
-    <li><a data-th-href="@{../recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
+    <li><a data-th-href="@{../plan/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
     <li data-th-unless="${session.loginUser != null}">
       <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
     </li>
@@ -47,7 +46,37 @@
     </a>
     <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
       <button type="button" class="btn btn-outline-primary me-2">로그인</button>
+      <form data-th-action="@{auth/login/google}" method="post">
+        <button id="googleLoginButton">구글로그인</button>
+      </form>
     </a>
+
+    <script>
+      document.getElementById('googleLoginButton').addEventListener('click', function() {
+         // 새 창 열기
+        var newWindow = window.open('', '_blank', 'width=800,height=600');
+
+        // 새 창의 문서에 폼 생성
+        var form = newWindow.document.createElement('form');
+        form.method = 'post';  // 메서드를 POST로 설정
+        form.action = 'auth/login/google';  // 요청을 보낼 URL 설정
+
+        // 폼에 추가할 필드(예: 파라미터)를 설정
+        var input = newWindow.document.createElement('input');
+        input.type = 'hidden';  // hidden 필드
+        input.name = 'parameterName';  // 파라미터 이름
+        input.value = 'parameterValue';  // 파라미터 값
+        form.appendChild(input);
+
+        // 폼을 새 창의 문서에 추가
+        newWindow.document.body.appendChild(form);
+
+        // 폼 서브밋
+        form.submit();
+
+      });
+    </script>
+
   </div>
 
   <script>
@@ -79,7 +108,6 @@ function openPopup() {
 
   </script>
 </header>
-
 
 </body>
 

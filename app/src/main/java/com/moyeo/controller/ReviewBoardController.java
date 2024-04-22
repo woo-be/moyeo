@@ -7,7 +7,6 @@ import com.moyeo.service.ReviewCommentService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
 import com.moyeo.vo.Member;
-import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
@@ -50,15 +49,9 @@ public class ReviewBoardController {
   private String bucketName;
 
   @GetMapping("form")
-  public void form(Model model, HttpSession session) throws Exception {
+  public void form(Model model) throws Exception {
     model.addAttribute("regionId", 0);
     model.addAttribute("themeId", 0);
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    log.debug(loginUser);
-    if (loginUser == null) {
-      throw new MoyeoError("로그인 해주세요", "/auth/form");
-    }
   }
 
   @PostMapping("add")
@@ -70,7 +63,8 @@ public class ReviewBoardController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new MoyeoError("로그인 해주세요", "/auth/form");
+      session.setAttribute("message", "로그인 해주세요");
+      session.setAttribute("replaceUrl", "/auth/form");
     }
 
     reviewBoard.setWriter(loginUser);
