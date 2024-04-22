@@ -65,6 +65,9 @@
     <if test="regionId > 0">
       and rb.region_id=#{regionId}
     </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
     group by
       rb.review_board_id
     order by
@@ -148,6 +151,10 @@
     rb.title,
     rb.content,
     rb.created_date,
+    rb.views,
+    c,
+    m.member_id,
+    m.nickname,
     r.region_name,
     rp.photo
     from
@@ -155,6 +162,7 @@
     inner join review_board rb on m.member_id=rb.member_id
     inner join region r on r.region_id=rb.region_id
     left outer join review_photo rp on rb.review_board_id=rp.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
     where
     m.member_id = #{memberId}
     order by
@@ -176,12 +184,19 @@
     rb.review_board_id,
     rb.title,
     rb.created_date,
-    r.region_name
+    rb.views,
+    r.region_name,
+    c,
+    rp.photo,
+    m.member_id,
+    m.nickname
     from
     member m
     inner join review_scrap rs on m.member_id=rs.member_id
     inner join review_board rb on rb.review_board_id=rs.review_board_id
     inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rb.review_board_id=rp.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
     where
     m.member_id=#{memberId}
     order by

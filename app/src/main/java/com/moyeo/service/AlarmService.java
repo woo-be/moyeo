@@ -12,4 +12,7 @@ public interface AlarmService {
   int update(int alarmId);
 
   boolean getStatus(int alarmId);
+  int delete(int alarmId);
+
+  List<Alarm> listAll();
 }
