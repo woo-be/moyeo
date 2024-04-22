@@ -45,6 +45,7 @@
       <th>기한</th>
       <th>모집상태</th>
       <th>모집현황</th>
+      <th>대기인원</th>
       <th>신청자 확인</th>
     </tr>
     </thead>
@@ -57,8 +58,11 @@
       <td data-th-if="*{state == true}">모집중</td>
       <td data-th-if="*{state == false}">모집완료</td>
       <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+      <td data-th-text="*{waiting}">1</td>
       <td data-th-if="*{state == true}" id="checkBtn">
-        <a data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" href="#">이동(임시)</a>
+        <a data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" href="#">
+          <Button data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" value="이동">이동</Button>
+        </a>
       </td>
     </tr>
     </tbody>

@@ -20,6 +20,8 @@
     <result column="longitude" property="longitude"/>
     <result column="views" property="views"/>
     <result column="address" property="address"/>
+
+    <result column="waiting" property="waiting"/>
     
     <association property="writer" javaType="Member">
       <id column="member_id" property="memberId"/>
@@ -88,7 +90,8 @@
       rb.deadline,
       rb.state,
       rb.recruit_total,
-      count(case when rm.state = 1 then 1 end) as current
+      count(case when rm.state = 1 then 1 end) as current,
+      count(case when rm.state is null then 1 end) as waiting
     from
       recruit_board rb
       inner join member m on m.member_id=rb.member_id

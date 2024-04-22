@@ -19,14 +19,15 @@ public interface RecruitMemberDao {
 
   List<RecruitBoard> findAll(@Param("memberId") int memberId);
 
-  void delete(
-      @Param("recruitBoardId") int recruitBoardId,
-      @Param("memberId") int memberId);
-
   RecruitMember findBy(
       @Param("memberId") int memberId,
       @Param("recruitBoardId") int recruitBoardId);
 
   List<RecruitMember> findAllApplicant(int recruitBoardId);
 
+  int update(RecruitMember recruitMember);
+
+  void delete(
+      @Param("recruitBoardId") int recruitBoardId,
+      @Param("memberId") int memberId);
 }

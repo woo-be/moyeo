@@ -4,7 +4,9 @@ import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
 import javax.servlet.http.HttpSession;
@@ -29,13 +31,12 @@ public class RecruitCommentController {
 
 
   @PostMapping("add")
-  public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) {
+  public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) throws Exception{
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      log.debug("로그인해주세요.");  // .html에서 클릭했을 시 팝업 띄움
-      return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     recruitComment.setRecruitBoard(recruitBoard);
@@ -48,12 +49,12 @@ public class RecruitCommentController {
   public String commentUpdate(RecruitComment recruitComment, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인하시기 바랍니다!");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     RecruitComment old = recruitBoardService.getComment(recruitComment.getRecruitCommentId());
     if (old.getMember().getMemberId() != loginUser.getMemberId()) {
-      throw new Exception("권한이 없습니다.");
+      throw new MoyeoError(ErrorName.ACCESS_DENIED, "../../recruit/view?recruitBoardId=" + old.getRecruitBoard().getRecruitBoardId());
     }
 
     recruitComment.setRecruitBoard(old.getRecruitBoard());
@@ -64,14 +65,13 @@ public class RecruitCommentController {
   }
 
   @GetMapping("delete")
-  public String commentDelete(int recruitCommentId, HttpSession session) {
+  public String commentDelete(int recruitCommentId, HttpSession session)throws Exception {
     RecruitComment recruitComment = recruitBoardService.getComment(recruitCommentId);
     int boardId = recruitComment.getRecruitBoard().getRecruitBoardId();
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null || loginUser.getMemberId() != recruitComment.getMember().getMemberId()) {
-      log.debug("권한이 없습니다."); // .html에서 클릭했을 시 팝업 띄움
-      return "redirect:../../recruit/view?recruitBoardId=" + boardId;
+      throw new MoyeoError(ErrorName.ACCESS_DENIED, "../../recruit/view?recruitBoardId=" + boardId);
     }
 
     recruitBoardService.deleteComment(recruitCommentId);

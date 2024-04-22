@@ -87,8 +87,13 @@
       left outer join recruit_member rcm on rcb.recruit_board_id=rcm.recruit_board_id
       inner join member m on rcm.member_id=m.member_id
     where
-      rcb.recruit_board_id=1 and rcm.state is null
+      rcb.recruit_board_id=#{recruitBoardId} and rcm.state is null
   </select>
 
+  <update id="update" parameterType="recruitMember">
+    update recruit_member set
+      state=#{state}
+    where recruit_board_id=#{recruitBoardId} and member_id=#{memberId}
+  </update>
 
 </mapper>
