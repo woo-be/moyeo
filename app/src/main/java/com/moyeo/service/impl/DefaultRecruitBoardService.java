@@ -136,9 +136,5 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     recruitBoardDao.plusViews(boardId);
   }
 
-  @Override
-  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
-    return recruitBoardDao.findAllApplicant(recruitBoardId);
-  }
 }
 
