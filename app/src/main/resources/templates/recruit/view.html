@@ -96,24 +96,21 @@
     <ul data-th-if="*{comments}">
       <li data-th-each="comment : *{comments}" data-th-object="${comment}">
         <div id="commentviewform">
-          <input data-th-value="*{recruitCommentId}" type="hidden"/>
-          <a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
-            <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
-          </a>
-          <a data-th-unless="*{member.photo}" href="/img/default-photo.jpeg">
-            <img height='20px' src="/img/default-photo.jpeg">
-          </a>
-          작성자: <span data-th-text="*{member.nickname}"></span>
-          내용: <input id="commentcontent" data-th-value="*{content}" readonly type='text' value="내용"/>
-          작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-          <button id="editBtn">수정</button>
-          <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
-             href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+          <div data-th-replace="recruit/commentform :: commentuserinfo"></div>
+          <div>
+            내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>
+            <button id="editBtn">수정</button>
+            <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
+               href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+          </div>
         </div>
         <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
               action="view.html" method='post' style="display:none;">
-          <div id="updateform" data-th-replace="recruit/commentform :: recruitcommentupdate"></div>
-          <button id="submitBtn" onclick="submitContent()">전송</button>
+          <div id="updateform" data-th-replace="recruit/commentform :: commentuserinfo"></div>
+          <div>
+            내용: <input data-th-value="*{content}" type='text' name="content" value="내용"/>
+            <button id="submitBtn" onclick="submitContent()">전송</button>
+          </div>
         </form>
         <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
       </li>

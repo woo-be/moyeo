@@ -18,4 +18,5 @@ public class RecruitMember implements Serializable {
   private int memberId;            // 회원 식별자
   private Boolean state;            // 여행 멤버 상태
 
+  private Member member;
 }
