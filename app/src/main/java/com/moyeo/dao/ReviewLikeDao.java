@@ -9,4 +9,5 @@ public interface ReviewLikeDao {
   void add(@Param("memberId")int memberId, @Param("reviewBoardId")int reviewBoardId);
 
   int deleteAll(int reviewBoardId);
+  int checked(@Param("memberId")int memberId, @Param("reviewBoardId")int reviewBoardId);
 }
