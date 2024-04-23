@@ -49,9 +49,16 @@
                 </div>
 
                 <div class="col-12">
-                  <label for="password" class="form-label">비밀번호</label>
-                  <input type="password" class="form-control" name="password" id="password" placeholder="비밀번호" style="width:300px;" required>
-                  <div id="password-error" class="invalid-feedback">Please enter your password!</div>
+                  <label for="pw" class="form-label">비밀번호</label>
+                  <input type="password" class="form-control" name="pw" id="pw" placeholder="비밀번호" style="width:300px;" onchange="check_pw()" required >
+                  <div id="pw-error" class="invalid-feedback">Please enter your password!</div>
+                </div>
+
+                <div class="col-12">
+                  <label for="pw2" class="form-label">비밀번호 확인</label>
+                  <input type="password" class="form-control" name="pw2" id="pw2" placeholder="비밀번호 확인" style="width:300px;" onchange="check_pw()" required>
+                  <span id="check"></span>
+                  <div id="pw2-error" class="invalid-feedback">Please enter your password!</div>
                 </div>
 
                 <div class="col-12">
@@ -77,7 +84,7 @@
 
                 <div class="col-12">
                   <label for="introduce" class="form-label">자기소개</label>
-                  <input type="text" class="form-control" name="introduce" id="introduce" placeholder="자기소개" style="width:300px;height:300px;" required>
+                  <textarea type="text" class="form-control" name="introduce" id="introduce" placeholder="자기소개 작성해주세요" style="width:300px;height:300px;" required></textarea>
                   <div id="introduce-error" class="invalid-feedback">Please enter a valid introduce!</div>
                 </div>
 
@@ -100,7 +107,7 @@
                   <button class="btn btn-primary w-100" id="signupBtn" type="submit">회원 가입하기</button>
                 </div>
                 <div class="col-12"><br>
-                  <p class="small mb-0">이미 계정이 있나요? <a href="/auth/form">Log in</a></p>
+                  <p class="small mb-0">이미 계정이 있나요? <a href="/auth/form">로그인 하러가기</a></p>
                 </div>
               </form>
             </div>
@@ -112,58 +119,98 @@
 </main>
 
 <script>
-  // 사진추가 해주는 스크립트
-  function setThumbnail(event) {
-    var reader = new FileReader();
+  // 비밀번호 중복확인 스크립트
+function check_pw(){
+  var pw = document.getElementById('pw').value;
+  var pw2 = document.getElementById('pw2').value;
 
-    reader.onload = function(event) {
-      var img = document.createElement("img");
-      img.setAttribute("src", event.target.result);
-      img.setAttribute("style", "width: 300px; height: 300;");
-      document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
-      document.getElementById("image_container").appendChild(img);
-    };
-    reader.readAsDataURL(event.target.files[0]);
+
+  <!--    이부분은 비밀번호에 특수문자 있는지 확인하는 부분 나중에 주석풀고 추가-->
+<!--    var SC = ["!","@","#","$","%"];-->
+<!--    var check_SC = 0;-->
+
+<!--    if(pw.length < 6 || pw.length>16){-->
+<!--        window.alert('비밀번호는 6글자 이상, 16글자 이하만 이용 가능합니다.');-->
+<!--        document.getElementById('pw').value='';-->
+<!--    }-->
+<!--    for(var i=0;i<SC.length;i++){-->
+<!--        if(pw.indexOf(SC[i]) != -1){-->
+<!--            check_SC = 1;-->
+<!--        }-->
+<!--    }-->
+<!--    if(check_SC == 0){-->
+<!--        window.alert('!,@,#,$,% 의 특수문자가 들어가 있지 않습니다.')-->
+<!--        document.getElementById('pw').value='';-->
+<!--    }-->
+
+
+
+  if(pw !== '' && pw2 !== ''){
+    if(pw === pw2){
+      document.getElementById('check').innerHTML='비밀번호가 일치합니다.';
+      document.getElementById('check').style.color='blue';
+    } else {
+      document.getElementById('check').innerHTML='비밀번호가 일치하지 않습니다.';
+      document.getElementById('check').style.color='red';
+    }
   }
+}
 
-  // 빈칸이 있으면 오류출력해주는 스크립트
-  var btn = document.getElementById("signupBtn");
-  var fields = [
-      { input: document.getElementById("email"), error: document.getElementById("email-error"), errorMessage: "아이디를 입력하세요!" },
-      { input: document.getElementById("password"), error: document.getElementById("password-error"), errorMessage: "비밀번호를 입력하세요!" },
-      { input: document.getElementById("username"), error: document.getElementById("username-error"), errorMessage: "이름을 입력하세요!" },
-      { input: document.getElementById("nickname"), error: document.getElementById("nickname-error"), errorMessage: "닉네임을 입력하세요!" },
-      { input: document.getElementById("phoneNumber"), error: document.getElementById("phoneNumber-error"), errorMessage: "휴대폰 번호를 입력하세요!" },
-      { input: document.getElementById("birth"), error: document.getElementById("birth-error"), errorMessage: "생년월일을 입력하세요!" },
-      { input: document.getElementById("gender"), error: document.getElementById("gender-error"), errorMessage: "성별을 선택하세요!" },
-      { input: document.getElementById("introduce"), error: document.getElementById("introduce-error"), errorMessage: "자기소개를 작성해주세요!" }
-  ];
 
-  btn.addEventListener('click', function(event) {
-      fields.forEach(function(field) {
-          if (field.input.value === '') {
-              field.error.innerHTML = field.errorMessage;
-              field.error.style.display = "block";
-              event.preventDefault();
-          } else {
-              field.error.innerHTML = ""; // 오류 메세지 지우기
-              field.error.style.display = "none"; // 오류 메세지 숨기기
-          }
-      });
 
-      // 성별관련 radio 버튼 관련
-      var genderInputs = document.querySelectorAll('input[name="gender"]:checked');
-      if (!genderInputs.length) {
-          var genderError = document.getElementById("gender-error");
-          genderError.innerHTML = "성별을 선택하세요!";
-          genderError.style.display = "block";
-          event.preventDefault();
-      }
-  });
+// 사진추가 해주는 스크립트
+function setThumbnail(event) {
+  var reader = new FileReader();
+
+  reader.onload = function(event) {
+    var img = document.createElement("img");
+    img.setAttribute("src", event.target.result);
+    img.setAttribute("style", "width: 300px; height: 300;");
+    document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
+    document.getElementById("image_container").appendChild(img);
+  };
+  reader.readAsDataURL(event.target.files[0]);
+}
+
+
+
+// 빈칸이 있으면 오류출력해주는 스크립트
+var btn = document.getElementById("signupBtn");
+var fields = [
+    { input: document.getElementById("email"), error: document.getElementById("email-error"), errorMessage: "아이디를 입력하세요!" },
+    { input: document.getElementById("pw"), error: document.getElementById("pw-error"), errorMessage: "비밀번호를 입력하세요!" },
+    { input: document.getElementById("pw2"), error: document.getElementById("pw2-error"), errorMessage: "비밀번호를 입력하세요!" },
+    { input: document.getElementById("username"), error: document.getElementById("username-error"), errorMessage: "이름을 입력하세요!" },
+    { input: document.getElementById("nickname"), error: document.getElementById("nickname-error"), errorMessage: "닉네임을 입력하세요!" },
+    { input: document.getElementById("phoneNumber"), error: document.getElementById("phoneNumber-error"), errorMessage: "휴대폰 번호를 입력하세요!" },
+    { input: document.getElementById("birth"), error: document.getElementById("birth-error"), errorMessage: "생년월일을 입력하세요!" },
+    { input: document.getElementById("gender"), error: document.getElementById("gender-error"), errorMessage: "성별을 선택하세요!" },
+    { input: document.getElementById("introduce"), error: document.getElementById("introduce-error"), errorMessage: "자기소개를 작성해주세요!" }
+];
+
+btn.addEventListener('click', function(event) {
+    fields.forEach(function(field) {
+        if (field.input.value === '') {
+            field.error.innerHTML = field.errorMessage;
+            field.error.style.display = "block";
+            event.preventDefault();
+        } else {
+            field.error.innerHTML = ""; // 오류 메세지 지우기
+            field.error.style.display = "none"; // 오류 메세지 숨기기
+        }
+    });
+
+    // 성별관련 radio 버튼 관련
+    var genderInputs = document.querySelectorAll('input[name="gender"]:checked');
+    if (!genderInputs.length) {
+        var genderError = document.getElementById("gender-error");
+        genderError.innerHTML = "성별을 선택하세요!";
+        genderError.style.display = "block";
+        event.preventDefault();
+    }
+});
 
 </script>
-
 <div data-th-replace="footer :: footer">꼬리말</div>
 </body>
-
 </html>
