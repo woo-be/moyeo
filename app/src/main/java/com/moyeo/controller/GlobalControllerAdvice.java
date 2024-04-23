@@ -1,5 +1,6 @@
 package com.moyeo.controller;
 
+import com.moyeo.vo.MoyeoError;
 import java.beans.PropertyEditorSupport;
 import java.sql.Date;
 import javax.servlet.http.HttpSession;
@@ -24,12 +25,11 @@ public class GlobalControllerAdvice {
   }
 
   @ExceptionHandler
-  public ModelAndView exceptionHandler(Exception e, HttpSession session) {
+  public ModelAndView exceptionHandler(MoyeoError e) {
     ModelAndView mv = new ModelAndView();
 
-    mv.addObject("message", session.getAttribute("message"));
-    mv.addObject("replaceUrl", session.getAttribute("replaceUrl"));
-    log.debug(e.getMessage());
+    mv.addObject("message", e.getMsg());
+    mv.addObject("replaceUrl", e.getUrl());
     mv.setViewName("error");
     return mv;
   }
