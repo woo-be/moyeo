@@ -41,11 +41,11 @@
       여행순서 : <input data-th-value="*{tripOrder}" readonly name='tripOrder' type='number'>
     </div>
     <div>
-      내용 : <textarea data-th-text="*{content}" id="summernote" name='content' style="display: none;">내용입니다.</textarea>
+      내용 : <textarea data-th-text="*{content}" id="summernote" readonly name='content' style="display: none;">내용입니다.</textarea>
     </div>
     <div>
       <button>변경</button>
-      <a data-th-href="@{delete(planBoardId=*{planBoardId})}" href="delete.html">[삭제]</a>
+      <a data-th-href="@{delete(planBoardId=*{planBoardId},recruitBoardId=*{recruitBoardId})}" href="delete.html">[삭제]</a>
     </div>
   </form>
 
@@ -63,12 +63,13 @@
   $('#summernote').summernote({
     height : 300,
     width : 900,
+    toolbar : false,
     callbacks: {
       onInit: function() {
         console.log('Summernote is launched');
       }
     }
-  });
+  }).summernote("disable");
   });
 
 </script>

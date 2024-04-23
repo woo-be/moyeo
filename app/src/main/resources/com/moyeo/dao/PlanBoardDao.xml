@@ -68,4 +68,13 @@
     where
       plan_board_id=#{planBoardId}
   </update>
+
+  <delete id="delete" parameterType="int">
+    delete from
+      plan_board
+    where
+      plan_board_id=#{planBoardId}
+    and
+      recruit_board_id=#{recruitBoardId}
+  </delete>
 </mapper>

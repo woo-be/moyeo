@@ -46,14 +46,36 @@ public class DefaultMaterialService implements MaterialService {
   @Override
   public int update(Material material) {
     int count = materialDao.update(material);
+    materialPhotoDao.deleteAll(material.getMaterialId());
+
+    if (material.getPhotos() != null && material.getPhotos().size() > 0) {
+      for (MaterialPhoto materialPhoto : material.getPhotos()) {
+        materialPhoto.setMaterialId(material.getMaterialId());
+      }
+      materialPhotoDao.addAll(material.getPhotos());
+    }
     return count;
   }
 
   @Transactional
   @Override
-  public int delete(int materialId) {
-    return materialDao.delete(materialId);
+  public int delete(int materialId, int recruitBoardId) {
+    materialPhotoDao.deleteAll(materialId);
+    return materialDao.delete(materialId, recruitBoardId);
   }
 
+  @Override
+  public MaterialPhoto getMaterialPhoto(int materialPhotoId) {
+    return materialPhotoDao.findByMaterialPhotoId(materialPhotoId);
+  }
 
+  @Override
+  public List<MaterialPhoto> getMaterialPhotos(int materialId) {
+    return materialPhotoDao.findAllByMaterialId(materialId);
+  }
+
+  @Override
+  public int deleteMaterialPhoto(int materialPhotoId) {
+    return materialPhotoDao.delete(materialPhotoId);
+  }
 }

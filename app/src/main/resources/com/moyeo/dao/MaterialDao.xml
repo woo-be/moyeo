@@ -65,8 +65,8 @@
     delete from
       material
     where
-      material_id=#{value}
+      material_id=#{materialId}
     and
-      recruit_board_id=#{value}
+      recruit_board_id=#{recruitBoardId}
   </delete>
 </mapper>

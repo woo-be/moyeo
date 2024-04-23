@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -71,8 +72,10 @@ public class MaterialController {
     }
 
     List<MaterialPhoto> materialPhotos = (List<MaterialPhoto>) session.getAttribute("materialPhotos");
+    if (materialPhotos == null) {
+      materialPhotos= new ArrayList<>();
+    }
 
-    if (materialPhotos != null) {
       for (int i = materialPhotos.size() -1; i >=0; i--) {
         MaterialPhoto materialPhoto = materialPhotos.get(i);
         if (material.getContent().indexOf(materialPhoto.getMaterialPhoto()) == -1) {
@@ -83,7 +86,6 @@ public class MaterialController {
       if (materialPhotos.size() > 0) {
         material.setPhotos(materialPhotos);
       }
-    }
 
     model.addAttribute("recruitBoardId", material.getRecruitBoardId());
 
@@ -98,7 +100,8 @@ public class MaterialController {
   public String update(
       Material material,
       HttpSession session,
-      Model model) throws Exception {
+      Model model,
+      SessionStatus sessionStatus) throws Exception {
 
     model.addAttribute("recruitBoardId", material.getRecruitBoardId());
 
@@ -109,11 +112,35 @@ public class MaterialController {
     }
 
     Material old = materialService.get(material.getMaterialId());
+    old.setPhotos(materialService.getMaterialPhotos(material.getMaterialId()));
     if (old == null) {
       throw new Exception("번호가 유효하지 않습니다.");
     }
 
+    List<MaterialPhoto> materialPhotos = (List<MaterialPhoto>) session.getAttribute("materialPhotos");
+    if (materialPhotos == null) {
+      materialPhotos = new ArrayList<>();
+    }
+
+    if (old.getPhotos().size() > 0) {
+      materialPhotos.addAll(old.getPhotos());
+    }
+    if (materialPhotos != null) {
+      for (int i = materialPhotos.size() - 1; i >= 0; i--) {
+        MaterialPhoto materialPhoto = materialPhotos.get(i);
+        if (!material.getContent().contains(materialPhoto.getMaterialPhoto())) {
+          storageService.delete(this.bucketName, this.uploadDir, materialPhoto.getMaterialPhoto());
+          log.debug(String.format("%s 파일 삭제!", materialPhoto.getMaterialPhoto()));
+          materialPhotos.remove(i);
+        }
+      }
+      if (materialPhotos.size() > 0) {
+        material.setPhotos(materialPhotos);
+      }
+    }
     materialService.update(material);
+
+    sessionStatus.setComplete();
 
     return "redirect:view?materialId=" + material.getMaterialId();
   }
@@ -128,14 +155,30 @@ public class MaterialController {
   }
 
   @GetMapping("delete")
-  public String delete(int materialId) throws Exception {
-    materialService.delete(materialId);
-    return "redirect:list";
+  public String delete(
+      @Param("materialId") int materialId,
+      @Param("recruitBoardId") int recruitBoardId,
+      Model model) throws Exception {
+
+    log.debug(String.format("recruitBoardId = %s", recruitBoardId));
+
+    List<MaterialPhoto> photos = materialService.getMaterialPhotos(materialId);
+
+    materialService.delete(materialId, recruitBoardId);
+
+    for (MaterialPhoto photo : photos) {
+      storageService.delete(this.bucketName, this.uploadDir, photo.getMaterialPhoto());
+    }
+
+    return "redirect:/material/list?recruitBoardId=" + recruitBoardId;
   }
 
   @PostMapping("photo/upload")
   @ResponseBody
-  public Object photoUpload(MultipartFile[] photos, HttpSession session, Model model)
+  public Object photoUpload(
+      MultipartFile[] photos,
+      HttpSession session,
+      Model model)
     throws Exception {
 
     ArrayList<MaterialPhoto> materialPhotos = new ArrayList<>();
@@ -153,5 +196,17 @@ public class MaterialController {
     model.addAttribute("materialPhotos", materialPhotos);
 
     return materialPhotos;
+  }
+
+  @GetMapping("photo/delete")
+  public String photoDelete(int materialPhotoId, HttpSession session) throws Exception {
+
+    MaterialPhoto materialPhoto = materialService.getMaterialPhoto(materialPhotoId);
+
+    materialService.deleteMaterialPhoto(materialPhotoId);
+
+    storageService.delete(this.bucketName, this.uploadDir, materialPhoto.getMaterialPhoto());
+
+    return "redirect:../view?no=" + materialPhoto.getMaterialId();
   }
 }

@@ -15,6 +15,6 @@ public interface PlanBoardDao {
 
   int update(PlanBoard planBoard);
 
-
+  int delete(int planBoardId, int recruitBoardId);
 
 }
