@@ -1,18 +1,15 @@
 package com.moyeo.service;
 
 import com.moyeo.vo.PlanBoard;
-
 import com.moyeo.vo.PlanPhoto;
 import java.awt.Panel;
-
 import java.util.List;
 
 public interface PlanBoardService {
 
-  List<PlanBoard> list();
+  List<PlanBoard> list(int recruitBoardId);
 
   PlanBoard get(int planBoardId);
-
 
   void add(PlanBoard planBoard);
 
@@ -25,5 +22,4 @@ public interface PlanBoardService {
   List<PlanPhoto> getPhotos(int planBoardId);
 
   int deletePlanPhoto(int planPhotoId);
-
 }
