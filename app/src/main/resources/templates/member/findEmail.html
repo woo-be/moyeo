@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Moeyo 아이디 찾기</title>
+  <title>Moeyo 아이디찾기</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
@@ -16,45 +15,42 @@
     }
   </style>
 </head>
-<body>
-
 <div data-th-replace="header :: header">머리말</div>
-
+<body>
 <main>
   <form action="findEmail" data-th-action="@{findByEmail}" method='post'>
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
-          <div class="d-flex justify-content-center py-4">
-            <a class="logo d-flex align-items-center w-auto">
-              <img src="assets/img/logo.png" alt="">
-              <span class="d-none d-lg-block"><b>아이디 찾기1</b></span>
-            </a>
-          </div><!-- End Logo -->
           <div class="card mb-3">
             <div class="card-body">
               <div class="pt-4 pb-2">
                 <h5 class="card-title text-center pb-0 fs-4">아이디 찾기</h5>
                 <p class="text-center small">사용자 정보를 입력해주세요.</p>
               </div>
-              <form class="row g-3 needs-validation" novalidate="">
+              <form class="row g-3 needs-validation was-validated" novalidate="">
                 <div class="col-12">
-                  <label class="form-label">이름 : </label>
-                  <input name='name' type='text' style="width:300px;">
+                  <label for="username" class="form-label">이름 : </label>
+                  <input type="text" name='name' class="form-control" id="username" style="width:300px;" placeholder="이름" required>
+                  <div id="username-error" class="invalid-feedback">이름을 입력하세요!</div>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">생년월일 : </label>
-                  <input name='birthdate' type='date' style="width:300px;">
+                  <label for="birth" class="form-label">생년월일 : </label>
+                  <input name='birthdate' class="form-control" type='date' id="birth" style="width:300px;" required>
+                  <div id="birth-error" class="invalid-feedback">생년월일을 입력하세요!</div>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">휴대폰 번호 : </label>
-                  <input name='phoneNumber' type='text' style="width:300px;">
+                  <label for="phoneNumber" class="form-label">휴대폰 번호 : </label>
+                  <input name='phoneNumber' class="form-control" id="phoneNumber" type='text' style="width:300px;" placeholder="휴대폰 번호" required>
+                  <div id="phoneNumber-error" class="invalid-feedback">휴대폰 번호를 입력하세요!</div>
                 </div><br>
 
                 <div class="col-12">
-                  <button class="btn btn-primary w-100" type="submit">아이디 찾기</button>
+                  <button id="searchBtn" class="btn btn-primary w-100" type="submit">아이디 찾기</button>
                 </div><br>
-
+                <div class="col-12"><br>
+                  <p class="small mb-0">이미 계정이 있나요? <a href="/auth/form">로그인 하러가기</a></p>
+                </div>
               </form>
             </div>
           </div>
@@ -64,8 +60,28 @@
   </form>
 </main>
 
+<script>
+  var btn = document.getElementById("searchBtn");
+  var fields = [
+    { input: document.getElementById("username"), error: document.getElementById("username-error"), errorMessage: "이름을 입력하세요!" },
+    { input: document.getElementById("birth"), error: document.getElementById("birth-error"), errorMessage: "생년월일을 입력하세요!" },
+    { input: document.getElementById("phoneNumber"), error: document.getElementById("phoneNumber-error"), errorMessage: "휴대폰 번호를 입력하세요!" },
+  ];
+
+  btn.addEventListener('click', function(event) {
+      fields.forEach(function(field) {
+          if (field.input.value === '') {
+              field.error.innerHTML = field.errorMessage;
+              field.error.style.display = "block";
+              event.preventDefault();
+          } else {
+              field.error.innerHTML = ""; // 오류 메세지 지우기
+              field.error.style.display = "none"; // 오류 메세지 숨기기
+          }
+      });
+  });
+</script>
+
 <div data-th-replace="footer :: footer">꼬리말</div>
-
 </body>
-
 </html>

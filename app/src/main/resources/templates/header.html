@@ -13,6 +13,11 @@
 <!--          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"-->
 <!--          crossorigin="anonymous"></script>-->
 
+  <style>
+    .me-2 {
+      display : inline-block;
+    }
+  </style>
 </head>
 
 
@@ -44,12 +49,14 @@
     <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
       <button type="button" class="btn btn-primary me-2">로그아웃</button>
     </a>
+  <div class="d-flex justify-content-end">
     <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
       <button type="button" class="btn btn-outline-primary me-2">로그인</button>
-      <form data-th-action="@{auth/login/google}" method="post">
-        <button id="googleLoginButton">구글로그인</button>
-      </form>
     </a>
+      <form data-th-action="@{auth/login/google}" method="post">
+        <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
+      </form>
+  </div>
 
     <script>
       document.getElementById('googleLoginButton').addEventListener('click', function() {
