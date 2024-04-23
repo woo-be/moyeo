@@ -17,6 +17,6 @@ public interface ReviewPhotoDao {
 
   List<ReviewPhoto> findAllByReviewBoardId(int reviewBoardId);
 
-  ReviewPhoto findbyReviewPhotoId(int reviewPhotoId);
+  ReviewPhoto findByReviewPhotoId(int reviewPhotoId);
 
 }

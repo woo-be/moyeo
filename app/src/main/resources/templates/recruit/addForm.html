@@ -65,7 +65,7 @@
     내용: <textarea name='content' id="summernote"></textarea>
   </div>
   <div>
-    <button>등록</button>
+    <button id="addButton">등록</button>
     <a href="list.html">취소</a>
   </div>
 </form>
@@ -326,6 +326,13 @@ function hasAddition (addition) {
 
 naver.maps.onJSContentLoaded = initGeocoder;
 <!--  -->
+</script>
+
+<script>
+  var button = document.getElementById('addButton');
+
+  button.addEventListener('click', function() {
+    console.log('이벤트 발생');
 </script>
 
 </body>

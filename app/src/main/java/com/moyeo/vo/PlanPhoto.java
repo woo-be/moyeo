@@ -14,7 +14,7 @@ public class PlanPhoto implements Serializable {
 
   private static final long serialVersionUID = 100L;
 
-  private int plan_photo_id;      // 여행계획게시물사진 식별자
-  private int plan_board_id;      // 여해예획게시물 식별자
+  private int planPhotoId;      // 여행계획게시물사진 식별자
+  private int planBoardId;      // 여해예획게시물 식별자
   private String photo;           // 사진
 }

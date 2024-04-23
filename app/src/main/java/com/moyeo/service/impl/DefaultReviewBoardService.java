@@ -99,7 +99,7 @@ public class DefaultReviewBoardService implements ReviewBoardService {
 
   @Override
   public ReviewPhoto getReviewPhoto(int reviewPhotoId) {
-    return reviewPhotoDao.findbyReviewPhotoId(reviewPhotoId);
+    return reviewPhotoDao.findByReviewPhotoId(reviewPhotoId);
   }
 
   @Override

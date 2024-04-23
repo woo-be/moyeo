@@ -2,6 +2,7 @@ package com.moyeo.vo;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,4 +24,5 @@ public class PlanBoard implements Serializable {
   private int tripOrder;           // 여행루트순서
   private float latitude;           // 위도
   private float longitude;          // 경도
+  private List<PlanPhoto> photos;
 }
