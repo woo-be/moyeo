@@ -28,21 +28,6 @@ public class AlarmController {
     Member loginUser = (Member) session.getAttribute("loginUser");
     List<Alarm> list = new ArrayList<Alarm>();
     list = alarmService.list(loginUser.getMemberId());
-    for (Alarm alarm : list) {
-      if (!alarm.isChecked()) {
-        alarm.setContent(alarm.getContent()+
-            alarm.getAlarmId()+
-            "\" target='_blank'>[이동]</td></a><td>x</td><td><button onclick='alarmDelete(this,"+
-            alarm.getAlarmId()+
-            ")'>x</button></td>");
-      } else if (alarm.isChecked()) {
-        alarm.setContent(alarm.getContent() +
-            alarm.getAlarmId()+
-            "\" target='_blank'>[이동]</td></a><td>o</td><td><button onclick='alarmDelete(this,"+
-            alarm.getAlarmId()+
-            ")'>x</button></td>");
-      }
-    }
     return list;
   }
 

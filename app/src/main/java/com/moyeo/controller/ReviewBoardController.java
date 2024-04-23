@@ -70,10 +70,10 @@ public class ReviewBoardController {
       Model model) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl", "/auth/form");
-    }
+//    if (loginUser == null) {
+//      session.setAttribute("message", "로그인 해주세요");
+//      session.setAttribute("replaceUrl", "/auth/form");
+//    }
 
     reviewBoard.setWriter(loginUser);
     Member writer = (Member) session.getAttribute("loginUser");
@@ -278,13 +278,14 @@ public class ReviewBoardController {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError("로그인하시기 바랍니다!", "/auth/form");
-    } else {
-      ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
-      if (old == null) {
-        throw new MoyeoError("번호가 유효하지 않습니다.", "/home");
-      } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
-        throw new MoyeoError("권한이 없습니다.", "view?reviewBoardId=" + reviewBoard.getReviewBoardId());
-      }
+    }
+
+    ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+    if (old == null) {
+      throw new MoyeoError("번호가 유효하지 않습니다.", "/home");
+    } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
+      log.debug(old.getWriter());
+      throw new MoyeoError("권한이 없습니다.", "view?reviewBoardId=" + reviewBoard.getReviewBoardId());
     }
 
     model.addAttribute("regionId", reviewBoard.getRegionId());

@@ -25,14 +25,14 @@
     <tr data-th-each="material : ${list}" data-th-object="${material}">
       <div style='board: 1px solid black; flex'>
         <a data-th-href="@{view(materialId=*{materialId})}" href="view.html">
-        <div style='board: 1px solid black; flex'>
-        <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height="200" src="/static/img/default-review-photo.png">
-      </div>
-      <div class="work-info" style='board: 1px solid black; float:none'>
-        <h3 data-th-text="*{name}">준비물이름</h3>
-        <p data-th-text="*{state ? '준비완료' : '준비중'}">준비물상태</p>
-      </div>
-      </a>
+          <div style='board: 1px solid black; flex'>
+            <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height="200" src="/static/img/default-review-photo.png">
+          </div>
+          <div class="work-info" style='board: 1px solid black; float:none'>
+            <h3 data-th-text="*{name}">준비물이름</h3>
+            <p data-th-text="*{state ? '준비완료' : '준비중'}">준비물상태</p>
+          </div>
+        </a>
       </div>
     </tr>
   </div>

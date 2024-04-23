@@ -25,7 +25,8 @@
    alarm_id desc
 </select>
 
-  <insert id="add" parameterType="Alarm">
+  <insert id="add" parameterType="Alarm"
+    useGeneratedKeys="true" keyColumn="alarm_id" keyProperty="alarmId">
     insert into alarm(member_id, content) values(#{memberId}, #{content});
   </insert>
 
@@ -52,5 +53,13 @@
   <select id="listAll" resultMap="AlarmMap">
     select * from alarm
   </select>
+
+  <update id="updateContent" parameterType="Alarm">
+    update alarm set
+      content=#{content}
+    where
+      alarm_id=#{alarmId}
+
+  </update>
 
 </mapper>
