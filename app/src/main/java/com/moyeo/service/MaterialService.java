@@ -13,10 +13,12 @@ public interface MaterialService {
 
   int update(Material material);
 
-  int delete(int materialId);
+  int delete(int materialId, int recruitBoardId);
 
-//  MaterialPhoto getMaterialPhoto(int materialPhotoId);
+  MaterialPhoto getMaterialPhoto(int materialPhotoId);
 
-//  List<MaterialPhoto> getMaterialPhotos(int materialId);
+  List<MaterialPhoto> getMaterialPhotos(int materialId);
+
+  int deleteMaterialPhoto(int materialPhotoId);
 
 }

@@ -16,6 +16,9 @@ public interface RecruitMemberDao {
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
 
+  void addWriter(
+      @Param("recruitBoardId") int recruitBoardId,
+      @Param("memberId") int memberId);
 
   List<RecruitBoard> findAll(@Param("memberId") int memberId);
 

@@ -37,17 +37,17 @@
 <form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
   <input type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
   <div>
-    제목: <input name="title" type="text" data-th-value="*{title}">
+    제목: <input id="title" name="title" type="text" data-th-value="*{title}">
   </div>
   <div>
     상태: <input name="state" type="radio" data-th-checked="*{state == true}" value="true">모집중
     <input name="state" type="radio" data-th-checked="*{state == false}" value="false">마감
   </div>
   <div>
-    마감일: <input name="deadline" type="date" data-th-value=*{deadline}>
+    마감일: <input id="deadline" name="deadline" type="date" data-th-value=*{deadline}>
   </div>
   <div>
-    여행일자: <input name="startDate" type="date" data-th-value=*{startDate}> ~ <input name="endDate" type="date" data-th-value=*{endDate}>
+    여행일자: <input id="startDate" name="startDate" type="date" data-th-value=*{startDate}> ~ <input id="endDate" name="endDate" type="date" data-th-value=*{endDate}>
   </div>
   <div>
     모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
@@ -73,11 +73,100 @@
   <div>
   </div>
   <div>
-    <button>등록</button>
-    <a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" href="list.html">취소</a>
+    <button id="updateBtn" type="submit">등록</button>
+    <button data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="list.html">취소</button>
   </div>
+  <div id="title-error" class="invalid-feedback"></div>
+  <div id="deadline-error" class="invalid-feedback"></div>
+  <div id="startDate-error" class="invalid-feedback"></div>
+  <div id="endDate-error" class="invalid-feedback"></div>
+  <div id="region-error" class="invalid-feedback"></div>
+  <div id="theme-error" class="invalid-feedback"></div>
 </form>
 
+<script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
+  var btn = document.getElementById("updateBtn");
+  var title = document.getElementById("title");
+  var startDate = document.getElementById("startDate");
+  var endDate = document.getElementById("endDate");
+  var deadline = document.getElementById("deadline");
+  var region = document.getElementById("regionId");
+  var theme = document.getElementById("themeId");
+  var titleError = document.getElementById("title-error");
+  var startDateError = document.getElementById("startDate-error");
+  var endDateError = document.getElementById("endDate-error");
+  var deadlineError = document.getElementById("deadline-error");
+  var regionError = document.getElementById("region-error");
+  var themeError = document.getElementById("theme-error");
+
+  function err(data, dataError, event, msg) {
+    if(data.value === '' || data.value == 0) {
+      dataError.innerHTML = msg;
+      dataError.style.display = "block";
+      event.preventDefault();
+    }else {
+      dataError.innerHTML = ""; // 오류 메세지 지우기
+      dataError.style.display = "none"; // 오류 메세지 숨기기
+    }
+  }
+
+  btn.addEventListener('click', function(event) {
+    err(title, titleError, event, "제목을 입력하세요!");
+    err(deadline, deadlineError, event, "모집마감일을 입력하세요!");
+    err(startDate, startDateError, event, "여행시작일을 입력하세요!");
+    err(endDate, endDateError, event, "여행종료일을 입력하세요!");
+    err(theme, themeError, event, "테마를 선택하세요!");
+    err(region, regionError, event, "지역을 선택하세요!");
+  });
+</script>
+
+
+<script>
+  // HTML 문서가 완전히 로드되었을 때 실행될 코드를 지정
+  $(document).ready(function() {
+
+    const deadlineInput = $('input[name="deadline"]')     // 마감일자
+    const startDateInput = $('input[name="startDate"]');  // 시작일자
+    const endDateInput = $('input[name="endDate"]');      // 종료일자
+
+    // 오늘 이전 날짜는 마감일자로 선택할 수 없음
+    // -> 입력 필드에 현재 날짜 이전을 선택하지 못하도록 하기
+    let offset = new Date().getTimezoneOffset() * 60000;  // 현재 타임존 오프셋(분)을 밀리초로 변환
+                                                          // 이때 getTimezoneOffset() 함수는 음수 반환함
+    let today = new Date(Date.now() - offset);        // UTC 시간에 타임존 오프셋을 더하여 현재 시간 계산
+    let minDate = today.toISOString().substring(0,10);// 날짜값 YYYY-MM-DD 형식으로 포맷
+    deadlineInput.prop('min', minDate); // min속성 설정 -> 오늘 이전날짜 선택 못하게 함
+
+    // 마감일자 선택시 시작일자/종료일자 min 설정 (마감일자 < 시작, 종료일자)
+    deadlineInput.on('change', function() {
+      // 선택한 날짜의 다음 날을 계산해서 YYYY-MM-DD 형식으로 포맷
+      let selectedDate = new Date($(this).val());
+      let nextDay = new Date(selectedDate.getTime() + (24 * 60 * 60 * 1000)); // 1000밀리초 기준 하루 계산
+      let nextDayFormatted = nextDay.toISOString().substring(0,10); // 다음 날짜를 YYYY-MM-DD 형식으로 포맷
+
+      startDateInput.prop('min', nextDayFormatted);
+      endDateInput.prop('min', nextDayFormatted);
+    });
+
+    // 시작일자 선택시 종료일자.min 설정 (시작일자 < 종료일자)
+    startDateInput.on('change', function() {
+      // 선택한 날짜의 이전 날짜를 계산해서 YYYY-MM-DD 형식으로 포맷
+      let selectedDate = new Date($(this).val());
+      let prevDay = new Date(selectedDate.getTime() - (24 * 60 * 60 * 1000)); // 1000밀리초 기준 하루 계산
+      let prevDayFormatted = prevDay.toISOString().substring(0,10); // 다음 날짜를 YYYY-MM-DD 형식으로 포맷
+
+      // 선택된 시작일의 값을 이용하여 종료일의 최소값(min 속성)을 설정
+      // this.value = 이벤트가 발생한 요소(시작일)의 값
+      endDateInput.prop('min', $(this).val());
+      deadlineInput.prop('max', prevDayFormatted);
+    });
+
+    // 종료일자 선택시 선택일자.max 설정 (시작일자 < 종료일자)
+    endDateInput.on('change', function() {
+      startDateInput.prop('max', $(this).val());
+    });
+  });
+</script>
 <script>
 
   $(document).ready(function() {

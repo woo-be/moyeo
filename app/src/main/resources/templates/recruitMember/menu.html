@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>메뉴</title>
+</head>
+<body data-th-fragment="list">
+<div style="border: 1px solid black; float:left; width:150px">
+
+  <p>메뉴</p>
+    <ol>
+      <a data-th-href="@{list(memberId=${memberId})}">
+        <li>여행멤버게시판</li>
+      </a>
+      <a data-th-href="@{../plan/list(recruitBoardId=${recruitBoardId})}">
+        <li>계획게시판</li>
+      </a>
+      <a data-th-href="@{../material/list(recruitBoardId=${recruitBoardId})}">
+        <li>준비물게시판</li>
+      </a>
+    </ol>
+
+</div>
+
+</body>
+</html>
+
+<!--<a data-th-href="@{../review/list(regionId=1)}">-->
+<!--  <li>서울특별시</li>-->
+<!--</a>-->

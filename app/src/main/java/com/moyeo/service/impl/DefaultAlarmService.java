@@ -46,4 +46,7 @@ public class DefaultAlarmService implements AlarmService {
   public List<Alarm> listAll() {
     return alarmDao.listAll();
   }
+  public int updateContent(Alarm alarm){
+    return alarmDao.updateContent(alarm);
+  }
 }

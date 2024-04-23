@@ -17,8 +17,8 @@
     review_board_id=#{reviewBoardId}
 </delete>
 
-
-
-
+  <select id="checked" parameterType="int" resultType="int">
+    select count(*) from review_like where member_id=#{memberId} and review_board_id=#{reviewBoardId}
+  </select>
 
 </mapper>

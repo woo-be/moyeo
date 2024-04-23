@@ -63,10 +63,10 @@
         onInit: function() {
           console.log('Summernote 생성됨!');
         },
-        onImageUpload: function(materialPhotos) {
+        onImageUpload: function(photos) {
           let data = new FormData();
-          for (const materialPhoto of materialPhotos) {
-            data.append("materialPhotos", materialPhoto);
+          for (const photo of photos) {
+            data.append("photos", photo);
           }
           $.ajax({
             url: 'photo/upload',
@@ -77,10 +77,10 @@
             data: data
           })
           .done(function(result) {
-            if (result.length == 0) {
-              alert('로그인 하세요!');
-              return;
-            }
+<!--            if (result.length == 0) {-->
+<!--              alert('로그인 하세요!');-->
+<!--              return;-->
+<!--            }-->
             for (const materialPhoto of result) {
               $('#summernote').summernote('insertImage',
                 'https://kr.object.ncloudstorage.com/moyeo-bucket/material/'

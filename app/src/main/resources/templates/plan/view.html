@@ -1,51 +1,78 @@
-<!--<!DOCTYPE html>-->
-<!--<html lang="en" xmlns="http://www.w3.org/1999/html">-->
-<!--<head>-->
-<!--  <meta charset="UTF-8">-->
-<!--  <title>모여</title>-->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0">-->
-<!--  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">-->
-<!--  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+  <meta charset="UTF-8">
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-<!--  &lt;!&ndash; include libraries(jQuery, bootstrap) &ndash;&gt;-->
-<!--  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">-->
-<!--  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
-<!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
+  <!-- include libraries(jQuery, bootstrap) -->
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-<!--  &lt;!&ndash; include summernote css/js &ndash;&gt;-->
-<!--  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">-->
-<!--  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>-->
+  <!-- include summernote css/js -->
+  <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-<!--  <style>-->
-<!--    body {-->
-<!--      padding-left: 10px;-->
-<!--    }-->
-<!--  </style>-->
-<!--</head>-->
-<!--<div data-th-replace="header :: header">머리말</div>-->
-<!--<body>-->
+  <style>
+    body {
+      padding-left: 10px;
+    }
+  </style>
+</head>
+<div data-th-replace="header :: header">머리말</div>
+<body>
 
-<!--<div data-th-object="${planBoard}">-->
-<!--  <form action="updateForm.html" data-th-action="@{updateForm}"-->
-<!--        enctype='multipart/form-data'-->
-<!--        method='post'>-->
-<!--    <input data-th-value="*{planBoardId}" name='planBoardId' type='hidden'>-->
-<!--    <input data-th-value="*{recruitBoardId}" name='recruitBoardId' type='hidden'>-->
-<!--    <div>-->
-<!--      여행일자 : <input data-th-value="*{tripDate}" name='tripDate' type='date'>-->
-<!--    </div>-->
-<!--    <div>-->
-<!--      제목 : <input data-th-value="*{title}" redaonly name='title' type='text' value="제목입니다.">-->
-<!--    </div>-->
-<!--    <div>-->
-<!--      내용 : <input data-th-value="*{content}" id="summernote" name='content'>내용입니다.</textarea>-->
-<!--    </div>-->
-<!--    <div>-->
+<div data-th-object="${planBoard}">
+  <form action="updateForm.html" data-th-action="@{updateForm}"
+        enctype='multipart/form-data'
+        method='post'>
+    <input data-th-value="*{planBoardId}" name='planBoardId' type='hidden'>
+    <input data-th-value="*{recruitBoardId}" name='recruitBoardId' type='hidden'>
+    <div>
+      제목 : <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">
+    </div>
+    <div>
+      여행일자 : <input data-th-value="*{tripDate}" readonly name='tripDate' type='date'>
+    </div>
+    <div>
+      여행순서 : <input data-th-value="*{tripOrder}" readonly name='tripOrder' type='number'>
+    </div>
+    <div>
+      내용 : <textarea data-th-text="*{content}" id="summernote" readonly name='content' style="display: none;">내용입니다.</textarea>
+    </div>
+    <div>
+      <button>변경</button>
+      <a data-th-href="@{delete(planBoardId=*{planBoardId},recruitBoardId=*{recruitBoardId})}" href="delete.html">[삭제]</a>
+    </div>
+  </form>
 
-<!--    </div>-->
-<!--  </form>-->
+</div>
 
-<!--</div>-->
+<div data-th-replace="footer :: footer">꼬리말</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous">
+</script>
 
-<!--</body>-->
-<!--</html>-->
+<script>
+
+  $(document).ready(function() {
+  $('#summernote').summernote({
+    height : 300,
+    width : 900,
+    toolbar : false,
+    callbacks: {
+      onInit: function() {
+        console.log('Summernote is launched');
+      }
+    }
+  }).summernote("disable");
+  });
+
+</script>
+
+</body>
+</html>

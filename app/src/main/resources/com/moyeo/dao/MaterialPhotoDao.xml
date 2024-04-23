@@ -9,6 +9,10 @@
     <id column="material_photo_id" property="materialPhotoId"/>
     <result column="material_id" property="materialId"/>
     <result column="material_photo" property="materialPhoto"/>
+
+    <association property="Material" javaType="Material">
+      <id column="material_id" property="materialId"/>
+    </association>
   </resultMap>
 
   <insert id="add" parameterType="MaterialPhoto">
@@ -17,4 +21,45 @@
       values(#{materialPhotoId}, #{materialPhoto})
   </insert>
 
+  <insert id="addAll" parameterType="list">
+    insert into material_photo (material_photo, material_id)
+    values
+    <foreach collection="list" item="item" separator=",">
+      (#{item.materialPhoto), #{item.material.materialId})
+    </foreach>
+  </insert>
+
+  <select id="findByMaterialPhotoId" resultMap="MaterialPhotoMap" parameterType="int">
+    select
+      material_photo_id,
+      material_photo,
+      material_id
+    from
+      material_photo
+    where
+      material_photo_id=#{value}
+  </select>
+
+  <select id="findAllByMaterialId" resultMap="MaterialPhotoMap" parameterType="int">
+    select
+      material_photo_id,
+      material_photo,
+      material_id
+    from
+      material_photo
+    where
+      material_id=#{value}
+    order by
+      material_photo_id asc
+  </select>
+
+  <delete id="delete" parameterType="int">
+    delete from material_photo
+    where material_photo_id=#{value}
+  </delete>
+
+  <delete id="deleteAll" parameterType="int">
+    delete from material_photo
+    where material_id=#{value}
+  </delete>
 </mapper>

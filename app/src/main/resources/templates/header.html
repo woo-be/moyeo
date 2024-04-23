@@ -33,7 +33,7 @@
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
     <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
     <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
-    <li><a data-th-href="@{../plan/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
+    <li><a data-th-href="@{../recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
     <li data-th-unless="${session.loginUser != null}">
       <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
     </li>
@@ -42,7 +42,38 @@
     </li>
   </ul>
 
-  <button data-th-if="${session.loginUser != null}" data-th-onclick="openPopup()" onclick="openPopup()" type="button" class="btn btn-outline-primary me-2">알림</button>
+  <!-- 알림 버튼(모달) -->
+  <button data-th-if="${session.loginUser != null}" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-th-onclick="openPopup()" onclick="openPopup()">
+    알림
+  </button>
+
+  <!-- 모달 창 -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div id="modal-body" class="modal-body">
+          <!--     모달 창의 알림 리스트     -->
+          <table>
+            <thead>
+              <tr id="alarmTr">
+                <th>내용</th><th>읽음</th><th>삭제</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- 알림 -->
+            </tbody>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div class="col-md-3 text-end">
     <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
@@ -57,6 +88,7 @@
         <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
       </form>
   </div>
+
 
     <script>
       document.getElementById('googleLoginButton').addEventListener('click', function() {
@@ -87,72 +119,49 @@
   </div>
 
   <script>
+    let alarmModalBody = $('#modal-body tbody');
+    console.log(alarmModalBody);
 
-function openPopup() {
+    function openPopup() {
 
-$.ajax({
-  url: '/alarm/list',
-  type: 'GET',
-  contentType: false,
-  processData: false
-})
-.done(function(response) {
-  var popup = window.open("", "_blank", "width=500,height=500");
-  popup.document.write("<h1>알림 리스트</h1>");
+      $.ajax({
+        url: '/alarm/list',
+        type: 'GET',
+        contentType: false,
+        processData: false
+      })
+      .done(function(response) {
 
-        // 팝업 창이 로드될 때 실행할 스크립트 정의 - jQuery 로드
-        var script1 = document.createElement('script');
-        script1.src = "http://code.jquery.com/jquery-latest.min.js";
+        for (const alarm of response) {
+              console.log(alarm);
+              console.log();
 
-        // 팝업 창이 로드될 때 실행할 스크립트 정의 - 함수 정의
-        var script2 = document.createElement('script');
-        script2.textContent = `
-        function alarmDelete(button, alarmId) {
-            var row = button.parentNode.parentNode;
-            row.style.display = 'none';
-            console.log(alarmId);
-
-            // 알림 삭제 요청
-            $.ajax({
-                url: '/alarm/delete?alarmId='+alarmId,
-                type: 'GET',
-                contentType: false,
-                processData: false,
-            });
-        }`;
-
-        // 팝업 창이 로드될 때 실행할 스크립트 정의 - 함수 정의
-        var script3 = document.createElement('script');
-        script3.textContent = `function openLinkInNewTab(event, link) {
-            event.preventDefault();
-            window.open(link, '_blank');
-            window.location.reload();
-            }`;
-
-        // 스크립트를 팝업 창에 추가
-        popup.document.body.appendChild(script1);
-        popup.document.body.appendChild(script2);
-        popup.document.body.appendChild(script3);
-
-  if(response == null){
-    popup.document.write("<p>알림이 없습니다.</p>");
-  }else{
-    // 알림 리스트가 존재한다면 리스트 출력
-    popup.document.write("<style>table {width: 100%;border-collapse: collapse;}th, td {border: 1px solid black;padding: 8px;text-align: center;}</style>");
-    popup.document.write("<table><tr><th>내용</th><th>이동</th><th>읽음</th><th>삭제</th></tr>");
-    for (const alarm of response) {
-      popup.document.write("<tr>");
-      popup.document.write(alarm.content);
-      popup.document.write("</tr>");
+              $('<tr>')
+                .append($('<td>').html(alarm.content))
+                .append($('<td>').html(alarm.checked ? 'o':'x'))
+                .append($('<td>').html('<button onclick="alarmDelete(this,' + alarm.alarmId + ')">x</button>'))
+                .appendTo(alarmModalBody);
+        }
+      });
     }
-    popup.document.write("</table>");
-  }
-  });
-}
 
+    function alarmDelete(button, alarmId) {
+        var row = button.parentNode.parentNode;
+        row.style.display = 'none';
+        console.log(alarmId);
 
+        // 알림 삭제 요청
+        $.ajax({
+            url: '/alarm/delete?alarmId='+alarmId,
+            type: 'GET',
+            contentType: false,
+            processData: false,
+        });
+    };
   </script>
 </header>
+
+
 
 </body>
 

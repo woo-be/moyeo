@@ -3,6 +3,7 @@ package com.moyeo.controller;
 
 import com.moyeo.service.MessageService;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.Msg;
 import java.util.List;
 import javax.servlet.http.HttpSession;
@@ -29,18 +30,16 @@ public class MessageController {
   public void index(
       @RequestParam(defaultValue = "0")int recruitBoardId,
       HttpSession session,
-      Model model) {
+      Model model) throws MoyeoError {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
     if(loginUser == null){
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl","/auth/login");
+      throw new MoyeoError("로그인 해주세요", "/auth/login");
     }
 
     if(recruitBoardId <= 0){
-      session.setAttribute("message", "팀 번호가 올바르지 않습니다.");
-      session.setAttribute("replaceUrl","/home");
+      throw new MoyeoError("팀 번호가 올바르지 않습니다.", "/home");
     }
 
     model.addAttribute("recruitBoardId", recruitBoardId);

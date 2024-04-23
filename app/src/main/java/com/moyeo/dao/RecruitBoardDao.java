@@ -1,7 +1,6 @@
 package com.moyeo.dao;
 
 import com.moyeo.vo.RecruitBoard;
-import com.moyeo.vo.RecruitMember;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -38,6 +37,4 @@ public interface RecruitBoardDao {
 
   // 조회수 증가
   void plusViews(int boardId);
-
-  List<RecruitMember> findAllApplicant(@Param("recruitBoardId") int recruitBoardId);
 }

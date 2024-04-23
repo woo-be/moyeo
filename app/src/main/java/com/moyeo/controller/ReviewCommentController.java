@@ -4,6 +4,7 @@ import com.moyeo.service.AlarmService;
 import com.moyeo.service.ReviewCommentService;
 import com.moyeo.vo.Alarm;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewComment;
 import javax.servlet.http.HttpSession;
@@ -24,13 +25,13 @@ public class ReviewCommentController {
   private final ReviewCommentService reviewCommentService;
   private final AlarmService alarmService;
   @PostMapping("add")
-  public String commentAdd(ReviewBoard reviewBoard, @RequestParam("reviewContent") String reviewContent, HttpSession session) {
+  public String commentAdd(ReviewBoard reviewBoard, @RequestParam("reviewContent") String reviewContent, HttpSession session)
+      throws MoyeoError {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
     if(loginUser == null){
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl", "/auth/form");
+      throw new MoyeoError("로그인 해주세요", "/auth/form");
     }
 
     ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoard.getReviewBoardId())
@@ -38,15 +39,22 @@ public class ReviewCommentController {
 
     // 알림 읽음여부를 확인하기 위해 알림 id를 같이 넘겨준다
     Alarm alarm = Alarm.builder().memberId(reviewBoard.getMemberId()).content(
-        "<td>"+
-        reviewBoard.getReviewBoardId()+
-            "번 후기에 댓글을 등록했습니다.</td><td><a href=\"/review/view?reviewBoardId="+
-            reviewBoard.getReviewBoardId()+
-            "&alarmId="
-    ).build();
+            "<a href=\"/review/view?reviewBoardId="+
+            reviewBoard.getReviewBoardId()).build();
 
     reviewCommentService.add(reviewComment);
     alarmService.add(alarm);
+
+    log.debug(alarm);
+    alarm.setContent(
+            alarm.getContent()+
+            "&alarmId="+
+            alarm.getAlarmId()+
+            "\">"+
+            reviewBoard.getReviewBoardId()+
+            "번 후기</a>에 댓글을 등록했습니다."
+        );
+    alarmService.updateContent(alarm);
 
     return "redirect:../review/view?reviewBoardId="+reviewBoard.getReviewBoardId();
   }
