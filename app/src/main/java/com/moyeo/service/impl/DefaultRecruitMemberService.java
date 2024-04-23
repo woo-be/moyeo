@@ -26,6 +26,10 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
     recruitMemberDao.add(recruitBoardId, memberId);
   }
 
+  @Override
+  public void addWriter(int recruitBoardId, int memberId) {
+    recruitMemberDao.addWriter(recruitBoardId, memberId);
+  }
 
   @Override
   public List<RecruitBoard> list(int memberId) {

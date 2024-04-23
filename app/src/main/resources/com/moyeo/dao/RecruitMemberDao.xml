@@ -39,6 +39,19 @@
         #{memberId})
   </insert>
 
+  <insert id="addWriter" parameterType="int">
+    insert
+    into
+    recruit_member(
+      recruit_board_id,
+      member_id,
+      state)
+    values(
+      #{recruitBoardId},
+      #{memberId},
+      true)
+  </insert>
+
 
   <select id="findAll" resultMap="recruitMemberMap" parameterType="int">
     select

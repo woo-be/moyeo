@@ -39,13 +39,13 @@
 
 <form action="add" data-th-action="@{add}" method="post" enctype='multipart/form-data'>
   <div>
-    제목: <input name="title" type="text">
+    제목: <input id="title" name="title" type="text">
   </div>
   <div>
-    마감일: <input name="deadline" type="date">
+    마감일: <input id="deadline" name="deadline" type="date">
   </div>
   <div>
-    여행일자: <input name="startDate" type="date"> ~ <input name="endDate" type="date">
+    여행일자: <input id="startDate" name="startDate" type="date"> ~ <input id="endDate" name="endDate" type="date">
   </div>
   <div>
     모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2">
@@ -65,10 +65,52 @@
     내용: <textarea name='content' id="summernote"></textarea>
   </div>
   <div>
-    <button id="addButton">등록</button>
-    <a href="list.html">취소</a>
+    <button type="submit" id="addBtn">등록</button>
+    <button type="button" href="list.html">취소</button>
+    <div id="title-error" class="invalid-feedback"></div>
+    <div id="deadline-error" class="invalid-feedback"></div>
+    <div id="startDate-error" class="invalid-feedback"></div>
+    <div id="endDate-error" class="invalid-feedback"></div>
+    <div id="region-error" class="invalid-feedback"></div>
+    <div id="theme-error" class="invalid-feedback"></div>
   </div>
 </form>
+
+<script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
+  var btn = document.getElementById("addBtn");
+  var title = document.getElementById("title");
+  var startDate = document.getElementById("startDate");
+  var endDate = document.getElementById("endDate");
+  var deadline = document.getElementById("deadline");
+  var region = document.getElementById("regionId");
+  var theme = document.getElementById("themeId");
+  var titleError = document.getElementById("title-error");
+  var startDateError = document.getElementById("startDate-error");
+  var endDateError = document.getElementById("endDate-error");
+  var deadlineError = document.getElementById("deadline-error");
+  var regionError = document.getElementById("region-error");
+  var themeError = document.getElementById("theme-error");
+
+  function err(data, dataError, event, msg) {
+    if(data.value === '' || data.value == 0) {
+      dataError.innerHTML = msg;
+      dataError.style.display = "block";
+      event.preventDefault();
+    }else {
+      dataError.innerHTML = ""; // 오류 메세지 지우기
+      dataError.style.display = "none"; // 오류 메세지 숨기기
+    }
+  }
+
+  btn.addEventListener('click', function(event) {
+    err(title, titleError, event, "제목을 입력하세요!");
+    err(deadline, deadlineError, event, "모집마감일을 입력하세요!");
+    err(startDate, startDateError, event, "여행시작일을 입력하세요!");
+    err(endDate, endDateError, event, "여행종료일을 입력하세요!");
+    err(theme, themeError, event, "테마를 선택하세요!");
+    err(region, regionError, event, "지역을 선택하세요!");
+  });
+</script>
 
 <script>
   // HTML 문서가 완전히 로드되었을 때 실행될 코드를 지정
