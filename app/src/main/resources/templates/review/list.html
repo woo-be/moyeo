@@ -67,11 +67,11 @@
 
 <span>
   [<a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize},regionId=${regionId},keyword=${keyword},filter=${filter})}"
+  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize},regionId=${regionId}, themeId=${themeId},keyword=${keyword},filter=${filter})}"
      data-th-if="${pageNo > 1}"
      href="list.html" >이전</a>]
   [<a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize},regionId=${regionId},keyword=${keyword},filter=${filter})}"
+  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize},regionId=${regionId}, themeId=${themeId},keyword=${keyword},filter=${filter})}"
      data-th-if="${pageNo < numOfPage}"
      href="list.html">다음</a>]
 </span>
