@@ -21,5 +21,4 @@ public class Msg implements Serializable {
   private String msg;           // 채팅 내용
   private Date time;                // 채팅 보낸시간
   private String nickname;
-
 }

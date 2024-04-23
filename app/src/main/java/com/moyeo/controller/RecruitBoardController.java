@@ -5,6 +5,7 @@ import com.moyeo.service.RecruitMemberService;
 import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
 import com.moyeo.service.ThemeService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
@@ -52,6 +53,68 @@ public class RecruitBoardController {
   @Value("${ncp.ss.bucketname}")
   private String bucketName;
 
+  @GetMapping("addForm")
+  public void addForm(HttpSession session) throws Exception {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
+    }
+  }
+
+  @PostMapping("add")
+  public String add(
+      RecruitBoard board,
+      int regionId,
+      int themeId,
+      HttpSession session,
+      SessionStatus sessionStatus) throws Exception {
+
+    // 지역 또는 테마를 선택하지 않으면 예외 발생.
+    if (themeId == 0 || regionId == 0) {
+      throw new MoyeoError("지역과 테마를 선택해주세요.", "addform");
+    }
+
+
+
+    // 현재 로그인한 사용자로 board 객체의 writer를 세팅함.
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    board.setWriter(loginUser);
+
+    if (loginUser == null) {
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
+    }
+
+    // board 객체의 regionId와 themeId를 세팅함.
+    board.setRegion(regionService.get(regionId));
+    board.setTheme(themeService.get(themeId));
+
+    // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
+    List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
+    if (recruitPhotos == null) {
+      recruitPhotos = new ArrayList<>();
+    }
+
+    for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
+      RecruitPhoto recruitPhoto = recruitPhotos.get(i);
+      if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
+        // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
+        storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
+        recruitPhotos.remove(i);
+      }
+    }
+    if (recruitPhotos.size() > 0) {
+      board.setPhotos(recruitPhotos);
+    }
+
+    // DBMS에 해당 게시물 업로드.
+    recruitBoardService.add(board);
+
+    // 게시글을 등록하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
+    sessionStatus.setComplete();
+
+    return "redirect:list";
+  }
+
   @GetMapping("list")
   public void list(
       Model model,
@@ -90,70 +153,53 @@ public class RecruitBoardController {
     model.addAttribute("filter", filter); // 검색 필터(제목 | 내용 | 작성자)
   }
 
-  @PostMapping("add")
-  public String add(
-      RecruitBoard board,
-      int regionId,
-      int themeId,
-      HttpSession session,
-      SessionStatus sessionStatus) throws Exception {
+  @GetMapping("view")
+  public void view(int recruitBoardId, Model model,
+      HttpSession session
+  ) throws Exception {
 
-    // 지역 또는 테마를 선택하지 않으면 예외 발생.
-    if (themeId == 0 || regionId == 0) {
-      throw new MoyeoError("지역과 테마를 선택해주세요.", "addform");
+    // 유효한 번호인지 검사
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    if (recruitBoard == null) {
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/list");
     }
 
-
-
-    // 현재 로그인한 사용자로 board 객체의 writer를 세팅함.
     Member loginUser = (Member) session.getAttribute("loginUser");
-    board.setWriter(loginUser);
-
     if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+      loginUser = Member.builder().name("로그인해주세요.").build(); // memberId = 0
+
+    } else { // 로그인 상태일 때, 신청 여부 파악하는 코드
+
+      RecruitMember recruitMember = recruitMemberService.findBy(loginUser.getMemberId(),
+          recruitBoardId);
+      model.addAttribute("recruitMember", recruitMember);
     }
 
-    // board 객체의 regionId와 themeId를 세팅함.
-    board.setRegion(regionService.get(regionId));
-    board.setTheme(themeService.get(themeId));
+    log.debug(recruitBoard);
 
-    log.debug("board = " + board);
-
-    // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
-    List<RecruitPhoto> recruitPhotos = (List<RecruitPhoto>) session.getAttribute("recruitPhotos");
-    if (recruitPhotos == null) {
-      recruitPhotos = new ArrayList<>();
-    }
-
-    for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
-      RecruitPhoto recruitPhoto = recruitPhotos.get(i);
-      if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
-        // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
-        storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
-        recruitPhotos.remove(i);
-      }
-    }
-    if (recruitPhotos.size() > 0) {
-      board.setPhotos(recruitPhotos);
-    }
-
-    // DBMS에 해당 게시물 업로드.
-    recruitBoardService.add(board);
-
-    // 게시글을 등록하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
-    sessionStatus.setComplete();
-
-    return "redirect:list";
+    model.addAttribute("loginUser", loginUser);
+    model.addAttribute("recruitboard", recruitBoard);
   }
 
-  @GetMapping("addForm")
-  public void addForm(HttpSession session) throws Exception {
-
-    // 로그인한 상태인지 아닌지 검사.
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+  // 조회수 증가시키는 요청핸들러?
+  @GetMapping("viewCountUp")
+  public String viewCountUp(int recruitBoardId,
+      @CookieValue(required = false) String views, // 조회한 게시글 번호를 저장하는 쿠키
+      HttpServletResponse res) {
+    if (views == null || views.isEmpty()) { // 만약 쿠키가 없다면,
+      Cookie cookie = new Cookie("views", "[" + recruitBoardId + "]");
+      res.addCookie(cookie);
+      recruitBoardService.plusViews(recruitBoardId);
+    } else {
+      if (!views.contains(String.valueOf(recruitBoardId))) { // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 없다면,
+        Cookie cookie = new Cookie("views", views + "[" + recruitBoardId + "]");
+        res.addCookie(cookie);
+        recruitBoardService.plusViews(recruitBoardId);
+      }
     }
+    // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 있다면,
+    // 조회수를 증가시키지 않고 바로 view로 redirect 한다.
+    return "redirect:view?recruitBoardId=" + recruitBoardId;
   }
 
   @PostMapping("updateForm")
@@ -162,7 +208,7 @@ public class RecruitBoardController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     // boardId로 게시글을 찾음.
@@ -170,7 +216,7 @@ public class RecruitBoardController {
 
     // 해당 게시글의 작성자 정보와 로그인한 사용자의 정보가 일치하는지 검사.
     if (board.getWriter().getMemberId() != loginUser.getMemberId()) {
-      throw new MoyeoError("권한이 없습니다.", "view?recruitBoardId=" + recruitBoardId);
+      throw new MoyeoError(ErrorName.ACCESS_DENIED, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
 
     log.debug(board);
@@ -193,17 +239,17 @@ public class RecruitBoardController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());
     if (old == null) {
-      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/list");
     }
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
-      throw new MoyeoError("지역과 테마를 선택해주세요.", "view?recruitBoardId=" + board.getRecruitBoardId());
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/view?recruitBoardId=" + board.getRecruitBoardId());
     }
 
     // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
@@ -246,69 +292,21 @@ public class RecruitBoardController {
     return "redirect:list";
   }
 
-  @GetMapping("view")
-  public void view(int recruitBoardId, Model model,
-      HttpSession session
-  ) throws Exception {
-
-    // 유효한 번호인지 검사
-    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    if (recruitBoard == null) {
-      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
-    }
-
-    Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      loginUser = Member.builder().name("로그인해주세요.").build(); // memberId = 0
-
-    } else { // 로그인 상태일 때, 신청 여부 파악하는 코드
-
-      RecruitMember recruitMember = recruitMemberService.findBy(loginUser.getMemberId(),
-          recruitBoardId);
-      model.addAttribute("recruitMember", recruitMember);
-    }
-
-    model.addAttribute("loginUser", loginUser);
-    model.addAttribute("recruitboard", recruitBoard);
-  }
-
-  // 조회수 증가시키는 요청핸들러?
-  @GetMapping("viewCountUp")
-  public String viewCountUp(int recruitBoardId,
-      @CookieValue(required = false) String views, // 조회한 게시글 번호를 저장하는 쿠키
-      HttpServletResponse res) {
-    if (views == null || views.isEmpty()) { // 만약 쿠키가 없다면,
-      Cookie cookie = new Cookie("views", "[" + recruitBoardId + "]");
-      res.addCookie(cookie);
-      recruitBoardService.plusViews(recruitBoardId);
-    } else {
-      if (!views.contains(String.valueOf(recruitBoardId))) { // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 없다면,
-        Cookie cookie = new Cookie("views", views + "[" + recruitBoardId + "]");
-        res.addCookie(cookie);
-        recruitBoardService.plusViews(recruitBoardId);
-      }
-    }
-    // 만약 쿠키가 있고, 쿠키에 해당 게시글 번호가 있다면,
-    // 조회수를 증가시키지 않고 바로 view로 redirect 한다.
-    return "redirect:view?recruitBoardId=" + recruitBoardId;
-  }
-
 
   @GetMapping("delete")
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
-    // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+    if (loginUser == null){
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard == null) {
-      throw new MoyeoError("유효하지 않은 번호입니다.", "list");
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/list");
     }
 
     if (recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()){
-      throw new MoyeoError("권한이 없습니다.", "view?recruitBoardId=" + recruitBoardId);
+      throw new MoyeoError(ErrorName.ACCESS_DENIED, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
 
     List<RecruitPhoto> photos = recruitBoardService.getRecruitPhotos(recruitBoardId);

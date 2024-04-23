@@ -5,10 +5,26 @@
 
 <mapper namespace="com.moyeo.dao.RecruitMemberDao">
 
+
+  <resultMap id="recruitMemberMap" type="recruitBoard">
+  <id column="recruit_board_id" property="recruitBoardId"/>
+  <result column="title" property="title"/>
+  </resultMap>
+
   <resultMap id="RecruitMemberMap" type="RecruitMember">
     <id column="recruit_Board_id" property="recruitBoardId"/>
     <id column="member_id" property="memberId"/>
     <result column="state" property="state"/>
+
+    <association property="member" javaType="Member">
+      <id column="memberId" property="memberId"/>
+      <result column="nickname" property="nickname"/>
+      <result column="email" property="email"/>
+      <result column="birth_date" property="birthdate"/>
+      <result column="introduce" property="introduce"/>
+      <result column="gender" property="gender"/>
+    </association>
+
   </resultMap>
 
   <!--모집 신청하기-->
@@ -22,6 +38,20 @@
         #{recruitBoardId},
         #{memberId})
   </insert>
+
+
+  <select id="findAll" resultMap="recruitMemberMap" parameterType="int">
+    select
+      *
+    from
+      recruit_member rm
+      left join recruit_board rb on rm.recruit_board_id = rb.recruit_board_id
+    where
+      rm.member_id = #{memberId}
+    order by
+      rb.recruit_board_id desc
+  </select>
+
 
   <select id="findBy" resultMap="RecruitMemberMap">
     select
@@ -43,5 +73,27 @@
     and
       recruit_board_id = #{recruitBoardId}
   </delete>
+
+  <select id="findAllApplicant" resultMap="RecruitMemberMap" parameterType="int">
+    select
+      rcm.member_id,
+      m.nickname,
+      m.email,
+      m.birth_date,
+      m.introduce,
+      m.gender
+    from
+      recruit_board rcb
+      left outer join recruit_member rcm on rcb.recruit_board_id=rcm.recruit_board_id
+      inner join member m on rcm.member_id=m.member_id
+    where
+      rcb.recruit_board_id=#{recruitBoardId} and rcm.state is null
+  </select>
+
+  <update id="update" parameterType="recruitMember">
+    update recruit_member set
+      state=#{state}
+    where recruit_board_id=#{recruitBoardId} and member_id=#{memberId}
+  </update>
 
 </mapper>

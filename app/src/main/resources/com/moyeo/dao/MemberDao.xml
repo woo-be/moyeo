@@ -132,4 +132,13 @@
     and birth_date = #{birthdate}
   </update>
 
+  <select id="matchByEmail" resultMap="MemberMap" parameterType="string">
+    SELECT *
+    FROM
+    member
+    WHERE
+    email = #{email}
+  </select>
+
+
 </mapper>

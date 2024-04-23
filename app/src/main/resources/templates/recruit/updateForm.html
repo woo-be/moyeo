@@ -3,6 +3,9 @@
 <head>
   <meta charset='UTF-8'>
   <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
   <!-- 네이버 지도 API -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -23,26 +26,12 @@
     body {
         padding-left: 10px;
     }
-
-<!-- footer가 화면에 고정된 상태로 아래 버튼을 가려 주석처리함 -->
-<!--    .footer {-->
-<!--      position: fixed;-->
-<!--      left: 0;-->
-<!--      bottom: 0;-->
-<!--      width: 100%;-->
-<!--    }-->
   </style>
-
-
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bootstrap 5 Example</title>
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
-<body>
 
 <div data-th-replace="header :: header">머리말</div>
 
+<body>
 <h2>모집 게시판</h2>
 
 <form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
@@ -75,12 +64,12 @@
   <div>
     내용: <textarea id="summernote" name="content" data-th-text="*{content}"></textarea>
   </div>
-<!--  <div>-->
-<!--    위도: <input name="latitude" type="text" data-th-value=*{latitude}>-->
-<!--  </div>-->
-<!--  <div>-->
-<!--    경도: <input name="longitude" type="text" data-th-value=*{longitude}>-->
-<!--  </div>-->
+  <div>
+    위도: <input name="latitude" type="text" data-th-value=*{latitude}>
+  </div>
+  <div>
+    경도: <input name="longitude" type="text" data-th-value=*{longitude}>
+  </div>
   <div>
   </div>
   <div>

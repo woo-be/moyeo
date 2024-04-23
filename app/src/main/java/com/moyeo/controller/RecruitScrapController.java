@@ -1,8 +1,11 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RecruitScrapService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
+import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitScrap;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ public class RecruitScrapController {
 
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
   private final RecruitScrapService recruitScrapService;
+  private final RecruitBoardService recruitBoardService;
 
   // 즐겨찾기 추가
   @GetMapping("add")
@@ -28,7 +32,13 @@ public class RecruitScrapController {
     // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
+    }
+
+    // 조회쪽에서 즐겨찾기하는 상황 상정하고 작성
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    if (loginUser.getMemberId() == recruitBoard.getWriter().getMemberId()) {
+      throw new MoyeoError(ErrorName.REJECTED_SCRAP_MYPOST, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
 
     // recruitScrap 객체 생성
@@ -45,12 +55,11 @@ public class RecruitScrapController {
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트
   @GetMapping("")
-  public void scrapList(HttpSession session, Model model)  throws Exception{
+  public void scrapList(HttpSession session, Model model) throws Exception {
 
-    // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new MoyeoError("로그인 하시기 바랍니다.", "/auth/form");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     // 즐겨찾기 리스트를 모델객체의 scarpList에 담음.
@@ -64,7 +73,7 @@ public class RecruitScrapController {
 
     // 아무것도 선택하지 않았다면 예외 발생
     if(scrapRecruitBoardIds == null || scrapRecruitBoardIds.isEmpty()) {
-      throw new Exception("삭제할 즐겨찾기 항목을 선택해 주세요."); // MoyeoError로 에러 페이지 처리 요망.
+      throw new MoyeoError(ErrorName.SELECT_REQUIRED, "/myrecruit/scrap");
     }
 
     // 각 번호들을 ','를 기준으로 분리하여 배열로 저장한다.

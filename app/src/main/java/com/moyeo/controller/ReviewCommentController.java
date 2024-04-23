@@ -36,10 +36,11 @@ public class ReviewCommentController {
     ReviewComment reviewComment = ReviewComment.builder().reviewBoardId(reviewBoard.getReviewBoardId())
         .content(reviewContent).commentMember(loginUser).build();
 
+    // 알림 읽음여부를 확인하기 위해 알림 id를 같이 넘겨준다
     Alarm alarm = Alarm.builder().memberId(reviewBoard.getMemberId()).content(
         "<td>"+
         reviewBoard.getReviewBoardId()+
-            "번 후기에 댓글을 등록했습니다.</td><td><a href='/review/view?reviewBoardId="+
+            "번 후기에 댓글을 등록했습니다.</td><td><a href=\"/review/view?reviewBoardId="+
             reviewBoard.getReviewBoardId()+
             "&alarmId="
     ).build();

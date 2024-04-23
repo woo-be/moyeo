@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+  <div data-th-replace="header :: header">머리말</div>
+</head>
+
+<body>
+<p>마이페이지</p>
+<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+
+<div style="width: 1500px">
+  <p>신청자 목록</p>
+  <ul style="margin-left: 250px;margin-right: 600px">
+    <li style="border: 1px solid; list-style: none;" data-th-each="applicant : ${applicants}" data-th-object="${applicant}">
+      <div class="basicInfo"  style="pointer-events: auto;">
+        <span data-th-text="*{member.nickname}">닉네임</span>
+        <form id="accept" data-th-action="@{/myrecruit/appl}" action="appl.html" method='post'>
+          <input data-th-value="*{memberId}" name="memberId" type="hidden"/>
+          <input data-th-value="${recruitBoardId}" name="recruitBoardId" type="hidden"/>
+          <input data-th-value=1 name="state" type="hidden"/>
+          <button class="acceptBtn">수락</button> <!-- 수락-> 1 거절-> 0 후 둘 다 새로고침 -->
+        </form>
+        <form id="reject" data-th-action="@{/myrecruit/appl}" action="appl.html" method='post'>
+          <input data-th-value="*{memberId}" name="memberId" type="hidden"/>
+          <input data-th-value="${recruitBoardId}" name="recruitBoardId" type="hidden"/>
+          <input data-th-value=0 name="state" type="hidden"/>
+          <button class="rejectBtn">거절</button>
+        </form>
+      </div>
+      <div class="detailInfo" style="display:none;">
+        <p data-th-text="*{member.email}">testemail@test.com/>
+        <p data-th-text="*{member.birthdate}">1234.01.23</p>
+        <p data-th-if="*{member.gender}">남자</p>
+        <p data-th-unless="*{member.gender}">여자</p>
+        <p data-th-text="*{member.introduce}">자기소개</p>
+      </div>
+    </li>
+  </ul>
+</div>
+
+
+
+
+</body>
+<div data-th-replace="footer :: footer">꼬리말</div>
+
+<script>
+
+  document.querySelectorAll(".basicInfo").forEach(function(btn){
+    btn.addEventListener("click", checkApplicants);
+  });
+
+  function checkApplicants(event) {
+    var listItem = event.currentTarget.parentElement;
+    var detailInfo = listItem.querySelector(".detailInfo");
+    var displayStyle = window.getComputedStyle(detailInfo).display;
+
+    var acceptBtn = listItem.querySelector("#acceptBtn");
+    var rejectBtn = listItem.querySelector("#rejectBtn");
+
+    if (displayStyle === "none") {
+      detailInfo.style.display = "block";
+    } else {
+      detailInfo.style.display = "none";
+    }
+
+    acceptBtn.addEventListener("click", function() {
+      $('#state1').val(1);
+    });
+
+    rejectBtn.addEventListener("click", function() {
+      $('#state0').val(0);
+    });
+  }
+
+</script>
+</html>

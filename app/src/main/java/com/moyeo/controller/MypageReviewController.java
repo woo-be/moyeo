@@ -50,8 +50,13 @@ public class MypageReviewController {
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
-    //    log.debug(String.format("%d____________________________%d__________________________%s", pageNo, pageSize,countScrap));
+
     List<ReviewBoard> scrapList = reviewBoardService.scrapList(loginUser.getMemberId(), pageNo, pageSize);
+    for(ReviewBoard reviewBoard : scrapList){
+      log.debug(reviewBoard.getLikeCount());
+      log.debug(reviewBoard.getViews());
+      log.debug(reviewBoard.getWriter().getNickname());
+    }
     model.addAttribute("scrapList", scrapList);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
@@ -70,11 +75,9 @@ public class MypageReviewController {
     if (pageSize < 6 || pageSize > 20) {
       pageSize = 6;
     }
-
     if (pageNo < 1) {
       pageNo = 1;
     }
-
 
     int numOfRecord = reviewBoardService.countPostedByMember(loginUser.getMemberId());
     int numOfPage = numOfRecord / pageSize + ((numOfRecord % pageSize) > 0 ? 1 : 0);
@@ -82,7 +85,12 @@ public class MypageReviewController {
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+
     List<ReviewBoard> reviewList = reviewBoardService.reviewList(loginUser.getMemberId(), pageSize, pageNo);
+    for(ReviewBoard reviewBoard : reviewList){
+      log.debug(reviewBoard.getLikeCount());
+      log.debug(reviewBoard.getViews());
+    }
     model.addAttribute("reviewList", reviewList);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("pageNo", pageNo);
