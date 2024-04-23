@@ -45,7 +45,7 @@
     </div>
     <div>
       <button>변경</button>
-      <a data-th-href="@{delete(materialId=*{materialId})}" href="delete.html">[삭제]</a>
+      <a data-th-href="@{delete(materialId=*{materialId},recruitBoardId=*{recruitBoardId})}" href="delete.html">[삭제]</a>
     </div>
   </form>
 </div>
@@ -58,12 +58,13 @@
   $('#summernote').summernote({
     height : 300,
     width : 900,
+    toolbar : false,
     callbacks: {
       onInit: function() {
         console.log('Summernote is launched');
       }
     }
-  });
+  }).summernote("disable");
   });
 
 </script>

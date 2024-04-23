@@ -69,6 +69,27 @@
     callbacks: {
       onInit: function() {
         console.log('Summernote is launched');
+      },
+      onImageUpload: function(photos) {
+        let data = new FormData();
+        for (const photo of photos) {
+          data.append("photos", photo);
+        }
+        $.ajax({
+          url: 'photo/upload',
+          type: 'POST',
+          dataType: 'json',
+          contentType: false,
+          processData: false,
+          data: data
+        })
+        .done(function(result) {
+          for (const materialPhoto of result) {
+            $('#summernote').summernote('insertImage',
+              'https://kr.object.ncloudstorage.com/moyeo-bucket/material/'
+              + materialPhoto.materialPhoto);
+          }
+        });
       }
     }
   });

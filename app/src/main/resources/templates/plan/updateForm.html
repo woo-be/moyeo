@@ -47,7 +47,7 @@
     여행순서 <input data-th-value="*{tripOrder}" name='tripOrder' type="number">
   </div>
   <div>
-    내용: <textarea data-th-text="*{content}" id="summernote" name='content'></textarea>
+    내용: <textarea data-th-text="*{content}" id="summernote" type="text" name='content'></textarea>
   </div>
   <div>
     <button>변경</button>
@@ -70,6 +70,27 @@
     callbacks: {
       onInit: function() {
         console.log('Summernote is launched');
+      },
+      onImageUpload: function(photos) {
+        let data = new FormData();
+        for (const photo of photos) {
+          data.append("photos", photo);
+        }
+        $.ajax({
+          url: 'photo/upload',
+          type: 'POST',
+          dataType: 'json',
+          contentType: false,
+          processData: false,
+          data: data
+        })
+        .done(function(result) {
+          for (const planPhoto of result) {
+            $('#summernote').summernote('insertImage',
+              'https://kr.object.ncloudstorage.com/moyeo-bucket/plan/'
+              + planPhoto.photo);
+          }
+        });
       }
     }
   });
