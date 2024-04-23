@@ -29,7 +29,7 @@ public class RecruitScrapController {
   @GetMapping("add")
   public String add(int recruitBoardId, HttpSession session) throws Exception {
 
-    // 로그인하지 않으면 예외 발생.
+    // 로그인한 상태인지 아닌지 검사.
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
