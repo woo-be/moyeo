@@ -15,5 +15,5 @@ public class ErrorName {
 
   public static final String REJECTED_RECRUIT_MYPOST = "자신의 게시글을 신청할 수 없습니다.";
 
-  public static final String REJECTED_SCRAP_MYPOST = "자신의 게시글을 신청할 수 없습니다.";
+  public static final String REJECTED_SCRAP_MYPOST = "자신의 게시글을 즐겨찾기할 수 없습니다.";
 }
