@@ -15,4 +15,9 @@ public class DefaultReviewScrapService implements ReviewScrapService {
   public void add(int memberId, int reviewBoardId) {
     reviewScrapDao.add(memberId, reviewBoardId);
   }
+
+  @Override
+  public int get(int memberId, int reviewBoardId) {
+    return reviewScrapDao.checked(memberId, reviewBoardId);
+  }
 }

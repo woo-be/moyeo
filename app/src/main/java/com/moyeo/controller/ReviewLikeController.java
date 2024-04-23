@@ -21,7 +21,12 @@ public class ReviewLikeController {
   @GetMapping("add")
   public String add(HttpSession session, int reviewBoardId) {
     Member loginUser = (Member) session.getAttribute("loginUser");
-    reviewLikeService.add(loginUser.getMemberId(), reviewBoardId);
+    int checked = reviewLikeService.get(loginUser.getMemberId(), reviewBoardId);
+
+    if(checked != 1){
+      reviewLikeService.add(loginUser.getMemberId(), reviewBoardId);
+    }
+
     return "redirect:/review/view?reviewBoardId=" + reviewBoardId;
   }
 
