@@ -110,6 +110,9 @@ public class RecruitBoardController {
     // 게시글을 등록하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
     sessionStatus.setComplete();
 
+    // 모집게시글을 작성하면 해당 게시글의 recruit_member에 작성자가 state=1로 들어간다.
+    recruitMemberService.addWriter(board.getRecruitBoardId(), loginUser.getMemberId());
+
     return "redirect:list";
   }
 
