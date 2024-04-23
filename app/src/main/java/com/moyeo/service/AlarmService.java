@@ -15,4 +15,5 @@ public interface AlarmService {
   int delete(int alarmId);
 
   List<Alarm> listAll();
+  int updateContent(Alarm alarm);
 }

@@ -17,4 +17,5 @@ public interface AlarmDao {
   int statusUpdate(int alarmId);
   int delete(int alarmId);
   List<Alarm> listAll();
+  int updateContent(Alarm alarm);
 }
