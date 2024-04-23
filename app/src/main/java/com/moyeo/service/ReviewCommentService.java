@@ -1,7 +1,6 @@
 package com.moyeo.service;
 
 import com.moyeo.vo.ReviewComment;
-import java.util.List;
 
 public interface ReviewCommentService {
 
@@ -11,8 +10,6 @@ public interface ReviewCommentService {
   int delete(int reviewCommentId);
 
   int update(ReviewComment reviewComment);
-
-
 
 
 }

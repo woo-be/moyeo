@@ -27,5 +27,8 @@ public interface MemberService {
   // 비밀번호 변경을 위해 member 를 update
   int updatePassword(Member member);
 
+  // 구글 로그인을 하기위해 DB에 같은 email이 저장되어있는지 확인
+  Member getByEmail(String email);
+
 
 }

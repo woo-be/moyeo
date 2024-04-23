@@ -19,21 +19,7 @@ public class DefaultAlarmService implements AlarmService {
 
   @Override
   public List<Alarm> list(int memberId) {
-
-    List<Alarm> list = new ArrayList<Alarm>();
-    list = alarmDao.findAll(memberId);
-    for (Alarm alarm : list) {
-      if (!alarm.isChecked()) {
-        alarm.setContent(alarm.getContent()+
-            alarm.getAlarmId()+
-            "' target='_blank'>[이동]</td></a><td>x</td>");
-      } else if (alarm.isChecked()) {
-        alarm.setContent(alarm.getContent() +
-            alarm.getAlarmId()+
-            "' target='_blank'>[이동]</td></a><td>o</td>");
-      }
-    }
-    return list;
+    return alarmDao.findAll(memberId);
   }
 
   @Override
@@ -49,5 +35,15 @@ public class DefaultAlarmService implements AlarmService {
   @Override
   public boolean getStatus(int alarmId) {
     return alarmDao.getStatus(alarmId);
+  }
+
+  @Override
+  public int delete(int alarmId) {
+    return alarmDao.delete(alarmId);
+  }
+
+  @Override
+  public List<Alarm> listAll() {
+    return alarmDao.listAll();
   }
 }

@@ -11,28 +11,39 @@
   <div data-th-replace="header :: header">머리말</div>
 </head>
 
-<body style="">
+<body>
 <p>마이페이지</p>
 <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
 
-<span style="width: 300px">
+<div style="width: 1500px">
+  <p>신청자 목록</p>
   <ul style="margin-left: 250px;margin-right: 600px">
-    <li style="border: 1px solid; list-style: none;" data-th-each="applicant : ${applicants}" data-th-object="${applicant.member}">
-      <span class="basicInfo"  style="pointer-events: auto;">
-        <span data-th-text="*{nickname}">닉네임</span>
-        <button>수락</button>
-        <button>거절</button>
-      </span>
-      <span class="detailInfo" style="display:none;">
-        <span data-th-text="*{email}">testemail@test.com</span>
-        <span data-th-text="*{birthdate}">1234.01.23</span>
-        <span data-th-if="*{gender}">남자</span>
-        <span data-th-unless="*{gender}">여자</span>
-        <span data-th-text="*{introduce}">자기소개</span>
-      </span>
+    <li style="border: 1px solid; list-style: none;" data-th-each="applicant : ${applicants}" data-th-object="${applicant}">
+      <div class="basicInfo"  style="pointer-events: auto;">
+        <span data-th-text="*{member.nickname}">닉네임</span>
+        <form id="accept" data-th-action="@{/myrecruit/appl}" action="appl.html" method='post'>
+          <input data-th-value="*{memberId}" name="memberId" type="hidden"/>
+          <input data-th-value="${recruitBoardId}" name="recruitBoardId" type="hidden"/>
+          <input data-th-value=1 name="state" type="hidden"/>
+          <button class="acceptBtn">수락</button> <!-- 수락-> 1 거절-> 0 후 둘 다 새로고침 -->
+        </form>
+        <form id="reject" data-th-action="@{/myrecruit/appl}" action="appl.html" method='post'>
+          <input data-th-value="*{memberId}" name="memberId" type="hidden"/>
+          <input data-th-value="${recruitBoardId}" name="recruitBoardId" type="hidden"/>
+          <input data-th-value=0 name="state" type="hidden"/>
+          <button class="rejectBtn">거절</button>
+        </form>
+      </div>
+      <div class="detailInfo" style="display:none;">
+        <p data-th-text="*{member.email}">testemail@test.com/>
+        <p data-th-text="*{member.birthdate}">1234.01.23</p>
+        <p data-th-if="*{member.gender}">남자</p>
+        <p data-th-unless="*{member.gender}">여자</p>
+        <p data-th-text="*{member.introduce}">자기소개</p>
+      </div>
     </li>
   </ul>
-</span>
+</div>
 
 
 
@@ -41,9 +52,8 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
-  var basicInfo = document.querySelectorAll(".basicInfo");
 
-  basicInfo.forEach(function(btn){
+  document.querySelectorAll(".basicInfo").forEach(function(btn){
     btn.addEventListener("click", checkApplicants);
   });
 
@@ -52,11 +62,22 @@
     var detailInfo = listItem.querySelector(".detailInfo");
     var displayStyle = window.getComputedStyle(detailInfo).display;
 
+    var acceptBtn = listItem.querySelector("#acceptBtn");
+    var rejectBtn = listItem.querySelector("#rejectBtn");
+
     if (displayStyle === "none") {
       detailInfo.style.display = "block";
     } else {
       detailInfo.style.display = "none";
     }
+
+    acceptBtn.addEventListener("click", function() {
+      $('#state1').val(1);
+    });
+
+    rejectBtn.addEventListener("click", function() {
+      $('#state0').val(0);
+    });
   }
 
 </script>

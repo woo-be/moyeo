@@ -8,8 +8,6 @@ import com.moyeo.vo.PlanPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 
 @Service
 @RequiredArgsConstructor
@@ -17,8 +15,8 @@ public class DefaultPlanBoardService implements PlanBoardService {
   private final PlanBoardDao planBoardDao;
   private final PlanPhotoDao planPhotoDao;
   @Override
-  public List<PlanBoard> list(int recruitBoardId) {
-    return planBoardDao.findAll(recruitBoardId);
+  public List<PlanBoard> list() {
+    return planBoardDao.findAll();
   }
 
   @Override
@@ -26,6 +24,7 @@ public class DefaultPlanBoardService implements PlanBoardService {
     PlanBoard planBoard = planBoardDao.findBy(planBoardId);
     return planBoard;
   }
+
 
   @Transactional
   @Override
@@ -78,4 +77,5 @@ public class DefaultPlanBoardService implements PlanBoardService {
   public int deletePlanPhoto(int planPhotoId) {
     return planPhotoDao.delete(planPhotoId);
   }
+
 }

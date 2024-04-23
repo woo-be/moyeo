@@ -34,8 +34,8 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
 
   @Transactional
   @Override
-  public void delete(int recruitBoardId, int memberId) { // 모집 신청 취소하기
-    recruitMemberDao.delete(recruitBoardId, memberId);
+  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
+    return recruitMemberDao.findAllApplicant(recruitBoardId);
   }
 
   @Override
@@ -44,7 +44,13 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   }
 
   @Override
-  public List<RecruitMember> findAllApplicant(int recruitBoardId) {
-    return recruitMemberDao.findAllApplicant(recruitBoardId);
+  public int update(RecruitMember recruitMember) {
+    return recruitMemberDao.update(recruitMember);
+  }
+
+  @Transactional
+  @Override
+  public void delete(int recruitBoardId, int memberId) { // 모집 신청 취소하기
+    recruitMemberDao.delete(recruitBoardId, memberId);
   }
 }

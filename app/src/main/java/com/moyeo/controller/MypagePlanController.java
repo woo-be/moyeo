@@ -1,7 +1,9 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,7 @@ public class MypagePlanController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인이 필요한 서비스입니다.");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     model.addAttribute("list", recruitBoardService.teamlist(loginUser.getMemberId()));

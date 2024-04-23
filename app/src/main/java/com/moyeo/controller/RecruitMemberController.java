@@ -1,9 +1,11 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RecruitMemberService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
-import com.moyeo.vo.RecruitMember;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -21,13 +23,19 @@ public class RecruitMemberController {
 
   private static final Log log = LogFactory.getLog(RecruitMemberController.class);
   private final RecruitMemberService recruitMemberService;
+  private final RecruitBoardService recruitBoardService;
 
   @GetMapping("add")
   public String add(int recruitBoardId, HttpSession session) throws Exception { // 모집 신청하기
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인이 필요한 서비스입니다.");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
+    }
+
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    if (loginUser.getMemberId() == recruitBoard.getWriter().getMemberId()) {
+      throw new MoyeoError(ErrorName.REJECTED_RECRUIT_MYPOST, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
 
     recruitMemberService.add(recruitBoardId, loginUser.getMemberId());
@@ -67,6 +75,11 @@ public class RecruitMemberController {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new Exception("로그인이 필요한 서비스입니다.");
+    }
+
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    if (loginUser.getMemberId() != recruitBoard.getWriter().getMemberId()) {
+      throw new MoyeoError(ErrorName.ACCESS_DENIED, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
 
     recruitMemberService.delete(recruitBoardId, loginUser.getMemberId());

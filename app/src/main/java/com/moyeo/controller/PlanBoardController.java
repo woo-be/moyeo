@@ -1,62 +1,66 @@
 package com.moyeo.controller;
 
-import com.amazonaws.services.s3.internal.eventstreaming.Message;
 import com.moyeo.dao.PlanBoardDao;
-import com.moyeo.service.MessageService;
 import com.moyeo.service.PlanBoardService;
+
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
 
 import com.moyeo.vo.Msg;
+
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Value;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 
+
 @RequestMapping("/plan")
 @RequiredArgsConstructor
 @Controller
 public class PlanBoardController {
-  private static final Log log = LogFactory.getLog(PlanBoardController.class);
   private final PlanBoardService planBoardService;
+
   private final StorageService storageService;
   private final String uploadDir = "plan/";
 
   @Value("${ncp.ss.bucketname}")
   private String bucketName;
 
-  @GetMapping("list")
-  public void list(
-      int recruitBoardId,
-      Model model) {
-    List<PlanBoard> list;
-    list = planBoardService.list(recruitBoardId);
+  private final PlanBoardDao planBoardDao;
 
-    log.debug("planBoard = " + list);
+
+  @GetMapping("list")
+  public void list(Model model) {
+    List<PlanBoard> list;
+    list = planBoardService.list();
     model.addAttribute("list", list);
-    model.addAttribute("recruitBoardId", recruitBoardId);
   }
 
   @GetMapping("view")
- public void view(int planBoardId, Model model) {
+ public void planBoardGet(int planBoardId, Model model) {
     model.addAttribute("planBoard", planBoardService.get(planBoardId));
  }
+
+  @GetMapping("chat")
+  public String index() {
+    return "plan/chat";
+  }
 
 
  @GetMapping("form")

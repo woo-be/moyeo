@@ -71,4 +71,9 @@ public class DefaultMemberService implements MemberService {
   public int updatePassword(Member member) {
     return memberDao.updatePassword(member);
   }
+
+  @Override
+  public Member getByEmail(String email) {
+    return memberDao.matchByEmail(email);
+  }
 }

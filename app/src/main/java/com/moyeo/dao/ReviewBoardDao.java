@@ -19,18 +19,14 @@ public interface ReviewBoardDao {
       @Param("offset") int offset);
 
   List<ReviewBoard> findAll(@Param("offset") int offset, @Param("rowCount") int rowCount,
-      @Param("regionId")int regionId, @Param("filter")String filter, @Param("keyword")String keyword);
-
-  List<ReviewBoard> findAllByRegionId(@Param("offset") int offset, @Param("rowCount") int rowCount,
-      @Param("regionId") int regionId);
+      @Param("regionId")int regionId, @Param("themeId")int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
 
   ReviewBoard findBy(@Param("reviewBoardId") int reviewBoardId);
 
   int delete(int reviewBoardId);
 
-  int countAll(@Param("regionId")int regionId, @Param("filter")String filter, @Param("keyword")String keyword);
+  int countAll(@Param("regionId")int regionId, @Param("themeId")int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
 
-  int countAllByRegionId(@Param("regionId") int regionId);
 
   int countPostedByMember(@Param("memberId") int memberId);
 

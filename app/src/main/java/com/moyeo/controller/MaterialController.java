@@ -1,3 +1,4 @@
+
 package com.moyeo.controller;
 
 import com.moyeo.service.MaterialService;
@@ -210,3 +211,4 @@ public class MaterialController {
     return "redirect:../view?no=" + materialPhoto.getMaterialId();
   }
 }
+

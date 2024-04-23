@@ -6,6 +6,7 @@
 <mapper namespace="com.moyeo.dao.AlarmDao">
   <resultMap id="AlarmMap" type="Alarm">
     <id column="alarm_id" property="alarmId"/>
+    <result column="member_id" property="memberId"/>
     <result column="content" property="content"/>
     <result column="checked" property="checked"/>
   </resultMap>
@@ -43,5 +44,13 @@
     where
       alarm_id=#{alarmId}
   </update>
+
+  <delete id="delete" parameterType="int">
+    delete from alarm where alarm_id=#{alarmId}
+  </delete>
+
+  <select id="listAll" resultMap="AlarmMap">
+    select * from alarm
+  </select>
 
 </mapper>

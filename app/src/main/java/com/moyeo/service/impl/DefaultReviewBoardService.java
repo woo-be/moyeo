@@ -1,5 +1,6 @@
 package com.moyeo.service.impl;
 
+import com.moyeo.dao.AlarmDao;
 import com.moyeo.dao.ReviewBoardDao;
 import com.moyeo.dao.ReviewCommentDao;
 import com.moyeo.dao.ReviewLikeDao;
@@ -25,6 +26,7 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   private final ReviewCommentDao reviewCommentDao;
   private final ReviewLikeDao reviewLikeDao;
   private final ReviewScrapDao reviewScrapDao;
+  private final AlarmDao alarmDao;
 
   @Transactional
   @Override
@@ -65,8 +67,8 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   }
 
   @Override
-  public int countAll(int regionId,String filter,String keyword) {
-    return reviewBoardDao.countAll(regionId, filter, keyword);
+  public int countAll(int regionId, int themeId,String filter,String keyword) {
+    return reviewBoardDao.countAll(regionId, themeId, filter, keyword);
   }
 
 
@@ -121,9 +123,9 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   }
 
   @Override
-  public List<ReviewBoard> list(int pageNo, int pageSize, int regionId, String filter,
+  public List<ReviewBoard> list(int pageNo, int pageSize, int regionId, int themeId, String filter,
       String keyword) {
-    return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, filter, keyword);
+    return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
   }
 
 }
