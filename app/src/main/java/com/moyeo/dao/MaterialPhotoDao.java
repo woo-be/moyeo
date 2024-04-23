@@ -10,4 +10,11 @@ public interface MaterialPhotoDao {
 
   int addAll(List<MaterialPhoto> materialPhotos);
 
+  List<MaterialPhoto> findAllByMaterialId(int materialId);
+
+  MaterialPhoto findByMaterialPhotoId(int materialPhotoId);
+
+  int delete(int materialPhotoId);
+
+  int deleteAll(int materialId);
 }

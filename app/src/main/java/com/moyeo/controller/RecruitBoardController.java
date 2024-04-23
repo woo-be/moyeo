@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
 @RequiredArgsConstructor
 @Controller
@@ -69,8 +71,10 @@ public class RecruitBoardController {
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
     if (themeId == 0 || regionId == 0) {
-      throw new Exception("지역과 테마를 선택해주세요.");
+      throw new MoyeoError("지역과 테마를 선택해주세요.", "addform");
     }
+
+
 
     // 현재 로그인한 사용자로 board 객체의 writer를 세팅함.
     Member loginUser = (Member) session.getAttribute("loginUser");

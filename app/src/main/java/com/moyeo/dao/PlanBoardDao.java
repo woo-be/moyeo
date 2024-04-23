@@ -12,5 +12,11 @@ public interface PlanBoardDao {
   PlanBoard findBy(int planBoardId);
 
 
+  void add(PlanBoard planBoard);
+
+  int update(PlanBoard planBoard);
+
+  int delete(int planBoardId, int recruitBoardId);
+
 
 }
