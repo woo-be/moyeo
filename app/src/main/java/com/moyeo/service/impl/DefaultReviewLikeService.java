@@ -14,4 +14,9 @@ public class DefaultReviewLikeService implements ReviewLikeService {
   public void add(int memberId, int reviewBoardId) {
       reviewLikeDao.add(memberId, reviewBoardId);
   }
+
+  @Override
+  public int get(int memberId, int reviewBoardId) {
+    return reviewLikeDao.checked(memberId, reviewBoardId);
+  }
 }

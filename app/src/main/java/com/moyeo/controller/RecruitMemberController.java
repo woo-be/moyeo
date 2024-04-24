@@ -61,6 +61,8 @@ public class RecruitMemberController {
 
     model.addAttribute("list", list);
     log.debug(String.format("%s", list.getFirst().getTitle()));
+
+    model.addAttribute("memberId", loginUser.getMemberId());
   }
 
   @GetMapping("test")

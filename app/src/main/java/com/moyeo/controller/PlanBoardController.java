@@ -215,4 +215,14 @@ public class PlanBoardController {
 
     return "redirect:../view?no=" + planPhoto.getPlanPhotoId();
   }
+
+//  @GetMapping("menu")
+//  public int menu(
+//      int recruitBoardId,
+//      Model model
+//  ) throws Exception {
+//
+//    model.addAttribute("recruitBoardId", recruitBoardId);
+//
+//  }
 }

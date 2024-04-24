@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,13 +44,13 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public List<RecruitBoard> mypost(int memberId) {
-    return recruitBoardDao.findByMemberId(memberId);
+  public List<RecruitBoard> mypost(int pageNo, int pageSize, int memberId) {
+    return recruitBoardDao.findByMemberId(pageSize * (pageNo - 1), pageSize, memberId);
   }
 
   @Override
-  public List<RecruitBoard> myrequest(int memberId) {
-    return recruitBoardDao.findReqByMemberId(memberId);
+  public List<RecruitBoard> myrequest(int pageNo, int pageSize, int memberId) {
+    return recruitBoardDao.findReqByMemberId(pageSize * (pageNo - 1), pageSize, memberId);
   }
 
   @Override
@@ -131,6 +132,14 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   public int countAll(int regionId, int themeId, String filter, String keyword) {
     return recruitBoardDao.countAll(regionId, themeId, filter, keyword);
+  }
+
+  public int countAllMyPost(@Param("memberId") int memberId){
+    return recruitBoardDao.countAllMyPost(memberId);
+  }
+
+  public int countAllMyReq(@Param("memberId") int memberId){
+    return recruitBoardDao.countAllMyReq(memberId);
   }
 
   @Override
