@@ -21,12 +21,23 @@ public class GlobalControllerAdvice {
     });
   }
 
-  @ExceptionHandler
+  @ExceptionHandler(MoyeoError.class) // 예외가 MoeyoError일 때 호출
   public ModelAndView exceptionHandler(MoyeoError e) {
     ModelAndView mv = new ModelAndView();
 
     mv.addObject("message", e.getMsg());
     mv.addObject("replaceUrl", e.getUrl());
+
+    mv.setViewName("error");
+    return mv;
+  }
+
+  @ExceptionHandler // 모든 예외에 대해 호출
+  public ModelAndView AllExceptionHandler(Exception e) {
+    ModelAndView mv = new ModelAndView();
+
+    mv.addObject("message", e.getMessage());
+    mv.addObject("replaceUrl", "/index.html");
 
     mv.setViewName("error");
     return mv;

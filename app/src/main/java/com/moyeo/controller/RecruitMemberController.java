@@ -74,12 +74,7 @@ public class RecruitMemberController {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      throw new Exception("로그인이 필요한 서비스입니다.");
-    }
-
-    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
-    if (loginUser.getMemberId() != recruitBoard.getWriter().getMemberId()) {
-      throw new MoyeoError(ErrorName.ACCESS_DENIED, "/recruit/view?recruitBoardId=" + recruitBoardId);
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     recruitMemberService.delete(recruitBoardId, loginUser.getMemberId());
