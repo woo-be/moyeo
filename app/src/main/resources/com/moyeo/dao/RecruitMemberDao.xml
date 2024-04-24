@@ -88,6 +88,15 @@
       recruit_board_id = #{recruitBoardId}
   </delete>
 
+  <!--recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제-->
+  <delete id="deleteAll">
+    delete
+    from
+      recruit_member
+    where
+      recruit_board_id = #{recruitBoardId}
+  </delete>
+
   <select id="findAllApplicant" resultMap="RecruitMemberMap" parameterType="int">
     select
       rcm.member_id,
