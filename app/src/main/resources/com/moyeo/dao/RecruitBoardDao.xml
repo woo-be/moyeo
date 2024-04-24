@@ -148,7 +148,8 @@
       rb.theme_id,
       th.theme_name,
       rb.member_id,
-      rb.address
+      rb.address,
+      rb.views
     from
       recruit_board rb
       left join region reg on rb.region_id=reg.region_id
