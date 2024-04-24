@@ -20,7 +20,6 @@
     <result column="longitude" property="longitude"/>
     <result column="views" property="views"/>
     <result column="address" property="address"/>
-
     <result column="waiting" property="waiting"/>
     
     <association property="writer" javaType="Member">
@@ -85,7 +84,7 @@
       rb.state,
       rb.recruit_total,
       count(case when rm.state = 1 then 1 end) as current,
-      count(case when rm.state is null then 1 end) as waiting
+      count(case when rm.member_id is null then 1 end) as waiting
     from
       recruit_board rb
       inner join member m on m.member_id=rb.member_id
@@ -93,13 +92,16 @@
     where
       m.member_id=#{memberId}
     group by
-      rb.recruit_board_id
+      rb.recruit_board_id, rb.title, rb.deadline, rb.state, rb.recruit_total
+    order by rb.recruit_board_id desc
+    limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findReqByMemberId" resultMap="RecruitBoardMap" parameterType="int">
     select
       rm.recruit_board_id,
       rm.state,
+      rm.created_date,
       rb.title,
       rb.deadline
     from
@@ -108,6 +110,9 @@
       inner join recruit_board rb on rb.recruit_board_id=rm.recruit_board_id
     where
       m.member_id=#{memberId}
+    order by rb.recruit_board_id desc
+<!--    order by rm.create_date desc-->
+    limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findMyTeamByMemberId" resultMap="RecruitBoardMap" parameterType="int">
@@ -148,6 +153,7 @@
       rb.theme_id,
       th.theme_name,
       rb.member_id,
+      rb.views,
       rb.address
     from
       recruit_board rb
@@ -180,6 +186,24 @@
     <if test="themeId > 0">
       and rb.theme_id=#{themeId}
     </if>
+  </select>
+
+  <select id="countAllMyPost" resultType="int">
+    select
+      count(*)
+    from
+      recruit_board rb
+    where
+      rb.member_id=#{memberId}
+  </select>
+
+  <select id="countAllMyReq" resultType="int">
+    select
+      count(*)
+    from
+      recruit_member rm
+    where
+      rm.member_id=#{memberId}
   </select>
 
   <insert id="add" parameterType="recruitBoard"

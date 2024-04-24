@@ -58,7 +58,7 @@
       <td data-th-if="*{state == true}">모집중</td>
       <td data-th-if="*{state == false}">모집완료</td>
       <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-      <td data-th-text="*{waiting}">1</td>
+      <td data-th-text="*{waiting}">0</td>
       <td data-th-if="*{state == true}" id="checkBtn">
         <a data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" href="#">
           <Button data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" value="이동">이동</Button>
@@ -83,6 +83,21 @@
 <!--      <span class="pop-btn confirm" id="confirm">닫기</span>-->
 <!--    </div>-->
 <!--  </div>-->
+
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{posted(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{posted(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
 </div>
 
   </body>

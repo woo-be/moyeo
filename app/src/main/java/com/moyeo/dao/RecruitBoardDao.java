@@ -18,9 +18,15 @@ public interface RecruitBoardDao {
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
-  List<RecruitBoard> findByMemberId(int memberId);
+  List<RecruitBoard> findByMemberId(
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("memberId") int memberId);
 
-  List<RecruitBoard> findReqByMemberId(int memberId);
+  List<RecruitBoard> findReqByMemberId(
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("memberId") int memberId);
 
   List<RecruitBoard> findMyTeamByMemberId(int memberId);
 
@@ -34,6 +40,9 @@ public interface RecruitBoardDao {
       @Param("themeId") int themeId,
       @Param("filter") String filter,
       @Param("keyword")String keyword);
+
+  int countAllMyPost(@Param("memberId") int memberId);
+  int countAllMyReq(@Param("memberId") int memberId);
 
   // 조회수 증가
   void plusViews(int boardId);

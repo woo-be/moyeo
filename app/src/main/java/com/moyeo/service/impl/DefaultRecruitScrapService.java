@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
@@ -23,12 +24,17 @@ public class DefaultRecruitScrapService implements RecruitScrapService {
   }
 
   @Override
-  public List<RecruitBoard> list(int memberId) {
-    return recruitScrapDao.findAll(memberId);
+  public List<RecruitBoard> list(int pageNo, int pageSize, int memberId) {
+    return recruitScrapDao.findAll(pageSize * (pageNo - 1), pageSize, memberId);
   }
 
   @Override
   public void delete(RecruitScrap recruitScrap) {
     recruitScrapDao.delete(recruitScrap);
+  }
+
+  @Override
+  public int countAll(@Param("memberId") int memberId){
+    return recruitScrapDao.countAll(memberId);
   }
 }

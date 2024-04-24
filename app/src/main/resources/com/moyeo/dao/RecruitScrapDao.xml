@@ -65,9 +65,10 @@
       inner join recruit_scrap rcs on rcs.recruit_board_id = rcb.recruit_board_id
       left join recruit_member rcm on rcm.recruit_board_id = rcb.recruit_board_id
     where
-      rcs.member_id = #{value}
+      rcs.member_id = #{memberId}
     group by
       rcb.recruit_board_id
+    limit #{rowCount} offset #{offset}
   </select>
 
   <delete id="delete" parameterType="RecruitScrap">
@@ -79,5 +80,14 @@
     and
       member_id = #{memberId}
   </delete>
+
+  <select id="countAll" resultType="int">
+    select
+      count(*)
+    from
+      recruit_scrap rc
+    where
+      rc.member_id=#{memberId}
+  </select>
 
 </mapper>

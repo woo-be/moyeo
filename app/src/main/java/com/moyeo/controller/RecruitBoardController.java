@@ -155,9 +155,7 @@ public class RecruitBoardController {
   }
 
   @GetMapping("view")
-  public void view(int recruitBoardId, Model model,
-      HttpSession session
-  ) throws Exception {
+  public void view(int recruitBoardId, Model model, HttpSession session) throws Exception {
 
     // 유효한 번호인지 검사
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
@@ -175,8 +173,6 @@ public class RecruitBoardController {
           recruitBoardId);
       model.addAttribute("recruitMember", recruitMember);
     }
-
-    log.debug(recruitBoard);
 
     model.addAttribute("loginUser", loginUser);
     model.addAttribute("recruitboard", recruitBoard);
@@ -219,8 +215,6 @@ public class RecruitBoardController {
     if (board.getWriter().getMemberId() != loginUser.getMemberId()) {
       throw new MoyeoError(ErrorName.ACCESS_DENIED, "/recruit/view?recruitBoardId=" + recruitBoardId);
     }
-
-    log.debug(board);
 
     // 해당 게시글을 "board"라는 이름으로 모델 객체에 저장.
     // regionId와 themeId도 별도로 저장.
