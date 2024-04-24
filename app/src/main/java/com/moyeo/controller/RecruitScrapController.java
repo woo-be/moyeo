@@ -48,6 +48,11 @@ public class RecruitScrapController {
         memberId(loginUser.getMemberId()).
         build();
 
+    // 이미 즐겨찾기한 글인지 검사.
+    if (recruitScrapService.isExist(recruitScrap) > 0) {
+      throw new MoyeoError("이미 즐겨찾기한 게시글입니다.", "/recruit/view?recruitBoardId=" + recruitBoardId);
+    }
+
     // 해당 객체를 recruit_scrap에 추가.
     recruitScrapService.add(recruitScrap);
     // list 페이지로 리다이렉트(임시)

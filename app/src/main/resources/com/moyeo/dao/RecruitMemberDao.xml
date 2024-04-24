@@ -39,6 +39,7 @@
         #{memberId})
   </insert>
 
+  <!--글 작성자를 recruit_member에 state=true로 추가-->
   <insert id="addWriter" parameterType="int">
     insert
     into
@@ -84,6 +85,15 @@
     where
       member_id = #{memberId}
     and
+      recruit_board_id = #{recruitBoardId}
+  </delete>
+
+  <!--recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제-->
+  <delete id="deleteAll">
+    delete
+    from
+      recruit_member
+    where
       recruit_board_id = #{recruitBoardId}
   </delete>
 

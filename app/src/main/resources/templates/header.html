@@ -31,14 +31,14 @@
   </a>
 
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
-    <li><a data-th-href="@{../review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>
-    <li><a data-th-href="@{../recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li>
-    <li><a data-th-href="@{../recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li>
+    <li><a data-th-href="@{/review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>  <!--son, href 상대경로 => 절대경로로 변경함.-->
+    <li><a data-th-href="@{/recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li> <!--son, href 상대경로 => 절대경로로 변경함.-->
+    <li><a data-th-href="@{/recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li> <!--son, href 상대경로 => 절대경로로 변경함.-->
     <li data-th-unless="${session.loginUser != null}">
-      <a data-th-href="@{../member/signup}" class="nav-link px-2 link-dark">회원 가입</a>
+      <a data-th-href="@{/member/signup}" class="nav-link px-2 link-dark">회원 가입</a>  <!--son, href 상대경로 => 절대경로로 변경함.-->
     </li>
     <li data-th-if="${session.loginUser != null}">
-      <a data-th-href="@{../member/mypage}" class="nav-link px-2 link-dark">마이페이지</a>
+      <a data-th-href="@{/member/mypage}" class="nav-link px-2 link-dark">마이페이지</a> <!--son, href 상대경로 => 절대경로로 변경함.-->
     </li>
   </ul>
 

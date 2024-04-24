@@ -2,11 +2,11 @@ package com.moyeo.service.impl;
 
 import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
+import com.moyeo.dao.RecruitMemberDao;
 import com.moyeo.dao.RecruitPhotoDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
-import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -24,6 +24,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitBoardDao recruitBoardDao;
   private final RecruitCommentDao recruitCommentDao;
   private final RecruitPhotoDao recruitPhotoDao;
+  private final RecruitMemberDao recruitMemberDao;
 
   @Transactional
   @Override
@@ -89,6 +90,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int delete(int boardId) {
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
+    recruitMemberDao.deleteAll(boardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
 
     return recruitBoardDao.delete(boardId);
   }

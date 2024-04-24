@@ -81,6 +81,18 @@
       member_id = #{memberId}
   </delete>
 
+  <!--해당 scrap 객체가 테이블상에 존재하면 1, 아니면 0-->
+  <select id="isExist" parameterType="RecruitScrap">
+    select
+      count(*)
+    from
+      recruit_scrap
+    where
+      recruit_board_id = #{recruitBoardId}
+    and
+     member_id = #{memberId}
+  </select>
+
   <select id="countAll" resultType="int">
     select
       count(*)
