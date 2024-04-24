@@ -16,6 +16,7 @@ public interface RecruitMemberDao {
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
 
+  // 글 작성자를 recruit_member에 추가
   void addWriter(
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);

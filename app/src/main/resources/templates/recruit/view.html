@@ -81,7 +81,7 @@
     <button>수정</button>
     [<a data-th-href="@{delete(recruitBoardId=*{recruitBoardId})}" href="delete.html">삭제</a>]
     [<a data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
-    <div data-th-if="${loginUser.memberId != 0}" style="display:inline"> <!--로그인상태일 때,-->
+    <div data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
       <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
         <button type="button">신청하기</button></a>
       <div data-th-if="${recruitMember} != null" style="display:inline">

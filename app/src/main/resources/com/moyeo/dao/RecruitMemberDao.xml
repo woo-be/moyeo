@@ -39,6 +39,7 @@
         #{memberId})
   </insert>
 
+  <!--글 작성자를 recruit_member에 state=true로 추가-->
   <insert id="addWriter" parameterType="int">
     insert
     into
