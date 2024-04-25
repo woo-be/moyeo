@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <title>WebSocket Chat</title>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <!--  채팅창 크기  -->
   <style>
     .chat-container {
       width: 400px;
@@ -19,7 +21,7 @@
     }
   </style>
 </head>
-<body>
+<body data-th-fragment="charForm">
   <div class="chat-container" id="chatContainer"></div>
 
   <label for="recruitBoardId"></label>
