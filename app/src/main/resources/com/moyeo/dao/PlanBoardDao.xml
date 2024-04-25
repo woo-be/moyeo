@@ -53,8 +53,9 @@
     #{content},
     #{tripDate},
     #{tripOrder},
-    1,
-    1)
+    #{latitude},
+    #{longitude}
+    )
   </insert>
 
   <update id="update" parameterType="PlanBoard">
