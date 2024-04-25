@@ -44,26 +44,15 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="pinModalLabel">게시물 저장</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          <div>
-            <label for="tripOrder" class="form-label">순서</label>
-            <input type="text" class="form-control" id="tripOrder" placeholder="게시물 내용을 입력하세요">
-          </div>
-          <div>
-            <label for="postTitle" class="form-label">목적지</label>
-            <input type="text" class="form-control" id="postTitle" placeholder="게시물 제목을 입력하세요">
-          </div>
-          <div>
-            <label for="postContent" class="form-label">게시물 내용</label>
-            <input type="text" class="form-control" id="postContent" placeholder="게시물 내용을 입력하세요">
-          </div>
+          ...
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">삭제</button>
-          <button type="button" class="btn btn-primary" id="savePost">저장</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="markerDelete(this)">삭제</button>
+          <button type="button" class="btn btn-primary">저장</button>
         </div>
       </div>
     </div>
