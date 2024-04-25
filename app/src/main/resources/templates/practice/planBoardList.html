@@ -36,6 +36,7 @@
   <div id="map" style="width:500px;height:400px;">지도</div>
   <div data-th-replace="chat/form :: charForm">채팅</div>
   <input type="hidden" readonly id="recruitBoardId" data-th-value="${recruitBoardId}">
+  <input type="hidden" readonly id="tripDate" data-th-value="${date}">
   <input type="hidden" readonly id="nickname" data-th-value="${nickname}">
 
 
@@ -44,57 +45,127 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <h5 class="modal-title" id="exampleModalLabel">게시물 저장</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
-          ...
+          <div>
+            <label for="tripOrder" class="form-label">순서</label>
+            <input type="text" class="form-control" id="tripOrder" placeholder="게시물 내용을 입력하세요">
+          </div>
+          <div>
+            <label for="postTitle" class="form-label">목적지</label>
+            <input type="text" class="form-control" id="postTitle" placeholder="게시물 제목을 입력하세요">
+          </div>
+          <div>
+            <label for="postContent" class="form-label">게시물 내용</label>
+            <input type="text" class="form-control" id="postContent" placeholder="게시물 내용을 입력하세요">
+          </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="markerDelete(this)">삭제</button>
-          <button type="button" class="btn btn-primary">저장</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="deleteButton">삭제</button>
+          <button type="button" class="btn btn-primary" id="addButton">저장</button>
         </div>
       </div>
     </div>
   </div>
+
 
 </body>
 
 <script>
   var t = [];
 
-  var map = new naver.maps.Map('map', {
-    center: new naver.maps.LatLng(37.3700065, 127.121359),
-    zoom: 14
-});
+ var map = new naver.maps.Map('map', {
+   center: new naver.maps.LatLng(37.3700065, 127.121359),
+   zoom: 14
+ });
 
-var polyline = new naver.maps.Polyline({
-    map: map,
-    strokeColor: '#5347AA',
-    strokeWeight: 2
-});
+ var polyline = new naver.maps.Polyline({
+   map: map,
+   strokeColor: '#5347AA',
+   strokeWeight: 2
+ });
 
-naver.maps.Event.addListener(map, 'click', function(e) {
+ naver.maps.Event.addListener(map, 'click', function(e) {
 
-    var point = e.coord;
+   var point = e.coord;
 
-    function markerDelete(marker) {
-      marker.setMap(null);
-    }
+   // 마커 생성
+   var mark = new naver.maps.Marker({
+     map: map,
+     position: point
+   });
 
-    var mark = new naver.maps.Marker({
-      map: map,
-      position: point
+
+   // 마커 클릭
+   mark.addListener('click', function() {
+
+    // 이 부분에 일정 정보를 가지고 와야함
+<!---->
+<!---->
+<!--
+
+
+
+-->
+     $('#markerModal').modal('show');
+
+   });
+
+   // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
+   $('#deleteButton').click( function() {
+     markerDelete(mark);
+     $('#markerModal').modal('hide');
+   });
+
+   // 마커를 삭제할 때 호출되는 함수
+   function markerDelete(marker) {
+     marker.setMap(null);
+  }
+
+
+
+
+
+  // 저장 버튼
+  var addButton = $('#addButton');
+  addButton.click( function() {
+
+     // 컨트롤러에게 보낼 객체 준비
+     var tripOrder = $('#tripOrder').val();
+     var postTitle = $('#postTitle').val();
+     var postContent = $('#postContent').val();
+     var recruitBoardId = $('#recruitBoardId').val();
+     var tripDate = $('#tripDate').val();
+     var longitude = point.lng();
+     var latitude = point.lat();
+
+    let planBoard = new FormData();
+
+     planBoard.append("tripOrder", tripOrder)
+     planBoard.append("title", postTitle)
+     planBoard.append("content", postContent)
+     planBoard.append("recruitBoardId", recruitBoardId)
+     planBoard.append("tripDate", tripDate)
+     planBoard.append("latitude", latitude)
+     planBoard.append("longitude", longitude)
+
+     console.log(planBoard);
+
+     // 컨트롤러에게 요청
+      $.ajax({
+        url: '/plan/add',
+        type: 'POST',
+        contentType: false,
+       processData: false,
+        data:planBoard
+      })
+
     });
 
-    mark.addListener('click', function() {
 
-      // Bootstrap 모달을 표시합니다.
-      $('#markerModal').modal('show');
-
-    });
-
-});
+ });
 </script>
 
 </html>
