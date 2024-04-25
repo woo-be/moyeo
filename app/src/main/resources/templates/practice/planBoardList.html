@@ -5,26 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>계획</title>
 
-  <!-- 네이버 지도 API -->
-<!--  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">-->
-  <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
-  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
-<!--  <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-<!--  채팅창 크기  -->
-  <style>
-    .chat-container {
-      width: 400px;
-      height: 300px;
-      border: 1px solid #ccc;
-      overflow-y: scroll;
-    }
-    .chat-message {
-      padding: 5px;
-      margin-bottom: 5px;
-      background-color: #f2f2f2;
-      border-radius: 5px;
-    }
+    <!-- 네이버 지도 API -->
+  <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">-->
+    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>-->
+
+  <!--  채팅창 크기  -->
+    <style>
+      .chat-container {
+        width: 400px;
+        height: 300px;
+        border: 1px solid #ccc;
+        overflow-y: scroll;
+      }
+      .chat-message {
+        padding: 5px;
+        margin-bottom: 5px;
+        background-color: #f2f2f2;
+        border-radius: 5px;
+      }
   </style>
 
 </head>
@@ -37,22 +40,24 @@
 
 
   <!-- 모달 창 -->
-  <div class="modal fade" id="markerModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div id="markerModal" class="modal fade" tabindex="-1" style="display:none" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">알림</h1>
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div id="modal-body" class="modal-body">
-
+        <div class="modal-body">
+          ...
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" onclick="markerDelete(this)">삭제</button>
+          <button type="button" class="btn btn-primary">저장</button>
         </div>
       </div>
     </div>
   </div>
+
 </body>
 
 <script>
@@ -71,9 +76,11 @@ var polyline = new naver.maps.Polyline({
 
 naver.maps.Event.addListener(map, 'click', function(e) {
 
-
     var point = e.coord;
 
+    function markerDelete(marker) {
+      marker.setMap(null);
+    }
 
     var mark = new naver.maps.Marker({
       map: map,
@@ -81,11 +88,10 @@ naver.maps.Event.addListener(map, 'click', function(e) {
     });
 
     mark.addListener('click', function() {
-      const markerModal = () => {
-<!--        markerInfo();-->
-        const myModal = new bootstrap.Modal(document.getElementById('markerModal'), {})
-        myModal.show();
-      }
+
+      // Bootstrap 모달을 표시합니다.
+      $('#markerModal').modal('show');
+
     });
 
 });
