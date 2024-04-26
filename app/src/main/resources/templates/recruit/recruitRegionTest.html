@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>모여</title>
+</head>
+<body>
+<div class="list-group" data-th-fragment="recruitRegionList" style="width:200px">
+  <ul id="recruitRegion" style="width: 200px;">
+    <a data-th-href="@{list(themeId=${themeId})}">
+        <button class="btn btn-outline-primary">전체</button>
+    </a>
+    <a data-th-href="@{list(regionId=1,themeId=${themeId})}">
+      <button class="btn btn-outline-primary" >서울특별시</button>
+    </a>
+    <a data-th-href="@{list(regionId=2,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">부산광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=3,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">대구광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=4,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">인천광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=5,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">광주광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=6,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">대전광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=7,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">울산광역시</button>
+    </a>
+    <a data-th-href="@{list(regionId=8,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">경기도</button>
+    </a>
+    <a data-th-href="@{list(regionId=9,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">충청북도</button>
+    </a>
+    <a data-th-href="@{list(regionId=10,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">충청남도</button>
+    </a>
+    <a data-th-href="@{list(regionId=11,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">강원도</button>
+    </a>
+    <a data-th-href="@{list(regionId=12,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">전라북도</button>
+    </a>
+    <a data-th-href="@{list(regionId=13,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">전라남도</button>
+    </a>
+    <a data-th-href="@{list(regionId=14,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">경상북도</button>
+    </a>
+    <a data-th-href="@{list(regionId=15,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">경상남도</button>
+    </a>
+    <a data-th-href="@{list(regionId=16,themeId=${themeId})}">
+      <button class="btn btn-outline-primary">제주도</button>
+    </a>
+  </ul>
+</div>
+</body>
+</html>
+
+
+

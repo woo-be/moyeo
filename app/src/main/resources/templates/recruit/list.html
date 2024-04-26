@@ -4,90 +4,166 @@
   <meta charset='UTF-8'>
   <title>모여</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
   <style>
-    .footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
+    .bd-placeholder-img {
+      font-size: 1.125rem;
+      text-anchor: middle;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      user-select: none;
+    }
+
+    @media (min-width: 768px) {
+      .bd-placeholder-img-lg {
+        font-size: 3.5rem;
+      }
     }
   </style>
-</head>
 
-<div data-th-replace="header :: header">머리말</div>
+  <link href="/css/dashboard.css" rel="stylesheet">
+</head>
 
 <body>
 
-<div data-th-replace="recruit/recruitregion :: recruitregionlist" data-th-object="${regionId}">지역</div>
-<div data-th-replace="recruit/recruittheme :: recruitthemelist" data-th-object="${themeId}">지역</div>
 
-<div>
-  <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+<div class="container-fluid">
 
-  <table border='1'>
-    <thead>
-    <tr>
-      <th>번호</th>
-      <th>제목</th>
-      <th>작성자</th>
-      <th>모집현황</th>
-      <th>모집상태</th>
-      <th>작성일자</th>
-      <th>조회수</th>
-    </tr>
-    </thead>
+  <div class="row sticky-top">
+    <div data-th-replace="header :: header">머리말</div>
+  </div>
 
-    <tbody>
-    <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
-      <td data-th-text="*{recruitBoardId}">1</td>
-      <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
-      <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-      <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
-      <td data-th-text="*{writer.nickname}">홍길동</td>
-      <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-      <td data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
-      <td data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
-      <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
-      <td data-th-text="*{views}">12</td>
-    </tr>
-    </tbody>
+  <div class="row justify-content-md-center min-vh-100">
 
-  </table>
+    <div fName="sidebar" class="col col-lg-2 p-0">
+      <nav id="sidebarMenu"
+           class="d-inline-flex flex-row col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+        <div class="row pt-5">
+          <div class="col-6">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span><h6>Region</h6></span>
+            </h6>
+            <ui data-th-replace="recruit/recruitRegionTest2 :: recruitRegionList2"
+                data-th-object="${regionId}">
+            </ui>
+          </div>
+          <div class="col-6">
+            <h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+              <span><h6>Theme</h6></span>
+            </h6>
+            <ui data-th-replace="recruit/recruitThemeTest2 :: recruitThemeList2"
+                data-th-object="${themeId}">
+            </ui>
+          </div>
+        </div>
+      </nav>
+    </div>
 
-  <p>
-    [
-    <a data-th-if="${pageNo <= 1}">이전</a>
-    <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
-       data-th-if="${pageNo > 1}"
-       href="list">이전</a>
-    ]
-    [
-    <a data-th-if="${pageNo >= numOfPage}">다음</a>
-    <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
-       data-th-if="${pageNo < numOfPage}"
-       href="list">다음</a>
-    ]
-  </p>
+    <div fName="content" class="col-7">
+      <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+
+      <table class="table table-striped table-hover table-bordered">
+        <thead>
+        <tr>
+          <th>번호</th>
+          <th class="col-">제목</th>
+          <th>작성자</th>
+          <th>모집현황</th>
+          <th>모집상태</th>
+          <th>작성일자</th>
+          <th>조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
+          <td data-th-text="*{recruitBoardId}">1</td>
+          <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
+          <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
+          <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
+                 data-th-text="*{title}" href="view.html">제목입니다</a></td>
+          <td data-th-text="*{writer.nickname}">홍길동</td>
+          <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+          <td data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
+          <td data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
+          <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+          <!--data-th-value => data-th-text -->
+          <td data-th-text="*{views}">12</td>
+        </tr>
+        </tbody>
+      </table>
+
+      <p>
+        [
+        <a data-th-if="${pageNo <= 1}">이전</a>
+        <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+           data-th-if="${pageNo > 1}"
+           href="list">이전</a>
+        ]
+        [
+        <a data-th-if="${pageNo >= numOfPage}">다음</a>
+        <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+           data-th-if="${pageNo < numOfPage}"
+           href="list">다음</a>
+        ]
+      <nav aria-label="Page navigation">
+        <ul class="pagination">
+          <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
+              class="page-link">Previous</a></li>
+          <li class="page-item"><a class="page-link"
+                                   data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                                   data-th-if="${pageNo > 1}">Previous</a></li>
+          <li class="page-item"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
+          </li>
+          <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
+                                                                      data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}">Next</a>
+          </li>
+        </ul>
+      </nav>
+      </p>
+
+      <!-- 검색 -->
+      <div>
+        <form method="get" action="list.html" data-th-action="@{list}">
+          <input type="hidden" name="regionId" data-th-value="${regionId}">
+          <input type="hidden" name="themeId" data-th-value="${themeId}">
+          <label for="filter"></label>
+          <select name="filter" id="filter">
+            <option value="title">제목</option>
+            <option value="content">내용</option>
+            <option value="nickname">작성자</option>
+          </select>
+          <input type="text" name="keyword" data-th-value="${keyword}">
+          <input type="submit" data-th-value="검색">
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row sticky-bottom">
+    <div data-th-replace="footer :: footer">꼬리말</div>
+  </div>
 </div>
+</body>
 
-<!-- 검색 -->
-<div>
-  <form method="get" action="list.html" data-th-action="@{list}">
-    <input type="hidden" name="regionId" data-th-value="${regionId}">
-    <input type="hidden" name="themeId" data-th-value="${themeId}">
-    <label for="filter"></label>
-    <select name="filter" id="filter">
-      <option value="title">제목</option>
-      <option value="content">내용</option>
-      <option value="nickname">작성자</option>
-    </select>
-    <input type="text" name="keyword" data-th-value="${keyword}">
-    <input type="submit" data-th-value="검색">
-  </form>
-</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/feather-icons@4.28.0/dist/feather.min.js"
+        integrity="sha384-uO3SXW5IuS1ZpFPKugNNWqTZRRglnUJK6UAZ/gxOX80nxEkN9NcGZTftn6RzhGWE"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"
+        integrity="sha384-zNy6FEbO50N+Cg5wap8IKA4M/ZnLJgzc6w2NqACZaK0u0FXfOWRRJOnQtpZun8ha"
+        crossorigin="anonymous"></script>
+<script src="/js/dashboard.js"></script>
+
+</html>
 
 <!-- 검색 필터 기본값 설정 자바 스크립트 -->
 <script>
@@ -111,7 +187,3 @@
   }
 });
 </script>
-
-</body>
-<div data-th-replace="footer :: footer">꼬리말</div>
-</html>

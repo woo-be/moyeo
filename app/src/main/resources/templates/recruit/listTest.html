@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <style>
+    .container {  display: grid;
+      grid-template-columns: 1fr 3fr;
+      grid-template-rows: 100px 1000px 100px;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "header header"
+        "sidebar context"
+        "footer footer";
+    }
+
+    .header {  display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-auto-flow: row dense;
+      justify-items: stretch;
+      grid-template-areas:
+        ".";
+      grid-area: header;
+      border: 1px solid black;
+      height: 100px;
+      padding: 5px;
+    }
+
+    .sidebar {  display: grid;
+      grid-template-columns: 1fr 2fr;
+      grid-template-rows: 1fr;
+      gap: 0px 0px;
+      grid-auto-flow: row;
+      grid-template-areas:
+        "left right";
+      grid-area: sidebar;
+    }
+
+    .left { grid-area: left;
+      border: 1px solid black;
+      border-left : 2px solid black;
+      width: auto;
+     }
+
+    .right { grid-area: right;
+      border: 1px solid black;
+      width: 130px;
+    }
+
+    .context { grid-area: context;
+      border: 1px solid black;
+      padding: 10px;
+      min-height: 80vh;
+    }
+
+    .footer { grid-area: footer;
+      border: 1px solid black;
+    }
+
+    body {
+      border: 1px;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header"><div data-th-replace="header :: header">머리말</div></div>
+
+  <div class="sidebar">
+    <div class="left">
+      <div data-th-replace="recruit/recruitregion :: recruitregionlist" data-th-object="${regionId}">지역</div>
+    </div>
+    <div class="right">
+      <div data-th-replace="recruit/recruittheme :: recruitthemelist" data-th-object="${themeId}">테마</div>
+    </div>
+  </div>
+
+  <div class="context">
+    <a data-th-href="@{/recruit/addForm}" href="form">새 과제</a>
+
+    <table class="table table-striped table-hover table-bordered">
+      <thead>
+      <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>작성자</th>
+        <th>모집현황</th>
+        <th>모집상태</th>
+        <th>작성일자</th>
+        <th>조회수</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
+        <td data-th-text="*{recruitBoardId}">1</td>
+        <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
+        <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
+        <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+        <td data-th-text="*{writer.nickname}">홍길동</td>
+        <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+        <td data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
+        <td data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
+        <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
+        <td data-th-text="*{views}">12</td>
+      </tr>
+      </tbody>
+
+    </table>
+
+    <p>
+      [
+      <a data-th-if="${pageNo <= 1}">이전</a>
+      <a data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+         data-th-if="${pageNo > 1}"
+         href="list">이전</a>
+      ]
+      [
+      <a data-th-if="${pageNo >= numOfPage}">다음</a>
+      <a data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+         data-th-if="${pageNo < numOfPage}"
+         href="list">다음</a>
+      ]
+    </p>
+
+    <!-- 검색 -->
+    <div>
+      <form method="get" action="list.html" data-th-action="@{list}">
+        <input type="hidden" name="regionId" data-th-value="${regionId}">
+        <input type="hidden" name="themeId" data-th-value="${themeId}">
+        <label for="filter"></label>
+        <select name="filter" id="filter">
+          <option value="title">제목</option>
+          <option value="content">내용</option>
+          <option value="nickname">작성자</option>
+        </select>
+        <input type="text" name="keyword" data-th-value="${keyword}">
+        <input type="submit" data-th-value="검색">
+      </form>
+    </div>
+</div>
+
+<!-- 검색 필터 기본값 설정 자바 스크립트 -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  let dropdown = document.getElementById("filter");
+  let condition = "[[${filter}]]";
+
+  switch (condition) {
+    case "title":
+      dropdown.value = "title";
+      break;
+    case "content":
+      dropdown.value = "content";
+      break;
+    case "nickname":
+      dropdown.value = "nickname";
+      break;
+    default:
+      dropdown.value = "title";
+      break;
+  }
+});
+</script>
+
+  <div class="footer"><div data-th-replace="footer :: footer">꼬리말</div></div>
+</div>
+</body>
+</html>
