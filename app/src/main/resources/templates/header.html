@@ -80,13 +80,13 @@
     <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
       <button type="button" class="btn btn-primary me-2">로그아웃</button>
     </a>
-  <div class="d-flex justify-content-end">
-    <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
+  <div class="d-flex justify-content-end" data-th-unless="${session.loginUser != null}">
+    <a data-th-href="@{/auth/form}">
       <button type="button" class="btn btn-outline-primary me-2">로그인</button>
     </a>
-      <form data-th-action="@{auth/login/google}" method="post">
-        <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
-      </form>
+    <form data-th-action="@{auth/login/google}" method="post">
+      <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
+    </form>
   </div>
 
 

@@ -5,6 +5,7 @@ import com.moyeo.service.PlanBoardService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
+import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import java.util.ArrayList;
@@ -39,21 +40,29 @@ public class PlanBoardController {
   private String bucketName;
 
   @GetMapping("list")
-  public void list(
+  @ResponseBody
+  public List<Pin> list(
       int recruitBoardId,
+      String tripDate,
       Model model) {
-    List<PlanBoard> list;
-    list = planBoardService.list(recruitBoardId);
+    List<Pin> list;
+    list = planBoardService.pinList(recruitBoardId, tripDate);
 
     log.debug("planBoard = " + list);
-    model.addAttribute("list", list);
-    model.addAttribute("recruitBoardId", recruitBoardId);
+//    model.addAttribute("list", list);
+//    model.addAttribute("recruitBoardId", recruitBoardId);
+    return list;
   }
 
   @GetMapping("view")
-  public void view(int planBoardId, Model model) {
-    model.addAttribute("planBoard", planBoardService.get(planBoardId));
+  @ResponseBody
+  public PlanBoard view(int recruitBoardId, String tripDate, double latitude, double longitude) {
+    PlanBoard planboard = planBoardService.get(recruitBoardId, tripDate, latitude, longitude);
+    log.debug(planboard);
+    return planboard;
   }
+
+
 
 
   @GetMapping("form")
