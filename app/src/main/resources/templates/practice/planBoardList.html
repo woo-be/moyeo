@@ -75,97 +75,156 @@
 
 <script>
   var t = [];
+<!--  var tripOrder = document.getElementById('tripOrder');-->
+<!--  var postTitle = document.getElementById('postTitle');-->
+<!--  var postContent = document.getElementById('postContent');-->
 
- var map = new naver.maps.Map('map', {
-   center: new naver.maps.LatLng(37.3700065, 127.121359),
-   zoom: 14
- });
+  var tripOrder = $('#tripOrder');
+  var postTitle = $('#postTitle');
+  var postContent = $('#postContent');
 
- var polyline = new naver.maps.Polyline({
-   map: map,
-   strokeColor: '#5347AA',
-   strokeWeight: 2
- });
+  var map = new naver.maps.Map('map', {
+    center: new naver.maps.LatLng(37.3700065, 127.121359),
+    zoom: 14
+  });
 
- naver.maps.Event.addListener(map, 'click', function(e) {
-
-   var point = e.coord;
-
-   // 마커 생성
-   var mark = new naver.maps.Marker({
-     map: map,
-     position: point
-   });
+ // 핀끼리 선 이어주는 부분
+ <!-- var polyline = new naver.maps.Polyline({-->
+ <!--   map: map,-->
+ <!--   strokeColor: '#5347AA',-->
+ <!--   strokeWeight: 2-->
+ <!-- });-->
 
 
-   // 마커 클릭
-   mark.addListener('click', function() {
+ // 페이지 로드시 저장된 핀 정보를 가져와 지도에 표시
+  $(document).ready(function() {
 
-    // 이 부분에 일정 정보를 가지고 와야함
-<!---->
-<!---->
-<!--
-
-
-
--->
-     $('#markerModal').modal('show');
-
-   });
-
-   // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
-   $('#deleteButton').click( function() {
-     markerDelete(mark);
-     $('#markerModal').modal('hide');
-   });
-
-   // 마커를 삭제할 때 호출되는 함수
-   function markerDelete(marker) {
-     marker.setMap(null);
-  }
-
-
-
-
-
-  // 저장 버튼
-  var addButton = $('#addButton');
-  addButton.click( function() {
-
-     // 컨트롤러에게 보낼 객체 준비
-     var tripOrder = $('#tripOrder').val();
-     var postTitle = $('#postTitle').val();
-     var postContent = $('#postContent').val();
+     // 이전 페이지에서 recruitBoardId를 받아오는 부분 추가
      var recruitBoardId = $('#recruitBoardId').val();
      var tripDate = $('#tripDate').val();
-     var longitude = point.lng();
-     var latitude = point.lat();
 
-    let planBoard = new FormData();
+    $.ajax({
+      url: '/plan/list?recruitBoardId=' + recruitBoardId + '&tripDate=' + tripDate,
+      type: 'GET',
+      success: function(data) {
+        data.forEach(function(pin) {
+          var marker = new naver.maps.Marker({
+            map: map,
+            position: new naver.maps.LatLng(pin.latitude, pin.longitude)
+          });
+              // 마커 클릭
+               marker.addListener('click', function() {
+                 $.ajax({
+                   url: '/plan/view?recruitBoardId=' + recruitBoardId + '&tripDate=' + tripDate + '&latitude=' + pin.latitude + '&longitude=' + pin.longitude,
+                   type: 'GET',
+                   contentType: false,
+                   processData: false
+                 }).done(function(planBoard) {
+                    console.log(planBoard);
+                    console.log(planBoard.tripOrder);
+                    console.log(planBoard.title);
+                    console.log(planBoard.content);
 
-     planBoard.append("tripOrder", tripOrder)
-     planBoard.append("title", postTitle)
-     planBoard.append("content", postContent)
-     planBoard.append("recruitBoardId", recruitBoardId)
-     planBoard.append("tripDate", tripDate)
-     planBoard.append("latitude", latitude)
-     planBoard.append("longitude", longitude)
+                    $('#markerModal').modal('show');
+<!--                    tripOrder.value = planBoard.tripOrder;-->
+<!--                    postTitle.value = planBoard.title;-->
+<!--                    postContent.value = planBoard.content;-->
+                        tripOrder.val(planBoard.tripOrder);
+                        postTitle.val(planBoard.title);
+                        postContent.val(planBoard.content);
+                 });
+               });
 
-     console.log(planBoard);
+               // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
+               $('#deleteButton').click( function() {
+                 markerDelete(mark);
+                 $('#markerModal').modal('hide');
+               });
 
-     // 컨트롤러에게 요청
-      $.ajax({
-        url: '/plan/add',
-        type: 'POST',
-        contentType: false,
-       processData: false,
-        data:planBoard
-      })
+               // 마커를 삭제할 때 호출되는 함수
+               function markerDelete(marker) {
+                 marker.setMap(null);
+               }
+        });
+      }
+    });
+  });
+
+
+  naver.maps.Event.addListener(map, 'click', function(e) {
+
+    var point = e.coord;
+
+    // 마커 생성
+    var mark = new naver.maps.Marker({
+      map: map,
+      position: point
+    });
+
+     // 클릭한 위치의 위도와 경도를 히든 인풋에 설정
+     $('#latitude').val(point.lat());
+     $('#longitude').val(point.lng());
+
+
+    // 마커 클릭
+    mark.addListener('click', function() {
+
+      $('#markerModal').modal('show');
 
     });
 
+    // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
+    $('#deleteButton').click( function() {
+      markerDelete(mark);
+      $('#markerModal').modal('hide');
+    });
 
- });
+    // 마커를 삭제할 때 호출되는 함수
+    function markerDelete(marker) {
+      marker.setMap(null);
+    }
+
+
+
+     // 저장 버튼
+     var addButton = $('#addButton');
+     addButton.click( function() {
+
+      // 컨트롤러에게 보낼 객체 준비
+      var tripOrder = $('#tripOrder').val();
+      var postTitle = $('#postTitle').val();
+      var postContent = $('#postContent').val();
+      var recruitBoardId = $('#recruitBoardId').val();
+      var tripDate = $('#tripDate').val();
+      var longitude = point.lng();
+      var latitude = point.lat();
+
+     let planBoard = new FormData();
+
+      planBoard.append("tripOrder", tripOrder)
+      planBoard.append("title", postTitle)
+      planBoard.append("content", postContent)
+      planBoard.append("recruitBoardId", recruitBoardId)
+      planBoard.append("tripDate", tripDate)
+      planBoard.append("latitude", latitude)
+      planBoard.append("longitude", longitude)
+
+      console.log(planBoard);
+
+      // 컨트롤러에게 요청
+       $.ajax({
+         url: '/plan/add',
+         type: 'POST',
+         contentType: false,
+         processData: false,
+         data:planBoard
+       }).done(function() {
+         $('#markerModal').modal('hide'); // 저장 후 모달 창 닫기
+       });
+
+
+     });
+  });
 </script>
 
 </html>

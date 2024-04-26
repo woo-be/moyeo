@@ -17,6 +17,12 @@
 
   </resultMap>
 
+  <resultMap id="PinMap" type="Pin">
+    <id column="plan_board_id" property="planBoardId"/>
+    <result column="latitude" property="latitude"/>
+    <result column="longitude" property="longitude"/>
+  </resultMap>
+
   <select id="findAll" resultMap="PlanBoardMap" parameterType="int">
     select
       *
@@ -78,4 +84,31 @@
     and
       recruit_board_id=#{recruitBoardId}
   </delete>
+
+
+  <select id="findByPin" resultMap="PinMap">
+    select
+    plan_board_id,
+    latitude,
+    longitude
+    from
+    plan_board
+    where
+    recruit_board_id = #{recruitBoardId}
+    AND trip_date = #{tripDate}
+  </select>
+
+  <select id="findByPlanBoard" resultMap="PlanBoardMap">
+    select
+    *
+    from
+    plan_board
+    where
+    recruit_board_id=#{recruitBoardId}
+    AND trip_date=#{tripDate}
+    AND latitude=#{latitude}
+    AND longitude=#{longitude}
+  </select>
+
+
 </mapper>
