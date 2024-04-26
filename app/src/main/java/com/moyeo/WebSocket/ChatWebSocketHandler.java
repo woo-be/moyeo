@@ -2,13 +2,20 @@ package com.moyeo.WebSocket;
 
 import java.util.HashSet;
 import java.util.Set;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
-public class ChatWebSocketHandler implements WebSocketHandler {
+@Slf4j
+@RequiredArgsConstructor
+@Component
+public class ChatWebSocketHandler extends TextWebSocketHandler {
 
   private static Set<WebSocketSession> sessions = new HashSet<>();
 
@@ -18,10 +25,16 @@ public class ChatWebSocketHandler implements WebSocketHandler {
   }
 
   @Override
-  public void handleMessage(WebSocketSession session, WebSocketMessage<?> message)
+  public void handleTextMessage(WebSocketSession session, TextMessage message /* WebSocketMessage<?> message*/)
       throws Exception {
+    String url = String.valueOf(session.getUri());
+    int index = url.indexOf("recruitBoardId");
+    int boardId = Integer.parseInt(url.substring(index+15));
+
     for (WebSocketSession s : sessions) {
-      s.sendMessage(new TextMessage((String) message.getPayload()));
+      // recruitId 같이 보내서 여기 팀 사람들한테는 무조건 보내주도록
+      // recruitid랑 html의 recruitboardid 같으면 받도록 함
+      s.sendMessage(new TextMessage(boardId + ") " + message.getPayload()));
     }
   }
 
