@@ -34,14 +34,15 @@
   <button type="button" onclick="sendMessage()">전송</button>
 
   <script type="text/javascript">
-    const socket = new WebSocket("ws://localhost:8888/chat");
+    let recruitBoardId = document.getElementById("recruitBoardId").value;
+    const socket = new WebSocket("ws://localhost:8888/chat?recruitBoardId=" + recruitBoardId);
 
+    // open: 커넥션이 제대로 만들어졌을 때 발생
     socket.onopen = function(event) {
       console.log("WebSocket 연결이 열렸습니다.");
     };
 
     <!--  이전에 메세지들을 불러와서 출력한다.  -->
-    let recruitBoardId = document.getElementById("recruitBoardId").value;
     $.ajax({
         url: '/chat/list?recruitBoardId='+recruitBoardId,
         type: 'GET',
@@ -64,20 +65,40 @@
           }
        });
 
-
+    // 데이터를 수신하였을 때 발생
     socket.onmessage = function(event) {
       var message = event.data;
-      var chatContainer = document.getElementById("chatContainer");
-      var messageElement = document.createElement("div");
-      messageElement.className = "chat-message";
-      messageElement.innerText = message;
-      chatContainer.appendChild(messageElement);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
+      console.log(message);
+
+      // 방 반호 num) 형태로 붙여줌 -> ) 이전 숫자 추출해서 수신 결과 걸러줌
+      let str = message.split(')');
+      if (recruitBoardId == str[0]){
+        // 방 번호 문자열 삭제
+        var index = message.indexOf(')');
+        message = message.slice(index + 1, message.length)
+
+        var chatContainer = document.getElementById("chatContainer");
+
+        // 새 div 생성해서 "chat-message" 클래스를 할당하고 텍스트 내용을 수신된 메시지로 설정
+        var messageElement = document.createElement("div");
+        messageElement.className = "chat-message";
+        messageElement.innerText = message;
+
+        // 생성된 div 요소를 chatContainer에 추가
+        chatContainer.appendChild(messageElement);
+
+        // 스크롤 위치를 아래쪽으로 이동
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }
     };
 
     function sendMessage() {
+      var boardId = document.getElementById("recruitBoardId").value;
       var inputMessage = document.getElementById("inputMessage").value;
       var nickname = document.getElementById("nickname").value;
+
+      //var talkMsg={"recruitBoardId" : boardId, "nickname": nickname, "msg":inputMessage};
+      //socket.send(JSON.stringify(talkMsg));
       socket.send(nickname+":"+inputMessage);
 
 <!--  메세지를 DB에 넣기 위해 팀 번호(=글 번호)와 멤버번호를 이용해서 저장한다.   -->
