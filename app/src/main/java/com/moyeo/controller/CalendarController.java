@@ -30,12 +30,12 @@ public class CalendarController {
     model.addAttribute("team", team);
   }
 
-//  @GetMapping("planBoardList")
-//  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session) {
-//    Member loginUser = (Member) session.getAttribute("loginUser");
-//    log.debug(loginUser);
-//    model.addAttribute("recruitBoardId", recruitBoardId);
-//    model.addAttribute("date", date);
-//    model.addAttribute("nickname", loginUser.getNickname());
-//  }
+  @GetMapping("planBoardList")
+  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    log.debug(loginUser);
+    model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("date", date);
+    model.addAttribute("nickname", loginUser.getNickname());
+  }
 }
