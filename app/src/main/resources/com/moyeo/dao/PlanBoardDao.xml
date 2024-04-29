@@ -85,6 +85,16 @@
       recruit_board_id=#{recruitBoardId}
   </delete>
 
+  <select id="findByTripDate" resultMap="PlanBoardMap">
+    select
+      *
+    from
+      plan_board
+    where
+      recruit_board_id=#{recruitBoardId}
+    and
+      trip_date=#{tripDate}
+  </select>
 
   <select id="findByPin" resultMap="PinMap">
     select
@@ -109,6 +119,5 @@
     AND latitude=#{latitude}
     AND longitude=#{longitude}
   </select>
-
 
 </mapper>

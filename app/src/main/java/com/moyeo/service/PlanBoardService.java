@@ -4,7 +4,9 @@ import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import java.awt.Panel;
+import java.sql.Date;
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 public interface PlanBoardService {
 
@@ -25,7 +27,9 @@ public interface PlanBoardService {
 
   int deletePlanPhoto(int planPhotoId);
 
-  List<Pin> pinList(int recruitBoardId, String tripDate);
 
+  List<PlanBoard> findByTripDate(@Param("tripDate")String tripDate, @Param("recruitBoardId")int recruitBoardId);
+
+  List<Pin> pinList(int recruitBoardId, String tripDate);
 
 }

@@ -21,7 +21,7 @@ public class RecruitMember implements Serializable {
   private int memberId;            // 회원 식별자
   private Boolean state;            // 여행 멤버 상태
 
-  private Date createdDate;             // 신청일자
+  private LocalDateTime createdDate;             // 신청일자
 
   private Member member;
 }
