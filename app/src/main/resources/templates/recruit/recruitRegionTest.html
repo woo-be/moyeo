@@ -8,61 +8,29 @@
   <title>모여</title>
 </head>
 <body>
-<div class="list-group" data-th-fragment="recruitRegionList" style="width:200px">
-  <ul id="recruitRegion" style="width: 200px;">
-    <a data-th-href="@{list(themeId=${themeId})}">
-        <button class="btn btn-outline-primary">전체</button>
-    </a>
-    <a data-th-href="@{list(regionId=1,themeId=${themeId})}">
-      <button class="btn btn-outline-primary" >서울특별시</button>
-    </a>
-    <a data-th-href="@{list(regionId=2,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">부산광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=3,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">대구광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=4,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">인천광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=5,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">광주광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=6,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">대전광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=7,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">울산광역시</button>
-    </a>
-    <a data-th-href="@{list(regionId=8,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">경기도</button>
-    </a>
-    <a data-th-href="@{list(regionId=9,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">충청북도</button>
-    </a>
-    <a data-th-href="@{list(regionId=10,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">충청남도</button>
-    </a>
-    <a data-th-href="@{list(regionId=11,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">강원도</button>
-    </a>
-    <a data-th-href="@{list(regionId=12,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">전라북도</button>
-    </a>
-    <a data-th-href="@{list(regionId=13,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">전라남도</button>
-    </a>
-    <a data-th-href="@{list(regionId=14,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">경상북도</button>
-    </a>
-    <a data-th-href="@{list(regionId=15,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">경상남도</button>
-    </a>
-    <a data-th-href="@{list(regionId=16,themeId=${themeId})}">
-      <button class="btn btn-outline-primary">제주도</button>
-    </a>
+<aside data-th-fragment="recruitRegionList" style="float:left; padding-right:10px">
+  <ul id="recruitRegion" style="list-style: none;">
+    <!-- 이거 리팩토링해야됨... -->
+    <li><a data-th-href="@{list(themeId=${themeId})}">전체</a></li>
+    <li><a data-th-href="@{list(regionId=1,themeId=${themeId})}">서울특별시</a></li>
+    <li><a data-th-href="@{list(regionId=2,themeId=${themeId})}">부산광역시</a></li>
+    <li><a data-th-href="@{list(regionId=3,themeId=${themeId})}">대구광역시</a></li>
+    <li><a data-th-href="@{list(regionId=4,themeId=${themeId})}">인천광역시</a></li>
+    <li><a data-th-href="@{list(regionId=5,themeId=${themeId})}">광주광역시</a></li>
+    <li><a data-th-href="@{list(regionId=6,themeId=${themeId})}">대전광역시</a></li>
+    <li><a data-th-href="@{list(regionId=7,themeId=${themeId})}">울산광역시</a></li>
+    <li><a data-th-href="@{list(regionId=8,themeId=${themeId})}">세종특별시</a></li>
+    <li><a data-th-href="@{list(regionId=9,themeId=${themeId})}">경기도</a></li>
+    <li><a data-th-href="@{list(regionId=10,themeId=${themeId})}">충청북도</a></li>
+    <li><a data-th-href="@{list(regionId=11,themeId=${themeId})}">충청남도</a></li>
+    <li><a data-th-href="@{list(regionId=12,themeId=${themeId})}">강원도</a></li>
+    <li><a data-th-href="@{list(regionId=13,themeId=${themeId})}">전라북도</a></li>
+    <li><a data-th-href="@{list(regionId=14,themeId=${themeId})}">전라남도</a></li>
+    <li><a data-th-href="@{list(regionId=15,themeId=${themeId})}">경상북도</a></li>
+    <li><a data-th-href="@{list(regionId=16,themeId=${themeId})}">경상남도</a></li>
+    <li><a data-th-href="@{list(regionId=17,themeId=${themeId})}">제주도</a></li>
   </ul>
-</div>
+</aside>
 </body>
 </html>
 
