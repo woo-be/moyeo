@@ -102,6 +102,7 @@ public class DefaultPlanBoardService implements PlanBoardService {
 //    paramMap.put("tripDate", stringifyTripDate);
 
     return planBoardDao.findByTripDate(tripDate, recruitBoardId);
+  }
 
   public List<Pin> pinList(int recruitBoardId, String tripDate) {
     return planBoardDao.findByPin(recruitBoardId, tripDate);
