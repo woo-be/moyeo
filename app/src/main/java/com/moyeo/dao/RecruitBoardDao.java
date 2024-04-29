@@ -37,4 +37,6 @@ public interface RecruitBoardDao {
 
   // 조회수 증가
   void plusViews(int boardId);
+
+  List<RecruitBoard> demoFindAll();
 }

@@ -22,4 +22,8 @@ public class App {
     @GetMapping("/home")
     public void home() {
     }
+
+    @GetMapping("/homedemo")
+    public void homedemo() {
+    }
 }

@@ -35,4 +35,6 @@ public interface ReviewBoardService {
   List<ReviewBoard> scrapList(int memberId, int pageNo, int pageSize);
 
   int countScrapByMember(@Param("memberId") int memberId);
+
+  List<ReviewBoard> findByCreatedDate();
 }

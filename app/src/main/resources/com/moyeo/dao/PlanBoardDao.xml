@@ -77,4 +77,15 @@
     and
       recruit_board_id=#{recruitBoardId}
   </delete>
+
+  <select id="findByTripDate" resultMap="PlanBoardMap">
+    select
+      *
+    from
+      plan_board
+    where
+      recruit_board_id=#{recruitBoardId}
+    and
+      trip_date=#{tripDate}
+  </select>
 </mapper>

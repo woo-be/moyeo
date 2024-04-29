@@ -25,8 +25,9 @@
     <div class="container">
       <tr data-th-each="recruitBoard : ${list}" data-th-object="${recruitBoard}">
         <div style='board: 1px solid black; float:left'>
-          <a data-th-href="@{/plan/list(recruitBoardId=*{recruitBoardId})}" href="view.html">
-            <div style='board: 1px solid black; flex'>
+<!--          <a data-th-href="@{/plan/list(recruitBoardId=*{recruitBoardId})}" href="view.html">-->
+          <a data-th-href="@{/recruitMember/calendar(recruitBoardId=*{recruitBoardId})}" href="calendar.html">
+          <div style='board: 1px solid black; flex'>
               <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height="200" src="/static/img/default-review-photo.png">
             </div>
             <div class="work-info" style='board: 1px solid black; float:none'>

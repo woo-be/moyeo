@@ -35,4 +35,7 @@ public interface ReviewBoardDao {
   ReviewBoard get(int id);
 
   int countScrapByMember(int memberId);
+
+  //여행후기 최신게시글
+  List<ReviewBoard> findByCreatedDate();
 }

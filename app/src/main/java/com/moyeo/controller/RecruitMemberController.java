@@ -89,4 +89,27 @@ public class RecruitMemberController {
     return "redirect:/recruit/view?recruitBoardId=" + recruitBoardId;
   }
 
+  @GetMapping("calendar")
+  public void calendar(int recruitBoardId,
+      Model model,
+      HttpSession session
+      ) throws Exception {
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      session.setAttribute("message", "로그인이 필요한 서비스입니다.");
+      session.setAttribute("replaceUrl", "/auth/form");
+    }
+
+    RecruitBoard team = recruitBoardService.get(recruitBoardId);
+
+    model.addAttribute("team", team);
+    model.addAttribute("recruitBoardId", recruitBoardId);
+  }
+
+  @GetMapping("planBoardList")
+  public void planBoardList(String date, Model model) {
+    model.addAttribute("date", date);
+  }
 }
+

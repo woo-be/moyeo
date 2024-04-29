@@ -342,4 +342,9 @@ public class ReviewBoardController {
     return "redirect:../view?no=" + photo.getReviewBoardId();
   }
 
+  public void findByCreatedDate(Model model) {
+
+    model.addAttribute("list", reviewBoardService.findByCreatedDate());
+  }
+
 }
