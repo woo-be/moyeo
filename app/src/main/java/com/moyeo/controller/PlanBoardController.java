@@ -2,15 +2,19 @@ package com.moyeo.controller;
 
 
 import com.moyeo.service.PlanBoardService;
+import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
+import com.moyeo.vo.RecruitBoard;
 import java.util.ArrayList;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -34,6 +38,7 @@ public class PlanBoardController {
   private static final Log log = LogFactory.getLog(PlanBoardController.class);
   private final PlanBoardService planBoardService;
   private final StorageService storageService;
+  private final RecruitBoardService recruitBoardService;
   private final String uploadDir = "plan/";
 
   @Value("${ncp.ss.bucketname}")
@@ -70,7 +75,15 @@ public class PlanBoardController {
       int recruitBoardId,
       Model model) throws Exception {
 
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    Date startDate = recruitBoard.getStartDate();
+    Date endDate = recruitBoard.getEndDate();
+
+    log.debug(startDate);
+    log.debug(endDate);
     model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
 
   }
 
@@ -149,6 +162,7 @@ public class PlanBoardController {
 
     PlanBoard old = planBoardService.get(planBoard.getPlanBoardId());
     old.setPhotos(planBoardService.getPhotos(planBoard.getPlanBoardId()));
+    log.debug(old.getPhotos().getFirst().getPhoto());
     if (old == null) {
       throw new Exception("번호가 유효하지 않습니다");
     }
@@ -250,4 +264,21 @@ public class PlanBoardController {
 //    model.addAttribute("recruitBoardId", recruitBoardId);
 //
 //  }
+
+  @GetMapping("findByTripDate")
+  public void findByTripDate(
+      @Param("tripDate")String tripDate,
+      @Param("recruitBoardId")int recruitBoardId,
+      Model model) {
+    List<PlanBoard> list;
+    list = planBoardService.findByTripDate(tripDate, recruitBoardId);
+
+    model.addAttribute("tripDate", tripDate);
+    model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("list", list);
+log.debug(String.format("recruitBoardId =%s", recruitBoardId));
+    log.debug(String.format("recruitBoardId =%s", tripDate));
+log.debug(list);
+  }
+
 }

@@ -2,6 +2,7 @@ package com.moyeo.dao;
 
 import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
+import java.sql.Date;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -20,6 +21,8 @@ public interface PlanBoardDao {
   int update(PlanBoard planBoard);
 
   int delete(int planBoardId, int recruitBoardId);
+
+  List<PlanBoard> findByTripDate(@Param("tripDate")String tripDate, @Param("recruitBoardId")int recruitBoardId);
 
   List<Pin> findByPin(@Param("recruitBoardId") int recruitBoardId, @Param("tripDate") String tripDate);
 

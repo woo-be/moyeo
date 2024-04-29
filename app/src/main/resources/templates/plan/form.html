@@ -159,6 +159,48 @@
     });
   });
 </script>
+
+
+<script>
+  $(document).ready(function() {
+    const tripDateInput = $('input[name="tripDate"]');
+    const startDate = '[[${startDate}]]';
+    const endDate = '[[${endDate}]]';
+
+  var arr2 = startDate.split('-');
+  const startDay = new Date();
+  startDay.setFullYear(arr2[0]);
+  startDay.setMonth(Number(arr2[1]) - 1); // date객체는 0 -> 1월 이므로 -1을 해주었음.
+  startDay.setDate(Number(arr2[2])); // fullcalendar에서 종료 일자가 표시가 종료일 -1일 까지 되므로 +1을 해주었음.
+
+  var arr = endDate.split('-');
+  const endDay = new Date();
+  endDay.setFullYear(arr[0]);
+  endDay.setMonth(Number(arr[1]) - 1); // date객체는 0 -> 1월 이므로 -1을 해주었음.
+  endDay.setDate(Number(arr[2])); // fullcalendar에서 종료 일자가 표시가 종료일 -1일 까지 되므로 +1을 해주었음.
+
+  console.log(startDay);
+  console.log(endDay);
+
+
+<!--    console.log(tripDateInput);-->
+    console.log(startDate);
+    console.log(endDate);
+
+    let offset = new Date().getTimezoneOffset() * 60000;
+
+    let before = new Date(startDay - offset);
+    let minDate = before.toISOString().substring(0,10);
+    tripDateInput.prop('min', minDate);
+
+    let after = new Date(endDay - offset);
+    let maxDate = after.toISOString().substring(0,10);
+    tripDateInput.prop('max', maxDate);
+  });
+
+
+
+</script>
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>
 </html>
