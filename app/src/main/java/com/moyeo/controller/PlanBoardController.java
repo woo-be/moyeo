@@ -1,14 +1,12 @@
 package com.moyeo.controller;
 
-import com.amazonaws.services.s3.internal.eventstreaming.Message;
-import com.moyeo.dao.PlanBoardDao;
-import com.moyeo.service.MessageService;
+
 import com.moyeo.service.PlanBoardService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
-
-import com.moyeo.vo.Msg;
+import com.moyeo.vo.MoyeoError;
+import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import com.moyeo.vo.RecruitBoard;
@@ -26,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,21 +45,29 @@ public class PlanBoardController {
   private String bucketName;
 
   @GetMapping("list")
-  public void list(
+  @ResponseBody
+  public List<Pin> list(
       int recruitBoardId,
+      String tripDate,
       Model model) {
-    List<PlanBoard> list;
-    list = planBoardService.list(recruitBoardId);
+    List<Pin> list;
+    list = planBoardService.pinList(recruitBoardId, tripDate);
 
     log.debug("planBoard = " + list);
-    model.addAttribute("list", list);
-    model.addAttribute("recruitBoardId", recruitBoardId);
+//    model.addAttribute("list", list);
+//    model.addAttribute("recruitBoardId", recruitBoardId);
+    return list;
   }
 
   @GetMapping("view")
-  public void view(int planBoardId, Model model) {
-    model.addAttribute("planBoard", planBoardService.get(planBoardId));
+  @ResponseBody
+  public PlanBoard view(int recruitBoardId, String tripDate, double latitude, double longitude) {
+    PlanBoard planboard = planBoardService.get(recruitBoardId, tripDate, latitude, longitude);
+    log.debug(planboard);
+    return planboard;
   }
+
+
 
 
   @GetMapping("form")
@@ -83,16 +88,33 @@ public class PlanBoardController {
   }
 
   @PostMapping("add")
+  @ResponseBody
   public String add(
-      PlanBoard planBoard,
+      @RequestParam("tripOrder") String tripOrder,
+      @RequestParam("title") String title,
+      @RequestParam("content") String content,
+      @RequestParam("recruitBoardId") String recruitBoardId,
+      @RequestParam("tripDate") String tripDate,
+      @RequestParam("latitude") String latitude,
+      @RequestParam("longitude") String longitude,
       HttpSession session,
       SessionStatus sessionStatus,
       Model model) throws Exception {
 
+    // 일정 객체를 만든다.
+    PlanBoard planBoard = PlanBoard.builder().
+        tripOrder(Integer.parseInt(tripOrder)).
+        title(title).
+        content(content).
+        recruitBoardId(Integer.parseInt(recruitBoardId)).
+        tripDate(Date.valueOf(tripDate)).
+        latitude(Double.parseDouble(latitude)).
+        longitude(Double.parseDouble(longitude)).
+        build();
+
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl", "/auth/form");
+      throw new MoyeoError("로그인이 필요합니다.","/auth/form");
     }
 
     List<PlanPhoto> photos = (List<PlanPhoto>) session.getAttribute("photos");
@@ -113,12 +135,14 @@ public class PlanBoardController {
 
     model.addAttribute("recruitBoardId", planBoard.getRecruitBoardId());
 
+    log.debug(planBoard);
 
     planBoardService.add(planBoard);
 
     sessionStatus.setComplete();
 
-    return "redirect:view?planBoardId=" + planBoard.getPlanBoardId();
+//    return "redirect:view?planBoardId=" + planBoard.getPlanBoardId();
+    return "일정 등록 했습니다.";
   }
 
   @PostMapping("update")

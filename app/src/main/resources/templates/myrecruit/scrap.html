@@ -6,15 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-  <style>
-    .footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
 </head>
 
 <div data-th-replace="header :: header">머리말</div>
@@ -22,27 +13,43 @@
 <body>
 <p>마이페이지</p>
 <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+<div>
+  <table border='1'>
+    <thead>
+    <tr>
+      <th>제목</th>
+      <th>모집현황</th>
+      <th>모집상태</th>
+      <th>기한</th>
+    </tr>
+    </thead>
 
-<table border='1'>
-  <thead>
-  <tr>
-    <th>제목</th>
-    <th>모집현황</th>
-    <th>모집상태</th>
-    <th>기한</th>
-  </tr>
-  </thead>
+    <tbody>
+    <tr data-th-each="recruitboard : ${scrapList}" data-th-object="${recruitboard}">
+      <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="../recruit/view.html">제목입니다</a></td>
+      <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+      <td data-th-if="*{state == true}">모집중</td>
+      <td data-th-if="*{state == false}">모집완료</td>
+      <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
+    </tr>
+    </tbody>
+  </table>
 
-  <tbody>
-  <tr data-th-each="recruitboard : ${scrapList}" data-th-object="${recruitboard}">
-    <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="../recruit/view.html">제목입니다</a></td>
-    <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-    <td data-th-if="*{state == true}">모집중</td>
-    <td data-th-if="*{state == false}">모집완료</td>
-    <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
-  </tr>
-  </tbody>
-</table>
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{scrap(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{scrap(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
+</div>
 
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>

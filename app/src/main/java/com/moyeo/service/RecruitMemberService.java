@@ -10,7 +10,7 @@ public interface RecruitMemberService {
 
   void add(int recruitBoardId, int memberId); // 모집 신청하기
 
-  void addWriter(int recruitBoardId, int memberId);
+  void addWriter(int recruitBoardId, int memberId); // 글 작성자를 recruit_member에 추가
 
   List<RecruitBoard> list(int memberId);
 

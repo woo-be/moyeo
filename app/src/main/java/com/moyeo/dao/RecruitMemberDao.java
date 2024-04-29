@@ -16,6 +16,7 @@ public interface RecruitMemberDao {
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
 
+  // 글 작성자를 recruit_member에 추가
   void addWriter(
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
@@ -33,4 +34,6 @@ public interface RecruitMemberDao {
   void delete(
       @Param("recruitBoardId") int recruitBoardId,
       @Param("memberId") int memberId);
+
+  void deleteAll(int recruitBoardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
 }

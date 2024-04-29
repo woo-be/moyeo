@@ -27,7 +27,7 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   }
 
   @Override
-  public void addWriter(int recruitBoardId, int memberId) {
+  public void addWriter(int recruitBoardId, int memberId) { // 글 작성자를 recruit_member에 추가
     recruitMemberDao.addWriter(recruitBoardId, memberId);
   }
 

@@ -1,5 +1,6 @@
 package com.moyeo.service;
 
+import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import java.awt.Panel;
@@ -12,6 +13,7 @@ public interface PlanBoardService {
   List<PlanBoard> list(int recruitBoardId);
 
   PlanBoard get(int planBoardId);
+  PlanBoard get(int planBoardId, String tripDate, double latitude, double longitude);
 
   void add(PlanBoard planBoard);
 
@@ -25,5 +27,9 @@ public interface PlanBoardService {
 
   int deletePlanPhoto(int planPhotoId);
 
+
   List<PlanBoard> findByTripDate(@Param("tripDate")String tripDate, @Param("recruitBoardId")int recruitBoardId);
+
+  List<Pin> pinList(int recruitBoardId, String tripDate);
+
 }

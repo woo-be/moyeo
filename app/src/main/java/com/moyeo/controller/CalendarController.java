@@ -1,7 +1,9 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.vo.Member;
 import com.moyeo.vo.RecruitBoard;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,7 +31,11 @@ public class CalendarController {
   }
 
   @GetMapping("planBoardList")
-  public void planBoardList(String date, Model model) {
+  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    log.debug(loginUser);
+    model.addAttribute("recruitBoardId", recruitBoardId);
     model.addAttribute("date", date);
+    model.addAttribute("nickname", loginUser.getNickname());
   }
 }

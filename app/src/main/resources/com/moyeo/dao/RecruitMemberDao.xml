@@ -5,7 +5,6 @@
 
 <mapper namespace="com.moyeo.dao.RecruitMemberDao">
 
-
   <resultMap id="recruitMemberMap" type="recruitBoard">
   <id column="recruit_board_id" property="recruitBoardId"/>
   <result column="title" property="title"/>
@@ -15,6 +14,7 @@
     <id column="recruit_Board_id" property="recruitBoardId"/>
     <id column="member_id" property="memberId"/>
     <result column="state" property="state"/>
+    <result column="created_date" property="createdDate"/>
 
     <association property="member" javaType="Member">
       <id column="memberId" property="memberId"/>
@@ -39,6 +39,7 @@
         #{memberId})
   </insert>
 
+  <!--글 작성자를 recruit_member에 state=true로 추가-->
   <insert id="addWriter" parameterType="int">
     insert
     into
@@ -87,9 +88,19 @@
       recruit_board_id = #{recruitBoardId}
   </delete>
 
+  <!--recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제-->
+  <delete id="deleteAll">
+    delete
+    from
+      recruit_member
+    where
+      recruit_board_id = #{recruitBoardId}
+  </delete>
+
   <select id="findAllApplicant" resultMap="RecruitMemberMap" parameterType="int">
     select
       rcm.member_id,
+      rcm.created_date,
       m.nickname,
       m.email,
       m.birth_date,

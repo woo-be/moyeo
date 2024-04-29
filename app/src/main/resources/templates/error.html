@@ -11,7 +11,7 @@
 
 <body>
 <script>
-  alert("[[${message}]]");
+  alert("[[${message}]]".replace(/&quot;/g, '"')); // 문자" 를 이스케이프처리
   location.href = "[[${replaceUrl}]]";
 </script>
 

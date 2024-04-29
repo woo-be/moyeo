@@ -19,9 +19,15 @@ public interface RecruitBoardService {
       @Param("filter")String filter,
       @Param("keyword")String keyword);
 
-  List<RecruitBoard> mypost(int memberId);  // 내가 생성한 모집
+  List<RecruitBoard> mypost(  // 내가 생성한 모집
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("memberId") int memberId);
 
-  List<RecruitBoard> myrequest(int memberId); // 내가 신청한 모집
+  List<RecruitBoard> myrequest( // 내가 신청한 모집
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("memberId") int memberId);
 
   List<RecruitBoard> teamlist(int memberId);  // 멤버 목록에 내가 존재하는 모집글
 
@@ -36,6 +42,10 @@ public interface RecruitBoardService {
       @Param("themeId") int themeId,
       @Param("filter")String filter,
       @Param("keyword")String keyword);
+
+  int countAllMyPost(@Param("memberId") int memberId);
+
+  int countAllMyReq(@Param("memberId") int memberId);
 
   List<RecruitPhoto> getRecruitPhotos(int no);
 

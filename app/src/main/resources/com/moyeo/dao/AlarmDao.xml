@@ -59,7 +59,6 @@
       content=#{content}
     where
       alarm_id=#{alarmId}
-
   </update>
 
 </mapper>

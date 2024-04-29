@@ -70,10 +70,6 @@ public class ReviewBoardController {
       Model model) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-//    if (loginUser == null) {
-//      session.setAttribute("message", "로그인 해주세요");
-//      session.setAttribute("replaceUrl", "/auth/form");
-//    }
 
     reviewBoard.setWriter(loginUser);
     Member writer = (Member) session.getAttribute("loginUser");
@@ -148,7 +144,6 @@ public class ReviewBoardController {
       @RequestParam(required = false, defaultValue = "0") int alarmId,
       Model model) {
     ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
-    log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
     if (reviewBoard.getAddress() == null) {
       reviewBoard.setAddress("서울특별시 용산구 한강대로 405");
     }
@@ -235,6 +230,7 @@ public class ReviewBoardController {
     model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
@@ -259,9 +255,6 @@ public class ReviewBoardController {
         reviewBoard.setPhotos(reviewPhotos);
       }
     }
-
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
 
     reviewBoardService.update(reviewBoard);
 

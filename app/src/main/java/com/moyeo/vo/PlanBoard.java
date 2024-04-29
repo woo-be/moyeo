@@ -22,7 +22,7 @@ public class PlanBoard implements Serializable {
   private String content;           // 여행계획게시물 내용
   private Date tripDate;           // 여행일자
   private int tripOrder;           // 여행루트순서
-  private float latitude;           // 위도
-  private float longitude;          // 경도
+  private double latitude;           // 위도
+  private double longitude;          // 경도
   private List<PlanPhoto> photos;
 }

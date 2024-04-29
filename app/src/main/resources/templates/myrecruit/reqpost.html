@@ -8,15 +8,6 @@
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
   <div data-th-replace="header :: header">머리말</div>
-
-  <style>
-    .footer {
-      position: fixed;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
-  </style>
 </head>
 
 <body>
@@ -29,6 +20,7 @@
     <tr>
       <th>번호</th>
       <th>제목</th>
+      <th>신청일자</th>
       <th>마감일자</th>
       <th>수락 여부</th>
       <th>팀스페이스</th>
@@ -39,6 +31,8 @@
     <tr data-th-each="recruitboard : ${myrequest}" data-th-object="${recruitboard}">
       <td data-th-text="*{recruitBoardId}">1</td>
       <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+<!--    <td data-th-text="*{#temporals.format(createdDate, 'yyyy-MM-dd HH:mm')}">2024-04-01</td> &lt;!&ndash;data-th-value => data-th-text &ndash;&gt;-->
+      <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
       <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
 
       <td data-th-if="*{state == true}" data-th-text="수락">수락</td>
@@ -48,6 +42,22 @@
     </tr>
     </tbody>
   </table>
+
+
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{reqpost(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{reqpost(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
 </div>
 
 </body>

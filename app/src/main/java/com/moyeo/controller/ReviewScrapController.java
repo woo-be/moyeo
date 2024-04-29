@@ -26,8 +26,12 @@ public class ReviewScrapController {
       int reviewBoardId
     ) {
     Member loginUser = (Member) session.getAttribute("loginUser");
-//    log.debug(String.format("로그인 정보: @@@@@@@@@@@@@@@@@@@@@@@@@@@%s@@@@@@@@@@@@@@@@@@@@@@@", loginUser.getMemberId()));
-    reviewScrapService.add(loginUser.getMemberId(), reviewBoardId);
+
+    int checked = reviewScrapService.get(loginUser.getMemberId(), reviewBoardId);
+
+    if(checked != 1) {
+      reviewScrapService.add(loginUser.getMemberId(), reviewBoardId);
+    }
 
     return "redirect:/review/view?reviewBoardId=" + reviewBoardId;
   }

@@ -11,22 +11,7 @@
   <div data-th-replace="header :: header">머리말</div>
 
   <style>
-    .popup-wrap{
-      display: none;
-      justify-content:center;
-      align-items:center;
-      position:fixed;
-    }
-
-    .popup {
-      overflow:hidden; //radius로 인해 내부가 밖으로 나오는걸 방지
-    }
-
-    #ad {
-      border: 5px solid orange;
-      position: fixed;
-      left: 30%;
-      top: 20%;
+    .modal-dialog{
       background-color: white;
     }
   </style>
@@ -52,14 +37,15 @@
 
     <tbody>
     <tr data-th-each="recruitboard : ${mypost}" data-th-object="${recruitboard}">
-      <td data-th-text="*{recruitBoardId}">1</td>
+      <td id="recruitBoardId" data-th-text="*{recruitBoardId}">1</td>
       <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="appl.html">제목입니다</a></td>
       <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
       <td data-th-if="*{state == true}">모집중</td>
       <td data-th-if="*{state == false}">모집완료</td>
       <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-      <td data-th-text="*{waiting}">1</td>
+      <td data-th-text="*{waiting}">0</td>
       <td data-th-if="*{state == true}" id="checkBtn">
+<!--        <button data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" value="이동">이동</button>-->
         <a data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" href="#">
           <Button data-th-href="@{appl(recruitBoardId=*{recruitBoardId})}" value="이동">이동</Button>
         </a>
@@ -68,56 +54,72 @@
     </tbody>
   </table>
 
-<!--  <div id="appls">-->
-<!--    <button id="closeBtn" type="button">X</button>-->
-<!--    <div data-th-replace="appl :: appllist">신청자리스트</div>-->
-<!--  </div>-->
-
-<!--  <div class="popup-wrap" id="popup">-->
-<!--    <div class="popup">-->
-<!--      <div>-->
-<!--        내용-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="popup-foot">-->
-<!--      <span class="pop-btn confirm" id="confirm">닫기</span>-->
-<!--    </div>-->
-<!--  </div>-->
+  <p>
+    [
+    <a data-th-if="${pageNo <= 1}">이전</a>
+    <a data-th-href="@{posted(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo > 1}"
+       href="list">이전</a>
+    ]
+    [
+    <a data-th-if="${pageNo >= numOfPage}">다음</a>
+    <a data-th-href="@{posted(pageNo=${pageNo + 1},pageSize=${pageSize})}"
+       data-th-if="${pageNo < numOfPage}"
+       href="list">다음</a>
+    ]
+  </p>
 </div>
 
-  </body>
-  <div data-th-replace="footer :: footer">꼬리말</div>
 
-<script>
-  var checkBtn = document.querySelectorAll("#checkBtn");
-  var popUp = document.querySelector("#appls");
-  var closeBtn = document.querySelector("#closeBtn");
+<div class="modal fade" id="sampleModalPopup" role="dialog" tabindex="-1">
+  <div class="modal-dialog modal-dialog-width1000 modal-dialog-height800">
+    <div class="modal-header">
+      <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <div class="modal-body">
+    </div>
+    <div class="modal-footer">
+      <button type="button" name="button" class="btn btn-color2" data-dismiss="modal" >닫기</button>
+    </div>
+  </div>
+</div>
 
-  checkBtn.forEach(function(btn){
-    btn.addEventListener("click", checkApplicants);
-  });
+</body>
+<div data-th-replace="footer :: footer">꼬리말</div>
 
-  function checkApplicants() {
-    // popUp.style.display = "block"; // 팝업 열기
-    disableScroll(); // 스크롤 비활성화
+<!--<script>-->
+<!--  var checkBtn = document.querySelectorAll("#checkBtn");-->
+<!--  var popUp = document.querySelector("#appls");-->
+<!--  var closeBtn = document.querySelector("#closeBtn");-->
+<!--  let recruitBoardId = document.getElementById("recruitBoardId").value;-->
+<!--  let url = "http://localhost:8888/myrecruit/appl?recruitBoardId=" + recruitBoardId-->
 
+<!--  checkBtn.forEach(function(btn){-->
+<!--    btn.addEventListener("click", checkApplicants);-->
+<!--  });-->
 
-  }
+<!--  function checkApplicants() {-->
+<!--    // popUp.style.display = "block"; // 팝업 열기-->
+<!--    disableScroll(); // 스크롤 비활성화-->
+<!--    $("#sampleModalPopup > .modal-dialog").load(url, function(){-->
+<!--      $("#sampleModalPopup").modal("show");-->
+<!--    });-->
+<!--  }-->
 
-  closeBtn.addEventListener("click", function() {
-    popUp.style.display = "none"; // 팝업 닫기
-    enableScroll(); // 스크롤 활성화
-  });
+<!--  closeBtn.addEventListener("click", function() {-->
+<!--    popUp.style.display = "none"; // 팝업 닫기-->
+<!--    enableScroll(); // 스크롤 활성화-->
+<!--  });-->
 
-  function disableScroll() {
-    // body 요소의 overflow를 hidden으로 변경하여 스크롤 비활성화
-    document.body.style.overflow = 'hidden';
-  }
+<!--  function disableScroll() {-->
+<!--    // body 요소의 overflow를 hidden으로 변경하여 스크롤 비활성화-->
+<!--    document.body.style.overflow = 'hidden';-->
+<!--  }-->
 
-  function enableScroll() {
-    // body 요소의 overflow를 visible로 변경하여 스크롤 활성화
-    document.body.style.overflow = 'visible';
-  }
+<!--  function enableScroll() {-->
+<!--    // body 요소의 overflow를 visible로 변경하여 스크롤 활성화-->
+<!--    document.body.style.overflow = 'visible';-->
+<!--  }-->
 
-</script>
+<!--</script>-->
 </html>

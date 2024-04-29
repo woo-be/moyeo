@@ -21,6 +21,9 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+<!--  &lt;!&ndash; 협업 문서를 위한 quill editor &ndash;&gt;-->
+<!--  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet" />-->
+
   <style>
     body {
         padding-left: 10px;
@@ -48,10 +51,78 @@
   <div>
     내용: <textarea name='content' type="text" id="summernote"></textarea>
   </div>
+<!--  <div id="editor"></div>-->
   <div>
     <button>등록</button>
   </div>
 </form>
+
+<!-- Include the Quill library -->
+<!--<script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>-->
+<!--<script src="quill-cursors.js"></script>-->
+<!-- Initialize Quill editor -->
+<!--<script>-->
+<!--  const quill = new Quill('#editor', {-->
+<!--    theme: 'snow'-->
+<!--  });-->
+<!--</script>-->
+<!--<script>-->
+<!--  import Quill from 'quill'-->
+<!--  import QuillCursors from 'quill-cursors'-->
+<!--  -->
+<!--  Quill.register('modules/cursors', QuillCursors);-->
+<!--  -->
+<!--  const quill = new Quill(document.querySelector('#editor'), {-->
+<!--    modules: {-->
+<!--      cursors: true,-->
+<!--      toolbar: [-->
+<!--        // adding some basic Quill content features-->
+<!--        [{ header: [1, 2, false] }],-->
+<!--        ['bold', 'italic', 'underline'],-->
+<!--        ['image', 'code-block']-->
+<!--      ],-->
+<!--      history: {-->
+<!--        // Local undo shouldn't undo changes-->
+<!--        // from remote users-->
+<!--        userOnly: true-->
+<!--      }-->
+<!--    },-->
+<!--    placeholder: 'Start collaborating...',-->
+<!--    theme: 'snow' // 'bubble' is also great-->
+<!--  })-->
+<!--</script>-->
+<!--<script>-->
+
+<!--  const quill = new Quill('#editor', {-->
+<!--    cursors: true,-->
+<!--    modules: {-->
+<!--      toolbar: [-->
+<!--        [{ header: [1, 2, false] }],-->
+<!--        ['bold', 'italic', 'underline'],-->
+<!--        ['image', 'code-block'],-->
+<!--      ],-->
+<!--    },-->
+<!--    placeholder: '내용을 입력하세요.',-->
+<!--    theme: 'snow', // or 'bubble'-->
+<!--  });-->
+<!--</script>-->
+<!--<script>-->
+<!--  import * as Y from 'yjs'-->
+<!--  import { QuillBinding } from 'y-quill'-->
+<!--  import { WebrtcProvider } from 'y-webrtc'-->
+
+<!--  // A Yjs document holds the shared data-->
+<!--  const ydoc = new Y.Doc()-->
+<!--  // Define a shared text type on the document-->
+<!--  const ytext = ydoc.getText('quill')-->
+
+<!--  // Create an editor-binding which-->
+<!--  // "binds" the quill editor to a Y.Text type.-->
+<!--  const binding = new QuillBinding(ytext, quill)-->
+
+<!--  const provider = new WebrtcProvider('quill-demo-room', ydoc)-->
+<!--</script>-->
+
 <script>
   $(document).ready(function() {
 

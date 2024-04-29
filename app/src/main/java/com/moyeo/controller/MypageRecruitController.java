@@ -16,6 +16,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @RequiredArgsConstructor
 @Controller
@@ -27,12 +28,36 @@ public class MypageRecruitController {
   private final RecruitMemberService recruitMemberService;
 
   @GetMapping("posted")
-  public void mypost(Model model, HttpSession session) throws Exception {
+  public void mypost(
+      Model model,
+      HttpSession session,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize) throws Exception {
+
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
-    model.addAttribute("mypost", recruitBoardService.mypost(loginUser.getMemberId()));
+
+    if (pageSize < 10 || pageSize > 20) {
+      pageSize = 10;
+    }
+    if (pageNo < 1){
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = recruitBoardService.countAllMyPost(loginUser.getMemberId());
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("mypost", recruitBoardService.mypost(pageNo, pageSize, loginUser.getMemberId()));
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 
   @GetMapping("/appl")
@@ -72,11 +97,35 @@ public class MypageRecruitController {
   }
 
   @GetMapping("reqpost")
-  public void myrequest(Model model, HttpSession session) throws Exception {
+  public void myrequest(
+      Model model,
+      HttpSession session,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize) throws Exception {
+
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
-    model.addAttribute("myrequest", recruitBoardService.myrequest(loginUser.getMemberId()));
+
+    if (pageSize < 10 || pageSize > 20) {
+      pageSize = 10;
+    }
+    if (pageNo < 1){
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = recruitBoardService.countAllMyReq(loginUser.getMemberId());
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("myrequest", recruitBoardService.myrequest(pageNo, pageSize, loginUser.getMemberId()));
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 }

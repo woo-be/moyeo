@@ -15,10 +15,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/myrecruit/scrap")
+@RequestMapping("/myrecruit")
 public class RecruitScrapController {
 
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
@@ -26,7 +27,7 @@ public class RecruitScrapController {
   private final RecruitBoardService recruitBoardService;
 
   // 즐겨찾기 추가
-  @GetMapping("add")
+  @GetMapping("scrap/add")
   public String add(int recruitBoardId, HttpSession session) throws Exception {
 
     // 로그인한 상태인지 아닌지 검사.
@@ -47,6 +48,11 @@ public class RecruitScrapController {
         memberId(loginUser.getMemberId()).
         build();
 
+    // 이미 즐겨찾기한 글인지 검사.
+    if (recruitScrapService.isExist(recruitScrap) > 0) {
+      throw new MoyeoError("이미 즐겨찾기한 게시글입니다.", "/recruit/view?recruitBoardId=" + recruitBoardId);
+    }
+
     // 해당 객체를 recruit_scrap에 추가.
     recruitScrapService.add(recruitScrap);
     // list 페이지로 리다이렉트(임시)
@@ -54,20 +60,42 @@ public class RecruitScrapController {
   }
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트
-  @GetMapping("")
-  public void scrapList(HttpSession session, Model model) throws Exception {
+  @GetMapping("scrap")
+  public void scrapList(
+      Model model,
+      HttpSession session,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
+    if (pageSize < 10 || pageSize > 20) {
+      pageSize = 10;
+    }
+    if (pageNo < 1){
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = recruitScrapService.countAll(loginUser.getMemberId());
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
     // 즐겨찾기 리스트를 모델객체의 scarpList에 담음.
-    model.addAttribute("scrapList", recruitScrapService.list(loginUser.getMemberId()));
+    model.addAttribute("scrapList", recruitScrapService.list(pageNo, pageSize, loginUser.getMemberId()));
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 
   // 즐겨찾기 삭제 - 선택된 즐겨찾기 항목 삭제
-  @GetMapping("delete")
+  @GetMapping("scrap/delete")
   public String delete(String scrapRecruitBoardIds, // 삭제할 즐겨찾기 모집게시글 번호들을 담는 문자열
       HttpSession session) throws Exception {
 
