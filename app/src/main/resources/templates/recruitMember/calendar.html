@@ -52,6 +52,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
       if (date >= start && date < end) { // 클릭한 날짜가 이벤트에 해당하는 날짜인 경우,
       date.setDate(date.getDate() + 1); // toISOString으로 date를 yyyy-mm-dd포맷의 문자열로 바꿀 때 하루 밀리므로 +1을 해줌.
+
+<!--         window.location.href = '/plan/findByTripDate?tripDate=' + date.toISOString().slice(0, 10) + '&recruitBoardId=' + [[${recruitBoardId}]];-->
+<!--        window.location.href = '/plan/planBoardList(recruitBoardId= + [[${recruitBoardId}]]');-->
+<!--                window.location.href = '/plan/planBoardList?date=' + date.toISOString().slice(0, 10)+'&recruitBoardId='+team.recruitBoardId;-->
+//                 window.location.href = '/plan/planBoardList?tripDate=' + date.toISOString().slice(0, 10)+'&recruitBoardId=' + [[${recruitBoardId}]];
          window.location.href = '/plan/planBoardList?date=' + date.toISOString().slice(0, 10) + '&recruitBoardId=' + [[${recruitBoardId}]];
       }
 
