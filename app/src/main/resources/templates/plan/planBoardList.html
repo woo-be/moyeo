@@ -33,6 +33,7 @@
 </head>
 <body>
   <h1 data-th-text="${date}+일정">날짜</h1>
+  <div data-th-replace="plan/menu :: list" class="box">메뉴</div>
   <div id="map" style="width:500px;height:400px;">지도</div>
   <div data-th-replace="chat/form :: charForm">채팅</div>
   <input type="hidden" readonly id="recruitBoardId" data-th-value="${recruitBoardId}">
