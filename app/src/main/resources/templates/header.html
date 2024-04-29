@@ -80,13 +80,13 @@
     <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
       <button type="button" class="btn btn-primary me-2">로그아웃</button>
     </a>
-  <div class="d-flex justify-content-end">
-    <a data-th-unless="${session.loginUser != null}" data-th-href="@{/auth/form}">
+  <div class="d-flex justify-content-end" data-th-unless="${session.loginUser != null}">
+    <a data-th-href="@{/auth/form}">
       <button type="button" class="btn btn-outline-primary me-2">로그인</button>
     </a>
-      <form data-th-action="@{auth/login/google}" method="post">
-        <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
-      </form>
+    <form data-th-action="@{auth/login/google}" method="post">
+      <button type="button" class="btn btn-outline-primary me-2" id="googleLoginButton">구글로그인</button>
+    </form>
   </div>
 
 
@@ -122,8 +122,10 @@
     let alarmModalBody = $('#modal-body tbody');
     console.log(alarmModalBody);
 
+    // 모달 창 오픈
     function openPopup() {
 
+      // 알림 리스트 가져오기
       $.ajax({
         url: '/alarm/list',
         type: 'GET',
@@ -132,20 +134,25 @@
       })
       .done(function(response) {
 
-        for (const alarm of response) {
-              console.log(alarm);
-              console.log();
+        // 이미 존재하는 alarmRow 클래스명을 가진 행들 제거
+        alarmModalBody.find('.alarmRow').remove();
 
-              $('<tr>')
-                .append($('<td>').html(alarm.content))
-                .append($('<td>').html(alarm.checked ? 'o':'x'))
-                .append($('<td>').html('<button onclick="alarmDelete(this,' + alarm.alarmId + ')">x</button>'))
-                .appendTo(alarmModalBody);
+        // 알림 리스트 출력
+        for (const alarm of response) {
+          console.log(alarmModalBody);
+          $('<tr>').addClass('alarmRow')  // 클래스명 추가
+          .append($('<td>').html(alarm.content))  // 링크+내용
+          .append($('<td>').html(alarm.checked ? 'o':'x'))  // 읽음여부
+          .append($('<td>').html('<button onclick="alarmDelete(this,' + alarm.alarmId + ')">x</button>'))  // 삭제 버튼
+          .appendTo(alarmModalBody);  // tbody에 자식 태그 추가
         }
       });
     }
 
+    // 알림 삭제 버튼 눌렀을 때 실행
     function alarmDelete(button, alarmId) {
+
+        // 알림을 삭제할 때 삭제된 것처럼 보이기 위해 안 보이게 한다
         var row = button.parentNode.parentNode;
         row.style.display = 'none';
         console.log(alarmId);

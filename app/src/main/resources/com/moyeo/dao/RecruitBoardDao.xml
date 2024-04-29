@@ -84,7 +84,7 @@
       rb.state,
       rb.recruit_total,
       count(case when rm.state = 1 then 1 end) as current,
-      count(case when rm.member_id is null then 1 end) as waiting
+      count(case when rm.state is null then 1 end) as waiting
     from
       recruit_board rb
       inner join member m on m.member_id=rb.member_id
@@ -92,7 +92,7 @@
     where
       m.member_id=#{memberId}
     group by
-      rb.recruit_board_id, rb.title, rb.deadline, rb.state, rb.recruit_total
+      rb.recruit_board_id
     order by rb.recruit_board_id desc
     limit #{rowCount} offset #{offset}
   </select>

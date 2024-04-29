@@ -1,17 +1,20 @@
 package com.moyeo.controller;
 
-import com.amazonaws.services.s3.internal.eventstreaming.Message;
-import com.moyeo.dao.PlanBoardDao;
-import com.moyeo.service.MessageService;
+
 import com.moyeo.service.PlanBoardService;
+import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
-
-import com.moyeo.vo.Msg;
+import com.moyeo.vo.MoyeoError;
+import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
+import com.moyeo.vo.RecruitBoard;
 import java.util.ArrayList;
+import java.sql.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -21,7 +24,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,27 +38,36 @@ public class PlanBoardController {
   private static final Log log = LogFactory.getLog(PlanBoardController.class);
   private final PlanBoardService planBoardService;
   private final StorageService storageService;
+  private final RecruitBoardService recruitBoardService;
   private final String uploadDir = "plan/";
 
   @Value("${ncp.ss.bucketname}")
   private String bucketName;
 
   @GetMapping("list")
-  public void list(
+  @ResponseBody
+  public List<Pin> list(
       int recruitBoardId,
+      String tripDate,
       Model model) {
-    List<PlanBoard> list;
-    list = planBoardService.list(recruitBoardId);
+    List<Pin> list;
+    list = planBoardService.pinList(recruitBoardId, tripDate);
 
     log.debug("planBoard = " + list);
-    model.addAttribute("list", list);
-    model.addAttribute("recruitBoardId", recruitBoardId);
+//    model.addAttribute("list", list);
+//    model.addAttribute("recruitBoardId", recruitBoardId);
+    return list;
   }
 
   @GetMapping("view")
-  public void view(int planBoardId, Model model) {
-    model.addAttribute("planBoard", planBoardService.get(planBoardId));
+  @ResponseBody
+  public PlanBoard view(int recruitBoardId, String tripDate, double latitude, double longitude) {
+    PlanBoard planboard = planBoardService.get(recruitBoardId, tripDate, latitude, longitude);
+    log.debug(planboard);
+    return planboard;
   }
+
+
 
 
   @GetMapping("form")
@@ -64,21 +75,46 @@ public class PlanBoardController {
       int recruitBoardId,
       Model model) throws Exception {
 
+    RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    Date startDate = recruitBoard.getStartDate();
+    Date endDate = recruitBoard.getEndDate();
+
+    log.debug(startDate);
+    log.debug(endDate);
     model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("startDate", startDate);
+    model.addAttribute("endDate", endDate);
 
   }
 
   @PostMapping("add")
+  @ResponseBody
   public String add(
-      PlanBoard planBoard,
+      @RequestParam("tripOrder") String tripOrder,
+      @RequestParam("title") String title,
+      @RequestParam("content") String content,
+      @RequestParam("recruitBoardId") String recruitBoardId,
+      @RequestParam("tripDate") String tripDate,
+      @RequestParam("latitude") String latitude,
+      @RequestParam("longitude") String longitude,
       HttpSession session,
       SessionStatus sessionStatus,
       Model model) throws Exception {
 
+    // 일정 객체를 만든다.
+    PlanBoard planBoard = PlanBoard.builder().
+        tripOrder(Integer.parseInt(tripOrder)).
+        title(title).
+        content(content).
+        recruitBoardId(Integer.parseInt(recruitBoardId)).
+        tripDate(Date.valueOf(tripDate)).
+        latitude(Double.parseDouble(latitude)).
+        longitude(Double.parseDouble(longitude)).
+        build();
+
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl", "/auth/form");
+      throw new MoyeoError("로그인이 필요합니다.","/auth/form");
     }
 
     List<PlanPhoto> photos = (List<PlanPhoto>) session.getAttribute("photos");
@@ -99,12 +135,14 @@ public class PlanBoardController {
 
     model.addAttribute("recruitBoardId", planBoard.getRecruitBoardId());
 
+    log.debug(planBoard);
 
     planBoardService.add(planBoard);
 
     sessionStatus.setComplete();
 
-    return "redirect:view?planBoardId=" + planBoard.getPlanBoardId();
+//    return "redirect:view?planBoardId=" + planBoard.getPlanBoardId();
+    return "일정 등록 했습니다.";
   }
 
   @PostMapping("update")
@@ -124,6 +162,7 @@ public class PlanBoardController {
 
     PlanBoard old = planBoardService.get(planBoard.getPlanBoardId());
     old.setPhotos(planBoardService.getPhotos(planBoard.getPlanBoardId()));
+    log.debug(old.getPhotos().getFirst().getPhoto());
     if (old == null) {
       throw new Exception("번호가 유효하지 않습니다");
     }
@@ -225,4 +264,30 @@ public class PlanBoardController {
 //    model.addAttribute("recruitBoardId", recruitBoardId);
 //
 //  }
+
+  @GetMapping("findByTripDate")
+  public void findByTripDate(
+      @Param("tripDate")String tripDate,
+      @Param("recruitBoardId")int recruitBoardId,
+      Model model) {
+    List<PlanBoard> list;
+    list = planBoardService.findByTripDate(tripDate, recruitBoardId);
+
+    model.addAttribute("tripDate", tripDate);
+    model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("list", list);
+log.debug(String.format("recruitBoardId =%s", recruitBoardId));
+    log.debug(String.format("recruitBoardId =%s", tripDate));
+log.debug(list);
+  }
+
+  @GetMapping("planBoardList")
+  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session) {
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    log.debug(loginUser);
+    model.addAttribute("recruitBoardId", recruitBoardId);
+    model.addAttribute("date", date);
+    model.addAttribute("nickname", loginUser.getNickname());
+  }
+
 }

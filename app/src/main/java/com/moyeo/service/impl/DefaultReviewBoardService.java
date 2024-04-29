@@ -128,4 +128,8 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     return reviewBoardDao.findAll(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
   }
 
+  @Override
+  public List<ReviewBoard> findByCreatedDate() {
+    return reviewBoardDao.findByCreatedDate();
+  }
 }

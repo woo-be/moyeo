@@ -230,6 +230,7 @@ public class ReviewBoardController {
     model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
+    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
@@ -254,9 +255,6 @@ public class ReviewBoardController {
         reviewBoard.setPhotos(reviewPhotos);
       }
     }
-
-    log.debug(String.format("%d      %s        %s~~~~~~~~~~~~~~~~~~~~~~~~~~~",
-        reviewBoard.getReviewBoardId(), reviewBoard.getTitle(), reviewBoard.getContent()));
 
     reviewBoardService.update(reviewBoard);
 
@@ -335,6 +333,11 @@ public class ReviewBoardController {
     storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
 
     return "redirect:../view?no=" + photo.getReviewBoardId();
+  }
+
+  public void findByCreatedDate(Model model) {
+
+    model.addAttribute("list", reviewBoardService.findByCreatedDate());
   }
 
 }
