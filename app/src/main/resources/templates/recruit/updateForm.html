@@ -68,8 +68,6 @@
     내용: <textarea id="summernote" name="content" data-th-text="*{content}"></textarea>
   </div>
   <div>
-  </div>
-  <div>
     <button id="updateBtn" type="button" data-th-onclick="'recruitUpdate(' + *{recruitBoardId} + ')'">수정</button>
     <a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="view.html">취소</a>
   </div>
@@ -308,8 +306,6 @@
 }
 
   function initGeocoder() {
-
-    console.log("initGeocoder()");
 
       searchAddressToCoordinate('[[${board.address}]]');
 

@@ -64,7 +64,15 @@
     종료일자: <span data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</span>
   </div>
   <div>
-    상태: <input data-th-value="*{state}" readonly type='text' name="state">
+    상태:  <span data-th-if="*{state == true}">모집중</span>
+    <span data-th-if="*{state == false}">모집완료</span>
+    <input data-th-value="*{state}" readonly type='hidden' name="state">
+  </div>
+  <div>
+    <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">
+  </div>
+  <div>
+    <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">
   </div>
   <div>
     조회수: <input data-th-value="*{views}" readonly type='text' name="views">
