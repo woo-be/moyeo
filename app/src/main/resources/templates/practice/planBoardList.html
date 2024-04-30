@@ -108,7 +108,7 @@
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="viewDeleteButton">
           삭제
         </button>
         <button type="button" class="btn btn-primary" id="updateButton">수정</button>
@@ -135,6 +135,7 @@
     var postTitle = $('#postTitle');
     var postContent = $('#postContent');
     var addButton = $('#addButton');
+    var deleteButton = $('#deleteButton');
     var tripDate = $('#tripDate');
     var recruitBoardId = $('#recruitBoardId');
     var latitude = $('#latitude');
@@ -145,6 +146,7 @@
     var viewPostTitle = $('#viewPostTitle');
     var viewPostContent = $('#viewPostContent');
     var updateButton = $('#updateButton');
+    var viewDeleteButton = $('#viewDeleteButton');
 
     // 페이지 로드시 저장된 핀 정보를 가져와 지도에 표시
     $.ajax({
@@ -176,7 +178,6 @@
       }
     });
 
-    // 업데이트 부분
     updateButton.click(function () {
       let planBoard = new FormData();
       planBoard.append("planBoardId", planBoardId.val());
@@ -196,12 +197,21 @@
         processData: false,
         data:planBoard
       }).done(() => {
-        // 수정한거저장
-        $('#markerModal').modal('hide'); // 저장 후 모달 창 닫기 <- 왜안닫아지는거야
-
-        // 현재 페이지를 다시로드
+        $('#viewModal').modal('hide');
         window.location.reload();
       });
+    });
+
+    // 기존 핀 삭제
+    viewDeleteButton.click(function () {
+      console.log("기존 핀을 눌러서 삭제 ajax 요청");
+      $.ajax({
+        url: '/plan/delete?recruitBoardId=' + recruitBoardId.val()+ '&planBoardId=' + planBoardId.val(),
+        type: 'GET'
+      }).done(()=>{
+        $('#viewModal').modal('hide');
+        window.location.reload();
+      })
     });
 
     naver.maps.Event.addListener(map, 'click', function (e) {
@@ -226,6 +236,12 @@
         tripOrder.val("");
         postTitle.val("");
         postContent.val("");
+      });
+
+      // 새로운 마커 삭제
+      deleteButton.click(function(){
+        $('#markerModal').modal('hide');
+        mark.setMap(null);
       });
     });
 

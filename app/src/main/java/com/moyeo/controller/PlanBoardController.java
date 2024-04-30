@@ -230,7 +230,8 @@ public class PlanBoardController {
   }
 
   @GetMapping("delete")
-  public String delete(
+  @ResponseBody
+  public void delete(
       @Param("planBoardId") int planBoardId,
       @Param("recruitBoardId") int recruitBoardId) throws Exception {
 
@@ -242,8 +243,6 @@ public class PlanBoardController {
       storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
 
     }
-
-    return "redirect:/plan/list?recruitBoardId=" + recruitBoardId;
   }
 
   @PostMapping("photo/upload")
