@@ -7,67 +7,82 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
-  .myInfo {
-    margin: auto;
-    width: 50%;
-    padding: 20px;
-    padding-bottom: 20px;
-    border: 1px solid #ccc;
-  }
+    .myInfo {
+      margin-left: 10%;
+      width: 60%;
+      padding: 1%;
+      padding-bottom: 20px;
+      border: 1px solid #ccc;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+    .form-group {
+      text-align: left;
+      margin-left: 25%;
+      margin-top: 1.5%;
+    }
+    .footer {
+      position: static;
+    }
   </style>
 </head>
 
 <body>
 <div data-th-replace="header :: header">머리말</div>
 
-<p>마이페이지</p>
-<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-
-<div class="myInfo">
-  <h1>내 정보</h1>
-  <form data-th-object="${session.loginUser}" enctype='multipart/form-data' method='post'>
-    <div class="table-responsive"  data-th-if="${session.loginUser != null }">
-        <div class="form-group">
-          <strong>사진</strong>
-          <p data-th-if="${session.loginUser.photo != null}">
-            <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=300,h=300,align=4,ttype=jpg)}"
-               src="/img/default-photo.jpeg">
-          </p>
-          <img data-th-unless="${session.loginUser.photo != null}" src='/img/default-photo.jpeg' class="form-control" style="width:300px;">
-        </div>
-        <div class="form-group">
-          <strong>회원번호</strong>
-          <input type="hidden" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>이메일</strong>
-          <input type="text" name="email" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>이름</strong>
-          <input type="text" name="name" data-th-value="*{name}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>닉네임</strong>
-          <input type="text" name="nickname" data-th-value="*{nickname}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>휴대폰 번호</strong>
-          <input type="text" name="phoneNumber" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>생일</strong>
-          <input type="text" name="birthdate" data-th-value="*{birthdate}" class="form-control" style="width:300px;" readonly>
-        </div>
-        <div class="form-group">
-          <strong>자기소개</strong>
-          <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;" readonly>
-        </div>
-      </div>
-    <div data-th-if="${member == null}">
-      <p>No member information found.</p>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-3">
+      <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
     </div>
-  </form>
+    <div class="col-md-9">
+      <div class="myInfo">
+        <h1>회원 정보</h1>
+        <form data-th-object="${session.loginUser}" enctype='multipart/form-data' method='post'>
+          <div class="table-responsive"  data-th-if="${session.loginUser != null }">
+            <div class="form-group">
+              <strong>사진</strong>
+              <p data-th-if="${session.loginUser.photo != null}">
+                <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=300,h=300,align=4,ttype=jpg)}"
+                     src="/img/default-photo.jpeg">
+              </p>
+              <img data-th-unless="${session.loginUser.photo != null}" src='/img/default-photo.jpeg' class="form-control" style="width:300px;">
+            </div>
+            <div class="form-group">
+              <input type="hidden" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>이메일</strong>
+              <input type="text" name="email" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>이름</strong>
+              <input type="text" name="name" data-th-value="*{name}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>닉네임</strong>
+              <input type="text" name="nickname" data-th-value="*{nickname}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>휴대폰 번호</strong>
+              <input type="text" name="phoneNumber" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>생일</strong>
+              <input type="text" name="birthdate" data-th-value="*{birthdate}" class="form-control" style="width:300px;" readonly>
+            </div>
+            <div class="form-group">
+              <strong>자기소개</strong>
+              <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;" readonly>
+            </div>
+          </div>
+          <div data-th-if="${member == null}">
+            <p>No member information found.</p>
+          </div><br>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
