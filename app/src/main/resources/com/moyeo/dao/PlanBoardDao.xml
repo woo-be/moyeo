@@ -19,6 +19,7 @@
 
   <resultMap id="PinMap" type="Pin">
     <id column="plan_board_id" property="planBoardId"/>
+    <result column="title" property="title"/>
     <result column="latitude" property="latitude"/>
     <result column="longitude" property="longitude"/>
   </resultMap>
@@ -99,6 +100,7 @@
   <select id="findByPin" resultMap="PinMap">
     select
     plan_board_id,
+    title,
     latitude,
     longitude
     from

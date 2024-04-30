@@ -121,7 +121,7 @@
 </body>
 
 <script>
-  $(document).ready(function () {
+$(document).ready(function () {
 
     var map = new naver.maps.Map('map', {
       center: new naver.maps.LatLng(37.3700065, 127.121359),
@@ -150,21 +150,32 @@
     $.ajax({
       url: '/plan/list?recruitBoardId=' + recruitBoardId.val() + '&tripDate=' + tripDate.val(),
       type: 'GET',
-      success: function (data) {
+      success: function(data) {
         // 반복문 돌려서 지도에 핀을 로드
-        data.forEach(function (pin) {
+        data.forEach(function(pin) {
           var marker = new naver.maps.Marker({
             map: map,
             position: new naver.maps.LatLng(pin.latitude, pin.longitude)
           });
-          // 로드한 핀을 눌렀을 때 핀의 상세정보 가져오기
-          marker.addListener('click', function () {
+
+          // 로드된 핀의 제목을 말풍선 출력을 해줄 객체
+          var infowindow = new naver.maps.InfoWindow({
+            content: '<h3>' + pin.title + '</h3>'
+          });
+
+          // 마커를 한 번 눌렀을 때 제목(말풍선) 보여주기
+          marker.addListener('click', function() {
+            infowindow.open(map, marker);
+          });
+
+          // 로드한 핀을 더블 클릭했을 때 핀의 상세정보 보여주기
+          marker.addListener('dblclick', function() {
             $.ajax({
               url: '/plan/view?recruitBoardId=' + recruitBoardId.val() + '&tripDate=' + tripDate.val() + '&latitude=' + pin.latitude + '&longitude=' + pin.longitude,
               type: 'GET',
               contentType: false,
               processData: false
-            }).done(function (planBoard) {
+            }).done(function(planBoard) {
               $('#viewModal').modal('show');
               planBoardId.val(planBoard.planBoardId)
               viewTripOrder.val(planBoard.tripOrder);
