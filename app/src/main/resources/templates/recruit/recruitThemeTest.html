@@ -8,9 +8,9 @@
   <title>모여</title>
 </head>
 <body>
-<aside data-th-fragment="recruitThemeList" style="float:left; padding-right:10px">
+<aside data-th-fragment="recruitThemeList">
   <ul id="recruitTheme" style="list-style: none;">
-    <li><a data-th-href="@{list(regionId=${regionId})}">전체</a></li>
+    <li><div><a data-th-href="@{list(regionId=${regionId})}">전체</a></div></li>
     <li><a data-th-href="@{list(themeId=1,regionId=${regionId})}" onclick="function move()">힐링</a></li>
     <li><a data-th-href="@{list(themeId=2,regionId=${regionId})}">캠핑</a></li>
     <li><a data-th-href="@{list(themeId=3,regionId=${regionId})}">액티비티</a></li>
@@ -19,9 +19,4 @@
   </ul>
 </aside>
 </body>
-<!--<script type="text/javascript">-->
-<!--  function detail(themeId, regionId) {-->
-<!--      location.href="http://localhost:8888/recruit/list?themeId="+ themeId + "&regionId=" + regionId;-->
-<!--  }-->
-<!--</script>-->
 </html>

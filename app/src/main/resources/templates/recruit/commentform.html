@@ -3,18 +3,28 @@
 <head>
   <meta charset='UTF-8'>
   <title>모여</title>
-</head>
-<body data-th-fragment="commentuserinfo">
 
-<input data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
-<a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
-  <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
-</a>
-<a data-th-unless="*{member.photo}" href="/img/default-photo.jpeg">
-  <img height='20px' src="/img/default-photo.jpeg">
-</a>
-작성자: <span data-th-text="*{member.nickname}"></span>
-작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+</head>
+<body data-th-fragment="commentuserinfo" >
+<div class="d-flex flex-row bd-highlight mb-3">
+  <input data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
+  <div>
+    <a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
+      <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+    </a>
+    <a data-th-unless="*{member.photo}" href="/img/default-photo.jpeg">
+      <img height='20px' src="/img/default-photo.jpeg">
+    </a>
+  </div>
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <span data-th-text="*{member.nickname}"></span> 
+    <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+  </div>
+</div>
 
 </body>
 </html>

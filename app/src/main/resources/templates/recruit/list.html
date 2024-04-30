@@ -8,7 +8,24 @@
   <!-- Bootstrap core CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet">
-
+  <style>
+    aside #recruitTheme {
+      display:flex;
+      justify-content:space-between;
+      flex-wrap:wrap;
+      width: 500px;
+      margin-right: 35px;
+    }
+    aside #recruitTheme li{
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+    aside #recruitRegion li {
+      margin-top: 10px;
+      margin-right: 50px;
+      margin-bottom: 10px;
+    }
+  </style>
 </head>
 
 <body>
@@ -31,11 +48,6 @@
             지역
           </div>
         </div>
-        <div class="m-2">
-          <div data-th-replace="recruit/recruitThemeTest :: recruitThemeList">
-            테마
-          </div>
-        </div>
       </div>
     </div>
 
@@ -43,6 +55,17 @@
     <div class="d-flex flex-column border p-2 col-7">
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
+
+      <!-- 지역, 테마 -->
+      <div class="d-flex justify-content-center">
+        <div fName="regionTheme" class="d-flex mx-2">
+          <div class="m-2">
+            <div class="recruitThemeList" data-th-replace="recruit/recruitThemeTest :: recruitThemeList">
+              테마
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- 리스트 -->
       <table class="table table-striped table-hover table-bordered">

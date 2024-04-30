@@ -8,9 +8,8 @@
   <title>모여</title>
 </head>
 <body>
-<aside data-th-fragment="recruitRegionList" style="float:left; padding-right:10px">
+<aside data-th-fragment="recruitRegionList" style="padding-right:10px">
   <ul id="recruitRegion" style="list-style: none;">
-    <!-- 이거 리팩토링해야됨... -->
     <li><a data-th-href="@{list(themeId=${themeId})}">전체</a></li>
     <li><a data-th-href="@{list(regionId=1,themeId=${themeId})}">서울특별시</a></li>
     <li><a data-th-href="@{list(regionId=2,themeId=${themeId})}">부산광역시</a></li>
