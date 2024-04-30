@@ -22,6 +22,9 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+  <!-- JSON -->
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+
   <style>
     body {
         padding-left: 10px;
@@ -35,7 +38,7 @@
 <h2>모집 게시판</h2>
 
 <form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
-  <input type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
+  <input id="recruitBoardId" type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
   <div>
     제목: <input id="title" name="title" type="text" data-th-value="*{title}">
   </div>
@@ -50,7 +53,7 @@
     여행일자: <input id="startDate" name="startDate" type="date" data-th-value=*{startDate}> ~ <input id="endDate" name="endDate" type="date" data-th-value=*{endDate}>
   </div>
   <div>
-    모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
+    모집인원: <input id="recruitTotal" name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
   </div>
     <div data-th-replace="review/regionList :: regionList">지역리스트</div>
     <div data-th-replace="review/themeList :: themeList">테마리스트</div>
@@ -67,8 +70,8 @@
   <div>
   </div>
   <div>
-    <button id="updateBtn" type="submit">등록</button>
-    <button data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="list.html">취소</button>
+    <button id="updateBtn" type="button" data-th-onclick="'recruitUpdate(' + *{recruitBoardId} + ')'">수정</button>
+    <a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="view.html">취소</a>
   </div>
   <div id="title-error" class="invalid-feedback"></div>
   <div id="deadline-error" class="invalid-feedback"></div>
@@ -113,7 +116,6 @@
     err(region, regionError, event, "지역을 선택하세요!");
   });
 </script>
-
 
 <script>
   // HTML 문서가 완전히 로드되었을 때 실행될 코드를 지정
@@ -307,6 +309,8 @@
 
   function initGeocoder() {
 
+    console.log("initGeocoder()");
+
       searchAddressToCoordinate('[[${board.address}]]');
 
       map.addListener('click', function(e) {
@@ -404,6 +408,75 @@
 
   naver.maps.onJSContentLoaded = initGeocoder;
 
+</script>
+
+<script>
+
+  function recruitUpdate(recruitBoardId) { // 수정 버튼 클릭 시 호출되는 함수.
+    var reply = confirm("수정하시겠습니까?");
+
+    if (reply) {
+
+      const recruitBoard = prepareRecruitBoard(); // 현재 페이지의 정보를 리턴하는 함수
+
+      $.ajax({
+        url: "update",
+        type: "POST",
+        data: JSON.stringify(recruitBoard), // 데이터의 포맷을 json으로 하여 요청.
+        processData: false,
+        contentType: 'application/json', // 데이터의 포맷을 json으로 하여 요청.
+      })
+      .done(function(response) {
+        if (response == 1) {
+          alert("수정되었습니다");
+          window.location.href = '/recruit/view?recruitBoardId=' + recruitBoardId;
+        } else {
+          alert("에러");
+          window.location.href = '/recruit/view?recruitBoardId=' + recruitBoardId;
+        }
+      })
+    }
+  }
+
+  function prepareRecruitBoard() { // 현재 페이지의 정보를 리턴하는 함수
+
+    const radioButtons = document.querySelectorAll('input[name="state"]');
+    // 변수를 초기화
+    let selectedValue;
+    // 각 라디오 버튼의 checked 상태 확인
+    radioButtons.forEach(radio => {
+      if (radio.checked) {
+        // 선택된 라디오 버튼의 값을 변수에 저장
+        selectedValue = radio.value;
+      }
+    });
+
+    var address = document.getElementById('addr').value;
+    theme = {
+    themeId: document.getElementById('themeId').value
+    };
+    region = {
+    regionId: document.getElementById('regionId').value
+    };
+
+    const recruitBoard = {
+    recruitBoardId: document.getElementById('recruitBoardId').value,
+    title: document.getElementById('title').value,
+    state: selectedValue,
+    content: document.getElementById('summernote').value,
+    deadline: document.getElementById('deadline').value,
+    startDate: document.getElementById('startDate').value,
+    endDate: document.getElementById('endDate').value,
+    recruitTotal: document.getElementById('recruitTotal').value,
+    address: address,
+    theme: theme,
+    region: region,
+    latitude: document.getElementById('latitude').value,
+    longitude: document.getElementById('longitude').value
+    };
+
+    return recruitBoard;
+  }
 </script>
 
 </body>

@@ -27,8 +27,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -227,10 +229,9 @@ public class RecruitBoardController {
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String update(
-      RecruitBoard board,
-      int themeId,
-      int regionId,
+      @RequestBody RecruitBoard recruitBoard,
       HttpSession session,
       SessionStatus sessionStatus) throws Exception {
 
@@ -240,19 +241,15 @@ public class RecruitBoardController {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
-    RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());
+    RecruitBoard old = recruitBoardService.get(recruitBoard.getRecruitBoardId());
     if (old == null) {
       throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/list");
     }
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
-    if (themeId == 0 || regionId == 0) {
-      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/view?recruitBoardId=" + board.getRecruitBoardId());
+    if (recruitBoard.getRegion().getRegionId() == 0 || recruitBoard.getTheme().getThemeId() == 0) {
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/view?recruitBoardId=" + recruitBoard.getRecruitBoardId());
     }
-
-    // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
-    board.setTheme(Theme.builder().themeId(themeId).build());
-    board.setRegion(Region.builder().regionId(regionId).build());
 
     // 세션에서 사진 못가져오고있음
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
@@ -270,7 +267,7 @@ public class RecruitBoardController {
       // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
       for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
         RecruitPhoto recruitPhoto = recruitPhotos.get(i);
-        if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
+        if (recruitBoard.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
           recruitPhotos.remove(i);
         }
@@ -278,16 +275,16 @@ public class RecruitBoardController {
     }
 
     if (recruitPhotos.size() > 0) {
-      board.setPhotos(recruitPhotos);
+      recruitBoard.setPhotos(recruitPhotos);
     }
 
     // DBMS의 정보를 해당 board 객체로 수정함.
-    recruitBoardService.update(board);
+    recruitBoardService.update(recruitBoard);
 
     // 게시글을 변경하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
     sessionStatus.setComplete();
 
-    return "redirect:list";
+    return "1";
   }
 
 
