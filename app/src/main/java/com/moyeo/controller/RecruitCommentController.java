@@ -1,9 +1,7 @@
 package com.moyeo.controller;
 
 import com.moyeo.service.RecruitBoardService;
-import com.moyeo.service.RegionService;
 import com.moyeo.service.StorageService;
-import com.moyeo.service.ThemeService;
 import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
@@ -17,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 @RequiredArgsConstructor
@@ -31,6 +30,7 @@ public class RecruitCommentController {
 
 
   @PostMapping("add")
+  @ResponseBody
   public String commentAdd(RecruitComment recruitComment, int recruitBoardId, HttpSession session) throws Exception{
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
 
@@ -42,7 +42,7 @@ public class RecruitCommentController {
     recruitComment.setRecruitBoard(recruitBoard);
     recruitComment.setMember(loginUser);
     recruitBoardService.addComment(recruitComment);
-    return "redirect:../../recruit/view?recruitBoardId=" + recruitBoardId;
+    return "1";
   }
 
   @PostMapping("update")

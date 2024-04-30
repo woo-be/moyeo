@@ -23,6 +23,9 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+    <!-- JSON -->
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+
   <style>
       body {
         padding-left: 10px;
@@ -36,7 +39,7 @@
 <form action="update" data-th-action="@{updateForm}"
       enctype='multipart/form-data' method='post'>
   <div>
-    번호: <input data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='text' value='100'>
+    번호: <input id="recruitBoardId" data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='text' value='100'>
   </div>
   <div>
     제목: <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">
@@ -124,7 +127,7 @@
     </ul>
   </div>
 
-  <form data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
+  <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
     <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
     <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
       <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
@@ -135,7 +138,7 @@
     <input data-th-value="*{photo}" type='hidden'>
     작성자: <input data-th-value="*{name}" name="name" readonly type='text'/>
     내용: <textarea id="content" name="content" type="text"></textarea>
-    <button id="submit">전송</button>
+    <button id="submit" type="button" data-th-onclick="addRecruitComment()">전송</button>
   </form>
 </div>
 </body>
@@ -420,6 +423,36 @@
 
   function cancelModal() {
     alert("취소되었습니다.");
+  }
+
+  /* 댓글 등록을 눌렀을 때 호출되는 함수,
+  댓글 내용이 없으면 내용을 입력하라는 모달창 출력,
+  내용이 있다면 ajax로 서버에게 요청 */
+  function addRecruitComment() {
+
+    // id가 commentForm인 form 태그의 name value 값을 저장하는 객체
+    var formData = new FormData(commentForm);
+
+    if (formData.get("content") == '') {
+      alert("내용을 입력해 주세요.");
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: "comment/add",
+        data: formData,
+        contentType: false,
+        processData: false
+      })
+      .done(function(response) {
+        if (response == 1) {
+          alert("댓글이 등록되었습니다.");
+          window.location.href = window.location.href;
+        } else {
+          alert("에러");
+          window.location.href = window.location.href;
+        }
+      })
+    }
   }
 
 </script>
