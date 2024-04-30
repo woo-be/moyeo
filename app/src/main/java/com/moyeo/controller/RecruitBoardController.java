@@ -287,7 +287,7 @@ public class RecruitBoardController {
     // 게시글을 변경하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
     sessionStatus.setComplete();
 
-    return "redirect:list";
+    return "redirect:view?recruitBoardId=" + board.getRecruitBoardId();
   }
 
 
