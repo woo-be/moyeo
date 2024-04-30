@@ -11,8 +11,6 @@ import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
-import com.moyeo.vo.Region;
-import com.moyeo.vo.Theme;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.Cookie;
@@ -30,7 +28,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
@@ -289,6 +286,7 @@ public class RecruitBoardController {
 
 
   @GetMapping("delete")
+  @ResponseBody
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null){
@@ -312,7 +310,7 @@ public class RecruitBoardController {
       storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
     }
 
-    return "redirect:list";
+    return "1";
   }
 
   @PostMapping("file/upload")
