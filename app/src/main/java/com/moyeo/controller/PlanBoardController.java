@@ -4,6 +4,7 @@ package com.moyeo.controller;
 import com.moyeo.service.PlanBoardService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.StorageService;
+import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.Pin;
@@ -146,25 +147,46 @@ public class PlanBoardController {
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String update(
-      PlanBoard planBoard,
+      @RequestParam("planBoardId") String planBoardId,
+      @RequestParam("viewTripOrder") String viewTripOrder,
+      @RequestParam("viewPostTitle") String viewPostTitle,
+      @RequestParam("viewPostContent") String viewPostContent,
       HttpSession session,
       SessionStatus sessionStatus,
       Model model) throws Exception {
 
-    model.addAttribute("recruitBoardId", planBoard.getRecruitBoardId());
+    log.debug("planBoardId: " + planBoardId);
+    log.debug("viewTripOrder: " + viewTripOrder);
+    log.debug("viewPostTitle: " + viewPostTitle);
+    log.debug("viewPostContent: " + viewPostContent);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
-      session.setAttribute("message", "로그인 해주세요");
-      session.setAttribute("replaceUrl", "/auth/form");
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
-    PlanBoard old = planBoardService.get(planBoard.getPlanBoardId());
+    PlanBoard old = planBoardService.get(Integer.parseInt(planBoardId));
+    PlanBoard planBoard = PlanBoard.builder()
+        .planBoardId(old.getPlanBoardId())
+        .tripOrder(Integer.parseInt(viewTripOrder))
+        .title(viewPostTitle)
+        .content(viewPostContent)
+        .recruitBoardId(old.getRecruitBoardId())
+        .tripDate(old.getTripDate())
+        .latitude(old.getLatitude())
+        .longitude(old.getLongitude())
+        .build();
+
+    log.debug("old:" + old);
+    log.debug("planBoard:" + planBoard);
+
     old.setPhotos(planBoardService.getPhotos(planBoard.getPlanBoardId()));
-    log.debug(old.getPhotos().getFirst().getPhoto());
+//    log.debug(old.getPhotos().getFirst().getPhoto());
+
     if (old == null) {
-      throw new Exception("번호가 유효하지 않습니다");
+      throw new Exception(ErrorName.INVALID_NUMBER);
     }
 
     List<PlanPhoto> photos = (List<PlanPhoto>) session.getAttribute("photos");
@@ -187,11 +209,14 @@ public class PlanBoardController {
         planBoard.setPhotos(photos);
       }
     }
+
+    model.addAttribute("recruitBoardId", planBoard.getRecruitBoardId());
+
     planBoardService.update(planBoard);
 
     sessionStatus.setComplete();
 
-    return "redirect:view?planBoardId=" + planBoard.getPlanBoardId();
+    return "일정을 수정했습니다.";
   }
 
   @PostMapping("updateForm")

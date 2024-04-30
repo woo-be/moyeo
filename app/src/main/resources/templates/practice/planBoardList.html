@@ -92,6 +92,9 @@
       </div>
       <div class="modal-body">
         <div>
+          <input type="hidden" class="form-control" id="planBoardId">
+        </div>
+        <div>
           <label for="tripOrder" class="form-label">순서</label>
           <input type="text" class="form-control" id="viewTripOrder" placeholder="게시물 내용을 입력하세요">
         </div>
@@ -126,6 +129,8 @@
     });
 
     // 새로운 input
+    var planBoardId = $('#planBoardId');
+
     var tripOrder = $('#tripOrder');
     var postTitle = $('#postTitle');
     var postContent = $('#postContent');
@@ -161,6 +166,7 @@
               processData: false
             }).done(function (planBoard) {
               $('#viewModal').modal('show');
+              planBoardId.val(planBoard.planBoardId)
               viewTripOrder.val(planBoard.tripOrder);
               viewPostTitle.val(planBoard.title);
               viewPostContent.val(planBoard.content);
@@ -172,7 +178,30 @@
 
     // 업데이트 부분
     updateButton.click(function () {
-      console.log("업데이트 버튼을 눌러서 업데이트ajax 요청");
+      let planBoard = new FormData();
+      planBoard.append("planBoardId", planBoardId.val());
+      planBoard.append("viewTripOrder", viewTripOrder.val());
+      planBoard.append("viewPostTitle", viewPostTitle.val());
+      planBoard.append("viewPostContent", viewPostContent.val());
+
+      console.log(planBoardId.val());
+      console.log("tripOrder 변경값? ", viewTripOrder.val());
+      console.log("postTitle 변경값? ", viewPostTitle.val());
+      console.log("postContent 변경값? ", viewPostContent.val());
+
+      $.ajax({
+        url: '/plan/update',
+        type: 'POST',
+        contentType: false,
+        processData: false,
+        data:planBoard
+      }).done(() => {
+        // 수정한거저장
+        $('#markerModal').modal('hide'); // 저장 후 모달 창 닫기 <- 왜안닫아지는거야
+
+        // 현재 페이지를 다시로드
+        window.location.reload();
+      });
     });
 
     naver.maps.Event.addListener(map, 'click', function (e) {
