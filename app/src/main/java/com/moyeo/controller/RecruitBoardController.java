@@ -11,6 +11,8 @@ import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitMember;
 import com.moyeo.vo.RecruitPhoto;
+import com.moyeo.vo.Region;
+import com.moyeo.vo.Theme;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.Cookie;
@@ -282,6 +284,7 @@ public class RecruitBoardController {
     sessionStatus.setComplete();
 
     return "1";
+    //return "redirect:view?recruitBoardId=" + board.getRecruitBoardId();
   }
 
 

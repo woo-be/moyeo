@@ -99,6 +99,7 @@ public class RecruitMemberController {
     RecruitBoard team = recruitBoardService.get(recruitBoardId);
 
     model.addAttribute("team", team);
+    model.addAttribute("nickname", loginUser.getNickname());
     model.addAttribute("recruitBoardId", recruitBoardId);
   }
 

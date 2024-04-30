@@ -5,22 +5,36 @@
   <title>메뉴</title>
 </head>
 <body data-th-fragment="list">
-<div style="border: 1px solid black; float:left; width:150px">
+<div id="calendarMenu">
+  <style>
+    a.no-underline {
+      text-decoration: none;
+      color: black;
+    }
 
-  <p>메뉴</p>
-    <ol>
-      <a data-th-href="@{list(memberId=${memberId})}">
-        <li>여행멤버게시판</li>
-      </a>
-<!--      <a data-th-href="@{../plan/list(recruitBoardId=${recruitBoardId})}">-->
-<!--        <li>계획게시판</li>-->
-      <a data-th-href="@{../recruitMember/calendar(recruitBoardId=${recruitBoardId})}">
-        <li>달력</li>
-      </a>
-      <a data-th-href="@{../material/list(recruitBoardId=${recruitBoardId})}">
-        <li>준비물게시판</li>
-      </a>
-    </ol>
+    #calendarMenu{
+      padding-right:10px;
+      margin-top:63px;
+    }
+
+    #calendarMenuHead{
+      text-align: center;
+    }
+
+    #calendarNav ul {
+      list-style-type: none;
+    }
+  </style>
+
+  <nav id="calendarNav">
+    <h3 id="calendarMenuHead">메뉴</h3>
+    <ul>
+      <li><a data-th-href="@{list(memberId=${memberId})}" class="no-underline">여행멤버게시판</a></li>
+      <li><a data-th-href="@{../recruitMember/calendar(recruitBoardId=${recruitBoardId})}" class="no-underline">달력</a></li>
+      <li><a data-th-href="@{../material/list(recruitBoardId=${recruitBoardId})}" class="no-underline">준비물게시판</a></li>
+    </ul>
+  </nav>
+
 
 </div>
 
