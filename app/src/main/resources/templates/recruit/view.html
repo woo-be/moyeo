@@ -84,10 +84,12 @@
     [<a data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
     <div data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
       <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
-        <button type="button">신청하기</button></a>
+        <button type="button" data-th-onclick="applyModal()">신청하기</button>
+      </a>
       <div data-th-if="${recruitMember} != null" style="display:inline">
         <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">
-          <button type="button">신청취소</button></a>
+          <button type="button" data-th-onclick="cancelModal()">신청취소</button>
+        </a>
         <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>
         <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>
       </div>
@@ -366,9 +368,10 @@
 
 </script>
 
-<script>  
-
-  function deleteRecruit(recruitBoardId) {
+<script>
+  /* 삭제 버튼 클릭시 호출되는 함수,
+  삭제 여부를 묻고 확인/취소 여부에 따라 ajax로 재요청하는 함수 */
+  function deleteRecruit(recruitBoardId) { // 
     var reply = confirm("삭제하시겠습니까?");
 
     if (reply) {
@@ -389,6 +392,34 @@
         }
       })
     }
+  }
+
+  /* 신청 여부를 묻고 확인/취소 여부에 따라 ajax로 재요청하는 함수 */
+  // function addRecruitMember(recruitBoardId) {
+  // var reply = confirm("신청하시겠습니까?");
+  // $.ajax({
+  //     url: "../recruitMember/add?recruitBoardId=" + recruitBoardId,
+  //     type: "GET",
+  //     contentType: false,
+  //     processData: false
+  //   })
+  //   .done(function(response) {
+  //     if (response == 1) {
+  //       alert("신청되었습니다.");
+  //       window.location.href = 'view?recruitBoardId=' + recruitBoardId;
+  //     } else {
+  //       alert("에러");
+  //       window.location.href = 'view?recruitBoardId=' + recruitBoardId;
+  //     }
+  //   })
+  // }
+
+  function applyModal() {
+    alert("신청되었습니다.");
+  }
+
+  function cancelModal() {
+    alert("취소되었습니다.");
   }
 
 </script>

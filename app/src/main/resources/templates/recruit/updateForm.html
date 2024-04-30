@@ -407,13 +407,14 @@
 </script>
 
 <script>
-
-  function updateRecruit(recruitBoardId) { // 수정 버튼 클릭 시 호출되는 함수.
+  /* 수정 버튼 클릭 시 호출되는 함수,
+  사용자의 확인/취소 여부에 따라 ajax를 사용하여 재요청함. */
+  function updateRecruit(recruitBoardId) {
     var reply = confirm("수정하시겠습니까?");
 
     if (reply) {
 
-      const recruitBoard = prepareRecruitBoard(); // 현재 페이지의 정보를 리턴하는 함수
+      const recruitBoard = prepareRecruitBoard(); // 현재 페이지의 정보를 담은 객체를 리턴하는 함수
 
       $.ajax({
         url: "update",
@@ -433,8 +434,8 @@
       })
     }
   }
-
-  function prepareRecruitBoard() { // 현재 페이지의 정보를 리턴하는 함수
+  /* 현재 페이지의 정보를 담은 객체를 리턴하는 함수 */
+  function prepareRecruitBoard() {
 
     const radioButtons = document.querySelectorAll('input[name="state"]');
     let selectedValue;
