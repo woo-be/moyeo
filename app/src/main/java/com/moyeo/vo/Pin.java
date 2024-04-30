@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class Pin {
   private int planBoardId;
+  private String title;               // 말풍선으로 보여줄 제목
   private double latitude;           // 위도
   private double longitude;          // 경도
 }

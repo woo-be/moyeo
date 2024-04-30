@@ -49,14 +49,12 @@ public class PlanBoardController {
   @ResponseBody
   public List<Pin> list(
       int recruitBoardId,
-      String tripDate,
-      Model model) {
+      String tripDate) {
     List<Pin> list;
     list = planBoardService.pinList(recruitBoardId, tripDate);
 
     log.debug("planBoard = " + list);
-//    model.addAttribute("list", list);
-//    model.addAttribute("recruitBoardId", recruitBoardId);
+
     return list;
   }
 
