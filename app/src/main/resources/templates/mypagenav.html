@@ -20,7 +20,10 @@
       <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
         <h5>회원 정보</h5>
       </button>
-      <div class="collapse show" id="home-collapse">
+
+      <!-- 토글네이게이션이 계속 보여지게 하고 싶으면 class="collapse show" 으로 해주면 계속 열려있음 -->
+
+      <div class="collapse" id="home-collapse">
         <ul class="btn-toggle-nav fw-normal pb-1 small">
           <li><a data-th-href="@{/member/mypage}" class="link-dark rounded">회원 정보</a></li>
           <li><a data-th-href="@{/member/userInfo}" class="link-dark rounded">회원 수정</a></li>

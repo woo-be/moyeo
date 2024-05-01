@@ -4,37 +4,71 @@
   <meta charset='UTF-8'>
   <title>모여</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <style>
+    .paging {
+      margin-left: 56.5%;
+      margin-bottom: 50px;
+    }
+    .modal-dialog{
+      background-color: white;
+    }
+    .card {
+      width: 70%;
+      padding: 1%;
+      padding-bottom: 20px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+  </style>
 </head>
 
-<div data-th-replace="header :: header">머리말</div>
+
 
 <body>
-<p>마이페이지</p>
-<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-<div>
-  <table border='1'>
-    <thead>
-    <tr>
-      <th>제목</th>
-      <th>모집현황</th>
-      <th>모집상태</th>
-      <th>기한</th>
-    </tr>
-    </thead>
+<div data-th-replace="header :: header">머리말</div>
 
-    <tbody>
-    <tr data-th-each="recruitboard : ${scrapList}" data-th-object="${recruitboard}">
-      <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="../recruit/view.html">제목입니다</a></td>
-      <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-      <td data-th-if="*{state == true}">모집중</td>
-      <td data-th-if="*{state == false}">모집완료</td>
-      <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
-    </tr>
-    </tbody>
-  </table>
+<div class="d-flex justify-content-around">
+  <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+  <div class="card">
+    <div class="bg-white  py-4 card-header"><h2 class="mb-0">즐겨찾기한 모집글</h2></div>
+    <div class="table-responsive">
+      <table class="text-nowrap mb-0 table">
+        <thead class="table-light">
+        <tr>
+          <th>번호</th>
+          <th>제목</th>
+          <th>모집현황</th>
+          <th>마감일자</th>
+          <th>모집상태</th>
+        </tr>
+        </thead>
 
+        <tbody>
+        <tr data-th-each="recruitboard : ${scrapList}" data-th-object="${recruitboard}">
+          <td class="align-middle">
+            <div data-th-text="*{recruitBoardId}">게시물번호</div>
+          </td>
+          <td class="align-middle"><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+          <td class="align-middle text-dark">
+            <div data-th-text="|*{current} / *{recruitTotal}|">1 / 4</div>
+          </td>
+          <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td>
+          <td class="align-middle">
+            <div class="avatar-group">
+              <span class="badge bg-warning" data-th-if="*{state == true}">모집중</span>
+              <span class="badge bg-secondary"  data-th-if="*{state == false}">모집완료</span>
+            </div>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="paging">
   <p>
     [
     <a data-th-if="${pageNo <= 1}">이전</a>
@@ -50,6 +84,8 @@
     ]
   </p>
 </div>
+
+
 
 </body>
 <div data-th-replace="footer :: footer">꼬리말</div>
