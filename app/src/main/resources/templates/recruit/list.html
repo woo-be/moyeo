@@ -8,6 +8,9 @@
   <!-- Bootstrap core CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet">
+  <!-- JQuery -->
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
   <style>
     aside #recruitTheme {
       display:flex;
@@ -107,9 +110,12 @@
             <li class="page-item"><a class="page-link"
                                      data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
                                      data-th-if="${pageNo > 1}">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
+            <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}"><a class="page-link"
+                href="#"
+                data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                data-th-text="${pageButton}"></a>
+            </li>
             <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
             </li>
             <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
@@ -176,4 +182,15 @@
       break;
   }
 });
+</script>
+
+<script>
+  $(document).ready(function() {
+
+    /* 현재 페이지에 해당하는 페이지 버튼을 찾아서 그 버튼의 클래스에 active를 추가,
+    현재 페이지가 어디인지 시각적으로 보이게 함. */
+    var link = document.getElementById("page[[${pageNo}]]");
+    console.log(link);
+    link.classList.add('active');
+  })
 </script>
