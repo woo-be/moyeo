@@ -16,18 +16,53 @@
       display:flex;
       justify-content:space-between;
       flex-wrap:wrap;
-      width: 500px;
+      width: 700px;
       margin-right: 35px;
     }
     aside #recruitTheme li{
+      display:flex;
+      justify-content:center;
+
+      width: 90px;
+      border: 1px solid rgb(184, 184, 184) ;
+      padding: 3px 7px 3px 7px;
+      border-radius: 45px;
+      text-decoration-line: none;
+
       margin-left: 10px;
       margin-right: 10px;
     }
     aside #recruitRegion li {
-      margin-top: 10px;
+      margin-top: 8px;
       margin-right: 50px;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
+    aside ul li a {
+      color: rgb(78, 78, 78);
+      text-decoration-line: none;
+    }
+    .column-no {
+      width: 6%;
+    }
+    .column-title {
+      width: 44%;
+    }
+    .column-writer {
+      width: 13%;
+    }
+    .column-present {
+      width: 10%;
+    }
+    .column-state {
+      width: 10%;
+    }
+    .column-createdAt {
+      width: 10%;
+    }
+    .column-hits {
+      width: 7%;
+    }
+
   </style>
 </head>
 
@@ -71,32 +106,32 @@
       </div>
 
       <!-- 리스트 -->
-      <table class="table table-striped table-hover table-bordered">
+      <table class="table table-hover">
         <thead>
         <tr>
-          <th class="col-1 text-center">번호</th>
-          <th class="col-4 text-center">제목</th>
-          <th class="col-1 text-center">작성자</th>
-          <th class="col-1 text-center">모집현황</th>
-          <th class="col-1 text-center">모집상태</th>
-          <th class="col-1 text-center">작성일자</th>
-          <th class="col-1 text-center">조회수</th>
+          <th class="col-1 text-center column-no">번호</th>
+          <th class="col-4 text-center column-title">제목</th>
+          <th class="col-1 text-center column-writer">작성자</th>
+          <th class="col-1 text-center column-present">모집현황</th>
+          <th class="col-1 text-center column-state">모집상태</th>
+          <th class="col-1 text-center column-createdAt">작성일자</th>
+          <th class="col-1 text-center column-hits">조회수</th>
         </tr>
         </thead>
         <tbody>
         <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
-          <td class="text-center" data-th-text="*{recruitBoardId}">1</td>
+          <td class="text-center column-no" data-th-text="*{recruitBoardId}">1</td>
           <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
           <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-          <td class="text-center"><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
+          <td class="text-center column-title"><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
                  data-th-text="*{title}" href="view.html">제목입니다</a></td>
-          <td class="text-center" data-th-text="*{writer.nickname}">홍길동</td>
-          <td class="text-center" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-          <td class="text-center" data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
-          <td class="text-center" data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
-          <td class="text-center" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+          <td class="text-center column-writer" data-th-text="*{writer.nickname}">홍길동</td>
+          <td class="text-center column-present" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+          <td class="text-center column-state" data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
+          <td class="text-center column-state" data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
+          <td class="text-center column-createdAt" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
           <!--data-th-value => data-th-text -->
-          <td class="text-center" data-th-text="*{views}">12</td>
+          <td class="text-center column-hits" data-th-text="*{views}">12</td>
         </tr>
         </tbody>
       </table>
