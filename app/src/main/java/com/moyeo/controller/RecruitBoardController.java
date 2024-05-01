@@ -142,6 +142,13 @@ public class RecruitBoardController {
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+
+    log.debug("현재페이지:" + pageNo);
+//    log.debug("pageButtons: " + pageButtons[0] + pageButtons[1] + pageButtons[2] + pageButtons[3] + pageButtons[4]);
+    log.debug("pageSize:" + pageSize);
+    log.debug("numOfPage:" + numOfPage);
+
+
     /*  */
     int[] pageButtons; // 페이징 페이지 숫자 버튼
 
@@ -165,15 +172,11 @@ public class RecruitBoardController {
       }
     } else { // b. 게시판 페이지가 5개 미만일 때,
       pageButtons = new int[numOfPage]; // 페이지 숫자 버튼의 개수를 전체 페이지 개수로 함.
-      for (int i = 0; i < numOfRecord; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+      for (int i = 0; i < numOfPage; i++) { // 숫자 버튼이 1부터 시작하도록 함.
         pageButtons[i] = i + 1;
       }
     }
 
-    log.debug("현재페이지:" + pageNo);
-    log.debug("pageButtons: " + pageButtons[0] + pageButtons[1] + pageButtons[2] + pageButtons[3] + pageButtons[4]);
-    log.debug("pageSize:" + pageSize);
-    log.debug("numOfPage:" + numOfPage);
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
     model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
