@@ -8,6 +8,9 @@
   <!-- Bootstrap core CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
         rel="stylesheet">
+  <!-- JQuery -->
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
   <style>
     aside #recruitTheme {
       display:flex;
@@ -71,29 +74,29 @@
       <table class="table table-striped table-hover table-bordered">
         <thead>
         <tr>
-          <th>번호</th>
-          <th class="col-">제목</th>
-          <th>작성자</th>
-          <th>모집현황</th>
-          <th>모집상태</th>
-          <th>작성일자</th>
-          <th>조회수</th>
+          <th class="col-1 text-center">번호</th>
+          <th class="col-4 text-center">제목</th>
+          <th class="col-1 text-center">작성자</th>
+          <th class="col-1 text-center">모집현황</th>
+          <th class="col-1 text-center">모집상태</th>
+          <th class="col-1 text-center">작성일자</th>
+          <th class="col-1 text-center">조회수</th>
         </tr>
         </thead>
         <tbody>
         <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">
-          <td data-th-text="*{recruitBoardId}">1</td>
+          <td class="text-center" data-th-text="*{recruitBoardId}">1</td>
           <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
           <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-          <td><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
+          <td class="text-center"><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
                  data-th-text="*{title}" href="view.html">제목입니다</a></td>
-          <td data-th-text="*{writer.nickname}">홍길동</td>
-          <td data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-          <td data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
-          <td data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
-          <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+          <td class="text-center" data-th-text="*{writer.nickname}">홍길동</td>
+          <td class="text-center" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+          <td class="text-center" data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
+          <td class="text-center" data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
+          <td class="text-center" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
           <!--data-th-value => data-th-text -->
-          <td data-th-text="*{views}">12</td>
+          <td class="text-center" data-th-text="*{views}">12</td>
         </tr>
         </tbody>
       </table>
@@ -107,9 +110,12 @@
             <li class="page-item"><a class="page-link"
                                      data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
                                      data-th-if="${pageNo > 1}">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
+            <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}"><a class="page-link"
+                href="#"
+                data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                data-th-text="${pageButton}"></a>
+            </li>
             <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
             </li>
             <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
@@ -176,4 +182,15 @@
       break;
   }
 });
+</script>
+
+<script>
+  $(document).ready(function() {
+
+    /* 현재 페이지에 해당하는 페이지 버튼을 찾아서 그 버튼의 클래스에 active를 추가,
+    현재 페이지가 어디인지 시각적으로 보이게 함. */
+    var link = document.getElementById("page[[${pageNo}]]");
+    console.log(link);
+    link.classList.add('active');
+  })
 </script>

@@ -27,6 +27,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -142,8 +143,40 @@ public class RecruitBoardController {
       pageNo = numOfPage;
     }
 
+    log.debug("현재페이지:" + pageNo);
+//    log.debug("pageButtons: " + pageButtons[0] + pageButtons[1] + pageButtons[2] + pageButtons[3] + pageButtons[4]);
     log.debug("pageSize:" + pageSize);
     log.debug("numOfPage:" + numOfPage);
+
+
+    /*  */
+    int[] pageButtons; // 페이징 페이지 숫자 버튼
+
+    if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,
+      pageButtons = new int[5]; // 페이지 숫자 버튼의 개수를 5개로 함.
+
+      if (pageNo <= 3) { // 1. 현재 페이지가 시작페이지에서 3페이지 이내의 페이지일 때,
+        for (int i = 0; i < 5; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+          pageButtons[i] = i + 1;
+        }
+      } else if (pageNo >= (numOfPage - 2)) { // 2. 현재 페이지가 끝페이지에서 3페이지 이내의 페이지일 때,
+        int temp = numOfPage;
+        for (int i = 4; i >= 0; i--) { // 숫자 버튼이 끝페이지 -4 부터 시작하도록 함.
+          pageButtons[i] = temp--;
+        }
+      } else { // 3. 그 외의 경우,
+        int temp = pageNo - 2;
+        for (int i = 0; i < 5; i++) { // 숫자 버튼의 가운데 버튼이 현재페이지를 가리키도록 함.
+          pageButtons[i] = temp++;
+        }
+      }
+    } else { // b. 게시판 페이지가 5개 미만일 때,
+      pageButtons = new int[numOfPage]; // 페이지 숫자 버튼의 개수를 전체 페이지 개수로 함.
+      for (int i = 0; i < numOfPage; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+        pageButtons[i] = i + 1;
+      }
+    }
+
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
     model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
@@ -155,6 +188,7 @@ public class RecruitBoardController {
     model.addAttribute("numOfPage", numOfPage);
     model.addAttribute("keyword", keyword); // 검색어
     model.addAttribute("filter", filter); // 검색 필터(제목 | 내용 | 작성자)
+    model.addAttribute("pageButtons", pageButtons); // 페이지 숫자 버튼
   }
 
   @GetMapping("view")
@@ -227,10 +261,9 @@ public class RecruitBoardController {
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String update(
-      RecruitBoard board,
-      int themeId,
-      int regionId,
+      @RequestBody RecruitBoard recruitBoard,
       HttpSession session,
       SessionStatus sessionStatus) throws Exception {
 
@@ -240,19 +273,15 @@ public class RecruitBoardController {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
-    RecruitBoard old = recruitBoardService.get(board.getRecruitBoardId());
+    RecruitBoard old = recruitBoardService.get(recruitBoard.getRecruitBoardId());
     if (old == null) {
       throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/list");
     }
 
     // 지역 또는 테마를 선택하지 않으면 예외 발생.
-    if (themeId == 0 || regionId == 0) {
-      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/view?recruitBoardId=" + board.getRecruitBoardId());
+    if (recruitBoard.getRegion().getRegionId() == 0 || recruitBoard.getTheme().getThemeId() == 0) {
+      throw new MoyeoError(ErrorName.INVALID_NUMBER, "/recruit/view?recruitBoardId=" + recruitBoard.getRecruitBoardId());
     }
-
-    // board객체의 themeId와 regionId를 파라미터로 받은 themeId와 regionId로 설정함.
-    board.setTheme(Theme.builder().themeId(themeId).build());
-    board.setRegion(Region.builder().regionId(regionId).build());
 
     // 세션에서 사진 못가져오고있음
     // 게시글 등록할 때 삽입한 이미지 목록을 세션에서 가져온다.
@@ -270,7 +299,7 @@ public class RecruitBoardController {
       // Object Storage에 업로드 한 파일 중에서 게시글 콘텐트에 포함되지 않은 것은 삭제한다.
       for (int i = recruitPhotos.size() - 1; i >= 0; i--) {
         RecruitPhoto recruitPhoto = recruitPhotos.get(i);
-        if (board.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
+        if (recruitBoard.getContent().indexOf(recruitPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, recruitPhoto.getPhoto());
           recruitPhotos.remove(i);
         }
@@ -278,20 +307,22 @@ public class RecruitBoardController {
     }
 
     if (recruitPhotos.size() > 0) {
-      board.setPhotos(recruitPhotos);
+      recruitBoard.setPhotos(recruitPhotos);
     }
 
     // DBMS의 정보를 해당 board 객체로 수정함.
-    recruitBoardService.update(board);
+    recruitBoardService.update(recruitBoard);
 
     // 게시글을 변경하는 과정에서 세션에 임시 보관한 첨부파일 목록 정보를 제거한다.
     sessionStatus.setComplete();
 
-    return "redirect:view?recruitBoardId=" + board.getRecruitBoardId();
+    return "1";
+    //return "redirect:view?recruitBoardId=" + board.getRecruitBoardId();
   }
 
 
   @GetMapping("delete")
+  @ResponseBody
   public String delete(int recruitBoardId, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null){
@@ -315,7 +346,7 @@ public class RecruitBoardController {
       storageService.delete(this.bucketName, this.uploadDir, photo.getPhoto());
     }
 
-    return "redirect:list";
+    return "1";
   }
 
   @PostMapping("file/upload")

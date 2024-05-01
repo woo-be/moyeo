@@ -4,46 +4,70 @@
   <meta charset='UTF-8'>
   <title>모여</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-
-  <div data-th-replace="header :: header">머리말</div>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <style>
+    .paging {
+      margin-left: 56.5%;
+      margin-bottom: 50px;
+    }
+    .modal-dialog{
+      background-color: white;
+    }
+    .card {
+      width: 70%;
+      padding: 1%;
+      padding-bottom: 20px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+  </style>
 </head>
 
 <body>
-<p>마이페이지</p>
-<div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+<div data-th-replace="header :: header">머리말</div>
 
-<div>
-  <table border='1'>
-    <thead>
-    <tr>
-      <th>번호</th>
-      <th>제목</th>
-      <th>신청일자</th>
-      <th>마감일자</th>
-      <th>수락 여부</th>
-      <th>팀스페이스</th>
-    </tr>
-    </thead>
+<div class="d-flex justify-content-around">
+  <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+  <div class="card">
+    <div class="bg-white  py-4 card-header"><h2 class="mb-0">작성한 모집글</h2></div>
+    <div class="table-responsive">
+      <table class="text-nowrap mb-0 table">
+        <thead class="table-light">
+          <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>신청일자</th>
+            <th>마감일자</th>
+            <th>수락 여부</th>
+            <th>팀스페이스</th>
+          </tr>
+        </thead>
 
-    <tbody>
-    <tr data-th-each="recruitboard : ${myrequest}" data-th-object="${recruitboard}">
-      <td data-th-text="*{recruitBoardId}">1</td>
-      <td><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
-<!--    <td data-th-text="*{#temporals.format(createdDate, 'yyyy-MM-dd HH:mm')}">2024-04-01</td> &lt;!&ndash;data-th-value => data-th-text &ndash;&gt;-->
-      <td data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
-      <td data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">2024-04-02</td> <!--data-th-value => data-th-text -->
+        <tbody>
+        <tr data-th-each="recruitboard : ${myrequest}" data-th-object="${recruitboard}">
+          <td class="align-middle">
+            <div data-th-text="*{recruitBoardId}">게시물번호</div>
+          </td>
+          <td class="align-middle"><a data-th-href="@{/recruit/viewCountUp(recruitBoardId=*{recruitBoardId})}" data-th-text="*{title}" href="view.html">제목입니다</a></td>
+          <td class="align-middle" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">신청일자</td>
+          <td class="align-middle" data-th-text="*{#dates.format(deadline,'yyyy-MM-dd')}">마감일자</td>
+          <td class="align-middle text-dark">
+            <span class="badge bg-warning" data-th-if="*{state == true}" data-th-text="수락">수락 여부</span>
+            <span class="badge bg-secondary" data-th-if="*{state == false}" data-th-text="거절">거절 여부</span>
+          </td>
+          <td class="align-middle text-dark">
+            <span data-th-if="*{#strings.isEmpty(state)}" class="btn btn-secondary btn-sm" data-th-text="대기중">대기중</span>
+            <span data-th-if="*{state == true}"><button class="btn btn-success btn-sm">이동</button></span>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
 
-      <td data-th-if="*{state == true}" data-th-text="수락">수락</td>
-      <td data-th-if="*{state == false}" data-th-text="거절">거절</td>
-      <td data-th-if="*{#strings.isEmpty(state)}" data-th-text="대기중">대기중</td>
-      <td data-th-if="*{state == true}"><button>이동</button></td>
-    </tr>
-    </tbody>
-  </table>
-
-
+<div class="paging">
   <p>
     [
     <a data-th-if="${pageNo <= 1}">이전</a>
