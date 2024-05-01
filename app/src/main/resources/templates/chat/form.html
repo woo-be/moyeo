@@ -8,7 +8,8 @@
 </head>
 <body data-th-fragment="charForm">
 <div id="chatBox">
-  <h2 data-th-text="${recruitBoardId} + '번 채팅방'"></h2>
+  <h3 data-th-text="${recruitBoardId} + '번 채팅방'"></h3>
+  <br>
   <div class="chat-container" id="chatContainer"></div>
 
   <label for="recruitBoardId"></label>
@@ -19,7 +20,7 @@
   <!--  메세지 입력창에서 엔터를 눌렀을 때 keyCode 값이 13(enter)인지 확인한다.  -->
   <input class="inputBox" type="text" id="inputMessage"
          onkeydown="if (event.keyCode === 13) sendMessage()">
-  <button class="inputBox" type="button" onclick="sendMessage()">전송</button>
+  <button class="inputBox btn btn-dark" type="button" onclick="sendMessage()">전송</button>
 </div>
 <script type="text/javascript">
   let recruitBoardId = document.getElementById("recruitBoardId").value;
