@@ -29,55 +29,101 @@
     body {
         padding-left: 10px;
     }
+    .form-item-div {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgb(206, 206, 206);
+    }
+    .form-item-div-name {
+      margin-right:10px;
+    }
   </style>
 </head>
 
 <div data-th-replace="header :: header">머리말</div>
 
 <body>
-<h2>모집 게시판</h2>
+<div class="d-flex container-fluid justify-content-center">
+  <div class="d-flex flex-column border border-2 w-75">
+    <!-- 페이지 제목 -->
+    <div class="d-flex justify-content-center border-bottom border-2 mt-2 pb-3 mb-5">
+      <h2>멤버 모집 글 수정</h2>
+    </div>
+    <!-- 가운데 정렬 -->
+    <div class="d-flex justify-content-center">
+      <div class="w-50 pt-4 pb-4 ps-5 pe-5">
+        <form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
+          <input id="recruitBoardId" type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <h4 class="form-item-div-name">제목</h4>
+            <input class="form-control w-50" id="title" name="title" type="text" data-th-value="*{title}">
+          </div>
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <h4 class="form-item-div-name">상태</h4>
+            <input name="state" type="radio" data-th-checked="*{state == true}" value="true">
+            <span>모집중</span>
+            <input name="state" type="radio" data-th-checked="*{state == false}" value="false">
+            <span>마감</span>
+          </div>
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <div class="d-flex flex-row me-auto">
+              <h4 class="w-50 form-item-div-name">마감일</h4>
+              <input class="form-control w-75" id="deadline" name="deadline" type="date" data-th-value=*{deadline}>
+            </div>
+            <div class="d-flex flex-row">
+              <h4 class="w-50 form-item-div-name">여행일자</h4>
+              <input class="form-control w-75" id="startDate" name="startDate" type="date" data-th-value=*{startDate}> ~ <input class="form-control w-75" id="endDate" name="endDate" type="date" data-th-value=*{endDate}>
+            </div>
+          </div>
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <h4 class="form-item-div-name">모집인원</h4>
+            <input class="form-control w-25" id="recruitTotal" name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
+          </div>
+          <div data-th-replace="review/regionList :: regionList">지역리스트</div>
+          <div data-th-replace="review/themeList :: themeList">테마리스트</div>
+          <div class="form-item-div">
+            <div>
+              <h4 class="form-item-div-name">주소</h4>
+              <input class="form-item-div form-control w-75" id="addr" type="text" name="address">
+              <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
+              <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
+            </div>
+            <div class="d-flex flex-row">
+              <input class="form-item-div form-control w-75 me-3" id="address" type="text" placeholder="검색할 주소">
+              <input class="form-item-div btn btn-primary" id="submit" type="button" value="주소 검색">
+            </div>
+            <div id="map" style="width:500px;height:400px;"></div>
+          </div>
 
-<form action="update" data-th-action="@{update}" method="post" enctype='multipart/form-data' data-th-object="${board}">
-  <input id="recruitBoardId" type="hidden" name="recruitBoardId" data-th-value="*{recruitBoardId}">
-  <div>
-    제목: <input id="title" name="title" type="text" data-th-value="*{title}">
+          <div>
+            <h4 class="form-item-div-name">내용</h4>
+            <textarea id="summernote" name="content" data-th-text="*{content}"></textarea>
+          </div>
+
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+              <button id="updateBtn" type="button" class="btn btn-primary m-2" data-th-onclick="'updateRecruit(' + *{recruitBoardId} + ')'">수정</button>
+              <a class="btn btn-primary m-2" data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="view.html">취소</a>
+            </div>
+            <div class="d-flex justify-content-center">
+              <div>
+                <div id="title-error" class="invalid-feedback"></div>
+                <div id="deadline-error" class="invalid-feedback"></div>
+                <div id="startDate-error" class="invalid-feedback"></div>
+                <div id="endDate-error" class="invalid-feedback"></div>
+                <div id="region-error" class="invalid-feedback"></div>
+                <div id="theme-error" class="invalid-feedback"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
   </div>
-  <div>
-    상태: <input name="state" type="radio" data-th-checked="*{state == true}" value="true">모집중
-    <input name="state" type="radio" data-th-checked="*{state == false}" value="false">마감
-  </div>
-  <div>
-    마감일: <input id="deadline" name="deadline" type="date" data-th-value=*{deadline}>
-  </div>
-  <div>
-    여행일자: <input id="startDate" name="startDate" type="date" data-th-value=*{startDate}> ~ <input id="endDate" name="endDate" type="date" data-th-value=*{endDate}>
-  </div>
-  <div>
-    모집인원: <input id="recruitTotal" name="recruitTotal" type="number" min="2" max="20" value="2" data-th-value="*{recruitTotal}">
-  </div>
-    <div data-th-replace="review/regionList :: regionList">지역리스트</div>
-    <div data-th-replace="review/themeList :: themeList">테마리스트</div>
-  주소 : <input id="addr" type="text" name="address">
-  <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
-  <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
-  주소 검색:
-  <input id="address" type="text" placeholder="검색할 주소">
-  <input id="submit" type="button" value="주소 검색">
-  <div id="map" style="width:500px;height:400px;"></div>
-  <div>
-    내용: <textarea id="summernote" name="content" data-th-text="*{content}"></textarea>
-  </div>
-  <div>
-    <button id="updateBtn" type="button" data-th-onclick="'updateRecruit(' + *{recruitBoardId} + ')'">수정</button>
-    <a data-th-href="@{view(recruitBoardId=*{recruitBoardId})}" type="button" href="view.html">취소</a>
-  </div>
-  <div id="title-error" class="invalid-feedback"></div>
-  <div id="deadline-error" class="invalid-feedback"></div>
-  <div id="startDate-error" class="invalid-feedback"></div>
-  <div id="endDate-error" class="invalid-feedback"></div>
-  <div id="region-error" class="invalid-feedback"></div>
-  <div id="theme-error" class="invalid-feedback"></div>
-</form>
+</div>
+
+
 
 <script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
   var btn = document.getElementById("updateBtn");
@@ -166,11 +212,8 @@
   $(document).ready(function() {
     $('#summernote').summernote({
       height: 300,
-      width: 900,
+      width: 600,
       callbacks: {
-        onInit: function() {
-          console.log('Summernote 생성됨!');
-        },
         onImageUpload: function(files) {  // 사용자 지정 메서드
 
           let data = new FormData();
