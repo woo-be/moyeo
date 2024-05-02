@@ -60,6 +60,7 @@ public class RecruitMemberController {
     log.debug(list);
 
     model.addAttribute("list", list);
+    log.debug(String.format("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%s", list.getFirst().getWriter().getNickname()));
     log.debug(String.format("%s", list.getFirst().getTitle()));
 
     model.addAttribute("memberId", loginUser.getMemberId());

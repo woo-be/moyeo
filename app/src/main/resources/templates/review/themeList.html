@@ -3,11 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>테마</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
 </head>
 <body data-th-fragment="themeList">
-<div>
-  테마:
-  <select name="themeId" id="themeId">
+<div class="form-item-div d-flex flex-row ">
+  <h4 class="form-item-div-name">테마</h4>
+  <select class="form-select w-25" name="themeId" id="themeId">
     <option value="0">===선택===</option>
     <option value="1">힐링</option>
     <option value="2">캠핑</option>
