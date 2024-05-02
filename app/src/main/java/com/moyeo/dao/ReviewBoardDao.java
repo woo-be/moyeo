@@ -37,5 +37,20 @@ public interface ReviewBoardDao {
   int countScrapByMember(int memberId);
 
   //여행후기 최신게시글
-  List<ReviewBoard> findByCreatedDate();
+  List<ReviewBoard> findByCreatedDate(@Param("offset") int offset, @Param("rowCount") int rowCount,
+      @Param("regionId") int regionId, @Param("themeId") int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
+
+  List<ReviewBoard> findByCreatedDateByLimit3();
+
+  List<ReviewBoard> findByLikeCountByLimit3();
+
+  List<ReviewBoard> findByLikeCount(@Param("offset") int offset, @Param("rowCount") int rowCount,
+      @Param("regionId")int regionId, @Param("themeId")int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
+
+  List<ReviewBoard> findByViewsByLimit3();
+
+  List<ReviewBoard> findByViews(@Param("offset") int offset, @Param("rowCount") int rowCount,
+      @Param("regionId")int regionId, @Param("themeId")int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
+
+
 }

@@ -29,6 +29,8 @@ public interface RecruitMemberDao {
 
   List<RecruitMember> findAllApplicant(int recruitBoardId);
 
+  List<RecruitMember> allApplicant(@Param("recruitBoardId") int recruitBoardId);
+
   int update(RecruitMember recruitMember);
 
   void delete(

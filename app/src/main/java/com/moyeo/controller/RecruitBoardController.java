@@ -377,4 +377,42 @@ public class RecruitBoardController {
     // 클라이언트에서 이미지 이름을 가지고 <img> 태그를 생성할 수 있도록 업로드한 파일의 이미지 정보 보냄
     return recruitPhotos;
   }
+
+  @GetMapping("listByCurrent")
+  public void findByCurrent(
+      Model model,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "10") int pageSize,
+      @RequestParam(defaultValue = "0") int regionId,
+      @RequestParam(defaultValue = "0") int themeId,
+      @RequestParam(required = false) String filter, // 검색 필터(제목 | 내용 | 작성자)
+      @RequestParam(required = false) String keyword // 검색어
+  ) {
+
+    if (pageSize < 10 || pageSize > 20) {
+      pageSize = 10;
+    }
+    if (pageNo < 1){
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = recruitBoardService.countAll(regionId, themeId, filter, keyword);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
+    model.addAttribute("list", recruitBoardService.findByCurrent(pageNo, pageSize, regionId, themeId, filter, keyword));
+
+    model.addAttribute("regionId", regionId);
+    model.addAttribute("themeId", themeId);
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("keyword", keyword); // 검색어
+    model.addAttribute("filter", filter); // 검색 필터(제목 | 내용 | 작성자)
+  }
 }

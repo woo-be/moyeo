@@ -210,5 +210,8 @@ public class MaterialController {
 
     return "redirect:../view?no=" + materialPhoto.getMaterialId();
   }
+
+  @GetMapping("listdemo")
+  public void listdemo() {}
 }
 

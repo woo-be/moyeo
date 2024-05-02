@@ -149,8 +149,13 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   }
 
   @Override
-  public List<RecruitBoard> demoList() {
-    return recruitBoardDao.demoFindAll();
+  public List<RecruitBoard> findByCurrent(int pageNo, int pageSize, int regionId, int themeId, String filter, String keyword) {
+    return recruitBoardDao.findByCurrent(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
+  }
+
+  @Override
+  public List<RecruitBoard> findByCurrentByLimit6() {
+    return recruitBoardDao.findByCurrentByLimit6();
   }
 }
 

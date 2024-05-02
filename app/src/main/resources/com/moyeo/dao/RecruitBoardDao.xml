@@ -42,6 +42,11 @@
       <result column="photo" property="photo"/>
     </collection>
 
+    <collection property="applicants" ofType="RecruitMember">
+      <id column="a_id" property="memberId"/>
+        <result column="a_photo" property="photo"/>
+        <result column="a_nick" property="nickname"/>
+    </collection>
   </resultMap>
 
   <select id="findAll" resultMap="RecruitBoardMap">
@@ -264,5 +269,88 @@
     where
       recruit_board_id=#{value};
   </update>
+
+  <select id="findByCurrent" resultMap="RecruitBoardMap">
+    select
+    rb.recruit_board_id,
+    rb.title,
+    m.nickname, <!-- name => nickname 으로 변경 -->
+    rb.views,
+    count(case when rm.state = 1 then 1 end) as current,
+    rb.recruit_total,
+    rb.state,
+    rb.created_date
+    from
+    recruit_board rb
+    inner join member m on rb.member_id = m.member_id
+    left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
+    and rb.state = 1
+    group by
+    rb.recruit_board_id
+    having
+    current != rb.recruit_total
+    order by
+    rb.recruit_board_id desc
+    limit #{rowCount} offset #{offset}
+  </select>
+
+  <select id="findByCurrentByLimit6" resultMap="RecruitBoardMap">
+    select
+    rb.recruit_board_id,
+    rb.title,
+    m.nickname, <!-- name => nickname 으로 변경 -->
+    rb.views,
+    count(case when rm.state = 1 then 1 end) as current,
+    rb.recruit_total,
+    rb.state,
+    rb.created_date,
+    rb.start_date,
+    rb.end_date,
+    t.theme_name,
+    a.member_id a_id,
+    a.nickname as a_nick,
+    a.photo as a_photo,
+    rb.recruit_total
+
+<!--    a.photo as p-->
+    from
+    recruit_board rb
+    inner join member m on rb.member_id = m.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+    inner join member a on rm.member_id = a.member_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
+    and rb.state = 1
+    and rm.state = 1
+    group by
+    rb.recruit_board_id
+    having
+    current != rb.recruit_total
+    order by
+    rb.recruit_board_id desc
+    limit 6
+  </select>
+
 
 </mapper>
