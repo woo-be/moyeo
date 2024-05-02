@@ -335,9 +335,106 @@ public class ReviewBoardController {
     return "redirect:../view?no=" + photo.getReviewBoardId();
   }
 
-  public void findByCreatedDate(Model model) {
+  @GetMapping("listByCreatedDate")
+  public void findByCreatedDate(
+      @RequestParam(required = false) String filter,
+      @RequestParam(required = false) String keyword,
+      @RequestParam(defaultValue = "12") int pageSize,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
+      @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
+      Model model) {
 
-    model.addAttribute("list", reviewBoardService.findByCreatedDate());
+    if (pageSize < 3 || pageSize > 20) {
+      pageSize = 3;
+    }
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("list", reviewBoardService.findByCreatedDate(pageNo, pageSize, regionId, themeId, filter, keyword));
+    model.addAttribute("filter", filter);
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("regionId", regionId);
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+  }
+
+  @GetMapping("listByLikeCount")
+  public void findByLikeCount(
+      @RequestParam(required = false) String filter,
+      @RequestParam(required = false) String keyword,
+      @RequestParam(defaultValue = "12") int pageSize,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
+      @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
+      Model model) {
+
+    if (pageSize < 3 || pageSize > 20) {
+      pageSize = 3;
+    }
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("list", reviewBoardService.findByLikeCount(pageNo, pageSize, regionId, themeId, filter, keyword));
+    model.addAttribute("filter", filter);
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("regionId", regionId);
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
+  }
+
+  @GetMapping("listByViews")
+  public void findByViews(
+      @RequestParam(required = false) String filter,
+      @RequestParam(required = false) String keyword,
+      @RequestParam(defaultValue = "12") int pageSize,
+      @RequestParam(defaultValue = "1") int pageNo,
+      @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
+      @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
+      Model model) {
+
+    if (pageSize < 3 || pageSize > 20) {
+      pageSize = 3;
+    }
+    if (pageNo < 1) {
+      pageNo = 1;
+    }
+
+    int numOfPage = 1;
+    int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
+    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (pageNo > numOfPage) {
+      pageNo = numOfPage;
+    }
+
+    model.addAttribute("list", reviewBoardService.findByLikeCount(pageNo, pageSize, regionId, themeId, filter, keyword));
+    model.addAttribute("filter", filter);
+    model.addAttribute("keyword", keyword);
+    model.addAttribute("regionId", regionId);
+    model.addAttribute("pageNo", pageNo);
+    model.addAttribute("pageSize", pageSize);
+    model.addAttribute("numOfPage", numOfPage);
   }
 
 }

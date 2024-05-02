@@ -36,5 +36,16 @@ public interface ReviewBoardService {
 
   int countScrapByMember(@Param("memberId") int memberId);
 
-  List<ReviewBoard> findByCreatedDate();
+  List<ReviewBoard> findByCreatedDate(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword);
+
+  List<ReviewBoard> findByCreatedDateByLimit3();
+
+  List<ReviewBoard> findByLikeCountByLimit3();
+
+  List<ReviewBoard> findByLikeCount(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword);
+
+  List<ReviewBoard> findByViewsByLimit3();
+
+  List<ReviewBoard> findByViews(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword);
+
 }

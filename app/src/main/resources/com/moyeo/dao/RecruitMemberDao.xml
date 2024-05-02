@@ -27,6 +27,12 @@
 
   </resultMap>
 
+  <resultMap id="memberMap" type="RecruitMember">
+    <id column="memberId" property="memberId"/>
+    <result column="nickname" property="nickname"/>
+    <result column="photo" property="photo"/>
+  </resultMap>
+
   <!--모집 신청하기-->
   <insert id="add" parameterType="int">
     insert
@@ -119,5 +125,17 @@
       state=#{state}
     where recruit_board_id=#{recruitBoardId} and member_id=#{memberId}
   </update>
+
+  <select id="allApplicant" resultMap="memberMap">
+    select
+      m.member_id,
+      m.photo,
+      m.nickname
+    from
+      recruit_member rm
+      inner join member m on rm.member_id=m.member_id
+    where
+      recruit_board_id=#{recruitBoardId}
+  </select>
 
 </mapper>

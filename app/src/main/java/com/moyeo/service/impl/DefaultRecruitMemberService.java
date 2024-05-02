@@ -43,6 +43,11 @@ public class DefaultRecruitMemberService implements RecruitMemberService {
   }
 
   @Override
+  public List<RecruitMember> allApplicant(int recruitBoardId) {
+    return recruitMemberDao.allApplicant(recruitBoardId);
+  }
+
+  @Override
   public RecruitMember findBy(int memberId, int recruitBoardId) {
     return recruitMemberDao.findBy(memberId, recruitBoardId);
   }

@@ -19,6 +19,8 @@ public interface RecruitMemberService {
   RecruitMember findBy(int memberId, int recruitBoardId);
 
   List<RecruitMember> findAllApplicant(int recruitBoardId);
+  List<RecruitMember> allApplicant(int recruitBoardId);
 
   int update(RecruitMember recruitMember);
+
 }

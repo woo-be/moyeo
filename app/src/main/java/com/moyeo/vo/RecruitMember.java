@@ -24,4 +24,7 @@ public class RecruitMember implements Serializable {
   private LocalDateTime createdDate;             // 신청일자
 
   private Member member;
+  private String nickname;
+  private String photo;
+
 }

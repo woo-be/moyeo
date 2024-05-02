@@ -232,9 +232,166 @@
       inner join region r on r.region_id = rb.region_id
       left outer join review_photo rp on rp.review_board_id = rb.review_board_id
       left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id = rb.review_board_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
     group by
       review_board_id
-    order by created_date desc limit 3
+    order by created_date desc
+    limit #{rowCount} offset #{offset}
+<!--    limit 3-->
   </select>
 
+  <select id="findByCreatedDateByLimit3" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id = rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id = rb.review_board_id
+    group by
+    review_board_id
+    order by created_date desc
+    limit 3
+  </select>
+
+  <select id="findByLikeCountByLimit3" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    group by
+    rb.review_board_id
+    order by c desc limit 3
+  </select>
+
+  <select id="findByLikeCount" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
+    group by
+    rb.review_board_id
+    order by c desc
+    limit #{rowCount} offset #{offset}
+  </select>
+
+  <select id="findByViewsByLimit3" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
+    group by
+    rb.review_board_id
+    order by views desc limit 3
+  </select>
+
+  <select id="findByViews" resultMap="ReviewBoardMap">
+    select
+    rb.review_board_id,
+    rb.title,
+    rb.created_date,
+    rb.views,
+    c,
+    m.nickname,
+    t.theme_name,
+    r.region_name,
+    rp.photo
+    from
+    review_board rb inner join member m on m.member_id = rb.member_id
+    inner join theme t on rb.theme_id = t.theme_id
+    inner join region r on r.region_id=rb.region_id
+    left outer join review_photo rp on rp.review_board_id = rb.review_board_id
+    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+    where
+    1 = 1
+    <if test="keyword != null and keyword != ''">
+      and ${filter} like concat('%',#{keyword},'%')
+    </if>
+    <if test="regionId > 0">
+      and rb.region_id=#{regionId}
+    </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
+    group by
+    rb.review_board_id
+    order by views desc
+    limit #{rowCount} offset #{offset}
+  </select>
 </mapper>

@@ -129,7 +129,33 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   }
 
   @Override
-  public List<ReviewBoard> findByCreatedDate() {
-    return reviewBoardDao.findByCreatedDate();
+  public List<ReviewBoard> findByCreatedDate(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword) {
+    return reviewBoardDao.findByCreatedDate(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
+  }
+
+  @Override
+  public List<ReviewBoard> findByCreatedDateByLimit3() {
+    return reviewBoardDao.findByCreatedDateByLimit3();
+  }
+
+  @Override
+  public List<ReviewBoard> findByLikeCountByLimit3() {
+    return reviewBoardDao.findByLikeCountByLimit3();
+  }
+
+  @Override
+  public List<ReviewBoard> findByLikeCount(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword) {
+    return reviewBoardDao.findByLikeCount(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
+  }
+
+  @Override
+  public List<ReviewBoard> findByViewsByLimit3() {
+    return reviewBoardDao.findByViewsByLimit3();
+  }
+
+  @Override
+  public List<ReviewBoard> findByViews(int pageNo, int pageSize, int regionId, int themeId,
+      String filter, String keyword) {
+    return reviewBoardDao.findByViews(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
   }
 }
