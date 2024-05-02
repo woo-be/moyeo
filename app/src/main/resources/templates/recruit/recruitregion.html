@@ -10,7 +10,6 @@
 <body>
 <aside data-th-fragment="recruitregionlist" style="float:left; width:200px">
   <ul id="recruitregion" style="list-style: none;">
-    <!-- 이거 리팩토링해야됨... -->
     <li><a data-th-href="@{list(themeId=${themeId})}">전체</a></li>
     <li><a data-th-href="@{list(regionId=1,themeId=${themeId})}">서울특별시</a></li>
     <li><a data-th-href="@{list(regionId=2,themeId=${themeId})}">부산광역시</a></li>
