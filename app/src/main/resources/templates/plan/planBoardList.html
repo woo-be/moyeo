@@ -5,227 +5,293 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>계획</title>
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
 
-    <!-- 네이버 지도 API -->
+  <!-- 네이버 지도 API -->
   <!--  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">-->
-    <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
-    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script type="text/javascript"
+          src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=fjpvq7xa56&submodules=geocoder"></script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
   <!--  <script type="text/javascript" src="http://code.jquery.com/jquery-2.2.4.min.js"></script>-->
 
   <!--  채팅창 크기  -->
-    <style>
-      .chat-container {
-        width: 400px;
-        height: 300px;
-        border: 1px solid #ccc;
-        overflow-y: scroll;
-      }
-      .chat-message {
-        padding: 5px;
-        margin-bottom: 5px;
-        background-color: #f2f2f2;
-        border-radius: 5px;
-      }
+  <style>
+    .chat-container {
+      width: 400px;
+      height: 300px;
+      border: 1px solid #ccc;
+      overflow-y: scroll;
+    }
+    .chat-message {
+      padding: 5px;
+      margin-bottom: 5px;
+      background-color: #f2f2f2;
+      border-radius: 5px;
+    }
   </style>
 
 </head>
 <body>
-  <h1 data-th-text="${date}+일정">날짜</h1>
-  <div data-th-replace="plan/menu :: list" class="box">메뉴</div>
-  <div id="map" style="width:500px;height:400px;">지도</div>
-  <div data-th-replace="chat/form :: charForm">채팅</div>
-  <input type="hidden" readonly id="recruitBoardId" data-th-value="${recruitBoardId}">
-  <input type="hidden" readonly id="tripDate" data-th-value="${date}">
-  <input type="hidden" readonly id="nickname" data-th-value="${nickname}">
 
 
-  <!-- 모달 창 -->
-  <div id="markerModal" class="modal fade" tabindex="-1" style="display:none" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">게시물 저장</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<h1 data-th-text="${date}+일정">날짜</h1>
+<div id="map" style="width:500px;height:400px;">지도</div>
+<div data-th-replace="chat/form :: charForm">채팅</div>
+<input type="hidden" readonly id="recruitBoardId" data-th-value="${recruitBoardId}">
+<input type="hidden" readonly id="tripDate" data-th-value="${date}">
+<input type="hidden" readonly id="nickname" data-th-value="${nickname}">
+<input type="hidden" readonly id="latitude">
+<input type="hidden" readonly id="longitude">
+
+
+<!-- 저장 모달 창 -->
+<div id="markerModal" class="modal fade" tabindex="-1" style="display:none" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">게시물 저장</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <label for="tripOrder" class="form-label">순서</label>
+          <input type="text" class="form-control" id="tripOrder" placeholder="게시물 내용을 입력하세요">
         </div>
-        <div class="modal-body">
-          <div>
-            <label for="tripOrder" class="form-label">순서</label>
-            <input type="text" class="form-control" id="tripOrder" placeholder="게시물 내용을 입력하세요">
-          </div>
-          <div>
-            <label for="postTitle" class="form-label">목적지</label>
-            <input type="text" class="form-control" id="postTitle" placeholder="게시물 제목을 입력하세요">
-          </div>
-          <div>
-            <label for="postContent" class="form-label">게시물 내용</label>
-            <input type="text" class="form-control" id="postContent" placeholder="게시물 내용을 입력하세요">
-          </div>
+        <div>
+          <label for="postTitle" class="form-label">목적지</label>
+          <input type="text" class="form-control" id="postTitle" placeholder="게시물 제목을 입력하세요">
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="deleteButton">삭제</button>
-          <button type="button" class="btn btn-primary" id="addButton">저장</button>
+        <div>
+          <label for="postContent" class="form-label">게시물 내용</label>
+          <input type="text" class="form-control" id="postContent" placeholder="게시물 내용을 입력하세요">
         </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="deleteButton">
+          삭제
+        </button>
+        <button type="button" class="btn btn-primary" id="addButton">저장</button>
       </div>
     </div>
   </div>
+</div>
+
+<!-- 상세보기 모달 창 -->
+<div id="viewModal" class="modal fade" tabindex="-1" style="display:none" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">게시물 저장</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <input type="hidden" class="form-control" id="planBoardId">
+        </div>
+        <div>
+          <label for="tripOrder" class="form-label">순서</label>
+          <input type="text" class="form-control" id="viewTripOrder" placeholder="게시물 내용을 입력하세요">
+        </div>
+        <div>
+          <label for="postTitle" class="form-label">목적지</label>
+          <input type="text" class="form-control" id="viewPostTitle" placeholder="게시물 제목을 입력하세요">
+        </div>
+        <div>
+          <label for="postContent" class="form-label">게시물 내용</label>
+          <input type="text" class="form-control" id="viewPostContent" placeholder="게시물 내용을 입력하세요">
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="viewDeleteButton">
+          삭제
+        </button>
+        <button type="button" class="btn btn-primary" id="updateButton">수정</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 </body>
 
 <script>
-  var t = [];
-<!--  var tripOrder = document.getElementById('tripOrder');-->
-<!--  var postTitle = document.getElementById('postTitle');-->
-<!--  var postContent = document.getElementById('postContent');-->
+  $(document).ready(function () {
 
-  var tripOrder = $('#tripOrder');
-  var postTitle = $('#postTitle');
-  var postContent = $('#postContent');
+      var map = new naver.maps.Map('map', {
 
-  var map = new naver.maps.Map('map', {
-    center: new naver.maps.LatLng(37.3700065, 127.121359),
-    zoom: 14
-  });
+        // 지도를 모집일정에서 등록한 좌표로 로드
+        center: new naver.maps.LatLng([[${latitude}]], [[${longitude}]]),
+        zoom: 14
+      });
 
- // 핀끼리 선 이어주는 부분
- <!-- var polyline = new naver.maps.Polyline({-->
- <!--   map: map,-->
- <!--   strokeColor: '#5347AA',-->
- <!--   strokeWeight: 2-->
- <!-- });-->
+      // 새로운 input
+      var planBoardId = $('#planBoardId');
 
+      var tripOrder = $('#tripOrder');
+      var postTitle = $('#postTitle');
+      var postContent = $('#postContent');
+      var addButton = $('#addButton');
+      var deleteButton = $('#deleteButton');
+      var tripDate = $('#tripDate');
+      var recruitBoardId = $('#recruitBoardId');
+      var latitude = $('#latitude');
+      var longitude = $('#longitude');
 
- // 페이지 로드시 저장된 핀 정보를 가져와 지도에 표시
-  $(document).ready(function() {
+      // 상세보기 input
+      var viewTripOrder = $('#viewTripOrder');
+      var viewPostTitle = $('#viewPostTitle');
+      var viewPostContent = $('#viewPostContent');
+      var updateButton = $('#updateButton');
+      var viewDeleteButton = $('#viewDeleteButton');
 
-     // 이전 페이지에서 recruitBoardId를 받아오는 부분 추가
-     var recruitBoardId = $('#recruitBoardId').val();
-     var tripDate = $('#tripDate').val();
+      // 페이지 로드시 저장된 핀 정보를 가져와 지도에 표시
+      $.ajax({
+        url: '/plan/list?recruitBoardId=' + recruitBoardId.val() + '&tripDate=' + tripDate.val(),
+        type: 'GET',
+        success: function(data) {
+          // 반복문 돌려서 지도에 핀을 로드
+          data.forEach(function(pin) {
+            var marker = new naver.maps.Marker({
+              map: map,
+              position: new naver.maps.LatLng(pin.latitude, pin.longitude)
+            });
 
-    $.ajax({
-      url: '/plan/list?recruitBoardId=' + recruitBoardId + '&tripDate=' + tripDate,
-      type: 'GET',
-      success: function(data) {
-        data.forEach(function(pin) {
-          var marker = new naver.maps.Marker({
-            map: map,
-            position: new naver.maps.LatLng(pin.latitude, pin.longitude)
+            // 로드된 핀의 제목을 말풍선 출력을 해줄 객체
+            var infowindow = new naver.maps.InfoWindow({
+              content: '<h3>' + pin.title + '</h3>'
+            });
+
+            // 마커를 한 번 눌렀을 때 제목(말풍선) 보여주기
+            marker.addListener('click', function() {
+              infowindow.open(map, marker);
+            });
+
+            // 로드한 핀을 더블 클릭했을 때 핀의 상세정보 보여주기
+            marker.addListener('dblclick', function() {
+              $.ajax({
+                url: '/plan/view?recruitBoardId=' + recruitBoardId.val() + '&tripDate=' + tripDate.val() + '&latitude=' + pin.latitude + '&longitude=' + pin.longitude,
+                type: 'GET',
+                contentType: false,
+                processData: false
+              }).done(function(planBoard) {
+                $('#viewModal').modal('show');
+                planBoardId.val(planBoard.planBoardId)
+                viewTripOrder.val(planBoard.tripOrder);
+                viewPostTitle.val(planBoard.title);
+                viewPostContent.val(planBoard.content);
+              });
+            });
           });
-              // 마커 클릭
-               marker.addListener('click', function() {
-                 $.ajax({
-                   url: '/plan/view?recruitBoardId=' + recruitBoardId + '&tripDate=' + tripDate + '&latitude=' + pin.latitude + '&longitude=' + pin.longitude,
-                   type: 'GET',
-                   contentType: false,
-                   processData: false
-                 }).done(function(planBoard) {
-                    console.log(planBoard);
-                    console.log(planBoard.tripOrder);
-                    console.log(planBoard.title);
-                    console.log(planBoard.content);
+        }
+      });
 
-                    $('#markerModal').modal('show');
-<!--                    tripOrder.value = planBoard.tripOrder;-->
-<!--                    postTitle.value = planBoard.title;-->
-<!--                    postContent.value = planBoard.content;-->
-                        tripOrder.val(planBoard.tripOrder);
-                        postTitle.val(planBoard.title);
-                        postContent.val(planBoard.content);
-                 });
-               });
+      updateButton.click(function () {
+        let planBoard = new FormData();
+        planBoard.append("planBoardId", planBoardId.val());
+        planBoard.append("viewTripOrder", viewTripOrder.val());
+        planBoard.append("viewPostTitle", viewPostTitle.val());
+        planBoard.append("viewPostContent", viewPostContent.val());
 
-               // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
-               $('#deleteButton').click( function() {
-                 markerDelete(mark);
-                 $('#markerModal').modal('hide');
-               });
+        console.log(planBoardId.val());
+        console.log("tripOrder 변경값? ", viewTripOrder.val());
+        console.log("postTitle 변경값? ", viewPostTitle.val());
+        console.log("postContent 변경값? ", viewPostContent.val());
 
-               // 마커를 삭제할 때 호출되는 함수
-               function markerDelete(marker) {
-                 marker.setMap(null);
-               }
+        $.ajax({
+          url: '/plan/update',
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data:planBoard
+        }).done(() => {
+          $('#viewModal').modal('hide');
+          window.location.reload();
         });
-      }
+      });
+
+      // 기존 핀 삭제
+      viewDeleteButton.click(function () {
+        console.log("기존 핀을 눌러서 삭제 ajax 요청");
+        $.ajax({
+          url: '/plan/delete?recruitBoardId=' + recruitBoardId.val()+ '&planBoardId=' + planBoardId.val(),
+          type: 'GET'
+        }).done(()=>{
+          $('#viewModal').modal('hide');
+          window.location.reload();
+        })
+      });
+
+      naver.maps.Event.addListener(map, 'click', function (e) {
+
+        var point = e.coord;
+
+        // 마커 생성
+        var mark = new naver.maps.Marker({
+          map: map,
+          position: point
+        });
+
+        // 클릭한 위치의 위도와 경도를 히든 input에 설정
+        $('#latitude').val(point.lat());
+        $('#longitude').val(point.lng());
+
+        // 마커 클릭
+        mark.addListener('click', function () {
+          $('#markerModal').modal('show');
+
+          // 빈 문자열로 세팅
+          tripOrder.val("");
+          postTitle.val("");
+          postContent.val("");
+        });
+
+        // 새로운 마커 삭제
+        deleteButton.click(function(){
+          $('#markerModal').modal('hide');
+          mark.setMap(null);
+        });
+      });
+
+      // 저장
+      addButton.click(function () {
+
+        // 저장 할 객체 준비
+        let planBoard = new FormData();
+
+        planBoard.append("tripOrder", tripOrder.val())
+        planBoard.append("title", postTitle.val())
+        planBoard.append("content", postContent.val())
+        planBoard.append("recruitBoardId", recruitBoardId.val())
+        planBoard.append("tripDate", tripDate.val())
+        planBoard.append("latitude", latitude.val())
+        planBoard.append("longitude", longitude.val())
+
+        console.log(planBoard);
+
+        // 컨트롤러에게 요청
+        $.ajax({
+          url: '/plan/add',
+          type: 'POST',
+          contentType: false,
+          processData: false,
+          data: planBoard
+        }).done(function () {
+          // 저장 후 모달 창 닫기
+          $('#markerModal').modal('hide');
+
+          // 현재 페이지를 다시로드
+          window.location.reload();
+        });
+
+      });
+
     });
-  });
-
-
-  naver.maps.Event.addListener(map, 'click', function(e) {
-
-    var point = e.coord;
-
-    // 마커 생성
-    var mark = new naver.maps.Marker({
-      map: map,
-      position: point
-    });
-
-     // 클릭한 위치의 위도와 경도를 히든 인풋에 설정
-     $('#latitude').val(point.lat());
-     $('#longitude').val(point.lng());
-
-
-    // 마커 클릭
-    mark.addListener('click', function() {
-
-      $('#markerModal').modal('show');
-
-    });
-
-    // 모달창에서 삭제를 눌렀을 때 마커삭제, 모달창 숨김
-    $('#deleteButton').click( function() {
-      markerDelete(mark);
-      $('#markerModal').modal('hide');
-    });
-
-    // 마커를 삭제할 때 호출되는 함수
-    function markerDelete(marker) {
-      marker.setMap(null);
-    }
-
-
-
-     // 저장 버튼
-     var addButton = $('#addButton');
-     addButton.click( function() {
-
-      // 컨트롤러에게 보낼 객체 준비
-      var tripOrder = $('#tripOrder').val();
-      var postTitle = $('#postTitle').val();
-      var postContent = $('#postContent').val();
-      var recruitBoardId = $('#recruitBoardId').val();
-      var tripDate = $('#tripDate').val();
-      var longitude = point.lng();
-      var latitude = point.lat();
-
-     let planBoard = new FormData();
-
-      planBoard.append("tripOrder", tripOrder)
-      planBoard.append("title", postTitle)
-      planBoard.append("content", postContent)
-      planBoard.append("recruitBoardId", recruitBoardId)
-      planBoard.append("tripDate", tripDate)
-      planBoard.append("latitude", latitude)
-      planBoard.append("longitude", longitude)
-
-      console.log(planBoard);
-
-      // 컨트롤러에게 요청
-       $.ajax({
-         url: '/plan/add',
-         type: 'POST',
-         contentType: false,
-         processData: false,
-         data:planBoard
-       }).done(function() {
-         $('#markerModal').modal('hide'); // 저장 후 모달 창 닫기
-       });
-
-
-     });
-  });
 </script>
 
 </html>

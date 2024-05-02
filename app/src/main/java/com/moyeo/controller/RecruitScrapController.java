@@ -56,7 +56,7 @@ public class RecruitScrapController {
     // 해당 객체를 recruit_scrap에 추가.
     recruitScrapService.add(recruitScrap);
     // list 페이지로 리다이렉트(임시)
-    return "redirect:";
+    return "redirect:/recruit/view?recruitBoardId=" + recruitBoardId;
   }
 
   // 로그인한 사용자가 즐겨찾기한 게시글 리스트

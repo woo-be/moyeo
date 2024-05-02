@@ -3,44 +3,68 @@
 <head>
   <meta charset="UTF-8">
   <title>Title</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 
 <body data-th-fragment="sidebar">
-<div class="inner">
-  <!-- Menu -->
-  <div style="border: 1px solid black; float:left; width:250px">
-  <nav id="menu">
-    <header class="major">
-      <h2>마이 페이지</h2>
-    </header>
 
-    <p>사진 넣을 부분!!!!</p>
-    <button><a data-th-href="@{/member/userInfo}">정보수정</a></button>
+<div class="flex-shrink-0 p-3 bg-white" style="width: 210px;">
+  <a href="/" class="d-flex align-items-center pb-3 mb-3 link-dark text-decoration-none border-bottom">
+    <svg class="bi me-2" width="30" height="24"><use xlink:href="#bootstrap"></use></svg>
+    <span class="fs-5 fw-semibold">마이페이지</span>
+  </a>
+  <ul class="list-unstyled ps-0">
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="true">
+        <h5>회원 정보</h5>
+      </button>
 
-    <ul>
-      <li><a href="../member/mypage" data-th-href="@{/member/mypage}">내정보</a></li>
-      <li><a data-th-href="@{../myplan/list}" href="#">내계획</a></li>
-      <li>
-        <span class="opener">내 정보 공유</span>
-        <ul>
+      <!-- 토글네이게이션이 계속 보여지게 하고 싶으면 class="collapse show" 으로 해주면 계속 열려있음 -->
 
-          <li><a data-th-href="@{/myreview/posted}" href="#">작성한 정보</a></li>
-
-          <li><a data-th-href="@{/myreview/scrap}" href="#">즐겨찾기한 정보</a></li>
-
+      <div class="collapse" id="home-collapse">
+        <ul class="btn-toggle-nav fw-normal pb-1 small">
+          <li><a data-th-href="@{/member/mypage}" class="link-dark rounded">회원 정보</a></li>
+          <li><a data-th-href="@{/member/userInfo}" class="link-dark rounded">회원 수정</a></li>
         </ul>
-      </li>
-      <li>
-        <span class="opener">내 모집 현황</span>
-        <ul>
-          <li><a data-th-href="@{/myrecruit/posted}" href="#">작성한 모집글</a></li>
-          <li><a data-th-href="@{/myrecruit/reqpost}" href="#">신청한 모집글</a></li>
-          <li><a data-th-href="@{/myrecruit/scrap}" href="#">즐겨찾기한 모집글</a></li>
+      </div>
+    </li>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+        <h5>내 여행 관리</h5>
+      </button>
+      <div class="collapse" id="account-collapse">
+        <ul class="btn-toggle-nav fw-normal pb-1 small">
+          <li><a data-th-href="@{../myplan/list}" class="link-dark rounded">내 여행 관리</a></li>
         </ul>
-      </li>
-    </ul>
-  </nav>
+      </div>
+    </li>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+        <h5>후기 관련</h5>
+      </button>
+      <div class="collapse" id="dashboard-collapse">
+        <ul class="btn-toggle-nav fw-normal pb-1 small">
+          <li><a data-th-href="@{/myreview/posted}" class="link-dark rounded">작성 후기글</a></li>
+          <li><a data-th-href="@{/myreview/scrap}" class="link-dark rounded">즐겨찾기한 후기글</a></li>
+        </ul>
+      </div>
+    </li>
+    <li class="mb-1">
+      <button class="btn btn-toggle align-items-center rounded collapsed" data-bs-toggle="collapse" data-bs-target="#orders-collapse" aria-expanded="false">
+        <h5>모집 관련</h5>
+      </button>
+      <div class="collapse" id="orders-collapse">
+        <ul class="btn-toggle-nav fw-normal pb-1 small">
+          <li><a data-th-href="@{/myrecruit/posted}" class="link-dark rounded">작성한 모집글</a></li>
+          <li><a data-th-href="@{/myrecruit/reqpost}" class="link-dark rounded">신청한 모집글</a></li>
+          <li><a data-th-href="@{/myrecruit/scrap}" class="link-dark rounded">즐겨찾기한 모집글</a></li>
+        </ul>
+      </div>
+    </li>
+  </ul>
 </div>
-</div>
+
 </body>
 </html>

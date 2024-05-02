@@ -23,8 +23,13 @@
 
 <body>
 <header
-    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: #ffffff;"
-    data-th-fragment="header" >
+
+<!--     class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom" style="background-color: #ffffff;"
+    data-th-fragment="header" > -->
+
+    class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom bg-light"
+    data-th-fragment="header">
+
   <a href="/"
      class="d-flex align-items-center col-md-3 mb-2 mb-md-0 text-dark text-decoration-none">
     <img src="/img/home.png" alt="" width="110" height="60">
@@ -33,7 +38,7 @@
   <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
     <li><a data-th-href="@{/review/list}" class="nav-link px-2 link-dark">여행 후기</a></li>  <!--son, href 상대경로 => 절대경로로 변경함.-->
     <li><a data-th-href="@{/recruit/list}" class="nav-link px-2 link-dark">멤버 모집</a></li> <!--son, href 상대경로 => 절대경로로 변경함.-->
-    <li><a data-th-href="@{/recruitMember/list}" class="nav-link px-2 link-dark">일정 관리</a></li> <!--son, href 상대경로 => 절대경로로 변경함.-->
+    <li><a data-th-href="@{/recruitMember/list}" class="nav-link px-2 link-dark">여행 관리</a></li> <!--son, href 상대경로 => 절대경로로 변경함.-->
     <li data-th-unless="${session.loginUser != null}">
       <a data-th-href="@{/member/signup}" class="nav-link px-2 link-dark">회원 가입</a>  <!--son, href 상대경로 => 절대경로로 변경함.-->
     </li>

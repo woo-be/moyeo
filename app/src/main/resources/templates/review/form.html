@@ -48,7 +48,7 @@
   <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
   <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
   주소 검색:
-  <input id="address" type="text" placeholder="검색할 주소">
+  <input id="address" type="text" placeholder="검색할 주소" onkeydown="if (event.keyCode === 13) sendMessage()">
   <input id="submit" type="button" value="주소 검색">
   <div id="map" style="width:500px;height:400px;"></div>
 

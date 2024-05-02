@@ -8,6 +8,16 @@
   <resultMap id="recruitMemberMap" type="recruitBoard">
   <id column="recruit_board_id" property="recruitBoardId"/>
   <result column="title" property="title"/>
+    <result column="current" property="current"/>
+    <result column="start_date" property="startDate"/>
+    <result column="end_date" property="endDate"/>
+    <result column="current" property="current"/>
+    <result column="recruit_total" property="recruitTotal"/>
+
+    <association property="writer" javaType="Member">
+    <id column="memberId" property="memberId"/>
+    <result column="nickname" property="nickname"/>
+    </association>
   </resultMap>
 
   <resultMap id="RecruitMemberMap" type="RecruitMember">
@@ -62,14 +72,23 @@
 
   <select id="findAll" resultMap="recruitMemberMap" parameterType="int">
     select
-      *
+    rb.recruit_board_id,
+    rb.title,
+    rb.start_date,
+    rb.end_date,
+    m.nickname, <!-- name => nickname 으로 변경 -->
+    count(case when rm.state = 1 then 1 end) as current,
+    rb.recruit_total
     from
-      recruit_member rm
-      left join recruit_board rb on rm.recruit_board_id = rb.recruit_board_id
+    recruit_board rb
+    inner join member m on rb.member_id = m.member_id
+    left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
     where
-      rm.member_id = #{memberId}
+    rm.member_id=#{memberId}
+    group by
+    rb.recruit_board_id
     order by
-      rb.recruit_board_id desc
+    rb.recruit_board_id desc
   </select>
 
 

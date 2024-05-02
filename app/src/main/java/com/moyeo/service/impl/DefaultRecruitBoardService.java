@@ -90,6 +90,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int delete(int boardId) {
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
+    /* 해당 모집글의 채팅방의 채팅도 삭제해야함 */
     recruitMemberDao.deleteAll(boardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
 
     return recruitBoardDao.delete(boardId);
