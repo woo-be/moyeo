@@ -64,5 +64,13 @@ public interface RecruitBoardService {
   // 조회수 증가
   void plusViews(int boardId);
 
-  List<RecruitBoard> demoList();
+  List<RecruitBoard> findByCurrent(
+      @Param("offset") int offset,
+      @Param("rowCount") int rowCount,
+      @Param("regionId")int regionId,
+      @Param("themeId") int themeId,
+      @Param("filter")String filter,
+      @Param("keyword")String keyword);
+
+  List<RecruitBoard> findByCurrentByLimit6();
 }
