@@ -36,9 +36,9 @@
       margin-right: 10px;
     }
     aside #recruitRegion li {
-      margin-top: 8px;
+      margin-top: 10px;
       margin-right: 50px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
     }
     aside ul li a {
       color: rgb(78, 78, 78);
@@ -47,53 +47,55 @@
     .column-no {
       width: 6%;
     }
+    .td {
+      white-space: nowrap;
+    }
     .column-title {
-      width: 44%;
+      width: 40%;
+      max-width: 40%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
     .column-writer {
-      width: 13%;
+      width: 12%;
     }
     .column-present {
       width: 10%;
     }
     .column-state {
-      width: 10%;
+      width: 12%;
     }
-    .column-createdAt {
-      width: 10%;
+    .column-createdDate {
+      width: 12%;
     }
     .column-hits {
-      width: 7%;
+      width: 8%;
     }
 
   </style>
 </head>
 
-<body>
+<body class="d-flex flex-column">
 
-<div class="container-fluid">
+<!-- 헤더 -->
+<div class="row">
+  <div data-th-replace="header :: header">머리말</div>
+</div>
 
-  <!-- 헤더 -->
-  <div class="row">
-    <div data-th-replace="header :: header">머리말</div>
-  </div>
-
+<div class="d-flex justify-content-center align-items-start w-100">
   <!-- 컨텐트 -->
   <div class="d-flex p-3 justify-content-center align-items-start">
 
     <!-- 지역 -->
-    <div class="d-flex justify-content-end" style="width:300px;">
+    <div class="d-flex justify-content-end" style="width: 400px;">
       <div class="border d-flex mx-2">
-
-          <div data-th-replace="recruit/recruitRegion :: recruitRegionList">
-            지역
-          </div>
-
+          <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column border p-2 col-7">
+    <div class="d-flex flex-column border w-75 p-4 col-7">
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
 
@@ -101,9 +103,7 @@
       <div class="d-flex justify-content-center">
         <div fName="regionTheme" class="d-flex mx-2">
           <div class="m-2">
-            <div class="recruitThemeList" data-th-replace="recruit/recruitTheme :: recruitThemeList">
-              테마
-            </div>
+            <div class="recruitThemeList" data-th-replace="recruit/recruitTheme :: recruitThemeList">테마</div>
           </div>
         </div>
       </div>
@@ -113,11 +113,11 @@
         <thead>
         <tr>
           <th class="col-1 text-center column-no">번호</th>
-          <th class="col-4 text-center column-title">제목</th>
+          <th class="col-4 text-center column-title block col-2 text-truncate">제목</th>
           <th class="col-1 text-center column-writer">작성자</th>
           <th class="col-1 text-center column-present">모집현황</th>
           <th class="col-1 text-center column-state">모집상태</th>
-          <th class="col-1 text-center column-createdAt">작성일자</th>
+          <th class="col-1 text-center column-createdDate">작성일자</th>
           <th class="col-1 text-center column-hits">조회수</th>
         </tr>
         </thead>
@@ -130,9 +130,13 @@
                  data-th-text="*{title}" href="view.html">제목입니다</a></td>
           <td class="text-center column-writer" data-th-text="*{writer.nickname}">홍길동</td>
           <td class="text-center column-present" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
-          <td class="text-center column-state" data-th-if="*{state == true}">모집중</td> <!--data-th-value => data-th-text -->
-          <td class="text-center column-state" data-th-if="*{state == false}">모집완료</td> <!--data-th-value => data-th-text -->
-          <td class="text-center column-createdAt" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+          <td class="text-center">
+            <div class="avatar-group">
+              <span class="w-75 text-center column-state badge bg-warning" data-th-if="*{state == true}">모집중</span>
+              <span class="w-75 text-center column-state badge bg-secondary" data-th-if="*{state == false}">모집완료</span>
+            </div>
+          </td>
+          <td class="text-center column-createdDate col-2 text-truncate" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
           <!--data-th-value => data-th-text -->
           <td class="text-center column-hits" data-th-text="*{views}">12</td>
         </tr>
@@ -189,15 +193,13 @@
     </div>
     <div style="width:300px;"></div>
   </div>
-
-  <!-- 푸터 -->
-  <div class="row sticky-bottom">
-    <div data-th-replace="footer :: footer">꼬리말</div>
-  </div>
 </div>
-</body>
 
-</html>
+<!-- 푸터 -->
+  <div>
+    <div class="row sticky-bottoms" data-th-replace="footer :: footer">꼬리말</div>
+  </div>
+</body>
 
 <!-- 부트스트랩 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
@@ -234,3 +236,4 @@
     link.classList.add('active');
   })
 </script>
+</html>
