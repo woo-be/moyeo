@@ -10,10 +10,13 @@
 <!--  <script src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>-->
 <!--  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>-->
 
-  <!-- Bootstrap core CSS -->
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+<!--  &lt;!&ndash; Bootstrap core CSS &ndash;&gt;-->
+<!--  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">-->
+
   <!-- Bootstrap JS -->
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- 네이버 지도 API -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no">
@@ -172,88 +175,92 @@
       </form>
     </div>
 
-    <div class="d-flex flex-column bd-highlight border border-2 p-3">
-      <div>
-        <!-- view comment -->
-        <div>
-          <h4 class="mt-4 ms-4 mb-4">댓글</h4>
-          <ul data-th-if="*{comments}" style="list-style: none;">
-            <li data-th-each="comment : *{comments}" data-th-object="${comment}">
-              <div id="commentviewform" class="d-flex flex-row bd-highlight mb-3 w-75">
-                <div class="flex-shrink-0 mt-2 me-3">
-                  <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
-                </div>
-                <!--            <div class="me-auto bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>-->
-                <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-                  <div class="d-flex flex-row bd-highlight mb-1">
-                    <div class="me-auto pt-2 bd-highlight">
-                      <span data-th-text="*{member.nickname}"></span>
-                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                    </div>
-                    <div class="bd-highlight">
-                      <button id="editBtn">수정</button>
-                      <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
-                         href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
-                    </div>
-                  </div>
-                  <div  class="d-flex flex-row bd-highlight">
-                    <div class="w-100">
-                      <span class="text-break" data-th-text="*{content}"></span>
-                      <!--                내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>-->
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
-                    action="view.html" method='post' style="display:none;">
-                <div class="d-flex flex-row">
+    <div class="d-flex justify-content-center bd-highlight border border-2 p-3">
+      <div class="w-75">
+        <div class="d-flex flex-column">
+          <!-- view comment -->
+          <div>
+            <h4 class="mt-4 ms-4 mb-4">댓글</h4>
+            <ul data-th-if="*{comments}" style="list-style: none;">
+              <li data-th-each="comment : *{comments}" data-th-object="${comment}">
+                <div id="commentviewform" class="d-flex flex-row bd-highlight mb-3">
                   <div class="flex-shrink-0 mt-2 me-3">
                     <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
                   </div>
+                  <!--            <div class="me-auto bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>-->
                   <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-                    <div class="me-auto pt-2 bd-highlight">
-                      <span data-th-text="*{member.nickname}"></span>
-                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                    </div>
                     <div class="d-flex flex-row bd-highlight mb-1">
+                      <div class="d-flex flex-row me-auto align-items-center pt-2 bd-highlight">
+                        <h6 class="fw-bold me-2" data-th-text="*{member.nickname}"></h6>
+                        <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                      </div>
+                      <div class="bd-highlight">
+                        <button id="editBtn" class="btn btn-primary" >수정</button>
+                        <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
+                           type="button" class="btn btn-primary" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+                      </div>
+                    </div>
+                    <div  class="d-flex flex-row bd-highlight">
                       <div class="w-100">
-                        <input data-th-value="*{content}" type='text' name="content" value="내용"/>
-                        <button id="submitBtn" onclick="submitContent()">전송</button>
+                        <span class="text-break" data-th-text="*{content}"></span>
+                        <!--                내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>-->
                       </div>
                     </div>
                   </div>
                 </div>
-              </form>
-              <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
-            </li>
-          </ul>
-        </div>
 
-        <!-- add comment -->
-        <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-          <div class="d-flex flex-row bd-highlight border border-2 w-75 p-3">
-            <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
-            <div class="p-2 bd-highlight">
-              <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
-                <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
-              </a>
-              <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
-                <img height='40px' src="/img/default-photo.jpeg">
-              </a>
-              <input data-th-value="*{photo}" type='hidden'>
-            </div>
-            <div class="d-flex flex-column p-2 flex-grow-1 bd-highlight">
-              <div>
-                <span data-th-text="*{name}">name</span>
-              </div>
-              <div class="d-flex flex-row d-flex bd-highlight" >
-                <textarea id="content" class="p-2 flex-grow-1 bd-highlight" name="content" type="text"></textarea>
-                <button id="submit" type="button" data-th-onclick="addRecruitComment()" class="p-2 bd-highlight">전송</button>
-              </div>
-            </div>
+                <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
+                      action="view.html" method='post' style="display:none;">
+                  <div class="d-flex flex-row">
+                    <div class="flex-shrink-0 mt-2 me-3">
+                      <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
+                      <div class="d-flex flex-row me-auto pt-2 align-items-center bd-highlight">
+                        <h6 class="fw-bold me-2" data-th-text="*{member.nickname}"></h6>
+                        <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                      </div>
+                      <div class="d-flex flex-row bd-highlight mb-1">
+                        <div class="w-100">
+                          <input data-th-value="*{content}" type='text' name="content" value="내용"/>
+                          <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitContent()">전송</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+                <button id="cancelBtn" type="button" class="btn btn-primary" style="display: none;" onclick="cancelEdit()">취소</button>
+              </li>
+            </ul>
           </div>
-        </form>
+
+          <!-- add comment -->
+          <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
+            <div class="d-flex flex-row bd-highlight border border-2 p-3">
+              <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
+              <div class="p-2 bd-highlight">
+                <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
+                  <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+                </a>
+                <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
+                  <img height='40px' src="/img/default-photo.jpeg">
+                </a>
+                <input data-th-value="*{photo}" type='hidden'>
+              </div>
+              <div class="d-flex flex-column p-2 flex-grow-1 bd-highlight">
+                <div>
+                  <h6 class="fw-bold me-2" data-th-text="*{nickname}">nickname</h6>
+                </div>
+                <div class="d-flex flex-row d-flex bd-highlight" >
+                  <textarea id="content" class="p-2 flex-grow-1 bd-highlight form-control" name="content" type="text"></textarea>
+                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1" data-th-onclick="addRecruitComment()" >
+                    <span>전송</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>
@@ -306,7 +313,7 @@
   // summernote 사용 설정
   $(document).ready(function() {
     var options = new Object();
-    options.height = 300;
+    options.height = 600;
     options.width = 1000;
     options.toolbar = false;
     options.disableDragAndDrop = true;
