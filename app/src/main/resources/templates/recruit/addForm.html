@@ -24,9 +24,21 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+  <!-- JQuery -->
+  <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
   <style>
     body {
       padding-left: 10px;
+    }
+    .form-item-div {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgb(206, 206, 206);
+    }
+    .form-item-div-name {
+      margin-right:10px;
     }
   </style>
 </head>
@@ -35,46 +47,83 @@
 
 
 <body>
-<h2>모집 게시판</h2>
+<!-- center -->
+<div class="d-flex container-fluid justify-content-center">
 
-<form action="add" data-th-action="@{add}" method="post" enctype='multipart/form-data'>
-  <div>
-    제목: <input id="title" name="title" type="text">
-  </div>
-  <div>
-    마감일: <input id="deadline" name="deadline" type="date">
-  </div>
-  <div>
-    여행일자: <input id="startDate" name="startDate" type="date"> ~ <input id="endDate" name="endDate" type="date">
-  </div>
-  <div>
-    모집인원: <input name="recruitTotal" type="number" min="2" max="20" value="2">
-  </div>
-    <div data-th-replace="review/regionList :: regionList">지역리스트</div>
-    <div data-th-replace="review/themeList :: themeList">테마리스트</div>
+  <!--  -->
+  <div class="d-flex flex-column border border-2 w-75">
+    <div class="d-flex justify-content-center border-bottom border-2 mt-2 pb-3 mb-5">
+      <h2>멤버 모집 글 작성</h2>
+    </div>
+    <div class="d-flex justify-content-center">
+      <div class="w-50 pt-4 pb-4 ps-5 pe-5">
+        <form action="add" data-th-action="@{add}" method="post" enctype='multipart/form-data'>
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <h4 class="form-item-div-name">제목</h4>
+            <input class="form-control w-50" placeholder="제목을 입력하세요." id="title" name="title" type="text">
+          </div>
+          <div class="form-item-div d-flex flex-row border-bottom border-1 pb-2">
+            <div class="d-flex flex-row me-auto">
+              <h4 class="w-50 form-item-div-name">마감일</h4>
+              <input class="form-control w-75"  id="deadline" name="deadline" type="date">
+            </div>
+            <div class="d-flex flex-row">
+              <h4 class="w-50 form-item-div-name">여행일자</h4>
+              <input class="form-control w-75" id="startDate" name="startDate" type="date">
+              ~ <input class="form-control w-75" id="endDate" name="endDate" type="date">
+            </div>
+          </div>
+          <div class="form-item-div d-flex flex-row ">
+            <h4 class="form-item-div-name">모집인원</h4>
+            <input class="form-control w-25" name="recruitTotal" type="number" min="2" max="20" value="2">
+          </div>
+          <div class="form-item-div" data-th-replace="review/regionList :: regionList">지역리스트</div>
+          <div class="form-item-div" data-th-replace="review/themeList :: themeList">테마리스트</div>
+          <div class="form-item-div d-flex flex-row">
+            <h4 class="form-item-div-name">주소</h4>
+            <div>
+              <div>
+                <input class="form-item-div form-control w-75" id="addr" type="text" name="address">
+                <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
+                <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
+              </div>
+              <div class="d-flex flex-row">
+                <input class="form-item-div-name form-control w-75 me-3" id="address" type="text" placeholder="검색할 주소">
+                <input class="btn btn-primary" id="submit" type="button" value="주소 검색">
+              </div>
+              <div class="form-item-div" id="map" style="width:500px;height:400px;"></div>
+            </div>
+          </div>
+          <div class="form-input form-item-div d-flex flex-column">
+            <h4 class="form-item-div-name">내용</h4>
+            <textarea name='content' id="summernote"></textarea>
+          </div>
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+              <button type="submit" class="btn btn-primary m-2" id="addBtn">등록</button>
+              <button type="button" class="btn btn-primary m-2" href="list.html">취소</button>
+            </div>
+            <div  class="d-flex justify-content-center">
+              <div>
+                <div id="title-error" class="invalid-feedback"></div>
+                <div id="deadline-error" class="invalid-feedback"></div>
+                <div id="startDate-error" class="invalid-feedback"></div>
+                <div id="endDate-error" class="invalid-feedback"></div>
+                <div id="region-error" class="invalid-feedback"></div>
+                <div id="theme-error" class="invalid-feedback"></div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
 
-  주소 : <input id="addr" type="text" name="address">
-  <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
-  <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
-  주소 검색:
-  <input id="address" type="text" placeholder="검색할 주소">
-  <input id="submit" type="button" value="주소 검색">
-  <div id="map" style="width:500px;height:400px;"></div>
 
-  <div>
-    내용: <textarea name='content' id="summernote"></textarea>
+
   </div>
-  <div>
-    <button type="submit" id="addBtn">등록</button>
-    <button type="button" href="list.html">취소</button>
-    <div id="title-error" class="invalid-feedback"></div>
-    <div id="deadline-error" class="invalid-feedback"></div>
-    <div id="startDate-error" class="invalid-feedback"></div>
-    <div id="endDate-error" class="invalid-feedback"></div>
-    <div id="region-error" class="invalid-feedback"></div>
-    <div id="theme-error" class="invalid-feedback"></div>
-  </div>
-</form>
+
+</div>
+
 
 <script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
   var btn = document.getElementById("addBtn");
@@ -158,7 +207,8 @@
     });
   });
 
-
+</script>
+<script>
   // summernote 설정
   $(document).ready(function() {
     $('#summernote').summernote({
@@ -198,6 +248,8 @@
     });
   });
 
+</script>
+<script>
   <!-- 지도에서 검색 후 위도, 경도 가지고 오기-->
 var x = 37.5548376;
 var y = 126.9717326;

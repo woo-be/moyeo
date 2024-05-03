@@ -25,8 +25,8 @@
   <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-    <!-- JSON -->
-    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+  <!-- JSON -->
+  <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 
   <style>
     body {
@@ -36,184 +36,192 @@
       padding-bottom: 10px;
       margin-bottom: 20px;
     }
+
+
   </style>
 </head>
 <div data-th-replace="header :: header">머리말</div>
-<body data-th-object="${recruitboard}">
+<body  data-th-object="${recruitboard}">
 
 
-<div class="d-flex flex-column bd-highlight mb-3 justify-content-center">
-  <div class="d-flex flex-column bd-highlight">
-    <form action="update" data-th-action="@{updateForm}"
-    enctype='multipart/form-data' method='post'>
+<div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">
+  <div class="w-75 justify-content-center">
+    <div class="d-flex flex-column bd-highlight">
+      <form action="update" data-th-action="@{updateForm}"
+            enctype='multipart/form-data' method='post'>
 
-      <input id="recruitBoardId" data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='hidden' value='100'>
-      <div class="border border-2 w-50 p-3">
-        <div>
-          <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center">
-            <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center">
-              <div class="fs-1 me-2">
-                <span data-th-text="*{title}">제목</span>
-              </div>
-              <div class="border border-2 rounded-1 p-1 align-items-center">
-                <span data-th-if="*{state == true}">모집중</span>
-                <span data-th-if="*{state == false}">모집완료</span>
-              </div>
-            </div>
-            <div class="d-flex flex-column bd-highlight">
-              <div class="d-flex flex-row bd-highlight">
-                <div class="me-2">
-                  조회수: <span data-th-text="*{views}"></span>
+        <input id="recruitBoardId" data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='hidden' value='100'>
+        <div class="d-flex justify-content-center w-100 border border-2 p-3">
+          <div>
+            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center">
+              <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center">
+                <div class="fs-1 me-2">
+                  <span data-th-text="*{title}">제목</span>
                 </div>
-                <div>
-                  작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                <div class="border border-2 rounded-1 p-1 align-items-center">
+                  <span data-th-if="*{state == true}">모집중</span>
+                  <span data-th-if="*{state == false}">모집완료</span>
                 </div>
               </div>
-              <div class="d-flex flex-row bd-highlight ">
-                <div class="d-flex flex-row bd-highlight p-1">
-                  <button>수정</button>
+              <div class="d-flex flex-column bd-highlight">
+                <div class="d-flex flex-row bd-highlight">
+                  <div class="me-2">
+                    조회수: <span data-th-text="*{views}"></span>
+                  </div>
+                  <div>
+                    작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                  </div>
                 </div>
-                <div class="d-flex flex-row bd-highlight p-1">
-                  <button type="button" data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="border border-1 mb-3 p-3">
-            <div class="d-flex flex-column bd-highlight">
-              <div class="ms-2  bd-highlight">
-                <div>
-                  지역: <span data-th-text="*{region.regionName}">서울특별시</span>
-                </div>
-                <div>
-                  테마: <span data-th-text="*{theme.themeName}"></span>
-                </div>
-                <div>
-                  여행기간: <span data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</span>
-                  ~ <span data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</span>
-                </div>
-                <div>
-                  마감일자: <span data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</span>
-                </div>
-              </div>
-              <div class="p-2 bd-highlight">
-                <div id="map" style="width:500px;height:400px;"></div>
-                <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">
-                <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">
-              </div>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-center bd-highlight mb-3">
-            <div>
-              <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-          <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
-            <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
-              <button type="button" data-th-onclick="applyModal()">신청하기</button></a>
-            <div data-th-if="${recruitMember} != null" style="display:inline">
-              <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">
-                <button type="button" data-th-onclick="cancelModal()">신청취소</button></a>
-              <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>
-              <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>
-            </div>
-          </div>
-          <div class="m-1">
-<!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
-            [<a data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="d-flex flex-column bd-highlight border border-2 w-50 p-3">
-    <div>
-      <h4 class="mt-4 ms-4 mb-4">댓글</h4>
-      <ul data-th-if="*{comments}" style="list-style: none;">
-        <li data-th-each="comment : *{comments}" data-th-object="${comment}">
-          <div id="commentviewform" class="d-flex flex-row bd-highlight mb-3 w-75">
-            <div class="flex-shrink-0 mt-2 me-3">
-              <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
-            </div>
-<!--            <div class="me-auto bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>-->
-            <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-              <div class="d-flex flex-row bd-highlight mb-1">
-                <div class="me-auto pt-2 bd-highlight">
-                  <span data-th-text="*{member.nickname}"></span>
-                  <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                </div>
-                <div class="bd-highlight">
-                  <button id="editBtn">수정</button>
-                  <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
-                     href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
-                </div>
-              </div>
-              <div  class="d-flex flex-row bd-highlight">
-                <div class="w-100">
-                  <span class="text-break" data-th-text="*{content}"></span>
-                  <!--                내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>-->
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
-                action="view.html" method='post' style="display:none;">
-            <div class="d-flex flex-row">
-              <div class="flex-shrink-0 mt-2 me-3">
-                <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
-              </div>
-              <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-                <div class="me-auto pt-2 bd-highlight">
-                  <span data-th-text="*{member.nickname}"></span>
-                  <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                </div>
-                <div class="d-flex flex-row bd-highlight mb-1">
-                  <div class="w-100">
-                    <input data-th-value="*{content}" type='text' name="content" value="내용"/>
-                    <button id="submitBtn" onclick="submitContent()">전송</button>
+                <div class="d-flex flex-row bd-highlight ">
+                  <div class="d-flex flex-row bd-highlight p-1">
+                    <button>수정</button>
+                  </div>
+                  <div class="d-flex flex-row bd-highlight p-1">
+                    <button type="button" data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
                   </div>
                 </div>
               </div>
             </div>
-          </form>
-          <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
-        </li>
-      </ul>
+
+            <div class="border border-1 mb-3 p-3">
+              <div class="d-flex flex-column bd-highlight">
+                <div class="ms-2  bd-highlight">
+                  <div>
+                    지역: <span data-th-text="*{region.regionName}">서울특별시</span>
+                  </div>
+                  <div>
+                    테마: <span data-th-text="*{theme.themeName}"></span>
+                  </div>
+                  <div>
+                    여행기간: <span data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</span>
+                    ~ <span data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</span>
+                  </div>
+                  <div>
+                    마감일자: <span data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</span>
+                  </div>
+                </div>
+                <div class="p-2 bd-highlight">
+                  <div id="map" style="width:500px;height:400px;"></div>
+                  <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">
+                  <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">
+                </div>
+              </div>
+            </div>
+
+            <div class="d-flex justify-content-center bd-highlight mb-3">
+              <div>
+                <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
+              </div>
+            </div>
+
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
+              <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
+                <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
+                  <button type="button" data-th-onclick="applyModal()">신청하기</button></a>
+                <div data-th-if="${recruitMember} != null" style="display:inline">
+                  <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">
+                    <button type="button" data-th-onclick="cancelModal()">신청취소</button></a>
+                  <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>
+                  <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>
+                </div>
+              </div>
+              <div class="m-1">
+                <!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
+                [<a data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>]
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </form>
     </div>
 
-    <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-      <div class="d-flex flex-row bd-highlight border border-2 w-100 p-3">
-        <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
-        <div class="p-2 bd-highlight">
-          <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
-            <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
-          </a>
-          <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
-            <img height='40px' src="/img/default-photo.jpeg">
-          </a>
-          <input data-th-value="*{photo}" type='hidden'>
+    <div class="d-flex flex-column bd-highlight border border-2 p-3">
+      <div>
+        <!-- view comment -->
+        <div>
+          <h4 class="mt-4 ms-4 mb-4">댓글</h4>
+          <ul data-th-if="*{comments}" style="list-style: none;">
+            <li data-th-each="comment : *{comments}" data-th-object="${comment}">
+              <div id="commentviewform" class="d-flex flex-row bd-highlight mb-3 w-75">
+                <div class="flex-shrink-0 mt-2 me-3">
+                  <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
+                </div>
+                <!--            <div class="me-auto bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>-->
+                <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
+                  <div class="d-flex flex-row bd-highlight mb-1">
+                    <div class="me-auto pt-2 bd-highlight">
+                      <span data-th-text="*{member.nickname}"></span>
+                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+                    <div class="bd-highlight">
+                      <button id="editBtn">수정</button>
+                      <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
+                         href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+                    </div>
+                  </div>
+                  <div  class="d-flex flex-row bd-highlight">
+                    <div class="w-100">
+                      <span class="text-break" data-th-text="*{content}"></span>
+                      <!--                내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>-->
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <form id="updatecomment" data-th-action="@{/recruit/comment/update}"
+                    action="view.html" method='post' style="display:none;">
+                <div class="d-flex flex-row">
+                  <div class="flex-shrink-0 mt-2 me-3">
+                    <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
+                  </div>
+                  <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
+                    <div class="me-auto pt-2 bd-highlight">
+                      <span data-th-text="*{member.nickname}"></span>
+                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+                    <div class="d-flex flex-row bd-highlight mb-1">
+                      <div class="w-100">
+                        <input data-th-value="*{content}" type='text' name="content" value="내용"/>
+                        <button id="submitBtn" onclick="submitContent()">전송</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <button id="cancelBtn" style="display: none;" onclick="cancelEdit()">취소</button>
+            </li>
+          </ul>
         </div>
-        <div class="d-flex flex-column p-2 flex-grow-1 bd-highlight">
-          <div>
-            <span data-th-text="*{name}">name</span>
+
+        <!-- add comment -->
+        <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
+          <div class="d-flex flex-row bd-highlight border border-2 w-75 p-3">
+            <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
+            <div class="p-2 bd-highlight">
+              <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
+                <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+              </a>
+              <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
+                <img height='40px' src="/img/default-photo.jpeg">
+              </a>
+              <input data-th-value="*{photo}" type='hidden'>
+            </div>
+            <div class="d-flex flex-column p-2 flex-grow-1 bd-highlight">
+              <div>
+                <span data-th-text="*{name}">name</span>
+              </div>
+              <div class="d-flex flex-row d-flex bd-highlight" >
+                <textarea id="content" class="p-2 flex-grow-1 bd-highlight" name="content" type="text"></textarea>
+                <button id="submit" type="button" data-th-onclick="addRecruitComment()" class="p-2 bd-highlight">전송</button>
+              </div>
+            </div>
           </div>
-          <div class="d-flex flex-row d-flex bd-highlight" >
-            <textarea id="content" class="p-2 flex-grow-1 bd-highlight" name="content" type="text"></textarea>
-            <button id="submit" type="button" data-th-onclick="addRecruitComment()" class="p-2 bd-highlight">전송</button>
-          </div>
-        </div>
+        </form>
       </div>
-    </form>
-
+    </div>
   </div>
-
 </div>
 
 </body>
@@ -264,7 +272,7 @@
   $(document).ready(function() {
     var options = new Object();
     options.height = 300;
-    options.width = 910;
+    options.width = 600;
     options.toolbar = false;
     options.disableDragAndDrop = true;
 
