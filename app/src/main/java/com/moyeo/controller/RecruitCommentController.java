@@ -1,7 +1,9 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.StorageService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
@@ -26,6 +28,7 @@ public class RecruitCommentController {
   private static final Log log = LogFactory.getLog(RecruitBoardController.class);
   private final RecruitBoardService recruitBoardService;
   private final StorageService storageService;
+  private final AlarmService alarmService;
   private final String uploadDir = "recruit/";
 
 
@@ -42,6 +45,22 @@ public class RecruitCommentController {
     recruitComment.setRecruitBoard(recruitBoard);
     recruitComment.setMember(loginUser);
     recruitBoardService.addComment(recruitComment);
+
+    // 알림 읽음여부를 확인하기 위해 알림 id를 같이 넘겨준다
+    Alarm alarm = Alarm.builder().memberId(recruitBoard.getWriter().getMemberId()).content(
+        "<a href=\"/recruit/view?recruitBoardId="+
+            recruitBoardId).build();
+    alarmService.add(alarm);
+    alarm.setContent(
+        alarm.getContent()+
+            "&alarmId="+
+            alarm.getAlarmId()+
+            "\">"+
+            recruitBoardId+
+            "번 모집</a>에 댓글을 등록했습니다."
+    );
+    alarmService.updateContent(alarm);
+
     return "1";
   }
 
