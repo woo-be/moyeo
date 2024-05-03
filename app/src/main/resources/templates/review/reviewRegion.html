@@ -6,10 +6,17 @@
         content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>모여</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
-<aside data-th-fragment="recruitregionlist" style="float:left; width:200px">
-  <ul id="recruitregion" style="list-style: none;">
+<aside data-th-fragment="reviewRegionList" style="float:left; width:200px">
+  <div class="border-bottom border-1 pt-3 pb-2">
+    <h5 class="ms-4">지역</h5>
+  </div>
+  <ul class="mt-2" id="reviewRegion" style="list-style: none;">
     <li><a data-th-href="@{list(themeId=${themeId})}">전체</a></li>
     <li><a data-th-href="@{list(regionId=1,themeId=${themeId})}">서울특별시</a></li>
     <li><a data-th-href="@{list(regionId=2,themeId=${themeId})}">부산광역시</a></li>
@@ -32,3 +39,6 @@
 </aside>
 </body>
 </html>
+
+
+

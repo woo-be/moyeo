@@ -74,21 +74,21 @@
 <div class="container-fluid">
 
   <!-- 헤더 -->
-  <div class="row sticky-top">
+  <div class="row">
     <div data-th-replace="header :: header">머리말</div>
   </div>
 
   <!-- 컨텐트 -->
-  <div class="d-flex p-3 justify-content-center align-items-start vh-100">
+  <div class="d-flex p-3 justify-content-center align-items-start">
 
-    <!-- 지역, 테마 -->
+    <!-- 지역 -->
     <div class="d-flex justify-content-end" style="width:300px;">
-      <div fName="regionTheme" class="border d-flex mx-2">
-        <div class="m-2">
-          <div data-th-replace="recruit/recruitRegionTest :: recruitRegionList">
+      <div class="border d-flex mx-2">
+
+          <div data-th-replace="recruit/recruitRegion :: recruitRegionList">
             지역
           </div>
-        </div>
+
       </div>
     </div>
 
@@ -97,11 +97,11 @@
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
 
-      <!-- 지역, 테마 -->
+      <!-- 테마 -->
       <div class="d-flex justify-content-center">
         <div fName="regionTheme" class="d-flex mx-2">
           <div class="m-2">
-            <div class="recruitThemeList" data-th-replace="recruit/recruitThemeTest :: recruitThemeList">
+            <div class="recruitThemeList" data-th-replace="recruit/recruitTheme :: recruitThemeList">
               테마
             </div>
           </div>
@@ -182,12 +182,12 @@
             </div>
           </form>
         </div>
-        <div class="mx-2" style="width: 50">
-          <a data-th-href="@{/recruit/addForm}" href="form">새 게시글</a>
+        <div style="width: 50px">
+          <a class="" data-th-href="@{/recruit/addForm}" href="form">글쓰기</a>
         </div>
       </div>
-    </div><div style="width:300px;">
     </div>
+    <div style="width:300px;"></div>
   </div>
 
   <!-- 푸터 -->
