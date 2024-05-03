@@ -3,6 +3,7 @@ package com.moyeo.controller;
 
 import com.moyeo.service.PlanBoardService;
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.service.RecruitMemberService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
@@ -11,6 +12,7 @@ import com.moyeo.vo.Pin;
 import com.moyeo.vo.PlanBoard;
 import com.moyeo.vo.PlanPhoto;
 import com.moyeo.vo.RecruitBoard;
+import com.moyeo.vo.RecruitMember;
 import java.util.ArrayList;
 import java.sql.Date;
 import java.util.HashMap;
@@ -40,6 +42,7 @@ public class PlanBoardController {
   private final PlanBoardService planBoardService;
   private final StorageService storageService;
   private final RecruitBoardService recruitBoardService;
+  private final RecruitMemberService recruitMemberService;
   private final String uploadDir = "plan/";
 
   @Value("${ncp.ss.bucketname}")
@@ -304,9 +307,25 @@ log.debug(list);
   }
 
   @GetMapping("planBoardList")
-  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session) {
+  public void planBoardList(int recruitBoardId, String date, Model model, HttpSession session)
+      throws MoyeoError {
     Member loginUser = (Member) session.getAttribute("loginUser");
+
+    if(loginUser == null){
+      throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
+    }
+
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
+    List<RecruitMember> recruitMembers = recruitMemberService.allApplicant(recruitBoardId);
+
+    for (int i = 0; i < recruitMembers.size(); i++) {
+      log.debug(recruitMembers.get(i).getMemberId()+"@@@"+loginUser.getMemberId());
+      if (recruitMembers.get(i).getMemberId() == loginUser.getMemberId()) {
+        break;
+      }else if(recruitMembers.size()-1 == i){
+        throw new MoyeoError("권한이 없습니다.", "/home");
+      }
+    }
 
     model.addAttribute("longitude", recruitBoard.getLongitude());
     model.addAttribute("latitude", recruitBoard.getLatitude());
