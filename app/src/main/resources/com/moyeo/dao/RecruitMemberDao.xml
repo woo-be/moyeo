@@ -38,7 +38,7 @@
   </resultMap>
 
   <resultMap id="memberMap" type="RecruitMember">
-    <id column="memberId" property="memberId"/>
+    <id column="member_id" property="memberId"/>
     <result column="nickname" property="nickname"/>
     <result column="photo" property="photo"/>
   </resultMap>
@@ -84,7 +84,7 @@
     inner join member m on rb.member_id = m.member_id
     left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
     where
-    rm.member_id=#{memberId}
+    rm.member_id=#{memberId} and rm.state=1
     group by
     rb.recruit_board_id
     order by
@@ -154,7 +154,7 @@
       recruit_member rm
       inner join member m on rm.member_id=m.member_id
     where
-      recruit_board_id=#{recruitBoardId}
+      recruit_board_id=#{recruitBoardId} and rm.state=1
   </select>
 
 </mapper>
