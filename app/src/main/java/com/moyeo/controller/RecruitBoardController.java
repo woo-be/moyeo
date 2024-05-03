@@ -149,7 +149,7 @@ public class RecruitBoardController {
     log.debug("numOfPage:" + numOfPage);
 
 
-    /*  */
+    /* 페이징 페이지 숫자 버튼 */
     int[] pageButtons; // 페이징 페이지 숫자 버튼
 
     if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,

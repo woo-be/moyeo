@@ -127,6 +127,34 @@ public class ReviewBoardController {
       pageNo = numOfPage;
     }
 
+    /* 페이징 페이지 숫자 버튼 */
+    int[] pageButtons; // 페이징 페이지 숫자 버튼
+
+    if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,
+      pageButtons = new int[5]; // 페이지 숫자 버튼의 개수를 5개로 함.
+
+      if (pageNo <= 3) { // 1. 현재 페이지가 시작페이지에서 3페이지 이내의 페이지일 때,
+        for (int i = 0; i < 5; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+          pageButtons[i] = i + 1;
+        }
+      } else if (pageNo >= (numOfPage - 2)) { // 2. 현재 페이지가 끝페이지에서 3페이지 이내의 페이지일 때,
+        int temp = numOfPage;
+        for (int i = 4; i >= 0; i--) { // 숫자 버튼이 끝페이지 -4 부터 시작하도록 함.
+          pageButtons[i] = temp--;
+        }
+      } else { // 3. 그 외의 경우,
+        int temp = pageNo - 2;
+        for (int i = 0; i < 5; i++) { // 숫자 버튼의 가운데 버튼이 현재페이지를 가리키도록 함.
+          pageButtons[i] = temp++;
+        }
+      }
+    } else { // b. 게시판 페이지가 5개 미만일 때,
+      pageButtons = new int[numOfPage]; // 페이지 숫자 버튼의 개수를 전체 페이지 개수로 함.
+      for (int i = 0; i < numOfPage; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+        pageButtons[i] = i + 1;
+      }
+    }
+
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
     model.addAttribute("list",
         reviewBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
@@ -137,6 +165,7 @@ public class ReviewBoardController {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("pageButtons", pageButtons); // 페이지 숫자 버튼
   }
 
   @GetMapping("view")
