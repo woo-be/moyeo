@@ -125,7 +125,7 @@
       <div>
         <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">
         <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">
-        <button style='padding:10px; margin:20px'>등록</button>
+        <button style='padding:10px; margin:20px' data-th-onclick="addReviewComment()">등록</button>
       </div>
     </div>
 
@@ -355,6 +355,9 @@
               }
           })
       }
+  }
+  function addReviewComment(){
+    alert('댓글이 등록되었습니다.');
   }
 </script>
 
