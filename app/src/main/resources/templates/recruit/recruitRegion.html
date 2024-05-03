@@ -12,10 +12,11 @@
 
 </head>
 <body>
-<aside data-th-fragment="recruitRegionList" style="padding-right:10px">
+<aside data-th-fragment="recruitRegionList" style="padding-right:10px; padding-left: 10px;">
   <div class="border-bottom border-1 pt-3 pb-2">
     <h5 class="ms-4">지역</h5>
   </div>
+  <input data-th-value="${regionId}" type="hidden">
   <ul class="mt-2" id="recruitRegion" style="list-style: none;">
     <li><a data-th-href="@{list(themeId=${themeId})}">전체</a></li>
     <li><a data-th-href="@{list(regionId=1,themeId=${themeId})}">서울특별시</a></li>
