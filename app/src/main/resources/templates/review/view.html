@@ -35,6 +35,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
+       width: 50%;
+      height: 30%;
+      margin: 0 auto;
     }
 
     #comment-hr {
@@ -45,7 +48,7 @@
 
     #map {
       margin: 0 auto;
-      width: 1000px;
+      width: 50%;
       height:400px;
       }
 
@@ -57,6 +60,10 @@
 </head>
 <div data-th-replace="header :: header">머리말</div>
 <body style="text-align: center;">
+
+<!--<div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">-->
+<!--  <div class="w-75 justify-content-center">-->
+<!--    <div class="d-flex flex-column bd-highlight">-->
 
 <div data-th-object="${reviewBoard}">
   <form action="updateForm.html" data-th-action="@{updateForm}"
