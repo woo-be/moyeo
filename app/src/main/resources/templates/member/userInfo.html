@@ -84,8 +84,8 @@
                 </div>
             </div><br>
           <div>
-            <button type="submit" class="btn btn-secondary btn-sm">변경</button>
-            <button data-th-href="@{delete(id=*{memberId})}" href="delete.html" class="btn btn-secondary btn-sm">삭제</button>
+            <button type="submit" class="btn btn-secondary btn-sm" onclick="showMessage('수정되었습니다')">수정</button>
+            <button data-th-href="@{delete(id=*{memberId})}" href="delete.html" class="btn btn-secondary btn-sm" onclick="showMessage('탈퇴되었습니다')">탈퇴</button>
           </div>
           <div data-th-if="${session.loginUser == null}">
             <p>No member information found.</p>
@@ -109,6 +109,15 @@
     </div>
   </div>
 </div>
+
+<script>
+  // 알림창을 표시하는 함수
+  function showMessage(message) {
+      alert(message);
+  }
+</script>
+
+
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

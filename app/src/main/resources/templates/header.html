@@ -81,7 +81,7 @@
   <div class="col-md-3 text-end">
     <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
     <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
-      <button type="button" class="btn btn-primary me-2">로그아웃</button>
+      <button type="button" class="btn btn-primary me-2" onclick="showMessage('로그아웃되었습니다!')">로그아웃</button>
     </a>
   <div class="d-flex justify-content-end" data-th-unless="${session.loginUser != null}">
     <a data-th-href="@{/auth/form}">
@@ -168,6 +168,14 @@
             processData: false,
         });
     };
+
+
+      // 알림창을 표시하는 함수
+  function showMessage(message) {
+      alert(message);
+  }
+
+
   </script>
 </header>
 

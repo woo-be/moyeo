@@ -1,7 +1,9 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RecruitMemberService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.ErrorName;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
@@ -24,6 +26,7 @@ public class RecruitMemberController {
   private static final Log log = LogFactory.getLog(RecruitMemberController.class);
   private final RecruitMemberService recruitMemberService;
   private final RecruitBoardService recruitBoardService;
+  private final AlarmService alarmService;
 
   @GetMapping("add")
   public String add(int recruitBoardId, HttpSession session) throws Exception { // 모집 신청하기
@@ -39,6 +42,23 @@ public class RecruitMemberController {
     }
 
     recruitMemberService.add(recruitBoardId, loginUser.getMemberId());
+
+
+    // 알림 읽음여부를 확인하기 위해 알림 id를 같이 넘겨준다
+    Alarm alarm = Alarm.builder().memberId(recruitBoard.getWriter().getMemberId()).content(
+        "<a href=\"/myrecruit/appl?recruitBoardId="+
+            recruitBoardId).build();
+    alarmService.add(alarm);
+    alarm.setContent(
+        alarm.getContent()+
+            "&alarmId="+
+            alarm.getAlarmId()+
+            "\">"+
+            recruitBoardId+
+            "번 모집</a>에 신청했습니다."
+    );
+    alarmService.updateContent(alarm);
+    log.debug(alarm);
 
     return "redirect:/recruit/view?recruitBoardId=" + recruitBoardId;
   }

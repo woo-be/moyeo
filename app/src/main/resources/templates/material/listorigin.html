@@ -20,12 +20,6 @@
       grid-template-columns:repeat(3, 1fr);
       gap: 10px;
     }
-
-    .list-item {
-      border: 1px solid black;
-      padding: 10px;
-      text-align: center;
-    }
   </style>
 </head>
 <body style="text-align: center;">
@@ -38,7 +32,7 @@
 <p><a data-th-href="@{form(recruitBoardId=${recruitBoardId})}" href="form.html">새 준비물</a></p>
 <ul>
   <div class="container">
-    <li class="list-item" data-th-each="material : ${list}" data-th-object="${material}">
+    <tr data-th-each="material : ${list}" data-th-object="${material}">
       <div style='board: 1px solid black; flex'>
         <a data-th-href="@{view(materialId=*{materialId})}" href="view.html">
           <div style='board: 1px solid black; flex'>
@@ -50,7 +44,7 @@
           </div>
         </a>
       </div>
-    </li>
+    </tr>
   </div>
 </ul>
 

@@ -43,9 +43,8 @@ public class ReviewCommentController {
             reviewBoard.getReviewBoardId()).build();
 
     reviewCommentService.add(reviewComment);
-    alarmService.add(alarm);
 
-    log.debug(alarm);
+    alarmService.add(alarm);
     alarm.setContent(
             alarm.getContent()+
             "&alarmId="+

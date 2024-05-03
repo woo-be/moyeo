@@ -21,42 +21,17 @@
         rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
-
   <style>
     body {
-        padding-left: 0px;
+        padding-left: 10px;
     }
-
-<!--    .div-class {-->
-<!--      margin: 0 auto;-->
-<!--    }-->
-
-    #content {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    #comment-hr {
-      border: 1px solid black;
-      width:900px;
-      margin: 0 auto;
-    }
-
-    #map {
-      margin: 0 auto;
-      width: 1000px;
-      height:400px;
-      }
-
-
   </style>
 
   <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
   <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </head>
 <div data-th-replace="header :: header">머리말</div>
-<body style="text-align: center;">
+<body>
 
 <div data-th-object="${reviewBoard}">
   <form action="updateForm.html" data-th-action="@{updateForm}"
@@ -65,8 +40,8 @@
     <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
     <input data-th-value="*{regionId}" name='regionId' type='hidden'>
     <input data-th-value="*{themeId}" name='themeId' type='hidden'>
-
-
+    조회수 : <span data-th-text="*{views}">조회수</span><br>
+    좋아요수 : <span data-th-text="*{likeCount}">좋아요수</span><br>
     <div>
       게시일 : <span
         data-th-text="${#dates.format(reviewBoard.createdDate, 'yyyy-MM-dd HH:mm:ss')}">게시일</span>
@@ -86,30 +61,27 @@
     주소 : <input id="addr" type="text" name="address">
     <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
     <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>
-      지도 : <div id="map"></div>
-    <div id="content" >
-      <textarea  data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
+    지도 : <div id="map" style="width:500px;height:400px;"></div>
+    <div>
+      내용 : <textarea data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
     </div>
 
-    조회수 : <span data-th-text="*{views}">조회수</span><br>
-    좋아요수 : <span data-th-text="*{likeCount}">좋아요수</span><br>
-
-      <button>변경</button>
-<!--      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>-->
+    <button>변경</button>
+    <!--      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>-->
   </form>
-      <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
+  <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
 
-    <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
-        data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"
-        height="4%" width="4%"/></a>
+  <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
+      data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"
+      height="4%" width="4%"/></a>
 
-    <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
-        data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"
-        width="4%"/></a>
+  <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
+      data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"
+      width="4%"/></a>
 
-  <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none; ">
+  <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none;">
     <div data-th-each="comment : *{commentList}" data-th-object="${comment}">
-      <hr id="comment-hr">
+      <hr style='border: 1px solid black; width:900px'>
       <li>
         <!--
         <div style='float:left'>작성자: </div>
@@ -146,14 +118,14 @@
   <form action="view.html" data-th-action="@{../comment/add}" method='post'>
     <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
     <input data-th-value="*{writer.memberId}" name='memberId' type='hidden'>
-    <div style='border: 1px solid black; float:none; width:900px; margin: 0 auto;'>
+    <div style='border: 1px solid black; float:none; width:900px'>
       <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>
         댓글 내용
       </div>
       <div>
         <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">
         <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">
-        <button style='padding:10px; margin:20px' data-th-onclick="addReviewComment()">등록</button>
+        <button style='padding:10px; margin:20px'>등록</button>
       </div>
     </div>
 
@@ -167,12 +139,10 @@
   $(document).ready(function() {
   var options = new Object();
   options.height = 300;
-  options.width = 1000;
+  options.width = 900;
   options.toolbar = false;
 
     $('#summernote').summernote(options).summernote("disable");
-    $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
-
 
   });
 
@@ -358,37 +328,34 @@
 
 </script>
 <script>
-<!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
-  function reviewDelete(reviewBoardId){
-      var reply = confirm("후기를 삭제 하겠습니까?");
-      if (reply) {
-          $.ajax({
-              url: "delete?reviewBoardId="+reviewBoardId,
-              type: 'GET',
-              contentType: false,
-              processData: false
-          })
-          .done(function(responseUrl) {
-              // 권한을 체크
-              if(responseUrl == '-1'){
-                window.alert("로그인이 필요합니다.");
-                window.location.href = '/auth/form';
-              }else if(responseUrl == '-2'){
-                window.alert("번호가 옳지 않습니다.");
-                window.location.href = 'view?reviewBoardId='+reviewBoardId;
-              }else if(responseUrl == '-3'){
-                window.alert("권한이 없습니다.");
-                window.location.href = 'view?reviewBoardId='+reviewBoardId;
-              }else{
-                window.alert("삭제되었습니다.");
-                window.location.href = responseUrl;
-              }
-          })
-      }
-  }
-  function addReviewComment(){
-    alert('댓글이 등록되었습니다.');
-  }
+  <!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
+    function reviewDelete(reviewBoardId){
+        var reply = confirm("후기를 삭제 하겠습니까?");
+        if (reply) {
+            $.ajax({
+                url: "delete?reviewBoardId="+reviewBoardId,
+                type: 'GET',
+                contentType: false,
+                processData: false
+            })
+            .done(function(responseUrl) {
+                // 권한을 체크
+                if(responseUrl == '-1'){
+                  window.alert("로그인이 필요합니다.");
+                  window.location.href = '/auth/form';
+                }else if(responseUrl == '-2'){
+                  window.alert("번호가 옳지 않습니다.");
+                  window.location.href = 'view?reviewBoardId='+reviewBoardId;
+                }else if(responseUrl == '-3'){
+                  window.alert("권한이 없습니다.");
+                  window.location.href = 'view?reviewBoardId='+reviewBoardId;
+                }else{
+                  window.alert("삭제되었습니다.");
+                  window.location.href = responseUrl;
+                }
+            })
+        }
+    }
 </script>
 
 

@@ -24,6 +24,8 @@
 </div>
 <script type="text/javascript">
   let recruitBoardId = document.getElementById("recruitBoardId").value;
+
+  // 서버 ip주소를 등록해야함
   const socket = new WebSocket("ws://localhost:8888/chat?recruitBoardId=" + recruitBoardId);
 
   // open: 커넥션이 제대로 만들어졌을 때 발생

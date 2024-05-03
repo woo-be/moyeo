@@ -1,5 +1,6 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RecruitMemberService;
 import com.moyeo.vo.ErrorName;
@@ -26,6 +27,7 @@ public class MypageRecruitController {
   private final static Log log = LogFactory.getLog(MypageRecruitController.class);
   private final RecruitBoardService recruitBoardService;
   private final RecruitMemberService recruitMemberService;
+  private final AlarmService alarmService;
 
   @GetMapping("posted")
   public void mypost(
@@ -61,7 +63,7 @@ public class MypageRecruitController {
   }
 
   @GetMapping("/appl")
-  public void appllist(Model model, int recruitBoardId, HttpSession session) throws Exception {
+  public void appllist(Model model, @RequestParam(required = false, defaultValue = "0") int alarmId, int recruitBoardId, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
@@ -70,6 +72,12 @@ public class MypageRecruitController {
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
     if (recruitBoard.getWriter().getMemberId() != loginUser.getMemberId()) {
       throw new MoyeoError(ErrorName.ACCESS_DENIED, "/myrecruit/posted");
+    }
+
+    if (alarmId != 0) {
+      if (!alarmService.getStatus(alarmId)) {
+        alarmService.update(alarmId);
+      }
     }
 
     model.addAttribute("recruitBoardId", recruitBoardId);
