@@ -30,7 +30,7 @@
 <div class="d-flex justify-content-around">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="card">
-    <div class="bg-white  py-4 card-header"><h2 class="mb-0">작성한 모집글</h2></div>
+    <div class="bg-white  py-4 card-header"><h2 class="mb-0">신청한 모집글</h2></div>
     <div class="table-responsive">
       <table class="text-nowrap mb-0 table">
         <thead class="table-light">
@@ -55,10 +55,14 @@
           <td class="align-middle text-dark">
             <span class="badge bg-warning" data-th-if="*{state == true}" data-th-text="수락">수락 여부</span>
             <span class="badge bg-secondary" data-th-if="*{state == false}" data-th-text="거절">거절 여부</span>
+            <span class="badge bg-info" data-th-if="*{#strings.isEmpty(state)}" data-th-text="대기중">대기중</span>
           </td>
           <td class="align-middle text-dark">
-            <span data-th-if="*{#strings.isEmpty(state)}" class="btn btn-secondary btn-sm" data-th-text="대기중">대기중</span>
-            <span data-th-if="*{state == true}"><button class="btn btn-success btn-sm">이동</button></span>
+            <span data-th-if="*{state == true}">
+              <a class="btn btn-success btn-sm" data-th-href="@{../recruitMember/calendar(recruitBoardId=*{recruitBoardId})}">
+                이동
+              </a>
+            </span>
           </td>
         </tr>
         </tbody>
