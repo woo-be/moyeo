@@ -88,9 +88,9 @@ public class MypageRecruitController {
       throw new MoyeoError(ErrorName.ACCESS_DENIED, "/myrecruit/posted");
     }
 
-    /* 현재 모집 게시글의 총 모집 인원과 현재 모집 인원을 찾아 모집인원이 가득 찬 경우 예외 발생 */
+    /* 현재 모집 게시글의 총 모집 인원과 현재 모집 인원을 찾아 모집인원이 가득 찼을 때 수락을 누르면 예외 발생 */
     RecruitBoard temp = recruitBoardService.findCurrentAndTotalBy(recruitMember.getRecruitBoardId());
-    if (temp.getCurrent() >= temp.getRecruitTotal()) {
+    if (temp.getCurrent() >= temp.getRecruitTotal() && recruitMember.getState()) {
       throw new MoyeoError("모집인원이 모두 찼습니다.", "/myrecruit/appl?recruitBoardId=" + recruitMember.getRecruitBoardId());
     }
 
