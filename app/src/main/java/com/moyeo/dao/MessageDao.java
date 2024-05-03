@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 public interface MessageDao {
   void add(Msg msg);
   List<Msg> list(int recruitBoardId);
+
+  void delete(int recruitBoardId); // 모집게시글 삭제시 호출.
 }

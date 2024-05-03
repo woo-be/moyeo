@@ -36,4 +36,12 @@
       msg.msg_id asc
   </select>
 
+  <delete id="delete" parameterType="int"> <!-- 해당 모집 게시글을 삭제할 때 사용, -->
+    delete
+    from
+      msg
+    where
+      recruit_board_id = #{value}
+  </delete>
+
 </mapper>
