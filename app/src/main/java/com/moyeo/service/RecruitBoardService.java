@@ -73,4 +73,6 @@ public interface RecruitBoardService {
       @Param("keyword")String keyword);
 
   List<RecruitBoard> findByCurrentByLimit6();
+
+  RecruitBoard findCurrentAndTotalBy(int recruitBoardId);
 }

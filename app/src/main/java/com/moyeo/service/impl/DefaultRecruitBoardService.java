@@ -1,5 +1,6 @@
 package com.moyeo.service.impl;
 
+import com.moyeo.dao.MessageDao;
 import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
 import com.moyeo.dao.RecruitMemberDao;
@@ -25,6 +26,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitCommentDao recruitCommentDao;
   private final RecruitPhotoDao recruitPhotoDao;
   private final RecruitMemberDao recruitMemberDao;
+  private final MessageDao messageDao;
 
   @Transactional
   @Override
@@ -90,7 +92,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int delete(int boardId) {
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
-    /* 해당 모집글의 채팅방의 채팅도 삭제해야함 */
+    messageDao.delete(boardId); // 해당 모집글의 채팅방의 채팅 삭제
     recruitMemberDao.deleteAll(boardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
 
     return recruitBoardDao.delete(boardId);
@@ -156,6 +158,11 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Override
   public List<RecruitBoard> findByCurrentByLimit6() {
     return recruitBoardDao.findByCurrentByLimit6();
+  }
+
+  @Override
+  public RecruitBoard findCurrentAndTotalBy(int recruitBoardId) { // 현재 인원과 총 모집 인원을 찾는 메서드
+    return recruitBoardDao.findCurrentAndTotalBy(recruitBoardId);
   }
 }
 
