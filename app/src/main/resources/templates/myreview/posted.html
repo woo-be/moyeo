@@ -46,11 +46,13 @@
       <div class="review" data-th-each="reviewBoard : ${reviewList}" data-th-object="${reviewBoard}">
         <div class="review-1">
           <a data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-            <img data-th-if="*{photos[0].photo}" alt="여행 사진"
-                 data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-            <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
-                 data-th-src="@{/img/default-review-photo.png}" src="/static/img/default-review-photo.png"
-                 alt="여행 사진">
+            <div style="border: 1px solid #ccc">
+              <img data-th-if="*{photos[0].photo}" alt="여행 사진"
+                   data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+              <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
+                   data-th-src="@{/img/default-review-photo.png}" src="/static/img/default-review-photo.png"
+                   alt="여행 사진">
+            </div>
             <h3 data-th-text="*{title}">제목입니다</h3><br>
           </a>
           <div>

@@ -8,9 +8,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
     .container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      width: 70%;
     }
   </style>
 </head>
@@ -18,47 +16,49 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="mt-n22 px-6 container-fluid">
-  <div class="mt-6 row">
-    <div class="col-md-12 col-12">
-      <div class="card">
-        <div class="bg-white  py-4 card-header"><h4 class="mb-0">일정 관리</h4></div>
-        <div class="table-responsive">
-          <table class="text-nowrap mb-0 table">
-            <thead class="table-light">
-            <tr>
-              <th>게시물 번호</th>
-              <th>제목</th>
-              <th>작성자</th>
-              <th>여행일자</th>
-              <th>인원수</th>
-            </tr>
-            </thead>
-
-            <tbody>
-              <div data-th-each="recruitBoard : ${list}" data-th-object="${recruitBoard}">
+<div class="container">
+  <div class="mt-n22 px-6 container-fluid">
+    <div class="mt-6 row">
+      <div class="col-md-12 col-12">
+        <div class="card">
+          <div class="bg-white  py-4 card-header"><h4 class="mb-0">일정 관리</h4></div>
+          <div class="table-responsive">
+            <table class="text-nowrap mb-0 table">
+              <thead class="table-light">
               <tr>
-                <td data-th-text="*{recruitBoardId}">1</td>
-                <td class="align-middle">
-                  <div class="d-flex align-items-center">
-                    <a data-th-href="@{/recruitMember/calendar(recruitBoardId=*{recruitBoardId})}" href="calendar.html">
-                      <div class="work-info" style='board: 1px solid black; float:none'>
-                        <h4 data-th-text="*{title}">게시글제목</h4>
-                      </div>
-                    </a>
-                  </div>
-                </td>
-                <td class="align-middle" data-th-text="*{writer.nickname}">작성자</td>
-                <td class="align-middle" data-th-text="*{startDate} +' ~ '+ *{endDate}" >여행일자</td>
-                <td class="align-middle">
-                  <div class="avatar-group">
-                    <span class="avatar avatar-sm" data-th-text="|*{current} / *{recruitTotal}|">인원수</span>
-                  </div>
-                </td>
+                <th>게시물 번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>여행일자</th>
+                <th>인원수</th>
               </tr>
-              </div>
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                <div data-th-each="recruitBoard : ${list}" data-th-object="${recruitBoard}">
+                <tr>
+                  <td data-th-text="*{recruitBoardId}">1</td>
+                  <td class="align-middle">
+                    <div class="d-flex align-items-center">
+                      <a data-th-href="@{/recruitMember/calendar(recruitBoardId=*{recruitBoardId})}" href="calendar.html">
+                        <div class="work-info" style='board: 1px solid black; float:none'>
+                          <h4 data-th-text="*{title}">게시글제목</h4>
+                        </div>
+                      </a>
+                    </div>
+                  </td>
+                  <td class="align-middle" data-th-text="*{writer.nickname}">작성자</td>
+                  <td class="align-middle" data-th-text="*{startDate} +' ~ '+ *{endDate}" >여행일자</td>
+                  <td class="align-middle">
+                    <div class="avatar-group">
+                      <span class="avatar avatar-sm" data-th-text="|*{current} / *{recruitTotal}|">인원수</span>
+                    </div>
+                  </td>
+                </tr>
+                </div>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
