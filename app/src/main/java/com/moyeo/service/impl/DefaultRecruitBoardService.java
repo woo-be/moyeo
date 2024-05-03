@@ -159,5 +159,10 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public List<RecruitBoard> findByCurrentByLimit6() {
     return recruitBoardDao.findByCurrentByLimit6();
   }
+
+  @Override
+  public RecruitBoard findCurrentAndTotalBy(int recruitBoardId) { // 현재 인원과 총 모집 인원을 찾는 메서드
+    return recruitBoardDao.findCurrentAndTotalBy(recruitBoardId);
+  }
 }
 
