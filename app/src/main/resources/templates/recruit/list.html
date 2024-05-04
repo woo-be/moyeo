@@ -52,8 +52,10 @@
       white-space: nowrap;
     }
     .column-title {
+      text-align: center;
       width: 40%;
-      max-width: 40%;
+      max-width: 300px;
+      min-width: 40%;
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
@@ -76,6 +78,7 @@
     span {
       white-space: nowrap;
     }
+}
 
   </style>
 </head>
@@ -87,19 +90,19 @@
   <div data-th-replace="header :: header">머리말</div>
 </div>
 
-<div class="d-flex justify-content-center align-items-start w-100">
+<div class="d-flex justify-content-center align-items-start">
   <!-- 컨텐트 -->
   <div class="d-flex p-3 justify-content-center align-items-start">
 
     <!-- 지역 -->
-    <div class="d-flex justify-content-end" style="width: 400px;">
+    <div class="d-flex justify-content-end w-75">
       <div class="border d-flex mx-2">
           <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column border w-75 p-4 col-7">
+    <div class="d-flex flex-column border w-75 mw-75 p-4 col-7">
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
 
@@ -130,8 +133,11 @@
           <td class="text-center column-no" data-th-text="*{recruitBoardId}">1</td>
           <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
           <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-          <td class="text-center column-title"><a data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}"
-                 data-th-text="*{title}" href="view.html">제목입니다</a></td>
+          <td class="text-center">
+            <a class="d-flex justify-content-center" data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" href="view.html">
+              <span class="column-title w-100" data-th-text="*{title}"></span>
+            </a>
+          </td>
           <td class="text-center column-writer" data-th-text="*{writer.nickname}">홍길동</td>
           <td class="text-center column-present" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
           <td class="text-center">

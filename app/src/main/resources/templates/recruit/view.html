@@ -50,11 +50,18 @@
       padding-right:10px;
       margin-right:10px;
     }
-    h6 {
+    h6, span, button, a {
       white-space: nowrap;
     }
-    span {
-      white-space: nowrap;
+
+    .form-control {
+      width: 100%;
+      height: 100px;
+      word-wrap: break-word;
+    }
+    .maincontent {
+      width: 100%;
+      height: 100%;
     }
   </style>
 </head>
@@ -63,7 +70,7 @@
 
 
 <div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">
-  <div class="w-75 justify-content-center">
+  <div class="w-75 justify-content-center" style="min-width:900px">
     <div class="d-flex flex-column bd-highlight">
       <form action="update" data-th-action="@{updateForm}"
             enctype='multipart/form-data' method='post'>
@@ -74,82 +81,79 @@
         <div class="d-flex justify-content-center w-100 border border-2 p-3">
 
           <!-- 세로정렬 -->
-          <div class="d-flex w-100 flex-column">
+          <div class="d-flex w-75 flex-column">
 
             <!-- title -->
-            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center">
+            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center pt-3 pb-3">
               <!-- left -->
               <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center w-75 mw-75">
-                <div class="me-2">
+                <div class="ps-4 me-2">
                   <h1 class="text-break" data-th-text="*{title}">제목</h1>
                 </div>
-                <div class="border border-2 rounded-3 p-2 align-items-center">
+                <div class="border border-2 rounded-3 ms-3 p-2 align-items-center">
                   <span data-th-if="*{state == true}">모집중</span>
                   <span data-th-if="*{state == false}">모집완료</span>
                 </div>
               </div>
 
               <!-- right -->
-              <div class="d-flex flex-column bd-highlight">
-                <div class="d-flex flex-row bd-highlight">
-                  <div class="me-2">
-                    조회수: <span data-th-text="*{views}"></span>
-                  </div>
-                  <div>
+              <div class="d-flex flex-column bd-highlight me-4">
+                <div class="d-flex flex-column justify-content-end bd-highlight me-2">
+                  <div class="text-end" style="width:150px">
                     작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
                   </div>
-                </div>
-                <div class="d-flex flex-row bd-highlight ">
-                  <div class="d-flex flex-row bd-highlight p-1">
-                    <button class="btn btn-primary m-1" >수정</button>
+                  <div class="text-end">
+                    조회수: <span data-th-text="*{views}"></span>
                   </div>
-                  <div class="d-flex flex-row bd-highlight p-1">
-                    <button type="button" class="btn btn-primary m-1" data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <div class="d-flex flex-row bd-highlight">
+                    <div class="d-flex flex-row bd-highlight p-1">
+                      <button class="btn btn-primary m-1" >수정</button>
+                    </div>
+                    <div class="d-flex flex-row bd-highlight p-1">
+                      <button type="button" class="btn btn-danger m-1" data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- 세부정보 -->
-            <div class="d-flex justify-content-center">
-              <div class="d-flex justify-content-center w-75 mw-75 mb-3 p-3">
-                <div class="d-flex flex-column bd-highlight w-100 border border-1 ">
-                  <div class="d-flex ms-2 bd-highlight flex-row p-4">
-                    <div class="d-flex flex-column">
-                      <div class="d-flex flex-row">
-                        <h6 class="form-item-div-name">지역</h6>
-                        <h6 data-th-text="*{region.regionName}">서울특별시</h6>
-                      </div>
-                      <div class="d-flex flex-row">
-                        <h6 class="form-item-div-name">테마</h6>
-                        <h6 data-th-text="*{theme.themeName}"></h6>
-                      </div>
-                      <div class="d-flex flex-row">
-                        <h6 class="form-item-div-name">여행기간</h6>
-                        <h6 data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</h6>
-                        ~ <h6 data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</h6>
-                      </div>
-                      <div class="d-flex flex-row">
-                        <h6 class="form-item-div-name">마감일자</h6>
-                        <h6 data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</h6>
-                      </div>
+            <div class="maincontent d-flex justify-content-center mb-3 p-3">
+              <div class="d-flex flex-column bd-highlight w-100 border border-1 ">
+                <div class="d-flex ms-2 bd-highlight flex-row p-4">
+                  <div class="d-flex flex-column">
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">지역</h6>
+                      <h6 data-th-text="*{region.regionName}">서울특별시</h6>
                     </div>
-                    <div class="p-2 bd-highlight me-2 ms-auto">
-                      <div id="map" style="width:350px;height:250px;"></div>
-                      <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">
-                      <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">테마</h6>
+                      <h6 data-th-text="*{theme.themeName}"></h6>
                     </div>
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">여행기간</h6>
+                      <h6 data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</h6>
+                      ~ <h6 data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</h6>
+                    </div>
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">마감일자</h6>
+                      <h6 data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</h6>
+                    </div>
+                  </div>
+                  <div class="p-2 bd-highlight me-2 ms-auto">
+                    <div id="map" style="width:300px;height:250px;"></div>
+                    <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">
+                    <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">
                   </div>
                 </div>
               </div>
             </div>
 
-
             <!-- content -->
-            <div class="d-flex justify-content-center bd-highlight mb-3">
-              <div>
-                <textarea id="summernote" data-th-text="*{content}" readonly name='content' style="display: none;"></textarea>
-              </div>
+            <div class="maincontent d-flex justify-content-center">
+              <textarea id="summernote" data-th-text="*{content}" readonly name='content'></textarea>
             </div>
 
             <!-- buttons -->
@@ -175,7 +179,7 @@
       </form>
     </div>
 
-    <div class="d-flex justify-content-center bd-highlight border border-2 p-3">
+    <div class="d-flex justify-content-center bd-highlight border border-2 p-4 mt-4">
       <div class="w-75">
         <div class="d-flex flex-column">
           <!-- view comment -->
@@ -183,27 +187,24 @@
             <h4 class="mt-4 ms-4 mb-4">댓글</h4>
             <ul data-th-if="*{comments}" style="list-style: none;">
               <li data-th-each="comment : *{comments}" data-th-object="${comment}">
-                <div id="commentviewform" class="d-flex flex-row bd-highlight mb-3">
-                  <div class="flex-shrink-0 mt-2 me-3">
-                    <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
-                  </div>
-                  <!--            <div class="me-auto bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>-->
-                  <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-                    <div class="d-flex flex-row bd-highlight mb-1">
-                      <div class="d-flex flex-row me-auto align-items-center pt-2 bd-highlight">
-                        <h6 class="fw-bold me-2" data-th-text="*{member.nickname}"></h6>
-                        <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                      </div>
-                      <div class="bd-highlight">
-                        <button id="editBtn" class="btn btn-primary" >수정</button>
-                        <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
-                           type="button" class="btn btn-primary" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
-                      </div>
+                <div class="commentviewform"> <!-- 댓글 조회 지정용 -->
+                  <div class="d-flex flex-row bd-highlight mb-3">
+                    <div class="flex-shrink-0 mt-2 me-3">
+                      <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
                     </div>
-                    <div  class="d-flex flex-row bd-highlight">
-                      <div class="w-100">
-                        <span class="text-break" data-th-text="*{content}"></span>
-                        <!--                내용: <input data-th-value="*{content}" readonly type='text' value="내용"/>-->
+                    <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3 pe-4">
+                      <div class="d-flex flex-row bd-highlight mb-1">
+                        <div class="bd-highlight me-auto" data-th-replace="recruit/commentform :: commentusername"></div>
+                        <div class="d-flex flex-row bd-highlight ms-auto ">
+                          <button id="editBtn" class="btn btn-primary m-1">수정</button>
+                          <a id="deletecomment" data-th-href="@{comment/delete(recruitCommentId=*{recruitCommentId})}"
+                             type="button" class="btn btn-danger m-1" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+                        </div>
+                      </div>
+                      <div  class="d-flex flex-row bd-highlight">
+                        <div class="w-100">
+                          <div class="w-75 text-break" data-th-text="*{content}"></div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -216,27 +217,26 @@
                       <div class="bd-highlight" data-th-replace="recruit/commentform :: commentuserinfo"></div>
                     </div>
                     <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
-                      <div class="d-flex flex-row me-auto pt-2 align-items-center bd-highlight">
-                        <h6 class="fw-bold me-2" data-th-text="*{member.nickname}"></h6>
-                        <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
-                      </div>
-                      <div class="d-flex flex-row bd-highlight mb-1">
-                        <div class="w-100">
-                          <input data-th-value="*{content}" type='text' name="content" value="내용"/>
-                          <button type="button" class="btn btn-primary" id="submitBtn" onclick="submitContent()">전송</button>
+                      <div class="bd-highlight" data-th-replace="recruit/commentform :: commentusername"></div>
+                      <div class="d-flex flex-row bd-highlight mb-1 w-100">
+                        <div class="w-75">
+                          <textarea class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break" data-th-text="*{content}" name="content"></textarea>
+                        </div>
+                        <div class="d-flex flex-row h-50">
+                          <button id="submitBtn" type="submit" class="btn btn-primary m-1">전송</button>
+                          <button id="cancelBtn" type="button" class="btn btn-danger m-1">취소</button>
                         </div>
                       </div>
                     </div>
                   </div>
                 </form>
-                <button id="cancelBtn" type="button" class="btn btn-primary" style="display: none;" onclick="cancelEdit()">취소</button>
               </li>
             </ul>
           </div>
 
           <!-- add comment -->
           <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-            <div class="d-flex flex-row bd-highlight border border-2 p-3">
+            <div class="d-flex flex-row bd-highlight border border-2 p-3 ms-2">
               <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
               <div class="p-2 bd-highlight">
                 <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
@@ -252,9 +252,9 @@
                   <h6 class="fw-bold me-2" data-th-text="*{nickname}">nickname</h6>
                 </div>
                 <div class="d-flex flex-row d-flex bd-highlight" >
-                  <textarea id="content" class="p-2 flex-grow-1 bd-highlight form-control" name="content" type="text"></textarea>
-                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1" data-th-onclick="addRecruitComment()" >
-                    <span>전송</span>
+                  <textarea id="content" class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break me-1" name="content" type="text"></textarea>
+                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center mt-5 mb-5" data-th-onclick="addRecruitComment()" >
+                    <span class="ms-1 me-1">전송</span>
                   </button>
                 </div>
               </div>
@@ -270,8 +270,6 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 <script>
-
-
   // 모든 editBtn 요소 찾기
   var editBtns = document.querySelectorAll("#editBtn");
 
@@ -285,7 +283,7 @@
     // 클릭된 editBtn 요소의 부모 요소인 li 태그 선택
     var listItem = event.target.closest("li");
 
-    var commentViewForm = listItem.querySelector("#commentviewform");
+    var commentViewForm = listItem.querySelector(".commentviewform");
     var updateCommentForm = listItem.querySelector("#updatecomment");
     var cancelBtn = listItem.querySelector("#cancelBtn");
     var submitBtn = listItem.querySelector("#submitBtn");
@@ -300,6 +298,7 @@
       commentViewForm.style.display = "block";
       updateCommentForm.style.display = "none";
       cancelBtn.style.display = "none";
+      updateCommentForm.submit();
     });
 
     // 취소 버튼에 클릭 이벤트 추가
@@ -309,6 +308,8 @@
       cancelBtn.style.display = "none";
     });
   }
+</script>
+<script>
 
   // summernote 사용 설정
   $(document).ready(function() {
@@ -325,12 +326,10 @@
 
 <script>
   <!-- 지도에서 검색 후 위도, 경도 가지고 오기-->
-
-
-    var map = new naver.maps.Map("map", {
-      center: new naver.maps.LatLng(37.3595316, 127.1052133),
-      zoom: 15,
-      mapTypeControl: true
+  var map = new naver.maps.Map("map", {
+    center: new naver.maps.LatLng(37.3595316, 127.1052133),
+    zoom: 15,
+    mapTypeControl: true
   });
 
   var infoWindow = new naver.maps.InfoWindow({
@@ -403,7 +402,7 @@
           }
 
           infoWindow.setContent([
-              '<div style="padding:10px;min-width:250px;line-height:150%;">',
+              '<div style="padding:10px;min-width:230px;line-height:150%;">',
               //'<h6 style="margin-top:5px;">검색 주소 : '+ address +'</h6><br />',
               htmlAddresses.join('<br />'),
               '</div>'
