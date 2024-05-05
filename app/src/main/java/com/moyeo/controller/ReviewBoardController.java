@@ -228,24 +228,6 @@ public class ReviewBoardController {
       }
     }
 
-    List<Alarm> alarmList = alarmService.listAll();
-    // 관련 없는 알림을 제거해야 하는 리스트
-    List<Alarm> removeAlarm = new ArrayList<>();
-    // 관련 알림 내용
-    String removeStr = reviewBoardId + "번 후기에";
-    // 관련 없는 알림 리스트
-    for (Alarm alarm : alarmList) {
-      if (!alarm.getContent().contains(removeStr)) {
-        removeAlarm.add(alarm);
-      }
-    }
-    // 관련 없는 알림 리스트를 제거
-    alarmList.removeAll(removeAlarm);
-    // 후기 삭제 할 때 삭제 해야하는 알림 제거
-    for (Alarm alarm : alarmList) {
-      alarmService.delete(alarm.getAlarmId());
-    }
-
     reviewBoardService.delete(reviewBoardId);
     return "/review/list";
   }

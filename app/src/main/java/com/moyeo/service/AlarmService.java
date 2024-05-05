@@ -8,12 +8,12 @@ public interface AlarmService {
 
   List<Alarm> list(int memberId);
 
-  void add(Alarm alarm);
+  void reviewCommentAdd(Alarm alarm, int reviewBoardId);
+  void recruitCommentAdd(Alarm alarm, int reviewBoardId);
+  void recruitMemberAdd(Alarm alarm, int reviewBoardId);
   int update(int alarmId);
 
   boolean getStatus(int alarmId);
   int delete(int alarmId);
-
-  List<Alarm> listAll();
   int updateContent(Alarm alarm);
 }

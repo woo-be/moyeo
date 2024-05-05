@@ -23,8 +23,45 @@ public class DefaultAlarmService implements AlarmService {
   }
 
   @Override
-  public void add(Alarm alarm) {
+  public void reviewCommentAdd(Alarm alarm, int reviewBoardId) {
     alarmDao.add(alarm);
+    alarm.setContent(
+        alarm.getContent()+
+            "&alarmId="+
+            alarm.getAlarmId()+
+            "\">"+
+            reviewBoardId+
+            "번 후기</a>에 댓글을 등록했습니다."
+    );
+    alarmDao.updateContent(alarm);
+  }
+
+  @Override
+  public void recruitCommentAdd(Alarm alarm, int recruitBoardId) {
+    alarmDao.add(alarm);
+    alarm.setContent(
+        alarm.getContent() +
+            "&alarmId=" +
+            alarm.getAlarmId() +
+            "\">" +
+            recruitBoardId +
+            "번 모집</a>에 댓글을 등록했습니다."
+    );
+    alarmDao.updateContent(alarm);
+  }
+
+  @Override
+  public void recruitMemberAdd(Alarm alarm, int recruitBoardId) {
+    alarmDao.add(alarm);
+    alarm.setContent(
+        alarm.getContent()+
+            "&alarmId="+
+            alarm.getAlarmId()+
+            "\">"+
+            recruitBoardId+
+            "번 모집</a>에 신청했습니다."
+    );
+    alarmDao.updateContent(alarm);
   }
 
   @Override
@@ -42,10 +79,6 @@ public class DefaultAlarmService implements AlarmService {
     return alarmDao.delete(alarmId);
   }
 
-  @Override
-  public List<Alarm> listAll() {
-    return alarmDao.listAll();
-  }
   public int updateContent(Alarm alarm){
     return alarmDao.updateContent(alarm);
   }

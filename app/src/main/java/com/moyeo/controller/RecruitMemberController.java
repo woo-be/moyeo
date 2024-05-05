@@ -49,17 +49,7 @@ public class RecruitMemberController {
     Alarm alarm = Alarm.builder().memberId(recruitBoard.getWriter().getMemberId()).content(
         "<a href=\"/myrecruit/appl?recruitBoardId=" +
             recruitBoardId).build();
-    alarmService.add(alarm);
-    alarm.setContent(
-        alarm.getContent() +
-            "&alarmId=" +
-            alarm.getAlarmId() +
-            "\">" +
-            recruitBoardId +
-            "번 모집</a>에 신청했습니다."
-    );
-    alarmService.updateContent(alarm);
-    log.debug(alarm);
+    alarmService.recruitMemberAdd(alarm, recruitBoardId);
 
     return "redirect:/recruit/view?recruitBoardId=" + recruitBoardId;
   }

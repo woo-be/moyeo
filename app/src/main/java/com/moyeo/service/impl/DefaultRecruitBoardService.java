@@ -1,14 +1,17 @@
 package com.moyeo.service.impl;
 
+import com.moyeo.dao.AlarmDao;
 import com.moyeo.dao.MessageDao;
 import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
 import com.moyeo.dao.RecruitMemberDao;
 import com.moyeo.dao.RecruitPhotoDao;
 import com.moyeo.service.RecruitBoardService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitComment;
 import com.moyeo.vo.RecruitPhoto;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -27,6 +30,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitPhotoDao recruitPhotoDao;
   private final RecruitMemberDao recruitMemberDao;
   private final MessageDao messageDao;
+  private final AlarmDao alarmDao;
 
   @Transactional
   @Override
@@ -94,6 +98,24 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
     messageDao.delete(boardId); // 해당 모집글의 채팅방의 채팅 삭제
     recruitMemberDao.deleteAll(boardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
+
+    List<Alarm> alarmList = alarmDao.listAll();
+    // 관련 없는 알림을 제거해야 하는 리스트
+    List<Alarm> removeAlarm = new ArrayList<>();
+    // 관련 알림 내용
+    String removeStr = boardId + "번 모집";
+    // 관련 없는 알림 리스트
+    for (Alarm alarm : alarmList) {
+      if (!alarm.getContent().contains(removeStr)) {
+        removeAlarm.add(alarm);
+      }
+    }
+    // 관련 없는 알림 리스트를 제거
+    alarmList.removeAll(removeAlarm);
+    // 후기 삭제 할 때 삭제 해야하는 알림 제거
+    for (Alarm alarm : alarmList) {
+      alarmDao.delete(alarm.getAlarmId());
+    }
 
     return recruitBoardDao.delete(boardId);
   }
