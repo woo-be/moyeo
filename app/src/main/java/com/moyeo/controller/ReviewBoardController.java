@@ -162,6 +162,7 @@ public class ReviewBoardController {
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
     model.addAttribute("regionId", regionId);
+    model.addAttribute("themeId", themeId);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
