@@ -5,8 +5,13 @@
   <title>모여</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!--  헤더, 푸터-->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+        crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+          crossorigin="anonymous"></script>
 
   <style>
     .footer {
@@ -15,40 +20,80 @@
       bottom: 0;
       width: 100%;
     }
-    .container {
-      display: grid;
-      grid-template-columns:repeat(3, 1fr);
-      gap: 10px;
+
+    .td {
+      white-space: nowrap;
+    }
+
+    .column-title {
+      width: 40%;
+      max-width: 40%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .column-present {
+      width: 10%;
+    }
+
+    .column-state {
+      width: 12%;
+    }
+
+    #container{
+      width: 80%;
     }
   </style>
 </head>
-<body style="text-align: center;">
+<body>
 <div data-th-replace="header :: header">머리말</div>
 
-<h1>준비물</h1>
+<div class="d-flex justify-content-center align-items-start w-100">
 
-<div data-th-replace="recruitMember/menu :: list">메뉴</div>
-
-<p><a data-th-href="@{form(recruitBoardId=${recruitBoardId})}" href="form.html">새 준비물</a></p>
-<ul>
-  <div class="container">
-    <tr data-th-each="material : ${list}" data-th-object="${material}">
-      <div style='board: 1px solid black; flex'>
-        <a data-th-href="@{view(materialId=*{materialId})}" href="view.html">
-          <div style='board: 1px solid black; flex'>
-            <img data-th-src="@{/img/default-review-photo.png}" alt="여행 사진" height="200" src="/static/img/default-review-photo.png">
-          </div>
-          <div class="work-info" style='board: 1px solid black; float:none'>
-            <h3 data-th-text="*{name}">준비물이름</h3>
-            <p data-th-text="*{state ? '준비완료' : '준비중'}">준비물상태</p>
-          </div>
-        </a>
-      </div>
-    </tr>
+  <div class="d-flex justify-content-end">
+    <div>
+      <div data-th-replace="recruitMember/menu :: list">메뉴</div>
+    </div>
   </div>
-</ul>
+
+  <div id="container">
+    <div class="text-center fs-2 fw-bold pt-4 pb-3">준비물</div>
+    <table class="table table-hover">
+      <thead>
+      <tr>
+        <th class="col-4 text-center column-title block col-2 text-truncate">준비물</th>
+        <th class="col-1 text-center column-present">수량</th>
+        <th class="col-1 text-center column-state">상태</th>
+      </tr>
+      </thead>
+      <tr data-th-each="material : ${list}" data-th-object="${material}">
+        <td class="col-4 text-center column-title"><a data-th-text="*{name}"
+                                                      data-th-href="@{view(materialId=*{materialId})}"
+                                                      href="view.html"></a></td>
+        <td class="col-1 text-center column-present" data-th-text="*{count}">1</td>
+        <td class="text-center">
+          <div class="avatar-group">
+            <span class="w-75 text-center column-state badge bg-warning"
+                  data-th-if="*{state == false}">준비중</span>
+            <span class="w-75 text-center column-state badge bg-secondary"
+                  data-th-if="*{state == true}">준비완료</span>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <button class="btn btn-primary m-2" data-th-onclick="material()">등록</button>
+  </div>
+
+</div>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
+<script>
+  function material() {
+    window.location.href = "form?recruitBoardId=" + [[${recruitBoardId}]];
+  }
+</script>
+
 </html>

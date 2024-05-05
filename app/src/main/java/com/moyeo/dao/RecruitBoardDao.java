@@ -58,4 +58,5 @@ public interface RecruitBoardDao {
 
   List<RecruitBoard> findByCurrentByLimit6();
 
+  RecruitBoard findCurrentAndTotalBy(int recruitBoardId); // 현재인원과 총 모집 인원을 찾음.
 }

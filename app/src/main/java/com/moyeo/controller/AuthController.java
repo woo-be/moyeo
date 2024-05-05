@@ -2,6 +2,7 @@ package com.moyeo.controller;
 
 import com.moyeo.service.MemberService;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -36,7 +37,7 @@ public class AuthController {
       String password,
       String saveEmail,
       HttpServletResponse response,
-      HttpSession session) {
+      HttpSession session) throws MoyeoError {
 
     if (saveEmail != null) {
       Cookie cookie = new Cookie("email", email);
@@ -58,7 +59,7 @@ public class AuthController {
     } else {
       // 로그인 실패 시 로그인 페이지로 다시 이동
       // 구현후 로그인이 실패되었습니다 메세지 나오게 설정하기!!
-      return "redirect:/auth/form";
+      throw new MoyeoError("아이디 또는 비밀번호가 일치하지 않습니다.","/auth/form");
     }
   }
 

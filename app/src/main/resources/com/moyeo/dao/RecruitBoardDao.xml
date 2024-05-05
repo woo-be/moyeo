@@ -24,7 +24,7 @@
     
     <association property="writer" javaType="Member">
       <id column="member_id" property="memberId"/>
-      <result column="nickname" property="nickname"/> <!-- name => nickname 으로 변경 -->
+      <result column="nickname" property="nickname"/>
     </association>
 
     <association property="region" javaType="Region">
@@ -53,7 +53,7 @@
     select
       rb.recruit_board_id,
       rb.title,
-      m.nickname, <!-- name => nickname 으로 변경 -->
+      m.nickname,
       rb.views,
       count(case when rm.state = 1 then 1 end) as current,
       rb.recruit_total,
@@ -274,7 +274,7 @@
     select
     rb.recruit_board_id,
     rb.title,
-    m.nickname, <!-- name => nickname 으로 변경 -->
+    m.nickname,
     rb.views,
     count(case when rm.state = 1 then 1 end) as current,
     rb.recruit_total,
@@ -350,6 +350,19 @@
     order by
     rb.recruit_board_id desc
     limit 6
+  </select>
+
+  <!-- 총 모집인원과 현재 모집인원을 찾음. -->
+  <select id="findCurrentAndTotalBy" resultMap="RecruitBoardMap" parameterType="int">
+    select
+      rcb.recruit_board_id,
+      recruit_total,
+      count(case when rcm.state = 1 then 1 end) as current
+    from
+      recruit_board rcb
+    left join recruit_member rcm on rcm.recruit_board_id = rcb.recruit_board_id
+    where
+      rcb.recruit_board_id=#{value}
   </select>
 
 

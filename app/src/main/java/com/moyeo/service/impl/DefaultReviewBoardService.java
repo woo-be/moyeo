@@ -7,8 +7,10 @@ import com.moyeo.dao.ReviewLikeDao;
 import com.moyeo.dao.ReviewPhotoDao;
 import com.moyeo.dao.ReviewScrapDao;
 import com.moyeo.service.ReviewBoardService;
+import com.moyeo.vo.Alarm;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -63,6 +65,25 @@ public class DefaultReviewBoardService implements ReviewBoardService {
     reviewLikeDao.deleteAll(reviewBoardId);
     reviewPhotoDao.deleteAll(reviewBoardId);
     reviewCommentDao.deleteAll(reviewBoardId);
+
+    List<Alarm> alarmList = alarmDao.listAll();
+    // 관련 없는 알림을 제거해야 하는 리스트
+    List<Alarm> removeAlarm = new ArrayList<>();
+    // 관련 알림 내용
+    String removeStr = reviewBoardId + "번 후기";
+    // 관련 없는 알림 리스트
+    for (Alarm alarm : alarmList) {
+      if (!alarm.getContent().contains(removeStr)) {
+        removeAlarm.add(alarm);
+      }
+    }
+    // 관련 없는 알림 리스트를 제거
+    alarmList.removeAll(removeAlarm);
+    // 후기 삭제 할 때 삭제 해야하는 알림 제거
+    for (Alarm alarm : alarmList) {
+      alarmDao.delete(alarm.getAlarmId());
+    }
+
     return reviewBoardDao.delete(reviewBoardId);
   }
 

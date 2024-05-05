@@ -42,6 +42,8 @@ public class MaterialController {
     List<Material> list;
     list = materialService.list(recruitBoardId);
 
+    log.debug(list);
+
     model.addAttribute("list", list);
     model.addAttribute("recruitBoardId", recruitBoardId);
   }
@@ -94,7 +96,7 @@ public class MaterialController {
 
     sessionStatus.setComplete();
 
-    return "redirect:view?materialId=" + material.getMaterialId();
+    return "redirect:list?recruitBoardId=" + material.getRecruitBoardId();
   }
 
   @PostMapping("update")
@@ -211,7 +213,7 @@ public class MaterialController {
     return "redirect:../view?no=" + materialPhoto.getMaterialId();
   }
 
-  @GetMapping("listdemo")
-  public void listdemo() {}
+  @GetMapping("listorigin")
+  public void listorigin() {}
 }
 

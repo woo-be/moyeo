@@ -1,5 +1,6 @@
 package com.moyeo.controller;
 
+import com.moyeo.service.AlarmService;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.service.RecruitMemberService;
 import com.moyeo.service.RegionService;
@@ -47,6 +48,7 @@ public class RecruitBoardController {
   private final ThemeService themeService;
   private final RecruitMemberService recruitMemberService;
   private final StorageService storageService;
+  private final AlarmService alarmService;
   private final String uploadDir = "recruit/";
 
   @Value("${ncp.ss.bucketname}")
@@ -149,7 +151,7 @@ public class RecruitBoardController {
     log.debug("numOfPage:" + numOfPage);
 
 
-    /*  */
+    /* 페이징 페이지 숫자 버튼 */
     int[] pageButtons; // 페이징 페이지 숫자 버튼
 
     if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,
@@ -192,7 +194,7 @@ public class RecruitBoardController {
   }
 
   @GetMapping("view")
-  public void view(int recruitBoardId, Model model, HttpSession session) throws Exception {
+  public void view(int recruitBoardId, @RequestParam(required = false, defaultValue = "0") int alarmId, Model model, HttpSession session) throws Exception {
 
     // 유효한 번호인지 검사
     RecruitBoard recruitBoard = recruitBoardService.get(recruitBoardId);
@@ -209,6 +211,11 @@ public class RecruitBoardController {
       RecruitMember recruitMember = recruitMemberService.findBy(loginUser.getMemberId(),
           recruitBoardId);
       model.addAttribute("recruitMember", recruitMember);
+    }
+    if (alarmId != 0) {
+      if (!alarmService.getStatus(alarmId)) {
+        alarmService.update(alarmId);
+      }
     }
 
     model.addAttribute("loginUser", loginUser);
