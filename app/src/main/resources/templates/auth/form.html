@@ -8,6 +8,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
+    body {
+      background: rgb(246, 249, 255);
+    }
     .footer {
       position: fixed;
       left: 0;
@@ -42,26 +45,26 @@
                 <div class="col-12">
                   <label class="form-label">아이디 : </label>
                   <div class="input-group has-validation">
-                    <input data-th-value='${email}' name='email' id="email" type='text' value="hong@test.com" style="width:300px;">
+                    <input data-th-value='${email}' class="form-control" name='email' placeholder="이메일" id="email" type='text' value="hong@test.com" style="width:100%;">
                     <div id="email-error" class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-12">
                   <label class="form-label">비밀번호 : </label>
                   <div class="input-group has-validation">
-                    <input name='password' id="password" type='password' style="width:300px;">
+                    <input name='password' id="password" class="form-control" placeholder="비밀번호" type='password' style="width:100%;">
                     <div id="password-error" class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="form-check">
-                    <input name='saveEmail' type='checkbox'>이메일 저장
+                  <div class="form-check" style="margin-top:5px;">
+                    <input name='saveEmail' type='checkbox'> 이메일 저장
                   </div>
                 </div>
-                <div class="col-12">
+                <div class="col-12" style="margin-top:5px;">
                   <button class="btn btn-primary w-100" id="loginBtn" type="submit">로그인</button>
                 </div>
-                <div class="col-12">
+                <div class="d-flex justify-content-evenly" style="margin-top:10px;">
                   <a class="small mb-0" href="../../member/findEmail">아이디 찾기</a>
                   <a class="small mb-0" href="../../member/findPassword">비밀번호 찾기</a>
                   <a class="small mb-0" href="../../member/signup">회원가입</a>

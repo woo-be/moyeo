@@ -10,6 +10,15 @@
   .footer {
     position: static;
   }
+  body {
+      min-height: 100vh;
+
+      background: -webkit-gradient(linear, left bottom, right top, from(#92b5db), to(#1d466c));
+      background: -webkit-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: -moz-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: -o-linear-gradient(bottom left, #92b5db 0%, #1d466c 100%);
+      background: linear-gradient(to top right, #92b5db 0%, #1d466c 100%);
+    }
   </style>
 </head>
 
@@ -32,51 +41,51 @@
 
                 <div class="col-12">
                   <label for="email" class="form-label">로그인 이메일</label>
-                  <input type="text" class="form-control needs-validation" name="email" id="email" placeholder="이메일" style="width:300px;" data-th-value="${newMember.email}" required>
+                  <input type="text" class="form-control needs-validation" name="email" id="email" placeholder="이메일" style="width:100%;" data-th-value="${newMember.email}" required>
                   <div id="email-error" class="invalid-feedback">Please, enter your login email!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="username" class="form-label">이름</label>
-                  <input type="text" class="form-control" name="name" id="username" placeholder="이름" style="width:300px;" data-th-value="${newMember.name}" required>
+                  <input type="text" class="form-control" name="name" id="username" placeholder="이름" style="width:100%;" data-th-value="${newMember.name}" required>
                   <div id="username-error" class="invalid-feedback">Please, enter your login name!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="nickname" class="form-label">닉네임</label>
-                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임" style="width:300px;" required>
+                    <input type="text" class="form-control" name="nickname" id="nickname" placeholder="닉네임" style="width:100%;" required>
                     <div id="nickname-error" class="invalid-feedback">Please choose a nickname.</div>
                 </div>
 
                 <div class="col-12">
                   <label for="pw" class="form-label">비밀번호</label>
-                  <input type="password" class="form-control" name="password" id="pw" placeholder="비밀번호" style="width:300px;" onchange="check_pw()" required >
+                  <input type="password" class="form-control" name="password" id="pw" placeholder="비밀번호" style="width:100%;" onchange="check_pw()" required >
                   <div id="pw-error" class="invalid-feedback">Please enter your password!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="pw2" class="form-label">비밀번호 확인</label>
-                  <input type="password" class="form-control" name="pw2" id="pw2" placeholder="비밀번호 확인" style="width:300px;" onchange="check_pw()" required>
+                  <input type="password" class="form-control" name="pw2" id="pw2" placeholder="비밀번호 확인" style="width:100%;" onchange="check_pw()" required>
                   <span id="check"></span>
                   <div id="pw2-error" class="invalid-feedback">Please enter your password!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="phoneNumber" class="form-label">휴대폰 번호</label>
-                  <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" style="width:300px;" required>
+                  <input type="text" class="form-control" name="phoneNumber" id="phoneNumber" placeholder="휴대폰 번호" style="width:100%;" required>
                   <div id="phoneNumber-error" class="invalid-feedback">Please enter a valid phoneNumber!</div>
                 </div>
 
                 <div class="col-12">
                   <label for="birth" class="form-label">생년월일</label>
-                  <input type="date" class="form-control" name="birthdate" id="birth" placeholder="yyyy-MM-dd" style="width:300px;" required>
+                  <input type="date" class="form-control" name="birthdate" id="birth" placeholder="yyyy-MM-dd" style="width:100%;" required>
                   <div id="birth-error" class="invalid-feedback">Please enter a valid birth!</div>
                 </div>
 
                 <div class="col-12">
                   <label class="form-label">성별</label>
-                    <div class="form-control" id="gender" style="width:300px;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                      남자 : <input type="radio" name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <div class="form-control" id="gender" style="width:100%;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                      남자 : <input type="radio" name="gender" value="0" text="남자">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                       여자 : <input type="radio" name="gender" value="1" text="여자">
                     </div>
                   <div id="gender-error" class="invalid-feedback">Please enter a valid gender!</div>
@@ -84,7 +93,7 @@
 
                 <div class="col-12">
                   <label for="introduce" class="form-label">자기소개</label>
-                  <textarea type="text" class="form-control" name="introduce" id="introduce" placeholder="자기소개 작성해주세요" style="width:300px;height:300px;" required></textarea>
+                  <textarea type="text" class="form-control" name="introduce" id="introduce" placeholder="자기소개 작성해주세요" style="width:100%;height:300px;" required></textarea>
                   <div id="introduce-error" class="invalid-feedback">Please enter a valid introduce!</div>
                 </div>
 
