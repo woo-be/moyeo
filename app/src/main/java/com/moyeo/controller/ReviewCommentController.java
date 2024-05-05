@@ -44,16 +44,7 @@ public class ReviewCommentController {
 
     reviewCommentService.add(reviewComment);
 
-    alarmService.add(alarm);
-    alarm.setContent(
-            alarm.getContent()+
-            "&alarmId="+
-            alarm.getAlarmId()+
-            "\">"+
-            reviewBoard.getReviewBoardId()+
-            "번 후기</a>에 댓글을 등록했습니다."
-        );
-    alarmService.updateContent(alarm);
+    alarmService.reviewCommentAdd(alarm, reviewBoard.getReviewBoardId());
 
     return "redirect:../review/view?reviewBoardId="+reviewBoard.getReviewBoardId();
   }

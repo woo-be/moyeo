@@ -50,16 +50,7 @@ public class RecruitCommentController {
     Alarm alarm = Alarm.builder().memberId(recruitBoard.getWriter().getMemberId()).content(
         "<a href=\"/recruit/view?recruitBoardId="+
             recruitBoardId).build();
-    alarmService.add(alarm);
-    alarm.setContent(
-        alarm.getContent()+
-            "&alarmId="+
-            alarm.getAlarmId()+
-            "\">"+
-            recruitBoardId+
-            "번 모집</a>에 댓글을 등록했습니다."
-    );
-    alarmService.updateContent(alarm);
+    alarmService.recruitCommentAdd(alarm, recruitBoardId);
 
     return "1";
   }
