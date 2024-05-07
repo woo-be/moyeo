@@ -125,12 +125,7 @@
           data: data
         })
         .done(function(result) {
-<!--          if (result.length == 0) {-->
-<!--            alert('로그인 하세요!');-->
-<!--            return;-->
-<!--          }-->
-
- for (const reviewPhoto of result) {
+           for (const reviewPhoto of result.reviewPhotos) {
               $('#summernote').summernote('insertImage',
                 'https://kr.object.ncloudstorage.com/moyeo-bucket/review/'
                 + reviewPhoto.photo);
