@@ -133,23 +133,20 @@ public class RecruitBoardController {
     if (pageSize < 10 || pageSize > 20) {
       pageSize = 10;
     }
-    if (pageNo < 1){
+    if (pageNo < 1) {
       pageNo = 1;
     }
 
     int numOfPage = 1;
     int numOfRecord = recruitBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
-
-    log.debug("현재페이지:" + pageNo);
-//    log.debug("pageButtons: " + pageButtons[0] + pageButtons[1] + pageButtons[2] + pageButtons[3] + pageButtons[4]);
-    log.debug("pageSize:" + pageSize);
-    log.debug("numOfPage:" + numOfPage);
-
 
     /* 페이징 페이지 숫자 버튼 */
     int[] pageButtons; // 페이징 페이지 숫자 버튼
@@ -178,7 +175,6 @@ public class RecruitBoardController {
         pageButtons[i] = i + 1;
       }
     }
-
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
     model.addAttribute("list", recruitBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
