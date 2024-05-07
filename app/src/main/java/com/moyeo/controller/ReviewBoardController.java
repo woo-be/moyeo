@@ -121,7 +121,10 @@ public class ReviewBoardController {
 
     int numOfPage = 1;
     int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
