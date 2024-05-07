@@ -239,7 +239,7 @@
             }
 
             // 서버에서 받은 업로드 파일 이름을 가지고 <img> 태그를 설정한다.
-            for (const recruitPhoto of result) {
+            for (const recruitPhoto of result.recruitPhotos) {
               $('#summernote').summernote('insertImage',
                 'https://kr.object.ncloudstorage.com/moyeo-bucket/recruit/'
                 + recruitPhoto.photo);
