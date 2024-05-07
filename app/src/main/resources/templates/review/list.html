@@ -17,11 +17,6 @@
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
   <style>
-    .card {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
     aside #reviewTheme {
       display:flex;
       justify-content:space-between;
@@ -42,10 +37,9 @@
       margin-left: 10px;
       margin-right: 10px;
     }
-    aside #reivewRegion li {
-      margin-top: 8px;
-      margin-right: 50px;
-      margin-bottom: 8px;
+    aside #reviewRegion li {
+      margin-top: 10px;
+      margin-bottom: 10px;
     }
     aside ul li a {
       color: rgb(78, 78, 78);
@@ -73,8 +67,8 @@
   <div class="d-flex p-3 justify-content-center align-items-start">
 
     <!-- 지역 -->
-    <div class="d-flex justify-content-end" style="width:300px;">
-      <div class="border d-flex mx-2">
+    <div class="col-1">
+      <div class="border mx-2">
         <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
       </div>
     </div>
@@ -93,32 +87,30 @@
 
       <!-- 리스트 -->
       <div>
-        <ul>
+        <div class="row row-cols-1 row-cols-md-3 g-3">
+          <div class="col" data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
+            <a class="text-decoration-none link-dark" data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
           <div class="card">
-            <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
-              <div style='border: 1px solid black; float:left'>
-                <a data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-                  <div style='border: 1px solid black; flex'>
-                    <img data-th-if="*{photos[0].photo}" alt="여행 사진"
+                <!-- 사진 -->
+                <img class="card-img-top border-bottom" data-th-if="*{photos[0].photo}" alt="여행 사진"
                          data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-                    <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
+                <!-- 기본 사진 -->
+                <img class="card-img-top border-bottom" data-th-unless="*{photos[0].photo}"
                          data-th-src="@{/img/default-review-photo.png}"
                          src="/static/img/default-review-photo.png" alt="여행 사진">
-                  </div>
-                  <div class="work-info"
-                       style='border: 1px solid black; float:none; text-align: center;'>
-                    <h3 data-th-text="*{title}">제목입니다</h3>
+                <!-- 카드 내용 -->
+                <div class="card-body">
+                  <h2 data-th-text="*{title}">제목입니다</h2>
                     <p data-th-text="*{regionName}">지역</p>
                     조회수: <span data-th-text="*{views}">조회수</span><br>
                     좋아요수: <span data-th-text="*{likeCount}">좋아요수</span><br>
-                    <span data-th-text="*{writer.nickname}">홍길동</span>
-                    <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
+                  작성자: <span data-th-text="*{writer.nickname}">홍길동</span><br>
+                  작성일: <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
                   </div>
-                </a>
               </div>
-            </tr>
+            </a>
           </div>
-        </ul>
+        </div>
       </div>
 
       <!-- 페이징 -->
@@ -148,26 +140,30 @@
       <!-- 검색 및 글쓰기 -->
       <div class="d-flex flex-row justify-content-between pb-3">
         <div style="width: 50px"></div>
-        <div class="">
+        <div class="w-50">
           <form method="get" action="list.html" data-th-action="@{list}">
             <input type="hidden" name="regionId" data-th-value="${regionId}">
             <input type="hidden" name="themeId" data-th-value="${themeId}">
+            <div class="d-flex flex-row">
             <label for="filter"></label>
-            <select name="filter" id="filter">
+              <select class="form-select w-25 m-1" name="filter" id="filter">
               <option value="title">제목</option>
               <option value="content">내용</option>
               <option value="nickname">작성자</option>
             </select>
-            <input type="search" name="keyword" data-th-value="${keyword}">
-            <input type="submit" class="btn btn-primary m-2" data-th-value="검색">
+              <input class="form-control w-100 m-1" type="text" name="keyword" data-th-value="${keyword}">
+              <input type="submit" class="btn btn-primary m-1" data-th-value="검색">
+            </div>
           </form>
         </div>
-        <div style="width: 50px">
-          <a data-th-href="@{form}" href="form.html">글쓰기</a>
+        <div>
+          <a class="btn btn-primary m-1 w-100" data-th-href="@{form}" href="form.html">글쓰기</a>
         </div>
       </div>
     </div>
-    <div style="width:300px;"></div>
+
+    <!-- 우측 여백 -->
+    <div class="col-1"></div>
   </div>
 
   <!-- 푸터 -->

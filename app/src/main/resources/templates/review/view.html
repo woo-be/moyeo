@@ -44,131 +44,473 @@
       margin: 0 auto;
     }
 
-    #map {
-      margin: 0 auto;
-      width: 50%;
-      height:400px;
-      }
+<!--    #map {-->
+<!--      margin: 0 auto;-->
+<!--      width: 50%;-->
+<!--      height:400px;-->
+<!--      }-->
 
+    #title{
+      padding-bottom: 10px;
+      margin-bottom: 20px;
+    }
+
+    h6, span, button, a {
+      white-space: nowrap;
+    }
+
+    .maincontent {
+      width: 100%;
+      height: 100%;
+    }
+
+    .form-item-div {
+      margin-top: 5px;
+      margin-bottom: 10px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgb(206, 206, 206);
+    }
+    .form-item-div-name {
+      border-right: 1px solid rgb(206, 206, 206);
+      padding-right:10px;
+      margin-right:10px;
+    }
 
   </style>
 
 </head>
-<body>
+<!--<body>-->
 <div data-th-replace="header :: header">머리말</div>
 
 
-<div data-th-object="${reviewBoard}">
-  <form action="updateForm.html" data-th-action="@{updateForm}"
-        enctype='multipart/form-data'
-        method='post'>
-    <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
-    <input data-th-value="*{regionId}" name='regionId' type='hidden'>
-    <input data-th-value="*{themeId}" name='themeId' type='hidden'>
+<!--<div data-th-object="${reviewBoard}">-->
+<body data-th-object="${reviewBoard}">
 
+<div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">
+  <div class="w-75 justify-content-center" style="min-width:900px">
+    <div class="d-flex flex-column bd-highlight">
 
-    <div>
-      게시일 : <span
-        data-th-text="${#dates.format(reviewBoard.createdDate, 'yyyy-MM-dd HH:mm:ss')}">게시일</span>
-    </div>
-    <div>
-      작성자 : <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">
-    </div>
-    <div>
-      제목 : <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">
-    </div>
-    <div>
-      지역 : <input data-th-value="*{regionName}" readonly type='text' value="지역">
-    </div>
-    <div>
-      테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">
-    </div>
-    주소 : <input id="addr" type="text" name="address">
-    <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
-    <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>
-      지도 : <div id="map"></div>
-    <div id="content" >
-      <textarea  data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>
-    </div>
+      <form action="updateForm.html" data-th-action="@{updateForm}"
+            enctype='multipart/form-data'
+            method='post'>
+        <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
+        <input data-th-value="*{regionId}" name='regionId' type='hidden'>
+        <input data-th-value="*{themeId}" name='themeId' type='hidden'>
 
-    조회수 : <span data-th-text="*{views}">조회수</span><br>
-    좋아요수 : <span data-th-text="*{likeCount}">좋아요수</span><br>
+        <!-- 가운데정렬 -->
+        <div class="d-flex justify-content-center w-100 border border-2 p-3">
 
-      <button>변경</button>
-<!--      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>-->
-  </form>
-      <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
+          <!-- 세로정렬 -->
+          <div class="d-flex w-75 flex-column">
 
-    <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
-        data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"
-        height="4%" width="4%"/></a>
+            <!-- title -->
+            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center pt-3 pb-3">
+              <!-- left -->
+              <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center w-75 mw-75">
+                <div class="ps-4 me-2">
+                  <h1 class="text-break" data-th-text="*{title}">제목</h1>
+                </div>
+<!--                  <div class="border border-2 rounded-3 ms-3 p-2 align-items-center">-->
+<!--                    <span data-th-if="*{state == true}">모집중</span>-->
+<!--                    <span data-th-if="*{state == false}">모집완료</span>-->
+<!--                  </div>-->
+              </div>
 
-    <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img
-        data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"
-        width="4%"/></a>
+              <!-- right -->
+              <div class="d-flex flex-column bd-highlight me-4">
+                <div class="d-flex flex-column justify-content-end bd-highlight me-2">
+                  <div class="text-end" style="width:150px">
+                    작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                  </div>
+                  <div class="text-end">
+                    작성자: <span data-th-text="*{writer.nickname}"></span>
+                  </div>
+                  <div class="text-end">
+                    조회수: <span data-th-text="*{views}"></span>
+                  </div>
+                  <div class="text-end">
+                    좋아요: <span data-th-text="*{likeCount}"></span>
+                  </div>
+                </div>
+                <div class="d-flex justify-content-end">
+                  <div class="d-flex flex-row bd-highlight">
+                    <div class="d-flex flex-row bd-highlight p-1">
+                      <button class="btn btn-primary m-1" >수정</button>
+                    </div>
+                    <div class="d-flex flex-row bd-highlight p-1">
+                      <button type="button" class="btn btn-danger m-1" data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-  <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none; ">
-    <div data-th-each="comment : *{commentList}" data-th-object="${comment}">
-      <hr id="comment-hr">
-      <li>
-        <!--
-        <div style='float:left'>작성자: </div>
-        -->
-        <img data-th-if="*{commentMember.photo}" alt="댓글 작성자 사진"
-             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{commentMember.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
-        <img data-th-unless="*{commentMember.photo}" alt="댓글 작성자 사진" style="width:20;height:20;"
-             data-th-src="@{/img/default-photo.jpeg}" src="/static/img/default-photo.jpeg">
-        <div style='margin-left:10px;font-weight:bold; text-decoration: underline'
-             data-th-text="*{commentMember.nickname}" value="홍길동"></div>
-        <div>
-          <a data-th-href="@{../comment/delete(reviewCommentId=*{reviewCommentId},reviewBoardId=*{reviewBoardId})}"
-             href="view.html">[삭제]</a>
+            <!-- 세부정보 -->
+            <div class="maincontent d-flex justify-content-center mb-3 p-3">
+              <div class="d-flex flex-column bd-highlight w-100 border border-1 ">
+                <div class="d-flex ms-2 bd-highlight flex-row p-4">
+                  <div class="d-flex flex-column">
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">지역</h6>
+                      <h6 data-th-text="*{regionName}">서울특별시</h6>
+                    </div>
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">테마</h6>
+                      <h6 data-th-text="*{themeName}"></h6>
+                    </div>
+                    <div class="d-flex flex-row">
+                      <h6 class="form-item-div-name">주소</h6>
+                      <h6>
+                        <input id="addr" readonly type="text" name="address">
+                      </h6>
+                    </div>
+<!--                      <div class="d-flex flex-row">-->
+<!--                        <h6 class="form-item-div-name">여행기간</h6>-->
+<!--                        <h6 data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</h6>-->
+<!--                        ~ <h6 data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</h6>-->
+<!--                      </div>-->
+<!--                      <div class="d-flex flex-row">-->
+<!--                        <h6 class="form-item-div-name">마감일자</h6>-->
+<!--                        <h6 data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</h6>-->
+<!--                      </div>-->
+                  </div>
+                  <div class="p-2 bd-highlight me-2 ms-auto">
+                    <div id="map" style="width:300px;height:250px;"></div>
+<!--                      <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">-->
+<!--                      <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">-->
+                      <input id="latitude" readonly type="hidden" placeholder="검색한 위도" name="latitude">
+                      <input id="longitude" readonly type="hidden" placeholder="검색한 경도" name="longitude"><br>
+                  </div>
+                </div>
+              </div>
+            </div>
 
+            <!-- content -->
+            <div class="maincontent d-flex justify-content-center">
+              <textarea id="summernote" data-th-text="*{content}" readonly name='content'></textarea>
+            </div>
+
+            <!-- buttons-->
+            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
+<!--                <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> &lt;!&ndash;로그인상태이면서 게시글 상태가 모집중 일 때,,&ndash;&gt;-->
+<!--                  <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">-->
+<!--                    <button type="button" class="btn btn-primary m-1" data-th-onclick="applyModal()">신청하기</button></a>-->
+<!--                  <div data-th-if="${recruitMember} != null" style="display:inline">-->
+<!--                    <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">-->
+<!--                      <button type="button" class="btn btn-primary m-1" data-th-onclick="cancelModal()">신청취소</button></a>-->
+<!--                    <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>-->
+<!--                    <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>-->
+<!--                  </div>-->
+<!--                </div>-->
+              <div class="m-1">
+                <!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
+                <a type="button" class="btn btn-primary m-1" data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="scrap.html">즐겨찾기</a>
+              </div>
+              <div class="m-1">
+                <a type="button" class="btn btn-primary m-1" data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="scrap.html">좋아요</a>
+              </div>
+            </div>
+
+<!--          <div>-->
+<!--            게시일 : <span-->
+<!--              data-th-text="${#dates.format(reviewBoard.createdDate, 'yyyy-MM-dd HH:mm:ss')}">게시일</span>-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            작성자 : <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            제목 : <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            지역 : <input data-th-value="*{regionName}" readonly type='text' value="지역">-->
+<!--          </div>-->
+<!--          <div>-->
+<!--            테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">-->
+<!--          </div>-->
+<!--&lt;!&ndash;          주소 : <input id="addr" type="text" name="address">&ndash;&gt;-->
+<!--&lt;!&ndash;          <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">&ndash;&gt;-->
+<!--&lt;!&ndash;          <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>&ndash;&gt;-->
+<!--&lt;!&ndash;            지도 : <div id="map"></div>&ndash;&gt;-->
+<!--&lt;!&ndash;          <div id="content" >&ndash;&gt;-->
+<!--&lt;!&ndash;            <textarea  data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>&ndash;&gt;-->
+<!--&lt;!&ndash;          </div>&ndash;&gt;-->
+
+<!--          조회수 : <span data-th-text="*{views}">조회수</span><br>-->
+<!--          좋아요수 : <span data-th-text="*{likeCount}">좋아요수</span><br>-->
+
+<!--            <button>변경</button>-->
+<!--      &lt;!&ndash;      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>&ndash;&gt;-->
+
+          </div>
         </div>
-      </li>
 
-      <li>
-        <!--
-        <div style='float:left'>내용:</div>
-        -->
-        <form data-th-action="@{../../comment/update}" action="view.html" method="post">
-          <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type='hidden'>
-          <input data-th-value="*{reviewCommentId}" name='reviewCommentId' type='hidden'>
-          <input name="content" style='margin-left:10px' data-th-value="*{content}"
-                 value="댓글 내용입니다.">
-          <button>수정</button>
-          <!--data-th-href="@{../comment/update}" href="userInfo.html"-->
-        </form>
-      </li>
+      </form>
     </div>
-  </ul>
+<!--            <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>-->
 
-  <form action="view.html" data-th-action="@{../comment/add}" method='post'>
-    <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
-    <input data-th-value="*{writer.memberId}" name='memberId' type='hidden'>
-    <div style='border: 1px solid black; float:none; width:900px; margin: 0 auto;'>
-      <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>
-        댓글 내용
-      </div>
-      <div>
-        <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">
-        <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">
-        <button style='padding:10px; margin:20px' data-th-onclick="addReviewComment()">등록</button>
+<!--          <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img-->
+<!--              data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"-->
+<!--              height="4%" width="4%"/></a>-->
+
+<!--          <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img-->
+<!--              data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"-->
+<!--              width="4%"/></a>-->
+
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+
+    <div class="d-flex justify-content-center bd-highlight border border-2 p-4 mt-4">
+      <div class="w-75">
+        <div class="d-flex flex-column">
+          <!-- view comment -->
+          <div>
+            <h4 class="mt-4 ms-4 mb-4">댓글</h4>
+            <ul data-th-if="*{commentList}" style="list-style: none;">
+              <li data-th-each="comment : *{commentList}" data-th-object="${comment}">
+                <div class="commentviewform"> <!-- 댓글 조회 지정용 -->
+                  <div class="d-flex flex-row bd-highlight mb-3">
+                    <div class="flex-shrink-0 mt-2 me-3">
+                      <div class="bd-highlight" data-th-replace="review/commentform :: commentuserinfo"></div>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3 pe-4">
+                      <div class="d-flex flex-row bd-highlight mb-1">
+                        <div class="bd-highlight me-auto" data-th-replace="review/commentform :: commentusername"></div>
+                        <div class="d-flex flex-row bd-highlight ms-auto ">
+                          <button id="editBtn" class="btn btn-primary m-1">수정</button>
+                          <a id="deletecomment" data-th-href="@{comment/delete2(reviewCommentId=*{reviewCommentId})}"
+                             type="button" class="btn btn-danger m-1" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+                        </div>
+                      </div>
+                      <div  class="d-flex flex-row bd-highlight">
+                        <div class="w-100">
+                          <div class="w-75 text-break" data-th-text="*{content}"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <form id="updatecomment" data-th-action="@{/review/comment/update2}"
+                      action="view.html" method='post' style="display:none;">
+                  <div class="d-flex flex-row">
+                    <div class="flex-shrink-0 mt-2 me-3">
+                      <div class="bd-highlight" data-th-replace="review/commentform :: commentuserinfo"></div>
+                    </div>
+                    <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3">
+                      <div class="bd-highlight" data-th-replace="review/commentform :: commentusername"></div>
+                      <div class="d-flex flex-row bd-highlight mb-1 w-100">
+                        <div class="w-75">
+                          <textarea class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break" data-th-text="*{content}" name="content"></textarea>
+                        </div>
+                        <div class="d-flex flex-row h-50">
+                          <button id="submitBtn" type="submit" class="btn btn-primary m-1">전송</button>
+                          <button id="cancelBtn" type="button" class="btn btn-danger m-1">취소</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </li>
+            </ul>
+          </div>
+
+          <!-- add comment -->
+          <form id="commentForm" data-th-action="@{/review/comment/add2}" action="view.html" data-th-object="${loginUser}" method='post'>
+            <div class="d-flex flex-row bd-highlight border border-2 p-3 ms-2">
+              <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type="hidden">
+              <div class="p-2 bd-highlight">
+                <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
+                  <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+                </a>
+                <a data-th-unless="*{photo}" href="/img/default-photo.jpeg">
+                  <img height='40px' src="/img/default-photo.jpeg">
+                </a>
+                <input data-th-value="*{photo}" type='hidden'>
+              </div>
+              <div class="d-flex flex-column p-2 flex-grow-1 bd-highlight">
+                <div>
+                  <h6 class="fw-bold me-2" data-th-text="*{nickname}">nickname</h6>
+                </div>
+                <div class="d-flex flex-row d-flex bd-highlight" >
+                  <textarea id="content" class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break me-1" name="content" type="text"></textarea>
+                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center mt-5 mb-5" data-th-onclick="addReviewComment()" >
+                    <span class="ms-1 me-1">전송</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
-
-  </form>
+  </div>
 </div>
 
+
+
+<!--  <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none; ">-->
+<!--    <div data-th-each="comment : *{commentList}" data-th-object="${comment}">-->
+<!--      <hr id="comment-hr">-->
+<!--      <li>-->
+<!--        &lt;!&ndash;-->
+<!--        <div style='float:left'>작성자: </div>-->
+<!--        &ndash;&gt;-->
+<!--        <img data-th-if="*{commentMember.photo}" alt="댓글 작성자 사진"-->
+<!--             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{commentMember.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">-->
+<!--        <img data-th-unless="*{commentMember.photo}" alt="댓글 작성자 사진" style="width:20;height:20;"-->
+<!--             data-th-src="@{/img/default-photo.jpeg}" src="/static/img/default-photo.jpeg">-->
+<!--        <div style='margin-left:10px;font-weight:bold; text-decoration: underline'-->
+<!--             data-th-text="*{commentMember.nickname}" value="홍길동"></div>-->
+<!--        <div>-->
+<!--          <a data-th-href="@{../comment/delete(reviewCommentId=*{reviewCommentId},reviewBoardId=*{reviewBoardId})}"-->
+<!--             href="view.html">[삭제]</a>-->
+
+<!--        </div>-->
+<!--      </li>-->
+
+<!--      <li>-->
+<!--        &lt;!&ndash;-->
+<!--        <div style='float:left'>내용:</div>-->
+<!--        &ndash;&gt;-->
+<!--        <form data-th-action="@{../../comment/update}" action="view.html" method="post">-->
+<!--          <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type='hidden'>-->
+<!--          <input data-th-value="*{reviewCommentId}" name='reviewCommentId' type='hidden'>-->
+<!--          <input name="content" style='margin-left:10px' data-th-value="*{content}"-->
+<!--                 value="댓글 내용입니다.">-->
+<!--          <button>수정</button>-->
+<!--          &lt;!&ndash;data-th-href="@{../comment/update}" href="userInfo.html"&ndash;&gt;-->
+<!--        </form>-->
+<!--      </li>-->
+<!--    </div>-->
+<!--  </ul>-->
+
+<!--  <form action="view.html" data-th-action="@{../comment/add}" method='post'>-->
+<!--    <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>-->
+<!--    <input data-th-value="*{writer.memberId}" name='memberId' type='hidden'>-->
+<!--    <div style='border: 1px solid black; float:none; width:900px; margin: 0 auto;'>-->
+<!--      <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>-->
+<!--        댓글 내용-->
+<!--      </div>-->
+<!--      <div>-->
+<!--        <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">-->
+<!--        <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">-->
+<!--        <button style='padding:10px; margin:20px' data-th-onclick="addReviewComment()">등록</button>-->
+<!--      </div>-->
+<!--    </div>-->
+
+<!--  </form>-->
+</body>
+
 <div data-th-replace="footer :: footer">꼬리말</div>
+
+<script>
+  // 모든 editBtn 요소 찾기
+  var editBtns = document.querySelectorAll("#editBtn");
+
+  // 각 editBtn에 대해 이벤트 리스너 추가
+  editBtns.forEach(function(btn) {
+      btn.addEventListener("click", editComment);
+  });
+
+  // editBtn 클릭 시 실행될 함수
+  function editComment() {
+    // 클릭된 editBtn 요소의 부모 요소인 li 태그 선택
+    var listItem = event.target.closest("li");
+
+    var commentViewForm = listItem.querySelector(".commentviewform");
+    var updateCommentForm = listItem.querySelector("#updatecomment");
+    var cancelBtn = listItem.querySelector("#cancelBtn");
+    var submitBtn = listItem.querySelector("#submitBtn");
+
+    // commentViewForm-> none, updateCommentForm/cancelBtn-> block
+    commentViewForm.style.display = "none";
+    updateCommentForm.style.display = "block";
+    cancelBtn.style.display = "block";
+
+    // 전송 버튼에 클릭 이벤트 추가
+    submitBtn.addEventListener("click", function() {
+      commentViewForm.style.display = "block";
+      updateCommentForm.style.display = "none";
+      cancelBtn.style.display = "none";
+      updateCommentForm.submit();
+    });
+
+    // 취소 버튼에 클릭 이벤트 추가
+    cancelBtn.addEventListener("click", function() {
+      commentViewForm.style.display = "block";
+      updateCommentForm.style.display = "none";
+      cancelBtn.style.display = "none";
+    });
+  }
+</script>
+
+<script>
+  /* 삭제 버튼 클릭시 호출되는 함수,
+  삭제 여부를 묻고 확인/취소 여부에 따라 ajax로 재요청하는 함수 */
+  function deleteReview(reviewBoardId) { //
+    var reply = confirm("삭제하시겠습니까?");
+
+    if (reply) {
+
+      $.ajax({
+        url: "delete2?reviewBoardId=" + reviewBoardId,
+        type: "GET",
+        contentType: false,
+        processData: false
+      })
+      .done(function(response) {
+        if (response == 1) {
+          alert("삭제되었습니다");
+          window.location.href = '/review/list';
+        } else {
+          alert("에러");
+          window.location.href = '/review/list';
+        }
+      })
+    }
+  }
+
+  /* 댓글 등록을 눌렀을 때 호출되는 함수,
+  댓글 내용이 없으면 내용을 입력하라는 모달창 출력,
+  내용이 있다면 ajax로 서버에게 요청 */
+  function addReviewComment() {
+
+    // id가 commentForm인 form 태그의 <name value> 값을 저장하는 객체
+    var formData = new FormData(commentForm);
+
+    if (formData.get("content") == '') {
+      alert("내용을 입력해 주세요.");
+    } else {
+      $.ajax({
+        type: 'POST',
+        url: "comment/add2",
+        data: formData,
+        contentType: false,
+        processData: false
+      })
+      .done(function(response) {
+        if (response == 1) {
+          alert("댓글이 등록되었습니다.");
+          window.location.href = window.location.href;
+        } else {
+          alert("에러");
+          window.location.href = window.location.href;
+        }
+      })
+    }
+  }
+
+</script>
 
 <script>
 
   $(document).ready(function() {
   var options = new Object();
-  options.height = 300;
+  options.height = 600;
   options.width = 1000;
   options.toolbar = false;
+  options.disableDragAndDrop = true;
 
     $('#summernote').summernote(options).summernote("disable");
     $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
@@ -189,7 +531,8 @@
   });
 
   var infoWindow = new naver.maps.InfoWindow({
-      anchorSkew: true
+      anchorSkew: true,
+      maxWidth: 100
   });
 
   map.setCursor('pointer');
@@ -386,9 +729,9 @@
           })
       }
   }
-  function addReviewComment(){
-    alert('댓글이 등록되었습니다.');
-  }
+<!--  function addReviewComment(){-->
+<!--    alert('댓글이 등록되었습니다.');-->
+<!--  }-->
 </script>
 
 

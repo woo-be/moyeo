@@ -18,4 +18,6 @@ public interface MaterialDao {
 
   int delete(int materialId, int recruitBoardId);
 
+  int deleteAllByRecruitBoardId(int recruitBoardId);
+
 }

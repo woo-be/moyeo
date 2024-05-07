@@ -122,7 +122,10 @@ public class ReviewBoardController {
 
     int numOfPage = 1;
     int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
@@ -173,10 +176,15 @@ public class ReviewBoardController {
   @GetMapping("view")
   public void reviewBoardGet(int reviewBoardId,
       @RequestParam(required = false, defaultValue = "0") int alarmId,
-      Model model) {
+      Model model, HttpSession session) {
     ReviewBoard reviewBoard = reviewBoardService.get(reviewBoardId);
     if (reviewBoard.getAddress() == null) {
       reviewBoard.setAddress("서울특별시 용산구 한강대로 405");
+    }
+
+    Member loginUser = (Member) session.getAttribute("loginUser");
+    if (loginUser == null) {
+      loginUser = Member.builder().name("로그인해주세요.").build(); // memberId = 0
     }
 
     if (alarmId != 0) {
@@ -185,6 +193,7 @@ public class ReviewBoardController {
       }
     }
 
+    model.addAttribute("loginUser", loginUser);
     model.addAttribute("reviewBoard", reviewBoard);
     model.addAttribute("addr", reviewBoard.getAddress());
   }

@@ -21,6 +21,23 @@
 
   </resultMap>
 
+  <resultMap id="ReviewCommentMap" type="ReviewComment">
+    <id column="review_comment_id" property="reviewCommentId"/>
+    <result column="content" property="content"/>
+    <result column="created_Date" property="createdDate"/>
+
+    <association property="reviewBoard" javaType="ReviewBoard">
+      <id column="review_board_id" property="reviewBoardId"/>
+    </association>
+
+    <association property="commentMember" javaType="Member">
+      <id column="member_id" property="memberId"/>
+      <result column="name" property="name"/>
+      <result column="nickname" property="nickname"/>
+      <result column="photo" property="photo"/>
+    </association>
+  </resultMap>
+
   
   <select id="findAllByReviewId" resultMap="reviewCommentMap" parameterType="int">
     select
@@ -68,6 +85,47 @@
     set content=#{content}
     where review_comment_id=#{reviewCommentId}
   </update>
+
+  <select id="findBy" resultMap="ReviewCommentMap">
+    select
+    rc.review_comment_id,
+    rc.review_board_id,
+    rc.member_id,
+    rc.content,
+    rc.created_date
+    from
+    review_comment rc
+    where
+    rc.review_comment_id=#{value}
+  </select>
+
+  <select id="findAllByReviewBoardId" resultMap="ReviewCommentMap">
+    select
+    rc.review_comment_id,
+    rc.content,
+    rc.created_date,
+    m.nickname,
+    m.photo
+    from
+    review_comment rc
+    left join review_board rb on rb.review_board_id=rc.review_board_id
+    left join member m on rc.member_id = m.member_id
+    where
+    rb.review_board_id=#{value}
+  </select>
+
+  <insert id="add" parameterType="ReviewComment"
+    useGeneratedKeys="true" keyColumn="review_comment_id" keyProperty="reviewCommentId">
+    insert into
+      review_comment(
+        review_board_id,
+        member_id,
+        content)
+    values(
+      #{reviewBoard.reviewBoardId},
+      #{commentMember.memberId},
+      #{content})
+  </insert>
 
   
 </mapper>

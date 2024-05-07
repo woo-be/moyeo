@@ -45,6 +45,7 @@
       rc.recruit_comment_id,
       rc.content,
       rc.created_date,
+      m.member_id,
       m.nickname,
       m.photo
     from
