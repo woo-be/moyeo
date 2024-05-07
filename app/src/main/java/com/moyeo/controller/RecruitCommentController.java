@@ -56,6 +56,7 @@ public class RecruitCommentController {
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String commentUpdate(RecruitComment recruitComment, HttpSession session) throws Exception {
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
