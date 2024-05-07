@@ -31,6 +31,11 @@ public class DefaultMemberService implements MemberService {
     return memberDao.findByEmailAndPassword(email, password);
   }
 
+  @Override
+  public Member get(String email) {
+    return memberDao.loginByEmail(email);
+  }
+
   // 회원번호 찾아서 , 정보보여주기, 회원삭제
   @Override
   public Member get(int no) {

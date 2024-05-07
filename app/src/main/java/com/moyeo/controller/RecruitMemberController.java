@@ -9,6 +9,7 @@ import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitMember;
+import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -61,19 +62,13 @@ public class RecruitMemberController {
   ) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if(loginUser == null){
+    if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
     List<RecruitBoard> list = recruitMemberService.list(loginUser.getMemberId());
 
-    log.debug(list);
-
     model.addAttribute("list", list);
-    log.debug(String.format("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@%s",
-        list.getFirst().getWriter().getNickname()));
-    log.debug(String.format("%s", list.getFirst().getTitle()));
-
     model.addAttribute("memberId", loginUser.getMemberId());
   }
 
@@ -102,7 +97,7 @@ public class RecruitMemberController {
   ) throws Exception {
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    if(loginUser == null){
+    if (loginUser == null) {
       throw new MoyeoError(ErrorName.LOGIN_REQUIRED, "/auth/form");
     }
 
@@ -110,10 +105,10 @@ public class RecruitMemberController {
     List<RecruitMember> recruitMembers = recruitMemberService.allApplicant(recruitBoardId);
 
     for (int i = 0; i < recruitMembers.size(); i++) {
-      log.debug(recruitMembers.get(i).getMemberId()+"@@@"+loginUser.getMemberId());
+      log.debug(recruitMembers.get(i).getMemberId() + "@@@" + loginUser.getMemberId());
       if (recruitMembers.get(i).getMemberId() == loginUser.getMemberId()) {
         break;
-      }else if(recruitMembers.size()-1 == i){
+      } else if (recruitMembers.size() - 1 == i) {
         throw new MoyeoError("권한이 없습니다.", "/home");
       }
     }

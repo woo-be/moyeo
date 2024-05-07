@@ -158,6 +158,7 @@ public class MaterialController {
   }
 
   @GetMapping("delete")
+  @ResponseBody
   public String delete(
       @Param("materialId") int materialId,
       @Param("recruitBoardId") int recruitBoardId,
@@ -173,7 +174,7 @@ public class MaterialController {
       storageService.delete(this.bucketName, this.uploadDir, photo.getMaterialPhoto());
     }
 
-    return "redirect:/material/list?recruitBoardId=" + recruitBoardId;
+    return "/material/list?recruitBoardId=" + recruitBoardId;
   }
 
   @PostMapping("photo/upload")

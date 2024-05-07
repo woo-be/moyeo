@@ -52,4 +52,7 @@ public interface MemberDao {
       @Param("email") String email
   );
 
+  Member loginByEmail(
+      @Param("email") String email
+  );
 }

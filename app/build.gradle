@@ -33,6 +33,10 @@ dependencies {
     // spring-boot-starter-websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
+    // spring-security
+    implementation "org.springframework.boot:spring-boot-starter-security"
+    implementation "org.thymeleaf.extras:thymeleaf-extras-springsecurity5"
+
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

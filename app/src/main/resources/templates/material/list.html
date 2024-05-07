@@ -42,7 +42,13 @@
     }
 
     #container{
-      width: 80%;
+      width: 65%;
+      margin-left:8%;
+      min-height: 660px;
+    }
+
+    #materialAddBtn{
+      width:8%;
     }
   </style>
 </head>
@@ -82,7 +88,11 @@
         </td>
       </tr>
     </table>
-    <button class="btn btn-primary m-2" data-th-onclick="material()">등록</button>
+    <div class="d-flex justify-content-between">
+      <div class="w-50"></div>
+      <div class="w-50"></div>
+    <button id="materialAddBtn" class="btn btn-primary m-1" data-th-onclick="material()">등록</button>
+    </div>
   </div>
 
 </div>
