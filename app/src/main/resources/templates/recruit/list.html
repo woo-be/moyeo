@@ -38,7 +38,6 @@
     }
     aside #recruitRegion li {
       margin-top: 10px;
-      margin-right: 50px;
       margin-bottom: 10px;
     }
     aside ul li a {
@@ -91,23 +90,22 @@
 <body class="d-flex flex-column">
 
 <!-- 헤더 -->
-<div class="row">
+<div>
   <div data-th-replace="header :: header">머리말</div>
 </div>
 
-<div class="d-flex justify-content-center align-items-start">
   <!-- 컨텐트 -->
-  <div class="d-flex p-3 justify-content-center align-items-start">
+  <div class="d-flex justify-content-center align-items-start py-3">
 
     <!-- 지역 -->
-    <div class="d-flex justify-content-end w-75">
-      <div class="border d-flex mx-2">
+    <div class="col-1">
+      <div class="border mx-2">
           <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column border w-75 mw-75 p-4 col-7">
+    <div class="d-flex flex-column col-7 border p-2">
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
 
@@ -208,8 +206,11 @@
         </div>
       </div>
     </div>
-    <div style="width:300px;"></div>
-  </div>
+    
+    <!-- 우측 여백 -->
+    <div class="col-1">
+    </div>
+
 </div>
 
 <!-- 푸터 -->
