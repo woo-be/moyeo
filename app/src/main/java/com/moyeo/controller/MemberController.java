@@ -105,7 +105,6 @@ public class MemberController implements InitializingBean{
     // 이전 회원 정보의 회원번호를 그대로 사용하여 회원 정보를 업데이트합니다.
     member.setMemberId(loginedMemberId);
 
-    member.setPassword(passwordEncoder.encode(member.getPassword()));
     memberService.update(member);
     session.removeAttribute("loginUser");
     session.setAttribute("loginUser", member);
