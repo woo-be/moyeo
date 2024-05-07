@@ -69,4 +69,9 @@
     and
       recruit_board_id=#{recruitBoardId}
   </delete>
+
+  <delete id="deleteAllByRecruitBoardId" parameterType="int">
+    delete from material
+    where recruit_board_id=#{recruitBoardId}
+  </delete>
 </mapper>
