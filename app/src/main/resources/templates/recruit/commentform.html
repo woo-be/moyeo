@@ -12,7 +12,7 @@
 <body>
 <div data-th-fragment="commentuserinfo" >
   <div class="d-flex flex-row bd-highlight mb-3">
-    <input data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
+    <input id="recruitCommentId" data-th-value="*{recruitCommentId}" name="recruitCommentId" type="hidden"/>
     <div>
       <a data-th-if="*{member.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{member.photo}}">
         <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{member.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
