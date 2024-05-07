@@ -13,6 +13,7 @@ public interface MemberService {
   List<Member> list();
 
   Member get(String email, String password);
+  Member get(String email);
 
   int update(Member member);
 
