@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+  <meta charset='UTF-8'>
+  <title>모여</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+        rel="stylesheet">
+
+</head>
+<body>
+<div data-th-fragment="commentuserinfo" >
+  <div class="d-flex flex-row bd-highlight mb-3">
+    <input data-th-value="*{reviewCommentId}" name="reviewCommentId" type="hidden"/>
+    <div>
+      <a data-th-if="*{commentMember.photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{commentMember.photo}}">
+        <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{commentMember.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">
+      </a>
+      <a data-th-unless="*{commentMember.photo}" href="/img/default-photo.jpeg">
+        <img height='20px' src="/img/default-photo.jpeg">
+      </a>
+    </div>
+  </div>
+</div>
+
+<div class="w-100" data-th-fragment="commentusername">
+  <div class="d-flex flex-row align-items-center bd-highlight">
+    <h6 class="fw-bold me-2 mt-1" data-th-text="*{commentMember.nickname}"></h6>
+    <span class="p-2 mb-1" data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+  </div>
+</div>
+
+</body>
+</html>

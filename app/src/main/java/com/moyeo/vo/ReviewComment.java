@@ -18,7 +18,9 @@ public class ReviewComment implements Serializable {
 
   private int reviewCommentId;      // 여행후기게시판 댓글 식별자
   private Member commentMember;              // 회원 식별자
+//  private Member member;              // 회원 식별자
   private int reviewBoardId;        // 여행후기게시판 식별자
+  private ReviewBoard reviewBoard;
   private String content;             // 여행후기게시판 댓글 내용
   private Date createdDate;          // 여행후기게시판 댓글 작성일
 
