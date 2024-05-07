@@ -8,6 +8,7 @@
   <resultMap id="MemberMap" type="Member">
     <id column="member_id" property="memberId"/>
     <result column="email" property="email"/>
+    <result column="password" property="password"/>
     <result column="name" property="name"/>
     <result column="nickname" property="nickname"/>
     <result column="phone_number" property="phoneNumber"/>
@@ -20,7 +21,7 @@
   <!-- 회원 정보 저장 (회원가입) -->
   <insert id="add" parameterType="Member">
     insert into member(email, password, name, nickname, phone_number, birth_date, gender, introduce, photo)
-    values(#{email}, sha2(#{password},256), #{name}, #{nickname}, #{phoneNumber}, #{birthdate}, #{gender}, #{introduce}, #{photo})
+    values(#{email}, #{password}, #{name}, #{nickname}, #{phoneNumber}, #{birthdate}, #{gender}, #{introduce}, #{photo})
   </insert>
 
 
@@ -86,7 +87,7 @@
     member
     where
     email= #{email}
-    and password=sha2(#{password},256)
+    and password=#{password}
   </select>
 
   <select id="findByEmail" resultMap="MemberMap">
@@ -118,13 +119,7 @@
   <update id="updatePassword" parameterType="Member">
     update member
     set
-    password =
-    <if test="password != ''">
-      sha2(#{password}, 256)
-    </if>
-    <if test="password == ''">
-      sha2('1111', 256)
-    </if>
+    password = #{password}
     where
     email = #{email}
     and name = #{name}
@@ -140,5 +135,22 @@
     email = #{email}
   </select>
 
+  <!-- 스프링시큐리티로 로그인할때 email로 회원 정보 가져오기 -->
+  <select id="loginByEmail" resultMap="MemberMap">
+    select
+    member_id,
+    email,
+    name,
+    nickname,
+    phone_number,
+    password,
+    birth_date,
+    introduce,
+    photo
+    from
+    member
+    where
+    email= #{email}
+  </select>
 
 </mapper>
