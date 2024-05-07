@@ -12,6 +12,7 @@ import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -121,7 +122,10 @@ public class ReviewBoardController {
 
     int numOfPage = 1;
     int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
@@ -306,7 +310,7 @@ public class ReviewBoardController {
 
   @PostMapping("photo/upload")
   @ResponseBody
-  public Object photoUpload(MultipartFile[] photos, HttpSession session, Model model)
+  public Object photoUpload(MultipartFile[] photos, HttpSession session)
       throws Exception {
 
     ArrayList<ReviewPhoto> reviewPhotos = new ArrayList<>();
@@ -324,9 +328,10 @@ public class ReviewBoardController {
       reviewPhotos.add(ReviewPhoto.builder().photo(photoName).build());
     }
 
-    model.addAttribute("reviewPhotos", reviewPhotos);
+    HashMap<String,Object> result = new HashMap<>();
+    result.put("reviewPhotos", reviewPhotos);
 
-    return reviewPhotos;
+    return result;
   }
 
   public String photoDelete(int reviewPhotoId, HttpSession session) throws Exception {

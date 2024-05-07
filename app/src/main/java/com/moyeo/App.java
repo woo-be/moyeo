@@ -35,12 +35,12 @@ public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
-    @GetMapping("/home")
-    public void home() {
+    @GetMapping("/homedemo")
+    public void homedemo() {
     }
 
-    @GetMapping("/homedemo")
-    public void homedemo(Model model) {
+    @GetMapping("/home")
+    public void home(Model model) {
 
         List<RecruitBoard> list = recruitBoardService.findByCurrentByLimit6();
 

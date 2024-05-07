@@ -14,6 +14,7 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +31,7 @@ public class MemberController implements InitializingBean{
   private static final Log log = LogFactory.getLog(MemberController.class);
   private final MemberService memberService;
   private final StorageService storageService;
+  private final PasswordEncoder passwordEncoder;
   private String uploadDir;
 
   @Value("${ncp.ss.bucketname}")
@@ -65,12 +67,18 @@ public class MemberController implements InitializingBean{
   // 회원가입 폼 제출
   @PostMapping("add")
   public String add(Member member, MultipartFile file) throws Exception {
+    log.debug("asdasdasdasdasdasd");
+
     if (file.getSize() > 0) {
       String filename = storageService.upload(this.bucketName, this.uploadDir, file);
       member.setPhoto(filename);
     }
 
+    // spring-security에서 비밀번호를 암호화해서 넣어준다.
+    member.setPassword(passwordEncoder.encode(member.getPassword()));
+    
     memberService.add(member);
+    log.debug("asdasdasdasdasdasd");
     // 메인페이지로 이동
     return "redirect:../index.html";
   }
@@ -97,6 +105,7 @@ public class MemberController implements InitializingBean{
     // 이전 회원 정보의 회원번호를 그대로 사용하여 회원 정보를 업데이트합니다.
     member.setMemberId(loginedMemberId);
 
+    member.setPassword(passwordEncoder.encode(member.getPassword()));
     memberService.update(member);
     session.removeAttribute("loginUser");
     session.setAttribute("loginUser", member);
