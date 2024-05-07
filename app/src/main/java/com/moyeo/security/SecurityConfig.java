@@ -36,7 +36,8 @@ public class SecurityConfig {
         .csrf().disable()
         .authorizeHttpRequests(authorize -> authorize
             // 로그인 없이 들어갈수 있는 곳
-            .mvcMatchers("/review/list", "/home", "/index", "/", "/img/**", "/member/signup", "/member/add", "/review/view*", "/recruit/list", "/recruit/view*").permitAll()
+            .mvcMatchers("/review/list", "/home", "/index", "/", "/img/**", "/member/signup", "/member/add", "/review/view*", "/recruit/list", "/recruit/view*",
+                "/member/findEmail", "/member/findPassword").permitAll()
             .anyRequest().authenticated()
         )
         .formLogin(formLoginConfigurer ->
