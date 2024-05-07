@@ -609,13 +609,10 @@
               htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
           }
 
-          if (item.englishAddress) {
-              htmlAddresses.push('[영문명 주소] ' + item.englishAddress);
-          }
 
           infoWindow.setContent([
               '<div style="padding:10px;min-width:200px;line-height:150%;">',
-              '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
+<!--              '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',-->
               htmlAddresses.join('<br />'),
               '</div>'
           ].join('\n'));
