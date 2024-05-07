@@ -17,4 +17,10 @@ public interface ReviewCommentDao {
 
   int reviewCommentUpdate(ReviewComment reviewComment);
 
+  void add(ReviewComment reviewComment);
+
+  ReviewComment findBy(int reviewCommentId);
+
+  List<ReviewComment> findAllByReviewBoardId(int reviewBoardId);
+
 }

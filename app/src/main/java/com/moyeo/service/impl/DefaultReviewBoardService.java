@@ -9,6 +9,7 @@ import com.moyeo.dao.ReviewScrapDao;
 import com.moyeo.service.ReviewBoardService;
 import com.moyeo.vo.Alarm;
 import com.moyeo.vo.ReviewBoard;
+import com.moyeo.vo.ReviewComment;
 import com.moyeo.vo.ReviewPhoto;
 import java.util.ArrayList;
 import java.util.List;
@@ -178,5 +179,25 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public List<ReviewBoard> findByViews(int pageNo, int pageSize, int regionId, int themeId,
       String filter, String keyword) {
     return reviewBoardDao.findByViews(pageSize * (pageNo - 1), pageSize, regionId, themeId, filter, keyword);
+  }
+
+  @Override
+  public ReviewComment getComment(int commentId) {
+    return reviewCommentDao.findBy(commentId);
+  }
+
+  @Override
+  public void addComment(ReviewComment comment) {
+    reviewCommentDao.add(comment);
+  }
+
+  @Override
+  public int updateComment(ReviewComment reviewComment) {
+    return reviewCommentDao.reviewCommentUpdate(reviewComment);
+  }
+
+  @Override
+  public int deleteComment(int commentId) {
+    return reviewCommentDao.delete(commentId);
   }
 }

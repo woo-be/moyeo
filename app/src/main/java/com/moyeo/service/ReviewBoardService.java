@@ -2,6 +2,7 @@ package com.moyeo.service;
 
 import com.moyeo.vo.ReviewBoard;
 import com.moyeo.vo.ReviewPhoto;
+import com.moyeo.vo.ReviewComment;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
@@ -48,4 +49,11 @@ public interface ReviewBoardService {
 
   List<ReviewBoard> findByViews(int pageNo, int pageSize, int regionId,int themeId, String filter, String keyword);
 
+  ReviewComment getComment(int commentId);
+
+  void addComment(ReviewComment comment);
+
+  int updateComment(ReviewComment reviewComment);
+
+  int deleteComment(int commentId);
 }
