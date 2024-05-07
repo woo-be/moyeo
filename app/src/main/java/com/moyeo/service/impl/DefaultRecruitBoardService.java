@@ -1,6 +1,7 @@
 package com.moyeo.service.impl;
 
 import com.moyeo.dao.AlarmDao;
+import com.moyeo.dao.MaterialDao;
 import com.moyeo.dao.MessageDao;
 import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
@@ -31,6 +32,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   private final RecruitMemberDao recruitMemberDao;
   private final MessageDao messageDao;
   private final AlarmDao alarmDao;
+  private final MaterialDao materialDao;
 
   @Transactional
   @Override
@@ -96,6 +98,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   public int delete(int boardId) {
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
+    materialDao.deleteAllByRecruitBoardId(boardId);
     messageDao.delete(boardId); // 해당 모집글의 채팅방의 채팅 삭제
     recruitMemberDao.deleteAll(boardId); // recruit_member 테이블의 recruitBoardId가 boardId인 레코드 전부 삭제
 
