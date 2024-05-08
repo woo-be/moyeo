@@ -115,9 +115,9 @@
       inner join recruit_board rb on rb.recruit_board_id=rm.recruit_board_id
     where
       m.member_id=#{memberId}
-    order by rb.recruit_board_id desc
-<!--    order by rm.create_date desc-->
-    limit #{rowCount} offset #{offset}
+      and not rb.member_id=#{memberId}
+      order by rm.created_date desc
+      limit #{rowCount} offset #{offset}
   </select>
 
   <select id="findMyTeamByMemberId" resultMap="RecruitBoardMap" parameterType="int">
@@ -207,8 +207,10 @@
       count(*)
     from
       recruit_member rm
+      inner join recruit_board rb on rb.recruit_board_id=rm.recruit_board_id
     where
       rm.member_id=#{memberId}
+      and not rb.member_id=#{memberId}
   </select>
 
   <insert id="add" parameterType="recruitBoard"
