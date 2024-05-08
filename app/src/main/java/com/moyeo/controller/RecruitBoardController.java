@@ -15,6 +15,7 @@ import com.moyeo.vo.RecruitPhoto;
 import com.moyeo.vo.Region;
 import com.moyeo.vo.Theme;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -375,10 +376,12 @@ public class RecruitBoardController {
     }
 
     // 업로드한 파일 목록을 세션에 보관
+    HashMap<String,Object> result = new HashMap<>();
+    result.put("recruitPhotos", recruitPhotos);
     model.addAttribute("recruitPhotos", recruitPhotos);
 
     // 클라이언트에서 이미지 이름을 가지고 <img> 태그를 생성할 수 있도록 업로드한 파일의 이미지 정보 보냄
-    return recruitPhotos;
+    return result;
   }
 
   @GetMapping("listByCurrent")

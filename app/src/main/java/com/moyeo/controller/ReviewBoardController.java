@@ -77,11 +77,6 @@ public class ReviewBoardController {
     reviewBoard.setWriter(writer);
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
-    log.debug(reviewBoard.getThemeList());
-    log.debug(reviewBoard.getLatitude());
-    log.debug(reviewBoard.getLongitude());
-    log.debug(String.format("%s==================================\n", reviewBoard.getAddress()));
-
     if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
@@ -160,8 +155,7 @@ public class ReviewBoardController {
     }
 
     // list 메서드에 필요한 모든 값을 넘기고 mapper의 mybatis로 조건문 처리.
-    model.addAttribute("list",
-        reviewBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
+    model.addAttribute("list", reviewBoardService.list(pageNo, pageSize, regionId, themeId, filter, keyword));
 
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
@@ -310,7 +304,7 @@ public class ReviewBoardController {
 
   @PostMapping("photo/upload")
   @ResponseBody
-  public Object photoUpload(MultipartFile[] photos, HttpSession session)
+  public Object photoUpload(MultipartFile[] photos, HttpSession session, Model model)
       throws Exception {
 
     ArrayList<ReviewPhoto> reviewPhotos = new ArrayList<>();
@@ -330,6 +324,7 @@ public class ReviewBoardController {
 
     HashMap<String,Object> result = new HashMap<>();
     result.put("reviewPhotos", reviewPhotos);
+    model.addAttribute("reviewPhotos", reviewPhotos);
 
     return result;
   }
