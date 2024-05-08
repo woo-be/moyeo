@@ -276,7 +276,7 @@
                     <div class="d-flex flex-column flex-grow-1 bd-highlight mb-3 pe-4">
                       <div class="d-flex flex-row bd-highlight mb-1">
                         <div class="bd-highlight me-auto" data-th-replace="review/commentform :: commentusername"></div>
-                        <div class="d-flex flex-row bd-highlight ms-auto ">
+                        <div class="d-flex flex-row bd-highlight ms-auto " data-th-if="*{commentMember.memberId} == ${loginUser.memberId}">
                           <button id="editBtn" class="btn btn-primary m-1">수정</button>
                           <a id="deletecomment" data-th-href="@{comment/delete2(reviewCommentId=*{reviewCommentId})}"
                              type="button" class="btn btn-danger m-1" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
