@@ -233,7 +233,7 @@ public class MemberController implements InitializingBean{
   // updatePassword.html에 적힌 정보를 newPassword에 정보를 가지고와 member에 newPassword를 넣어준다.
   @PostMapping("updatePassword")
   public String updatePassword(Member member, Model model, @RequestParam("newPassword")String newPassword) {
-    member.setPassword(newPassword);
+    member.setPassword(passwordEncoder.encode(newPassword));
     memberService.updatePassword(member);
 
 //    if(updatedMember == null){
