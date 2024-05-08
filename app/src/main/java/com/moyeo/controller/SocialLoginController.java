@@ -52,14 +52,26 @@ public class SocialLoginController {
     Member existingMember = memberService.getByEmail(member.getEmail());
     if (existingMember == null) {
       session.setAttribute("newMember", member);
-      //창을 닫고 회원가입 페이지로 이동(추가적인 정보필요)
-      response.getWriter().println("<script>window.close(); window.opener.location.href='/member/signup ';</script>");
+      // modal 창을 닫고 회원가입 페이지로 이동(추가적인 정보 필요)
+      String script = "<script>"
+          + "window.close();"
+          + "window.opener.location.href='/member/signup';"
+          + "</script>";
+      response.setContentType("text/html");
+      response.getWriter().println(script);
     } else {
       session.setAttribute("loginUser", existingMember);
-      //창을 닫고 홈으로 이동
-      response.getWriter().println("<script>window.close(); window.opener.location.href='/home';</script>");
+      // modal 창을 닫고 홈으로 이동
+      String script = "<script>"
+          + "window.close();"
+          + "window.opener.location.href='/home';"
+          + "</script>";
+      response.setContentType("text/html");
+      response.getWriter().println(script);
     }
   }
+
+
 
 
   // 구글 OAuth를 통해 토큰 가져오기
