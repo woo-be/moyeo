@@ -11,6 +11,10 @@
     <result column="photo" property="photo"/>
   </resultMap>
 
+  <select id="findAllByReviewBoardId" resultMap="ReviewPhotoMap">
+    select * from review_photo where review_board_id=#{reviewBoardId}
+  </select>
+
   <insert id="add" parameterType="ReviewPhoto">
     insert into review_photo(review_board_id, photo)
     values(#{reviewPhotoId},#{filePath})

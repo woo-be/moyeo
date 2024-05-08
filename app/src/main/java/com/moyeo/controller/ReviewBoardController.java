@@ -296,8 +296,10 @@ public class ReviewBoardController {
       log.debug(old.getWriter());
       throw new MoyeoError("권한이 없습니다.", "view?reviewBoardId=" + reviewBoard.getReviewBoardId());
     }
+    log.debug(old.getTitle());
 
     model.addAttribute("regionId", reviewBoard.getRegionId());
+    model.addAttribute("old", old);
     model.addAttribute("themeId", reviewBoard.getThemeId());
   }
 

@@ -55,6 +55,7 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   @Override
   public ReviewBoard get(int reviewBoardId) {
     ReviewBoard reviewBoard = reviewBoardDao.findBy(reviewBoardId);
+    reviewBoard.setPhotos(reviewPhotoDao.findAllByReviewBoardId(reviewBoardId));
     reviewBoard.setCommentList(reviewCommentDao.findAllByReviewId(reviewBoardId));
     return reviewBoard;
   }
