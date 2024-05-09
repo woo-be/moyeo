@@ -83,7 +83,9 @@
       color: blue;
       text-decoration: underline;
     }
-
+    #recruitRegionList{
+      width:10%;
+    }
   </style>
 </head>
 
@@ -98,7 +100,7 @@
   <div class="d-flex justify-content-center align-items-start py-3">
 
     <!-- 지역 -->
-    <div class="col-1">
+    <div id="recruitRegionList">
       <div class="border mx-2">
           <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
       </div>

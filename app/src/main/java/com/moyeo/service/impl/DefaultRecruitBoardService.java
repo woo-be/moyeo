@@ -7,6 +7,7 @@ import com.moyeo.dao.RecruitBoardDao;
 import com.moyeo.dao.RecruitCommentDao;
 import com.moyeo.dao.RecruitMemberDao;
 import com.moyeo.dao.RecruitPhotoDao;
+import com.moyeo.dao.RecruitScrapDao;
 import com.moyeo.service.RecruitBoardService;
 import com.moyeo.vo.Alarm;
 import com.moyeo.vo.RecruitBoard;
@@ -27,6 +28,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
 
   private static final Log log = LogFactory.getLog(DefaultRecruitBoardService.class);
   private final RecruitBoardDao recruitBoardDao;
+  private final RecruitScrapDao recruitScrapDao;
   private final RecruitCommentDao recruitCommentDao;
   private final RecruitPhotoDao recruitPhotoDao;
   private final RecruitMemberDao recruitMemberDao;
@@ -96,6 +98,7 @@ public class DefaultRecruitBoardService implements RecruitBoardService {
   @Transactional
   @Override
   public int delete(int boardId) {
+    recruitScrapDao.deleteAllScrapByRecruitBoardId(boardId);
     recruitCommentDao.deleteAllCommentByRecruitBoardId(boardId);
     recruitPhotoDao.deleteAllPhotoByRecruitBoardId(boardId);
     materialDao.deleteAllByRecruitBoardId(boardId);

@@ -51,6 +51,9 @@
       color: blue;
       text-decoration: underline;
     }
+    #reviewRegionList{
+      width:10%;
+    }
 
   </style>
 </head>
@@ -67,7 +70,7 @@
   <div class="d-flex p-3 justify-content-center align-items-start">
 
     <!-- 지역 -->
-    <div class="col-1">
+    <div id="reviewRegionList">
       <div class="border mx-2">
         <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
       </div>

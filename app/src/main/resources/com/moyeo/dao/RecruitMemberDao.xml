@@ -76,13 +76,14 @@
     rb.title,
     rb.start_date,
     rb.end_date,
-    m.nickname, <!-- name => nickname 으로 변경 -->
-    count(case when rm.state = 1 then 1 end) as current,
+    m.nickname,
+    current,
     rb.recruit_total
     from
     recruit_board rb
     inner join member m on rb.member_id = m.member_id
     left join recruit_member rm on rb.recruit_board_id = rm.recruit_board_id
+    inner join (SELECT COUNT(*) as current, recruit_board_id FROM recruit_member where state=1 group by recruit_board_id) as cc on cc.recruit_board_id=rb.recruit_board_id
     where
     rm.member_id=#{memberId} and rm.state=1
     group by

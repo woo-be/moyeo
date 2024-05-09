@@ -59,7 +59,7 @@
           <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
           <div class="form-item-div d-flex flex-row align-items-center pb-2">
             <h6 class="form-item-div-name">제목</h6>
-            <input class="form-control w-50" id="title" name="title" type="text" data-th-value="*{title}" value="제목입니당.">
+            <input class="form-control w-50" id="title" name="title" type="text" data-th-value="${old.title}" value="제목입니당.">
           </div>
           <div data-th-replace="review/regionList :: regionList">지역리스트</div>
           <div data-th-replace="review/themeList :: themeList">테마리스트</div>
@@ -336,6 +336,11 @@
 
   naver.maps.onJSContentLoaded = initGeocoder;
   <!--  -->
+</script>
+
+<script>
+  var title = document.getElementById("title");
+  console.log(title.value);
 </script>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
