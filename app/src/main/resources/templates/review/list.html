@@ -55,6 +55,22 @@
       width:10%;
     }
 
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+      transition: 0.3s; /* 애니메이션 효과를 위한 transition */
+      border-radius: 20px; /* 모서리 둥글기 조절 */
+    }
+
+    /* 마우스 오버 시 그림자 강조 */
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
   </style>
 </head>
 <body>
@@ -71,13 +87,13 @@
 
     <!-- 지역 -->
     <div id="reviewRegionList">
-      <div class="border mx-2">
+      <div class="border rounded-3 mx-2">
         <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column border p-2 col-7">
+    <div class="d-flex flex-column border rounded-3 p-2 col-7">
 
       <p class="text-center fs-2 fw-bold pt-4 pb-3">여행 후기게시판</p>
 

@@ -29,7 +29,7 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around">
+<div class="d-flex justify-content-around pb-3">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
     <div class="card">
       <div class="bg-white  py-4 card-header"><h2 class="mb-0">작성한 모집글</h2></div>
@@ -80,20 +80,26 @@
   </div>
 </div>
 <div class="paging">
-  <p>
-    [
-    <a data-th-if="${pageNo <= 1}">이전</a>
-    <a data-th-href="@{posted(pageNo=${pageNo - 1},pageSize=${pageSize})}"
-       data-th-if="${pageNo > 1}"
-       href="list">이전</a>
-    ]
-    [
-    <a data-th-if="${pageNo >= numOfPage}">다음</a>
-    <a data-th-href="@{posted(pageNo=${pageNo + 1},pageSize=${pageSize})}"
-       data-th-if="${pageNo < numOfPage}"
-       href="list">다음</a>
-    ]
-  </p>
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
+          class="page-link">Previous</a></li>
+      <li class="page-item"><a class="page-link"
+                               data-th-href="@{posted(pageNo=${pageNo - 1},pageSize=${pageSize})}"
+                               data-th-if="${pageNo > 1}">Previous</a></li>
+      <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
+      <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}"><a class="page-link"
+        href="#"
+        data-th-href="@{posted(pageNo=${pageButton},pageSize=${pageSize})}"
+        data-th-text="${pageButton}"></a>
+      </li>
+      <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
+      </li>
+      <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
+                                                                  data-th-href="@{posted(pageNo=${pageNo + 1},pageSize=${pageSize})}">Next</a>
+      </li>
+    </ul>
+  </nav>
 </div>
 
 
@@ -149,4 +155,15 @@
 <!--  }-->
 
 <!--</script>-->
+
+<script>
+  $(document).ready(function() {
+
+    /* 현재 페이지에 해당하는 페이지 버튼을 찾아서 그 버튼의 클래스에 active를 추가,
+    현재 페이지가 어디인지 시각적으로 보이게 함. */
+    var link = document.getElementById("page[[${pageNo}]]");
+    console.log(link);
+    link.classList.add('active');
+  })
+</script>
 </html>
