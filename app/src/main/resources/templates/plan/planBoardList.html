@@ -119,7 +119,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="deleteButton">
-          삭제
+          취소
         </button>
         <button type="button" class="btn btn-primary" id="addButton">저장</button>
       </div>
@@ -140,15 +140,15 @@
           <input type="hidden" class="form-control" id="planBoardId">
         </div>
         <div>
-          <label for="tripOrder" class="form-label">순서</label>
+          <label for="viewTripOrder" class="form-label">순서</label>
           <input type="text" class="form-control" id="viewTripOrder" placeholder="게시물 내용을 입력하세요">
         </div>
         <div>
-          <label for="postTitle" class="form-label">목적지</label>
+          <label for="viewPostTitle" class="form-label">목적지</label>
           <input type="text" class="form-control" id="viewPostTitle" placeholder="게시물 제목을 입력하세요">
         </div>
         <div>
-          <label for="postContent" class="form-label">게시물 내용</label>
+          <label for="viewPostContent" class="form-label">게시물 내용</label>
           <input type="text" class="form-control" id="viewPostContent" placeholder="게시물 내용을 입력하세요">
         </div>
       </div>
@@ -227,7 +227,7 @@
                 processData: false
               }).done(function(planBoard) {
                 $('#viewModal').modal('show');
-                planBoardId.val(planBoard.planBoardId)
+                planBoardId.val(planBoard.planBoardId);
                 viewTripOrder.val(planBoard.tripOrder);
                 viewPostTitle.val(planBoard.title);
                 viewPostContent.val(planBoard.content);
