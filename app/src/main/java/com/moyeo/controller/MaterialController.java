@@ -49,19 +49,13 @@ public class MaterialController {
   }
 
   @GetMapping("view")
-  public void view(int materialId, Model model) {
-    model.addAttribute("material", materialService.get(materialId));
-  }
-
-  @GetMapping("form")
-  public void form(
-      int recruitBoardId,
-      Model model) throws Exception {
-
-    model.addAttribute("recruitBoardId", recruitBoardId);
+  @ResponseBody
+  public Object view(int materialId) {
+    return materialService.get(materialId);
   }
 
   @PostMapping("add")
+  @ResponseBody
   public String add(
       Material material,
       HttpSession session,
@@ -96,10 +90,11 @@ public class MaterialController {
 
     sessionStatus.setComplete();
 
-    return "redirect:list?recruitBoardId=" + material.getRecruitBoardId();
+    return "list?recruitBoardId=" + material.getRecruitBoardId();
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String update(
       Material material,
       HttpSession session,
@@ -145,16 +140,7 @@ public class MaterialController {
 
     sessionStatus.setComplete();
 
-    return "redirect:view?materialId=" + material.getMaterialId();
-  }
-
-  @PostMapping("updateForm")
-  public void updateForm(int recruitBoardId, int materialId, HttpSession session, Model model) {
-
-    Material material = materialService.get(materialId);
-
-    model.addAttribute("recruitBoardId", recruitBoardId);
-    model.addAttribute("updateMaterial", material);
+    return "list?recruitBoardId=" + old.getRecruitBoardId();
   }
 
   @GetMapping("delete")
