@@ -56,4 +56,7 @@ public class App {
 
     }
 
+    @GetMapping("/homedemo2")
+    public void homedemo2() {
+    }
 }
