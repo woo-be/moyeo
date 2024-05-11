@@ -234,7 +234,9 @@
         viewMaterialName.val(material.name);
         viewMaterialCount.val(material.count);
         viewMaterialContent.val(material.content);
-        viewMaterialState.val(material.state);
+        console.log(material.state);
+        console.log(viewMaterialState.val());
+        viewMaterialState.prop("checked", material.state);
       })
     }
 
