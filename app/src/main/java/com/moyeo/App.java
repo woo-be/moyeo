@@ -35,9 +35,6 @@ public class App {
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
-    @GetMapping("/homedemo")
-    public void homedemo() {
-    }
 
     @GetMapping("/home")
     public void home(Model model) {
@@ -56,4 +53,19 @@ public class App {
 
     }
 
+    @GetMapping("/originalhome")
+    public void newhome(Model model) {
+
+        List<RecruitBoard> list = recruitBoardService.findByCurrentByLimit6();
+
+        for(int i=0; i<list.size(); i++){
+            List<RecruitMember> recruitMembers = recruitMemberService.allApplicant(list.get(i).getRecruitBoardId());
+            list.get(i).setApplicants(recruitMembers);
+        }
+
+        model.addAttribute("listByLimit3", reviewBoardService.findByCreatedDateByLimit3());
+        model.addAttribute("listByLikeCountLimit3", reviewBoardService.findByLikeCountByLimit3());
+        model.addAttribute("listByViewsLimit3", reviewBoardService.findByViewsByLimit3());
+        model.addAttribute("listByCurrentLimit6", list);
+    }
 }
