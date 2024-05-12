@@ -6,6 +6,7 @@ import com.moyeo.vo.Member;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -18,9 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @RequiredArgsConstructor
@@ -150,26 +153,39 @@ public class MemberController implements InitializingBean{
   }
 
   //  /member/delete.html 에서
-  @GetMapping("delete")
+  @PostMapping("delete")
+  @ResponseBody
   public String delete(@RequestParam("id") Integer no, HttpSession session) throws Exception {
     if (no == null) {
       throw new IllegalArgumentException("회원번호가 유효하지 않습니다!!!!");
     }
 
     Member member = memberService.get(no);
+
     if(member == null) {
      throw new Exception("회원번호가 유효하지 않습니다!!!!");
     }
-
-    memberService.delete(no);
 
     String filename = member.getPhoto();
     if (filename != null) {
       storageService.delete(this.bucketName, this.uploadDir, member.getPhoto());
     }
+
+    LocalDate currentDate = LocalDate.now();
+    System.out.println("현재 날짜: " + currentDate);
+
+    member.setPassword(passwordEncoder.encode("moyeo" + member.getMemberId()));
+    member.setEmail("user" + member.getMemberId());
+    member.setName("user" + member.getMemberId());
+    member.setBirthdate(Date.valueOf(currentDate));
+    member.setPhoto("NULL");
+    member.setPhoneNumber("delete" + member.getMemberId());
+    member.setIntroduce("탈퇴 한 계정");
+
+    memberService.delete(member);
     session.removeAttribute("loginUser");
 
-    return "redirect:../index.html";
+    return "/index.html";
   }
 
   @GetMapping("mypage")
