@@ -21,6 +21,16 @@
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
+    body {
+      padding-left: 10px;
+      font-family: 'LINESeedKR-Rg';
+    }
     body {
         padding-left: 0px;
     }
@@ -82,8 +92,6 @@
 <!--<body>-->
 <div data-th-replace="header :: header">머리말</div>
 
-
-<!--<div data-th-object="${reviewBoard}">-->
 <body data-th-object="${reviewBoard}">
 
 <div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">
@@ -98,47 +106,45 @@
         <input data-th-value="*{themeId}" name='themeId' type='hidden'>
 
         <!-- 가운데정렬 -->
-        <div class="d-flex justify-content-center w-100 border border-2 p-3">
+        <div class="d-flex justify-content-center w-100 p-3">
 
           <!-- 세로정렬 -->
           <div class="d-flex w-75 flex-column">
 
             <!-- title -->
-            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center pt-3 pb-3">
-              <!-- left -->
+            <div id="title" class="d-flex flex-column bd-highlight border-bottom py-2">
+              <!-- top -->
               <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center w-75 mw-75">
-                <div class="ps-4 me-2">
-                  <h1 class="text-break" data-th-text="*{title}">제목</h1>
+                <div class="ps-4 me-3">
+                  <h3 class="text-break" data-th-text="*{title}">제목</h3>
                 </div>
-<!--                  <div class="border border-2 rounded-3 ms-3 p-2 align-items-center">-->
-<!--                    <span data-th-if="*{state == true}">모집중</span>-->
-<!--                    <span data-th-if="*{state == false}">모집완료</span>-->
-<!--                  </div>-->
               </div>
 
-              <!-- right -->
-              <div class="d-flex flex-column bd-highlight me-4">
-                <div class="d-flex flex-column justify-content-end bd-highlight me-2">
-                  <div class="text-end" style="width:150px">
-                    작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+              <!-- bottom -->
+              <div class="ps-4 ms-2 me-3 d-flex flex-row justify-content-between bd-highlight me-4">
+                <div class="d-flex flex-column bd-highlight me-2" style="font-size: 14px;">
+                  <div>
+                    작성자 <span data-th-text="*{writer.nickname}"></span>
                   </div>
-                  <div class="text-end">
-                    작성자: <span data-th-text="*{writer.nickname}"></span>
-                  </div>
-                  <div class="text-end">
-                    조회수: <span data-th-text="*{views}"></span>
-                  </div>
-                  <div class="text-end">
-                    좋아요: <span data-th-text="*{likeCount}"></span>
+                  <div class="d-flex flex-row bd-highlight me-2">
+                    <div class="me-2">
+                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                    </div>
+                    <div class="me-2">
+                      조회수 <span data-th-text="*{views}"></span>
+                    </div>
+                    <div class="me-2">
+                      좋아요 <span data-th-text="*{likeCount}"></span>
+                    </div>
                   </div>
                 </div>
                 <div class="d-flex justify-content-end">
                   <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex flex-row bd-highlight p-1">
-                      <button class="btn btn-primary m-1" >수정</button>
+                      <button class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
                     </div>
                     <div class="d-flex flex-row bd-highlight p-1">
-                      <button type="button" class="btn btn-danger m-1" data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
+                      <button type="button" class="btn btn-danger m-1 h-75" style="font-size: 14px;" data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>
                     </div>
                   </div>
                 </div>
@@ -164,20 +170,9 @@
                         <input id="addr" readonly type="text" name="address">
                       </h6>
                     </div>
-<!--                      <div class="d-flex flex-row">-->
-<!--                        <h6 class="form-item-div-name">여행기간</h6>-->
-<!--                        <h6 data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">게시일</h6>-->
-<!--                        ~ <h6 data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">게시일</h6>-->
-<!--                      </div>-->
-<!--                      <div class="d-flex flex-row">-->
-<!--                        <h6 class="form-item-div-name">마감일자</h6>-->
-<!--                        <h6 data-th-text="*{#dates.format(deadline, 'yyyy-MM-dd')}">게시일</h6>-->
-<!--                      </div>-->
                   </div>
                   <div class="p-2 bd-highlight me-2 ms-auto">
                     <div id="map" style="width:300px;height:250px;"></div>
-<!--                      <input data-th-value="*{latitude}" readonly type='hidden' name="latitude">-->
-<!--                      <input data-th-value="*{longitude}" readonly type='hidden' name="longitude">-->
                       <input id="latitude" readonly type="hidden" placeholder="검색한 위도" name="latitude">
                       <input id="longitude" readonly type="hidden" placeholder="검색한 경도" name="longitude"><br>
                   </div>
@@ -191,17 +186,7 @@
             </div>
 
             <!-- buttons-->
-            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
-<!--                <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> &lt;!&ndash;로그인상태이면서 게시글 상태가 모집중 일 때,,&ndash;&gt;-->
-<!--                  <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">-->
-<!--                    <button type="button" class="btn btn-primary m-1" data-th-onclick="applyModal()">신청하기</button></a>-->
-<!--                  <div data-th-if="${recruitMember} != null" style="display:inline">-->
-<!--                    <a data-th-if="${recruitMember.state == null}" data-th-href="@{../recruitMember/delete(recruitBoardId=*{recruitBoardId})}" href="apply.html">-->
-<!--                      <button type="button" class="btn btn-primary m-1" data-th-onclick="cancelModal()">신청취소</button></a>-->
-<!--                    <a data-th-if="${recruitMember.state == 1}">[신청승인됨]</a>-->
-<!--                    <a data-th-if="${recruitMember.state == 0}">[신청거부됨]</a>-->
-<!--                  </div>-->
-<!--                </div>-->
+            <div class="d-flex flex-row bd-highlight mt-4 pb-5 justify-content-center border-bottom border-2">
               <div class="m-1">
                 <!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
                 <a type="button" class="btn btn-primary m-1" data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="scrap.html">즐겨찾기</a>
@@ -210,57 +195,13 @@
                 <a type="button" class="btn btn-primary m-1" data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="scrap.html">좋아요</a>
               </div>
             </div>
-
-<!--          <div>-->
-<!--            게시일 : <span-->
-<!--              data-th-text="${#dates.format(reviewBoard.createdDate, 'yyyy-MM-dd HH:mm:ss')}">게시일</span>-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            작성자 : <input data-th-value="*{writer.nickname}" readonly type='text' value="홍길동">-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            제목 : <input data-th-value="*{title}" readonly name='title' type='text' value="제목입니다.">-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            지역 : <input data-th-value="*{regionName}" readonly type='text' value="지역">-->
-<!--          </div>-->
-<!--          <div>-->
-<!--            테마 : <input data-th-value="*{themeName}" readonly type='text' value="테마">-->
-<!--          </div>-->
-<!--&lt;!&ndash;          주소 : <input id="addr" type="text" name="address">&ndash;&gt;-->
-<!--&lt;!&ndash;          <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">&ndash;&gt;-->
-<!--&lt;!&ndash;          <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude"><br>&ndash;&gt;-->
-<!--&lt;!&ndash;            지도 : <div id="map"></div>&ndash;&gt;-->
-<!--&lt;!&ndash;          <div id="content" >&ndash;&gt;-->
-<!--&lt;!&ndash;            <textarea  data-th-text="*{content}" id="summernote" name='content'>내용입니다.</textarea>&ndash;&gt;-->
-<!--&lt;!&ndash;          </div>&ndash;&gt;-->
-
-<!--          조회수 : <span data-th-text="*{views}">조회수</span><br>-->
-<!--          좋아요수 : <span data-th-text="*{likeCount}">좋아요수</span><br>-->
-
-<!--            <button>변경</button>-->
-<!--      &lt;!&ndash;      <a data-th-href="@{delete(reviewBoardId=*{reviewBoardId})}" href="delete.html">[삭제]</a>&ndash;&gt;-->
-
           </div>
         </div>
 
       </form>
     </div>
-<!--            <button data-th-onclick="'reviewDelete(' + *{reviewBoardId} + ')'" onclick="reviewDelete()">삭제</button>-->
 
-<!--          <a data-th-href="@{../../scrap/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img-->
-<!--              data-th-src="@{/img/scrapwhite.png}" src="../../static/img/scrapwhite.png" alt="즐겨찾기"-->
-<!--              height="4%" width="4%"/></a>-->
-
-<!--          <a data-th-href="@{/review/like/add(reviewBoardId=*{reviewBoardId})}" href="view.html"><img-->
-<!--              data-th-src="@{/img/like.png}" src="../../static/img/like.png" alt="좋아요" height="5%"-->
-<!--              width="4%"/></a>-->
-
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
-    <div class="d-flex justify-content-center bd-highlight border border-2 p-4 mt-4">
+    <div class="d-flex justify-content-center bd-highlight p-4 mt-4">
       <div class="w-75">
         <div class="d-flex flex-column">
           <!-- view comment -->
@@ -277,9 +218,10 @@
                       <div class="d-flex flex-row bd-highlight mb-1">
                         <div class="bd-highlight me-auto" data-th-replace="review/commentform :: commentusername"></div>
                         <div class="d-flex flex-row bd-highlight ms-auto " data-th-if="*{commentMember.memberId} == ${loginUser.memberId}">
-                          <button id="editBtn" class="btn btn-primary m-1">수정</button>
+                          <button id="editBtn" class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
                           <a id="deletecomment" data-th-href="@{comment/delete2(reviewCommentId=*{reviewCommentId})}"
-                             type="button" class="btn btn-danger m-1" href="delete.html" onclick="alert('삭제했습니다.')">삭제</a>
+                             type="button" class="btn btn-danger m-1 h-75" href="delete.html" style="font-size: 14px;"
+                             onclick="alert('삭제했습니다.')">삭제</a>
                         </div>
                       </div>
                       <div  class="d-flex flex-row bd-highlight">
@@ -304,8 +246,8 @@
                           <textarea class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break" data-th-text="*{content}" name="content"></textarea>
                         </div>
                         <div class="d-flex flex-row h-75">
-                          <button id="submitBtn" type="submit" class="btn btn-primary m-1">전송</button>
-                          <button id="cancelBtn" type="button" class="btn btn-danger m-1">취소</button>
+                          <button id="submitBtn" type="submit" class="btn btn-primary m-1 h-75" style="font-size: 14px;">전송</button>
+                          <button id="cancelBtn" type="button" class="btn btn-danger m-1 h-75" style="font-size: 14px;">취소</button>
                         </div>
                       </div>
                     </div>
@@ -317,7 +259,7 @@
 
           <!-- add comment -->
           <form id="commentForm" data-th-action="@{/review/comment/add2}" action="view.html" data-th-object="${loginUser}" method='post'>
-            <div class="d-flex flex-row bd-highlight border border-2 p-3 ms-2">
+            <div class="d-flex flex-row bd-highlight p-3 ms-2">
               <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type="hidden">
               <div class="p-2 bd-highlight">
                 <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
@@ -334,8 +276,8 @@
                 </div>
                 <div class="d-flex flex-row d-flex bd-highlight" >
                   <textarea id="content" class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break me-1 h-50" name="content" type="text"></textarea>
-                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center mt-5 mb-5" data-th-onclick="addReviewComment()" >
-                    <span class="ms-1 me-1">전송</span>
+                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center" style="height: 40px" data-th-onclick="addReviewComment()" >
+                    <span class="ms-1 me-1" style="font-size: 14px;">전송</span>
                   </button>
                 </div>
               </div>
@@ -346,60 +288,6 @@
     </div>
   </div>
 </div>
-
-
-
-<!--  <ul data-th-if="${reviewBoard.commentList != null}" style="list-style-type: none; ">-->
-<!--    <div data-th-each="comment : *{commentList}" data-th-object="${comment}">-->
-<!--      <hr id="comment-hr">-->
-<!--      <li>-->
-<!--        &lt;!&ndash;-->
-<!--        <div style='float:left'>작성자: </div>-->
-<!--        &ndash;&gt;-->
-<!--        <img data-th-if="*{commentMember.photo}" alt="댓글 작성자 사진"-->
-<!--             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{commentMember.photo}(type=f,w=20,h=20,align=4,ttype=jpg)}">-->
-<!--        <img data-th-unless="*{commentMember.photo}" alt="댓글 작성자 사진" style="width:20;height:20;"-->
-<!--             data-th-src="@{/img/default-photo.jpeg}" src="/static/img/default-photo.jpeg">-->
-<!--        <div style='margin-left:10px;font-weight:bold; text-decoration: underline'-->
-<!--             data-th-text="*{commentMember.nickname}" value="홍길동"></div>-->
-<!--        <div>-->
-<!--          <a data-th-href="@{../comment/delete(reviewCommentId=*{reviewCommentId},reviewBoardId=*{reviewBoardId})}"-->
-<!--             href="view.html">[삭제]</a>-->
-
-<!--        </div>-->
-<!--      </li>-->
-
-<!--      <li>-->
-<!--        &lt;!&ndash;-->
-<!--        <div style='float:left'>내용:</div>-->
-<!--        &ndash;&gt;-->
-<!--        <form data-th-action="@{../../comment/update}" action="view.html" method="post">-->
-<!--          <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type='hidden'>-->
-<!--          <input data-th-value="*{reviewCommentId}" name='reviewCommentId' type='hidden'>-->
-<!--          <input name="content" style='margin-left:10px' data-th-value="*{content}"-->
-<!--                 value="댓글 내용입니다.">-->
-<!--          <button>수정</button>-->
-<!--          &lt;!&ndash;data-th-href="@{../comment/update}" href="userInfo.html"&ndash;&gt;-->
-<!--        </form>-->
-<!--      </li>-->
-<!--    </div>-->
-<!--  </ul>-->
-
-<!--  <form action="view.html" data-th-action="@{../comment/add}" method='post'>-->
-<!--    <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>-->
-<!--    <input data-th-value="*{writer.memberId}" name='memberId' type='hidden'>-->
-<!--    <div style='border: 1px solid black; float:none; width:900px; margin: 0 auto;'>-->
-<!--      <div style='width:100px; height:20px; margin-left:25px; margin-top:20px'>-->
-<!--        댓글 내용-->
-<!--      </div>-->
-<!--      <div>-->
-<!--        <input data-th-if="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="댓글을 입력해주세요.">-->
-<!--        <input data-th-unless="${session.loginUser}" style='width:700px; height:100px; margin:20px' name='reviewContent' placeholder="로그인 해주세요.">-->
-<!--        <button style='padding:10px; margin:20px' data-th-onclick="addReviewComment()">등록</button>-->
-<!--      </div>-->
-<!--    </div>-->
-
-<!--  </form>-->
 </body>
 
 <div data-th-replace="footer :: footer">꼬리말</div>
@@ -505,15 +393,16 @@
 
 <script>
 
+  // summernote 사용 설정
   $(document).ready(function() {
-  var options = new Object();
-  options.height = 600;
-  options.width = 1000;
-  options.toolbar = false;
-  options.disableDragAndDrop = true;
+    var options = new Object();
+    options.height = 600;
+    options.width = 1000;
+    options.toolbar = false;
+    options.disableDragAndDrop = true;
 
     $('#summernote').summernote(options).summernote("disable");
-    $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
+    // $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
 
 
   });

@@ -92,18 +92,17 @@
       white-space: nowrap;
     }
 
-    /* 지역, 테마 활성화 클래스 */
-    a.active {
-      color: blue;
-      text-decoration: underline;
-    }
-
     #recruitRegionList{
       width:10%;
       min-width: 150px;
       max-width: 150px;
     }
 
+    /* 지역, 테마 활성화 클래스 */
+    a.active {
+      color: blue;
+      /*text-decoration: underline;*/
+    }
     a {
       color: rgb(78, 78, 78);
       text-decoration-line: none;
@@ -131,7 +130,7 @@
     <!-- 게시판 -->
     <div class="d-flex flex-column col-7 border p-2" style="min-width: 700px">
 
-      <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
+      <h4 class="text-center fw-bold pt-4 pb-3">멤버 모집 게시판</h4>
 
       <!-- 테마 -->
       <div class="d-flex justify-content-center">
@@ -157,7 +156,7 @@
           <td class="text-center column-no" data-th-text="*{recruitBoardId}">1</td>
           <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
           <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-          <td class="">
+          <td>
             <a class="d-flex " data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" href="view.html">
               <span class="column-title w-100" data-th-text="*{title}"></span>
             </a>
