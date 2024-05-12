@@ -17,7 +17,7 @@ public interface MemberService {
 
   int update(Member member);
 
-  int delete(int no);
+  int delete(Member member);
 
   Member get(String phoneNumber, String name, Date birthdate);
 
