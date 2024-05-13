@@ -339,7 +339,7 @@
   $('#content').click(function(){
     if (loginUserId.val() == 0){
       alert("로그인 후 이용해주세요.");
-      $(this).prop('disabled', true); // 입력 막기
+      window.location.href = '/auth/form';
     }
   });
 </script>
@@ -412,11 +412,7 @@
 
     $('#summernote').summernote(options).summernote("disable");
     // $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
-
-
   });
-
-
 </script>
 
 <script>
@@ -595,7 +591,7 @@
 
 </script>
 <script>
-<!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
+// 후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청
   function reviewDelete(reviewBoardId){
     var reply = confirm("후기를 삭제 하겠습니까?");
     if (reply) {
