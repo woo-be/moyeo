@@ -19,8 +19,15 @@
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
     body {
-        padding-left: 10px;
+      padding-left: 10px;
+      font-family: 'LINESeedKR-Rg';
     }
     .form-item-div {
       margin-top: 5px;
@@ -53,10 +60,14 @@
           <div class="form-item-div d-flex flex-row align-items-center pb-2">
             <h6 class="form-item-div-name">제목</h6>
             <input class="form-control w-50" placeholder="제목을 입력하세요." id="title" name="title" type="text">
+            <div id="title-error" class="invalid-feedback"></div>
           </div>
 
           <div class="form-item-div" data-th-replace="review/regionList :: regionList">지역리스트</div>
+          <div id="region-error" class="invalid-feedback"></div>
+
           <div class="form-item-div" data-th-replace="review/themeList :: themeList">테마리스트</div>
+          <div id="theme-error" class="invalid-feedback"></div>
 
           <div class="form-item-div d-flex flex-row align-items-center">
             <h6 class="form-item-div-name">주소</h6>
@@ -65,6 +76,7 @@
                 <input class="form-item-div form-control w-75" id="addr" type="text" name="address">
                 <input id="latitude" type="hidden" placeholder="검색한 위도" name="latitude">
                 <input id="longitude" type="hidden" placeholder="검색한 경도" name="longitude">
+                <div id="address-error" class="invalid-feedback"></div>
               </div>
               <div class="d-flex flex-row">
                 <input class="form-control w-75 me-3" id="address" type="text" placeholder="검색할 주소">
@@ -77,11 +89,21 @@
           <div class="form-input form-item-div d-flex flex-row align-items-center">
             <h6 class="form-item-div-name">내용</h6>
             <textarea name='content' id="summernote"></textarea>
+            <div id="content-error" class="invalid-feedback"></div>
           </div>
 <!--          <div data-th-replace="theme :: themeList">테마 체크박스</div>-->
-          <div class="d-flex justify-content-center">
-            <button class="btn btn-primary m-2">등록</button>
+
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+              <button id="addBtn" class="btn btn-primary m-2">등록</button>
+            </div>
+            <div  class="d-flex justify-content-center">
+              <div>
+                <div id="msg-error" class="invalid-feedback"></div>
+              </div>
+            </div>
           </div>
+
         </form>
       </div>
     </div>
@@ -92,6 +114,40 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 
+<script>
+  let addBtn = $('#addBtn');
+
+  let title = $('#title');
+  let region = $('#regionId');
+  let theme = $('#themeId');
+  let addr = $('#addr');
+  let content = $('#summernote');
+
+  let titleError = $('#title-error');
+  let regionError = $('#region-error');
+  let themeError = $('#theme-error');
+  let addressError = $('#address-error');
+  let contentError = $('#content-error');
+
+  let addBtn = $('#msg-error');
+  function err(data, dataError, event, msg) {
+    if(data.value === '' || data.value == 0) {
+      dataError.innerHTML = msg;
+      dataError.style.display = "block";
+      event.preventDefault();
+    }else {
+      dataError.innerHTML = ""; // 오류 메세지 지우기
+      dataError.style.display = "none"; // 오류 메세지 숨기기
+    }
+  }
+  btn.addEventListener('click', function(event) {
+    err(title, titleError, event, "제목을 입력하세요!");
+    err(theme, themeError, event, "테마를 선택하세요!");
+    err(region, regionError, event, "지역을 선택하세요!");
+    err(addr, addressError, event, "주소를 입력하세요!");
+    err(content, contentError, event, "내용을 입력하세요!");
+  });
+</script>
 <script>
   $(document).ready(function() {
 
