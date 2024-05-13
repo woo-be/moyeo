@@ -6,6 +6,9 @@
   <title>User Information</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
   <style>
   .myInfo {
     margin-left: 10%;
@@ -85,14 +88,42 @@
                 <strong>자기소개</strong>
                 <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;">
               </div>
-          </div><br>
-        <div>
-          <button type="submit" class="btn btn-secondary btn-sm" onclick="showMessage('수정되었습니다')">수정</button>
-          <button data-th-href="@{delete(id=*{memberId})}" href="delete.html" class="btn btn-secondary btn-sm" onclick="showMessage('탈퇴되었습니다')">탈퇴</button>
-        </div>
-        <div data-th-if="${session.loginUser == null}">
-          <p>No member information found.</p>
-        </div>
+
+                <div class="form-group">
+                  <input type="hidden" id="memberId" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
+                </div>
+                <div class="form-group">
+                  <strong>이메일</strong>
+                  <input type="text" name="email" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
+                </div>
+                <div class="form-group">
+                  <strong>이름</strong>
+                  <input type="text" name="name" data-th-value="*{name}" class="form-control" style="width:300px;">
+                </div>
+                <div class="form-group">
+                  <strong>닉네임</strong>
+                  <input type="text" name="nickname" data-th-value="*{nickname}" class="form-control" style="width:300px;">
+                </div>
+                <div class="form-group">
+                  <strong>휴대폰 번호</strong>
+                  <input type="text" name="phoneNumber" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;">
+                </div>
+                <div class="form-group">
+                  <strong>생일</strong>
+                  <input type="text" name="birthdate" data-th-value="*{birthdate}" class="form-control" style="width:300px;">
+                </div>
+                <div class="form-group">
+                  <strong>자기소개</strong>
+                  <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;">
+                </div>
+            </div><br>
+          <div>
+            <button type="submit" class="btn btn-secondary btn-sm" onclick="showMessage('수정되었습니다')">수정</button>
+            <button type="button" id="memberDelete" class="btn btn-secondary btn-sm" onclick="showMessage('탈퇴되었습니다')">탈퇴</button>
+          </div>
+          <div data-th-if="${session.loginUser == null}">
+            <p>No member information found.</p>
+          </div>
 
         <script>
           function setThumbnail(event) {
@@ -113,10 +144,31 @@
 </div>
 
 <script>
-  // 알림창을 표시하는 함수
+  var memberDelete = $('#memberDelete');
+  var memberId = $('#memberId');
+
+  // 알림창을 표시하는 함수 data-th-href="@{delete(id=*{memberId})}"
   function showMessage(message) {
       alert(message);
   }
+
+  memberDelete.click(function () {
+    let member = new FormData();
+    member.append("id", memberId.val());
+    console.log(memberId.val());
+    $.ajax({
+      url: '/member/delete',
+      type: 'POST',
+      contentType: false,
+      processData: false,
+      data: member
+    }).done((url)=>{
+      location.href = url;
+      console.log(url);
+    })
+  });
+
+
 </script>
 
 

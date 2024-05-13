@@ -1,106 +1,242 @@
 <!DOCTYPE html>
 <html lang='en'>
 <head>
-  <meta charset='UTF-8'>
-  <title>모여</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
-  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-  <style>
-    .container {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-  </style>
+    <meta charset='UTF-8'>
+    <title>모여</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- webjars BootStrap -->
+    <!--  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">-->
+    <!--  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
+
+    <!-- Bootstrap core CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- JQuery -->
+    <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+    <style>
+
+        @font-face {
+            font-family: 'LINESeedKR-Rg';
+            src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+            src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+            font-style: normal;
+        }
+        body {
+            font-family: 'LINESeedKR-Rg';
+        }
+
+        aside #reviewTheme {
+            display:flex;
+            justify-content:space-between;
+            flex-wrap:wrap;
+            width: 640px;
+            margin-right: 35px;
+        }
+        aside #reviewTheme li{
+            display:flex;
+            justify-content:center;
+
+            width: 80px;
+            border: 1px solid rgb(184, 184, 184) ;
+            padding: 3px 7px 3px 7px;
+            border-radius: 45px;
+            text-decoration-line: none;
+
+            margin-left: 10px;
+            margin-right: 10px;
+        }
+        aside #reviewTheme li a{
+            font-size: 14px;
+        }
+        aside #reviewRegion li {
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        aside ul li a {
+            color: rgb(78, 78, 78);
+            text-decoration-line: none;
+        }
+
+        /* 지역, 테마 활성화 클래스 */
+        a.active {
+            color: blue;
+            text-decoration: underline;
+        }
+        #reviewRegionList{
+            width:10%;
+            min-width: 150px;
+            max-width: 150px;
+        }
+
+        .card {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+            transition: 0.3s; /* 애니메이션 효과를 위한 transition */
+            /*border-radius: 20px; !* 모서리 둥글기 조절 *!*/
+        }
+
+        /* 마우스 오버 시 그림자 강조 */
+        .card:hover {
+            box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+        }
+
+    </style>
 </head>
-<body style="text-align: center;">
-<div data-th-replace="header :: header">머리말</div>
+<body>
 
+<div class="container-fluid">
 
+    <!-- 헤더 -->
+    <div data-th-replace="header :: header">머리말</div>
 
+    <!-- 컨텐트 -->
+    <div class="d-flex justify-content-center align-items-start py-3">
 
-<h1>게시글</h1>
+        <!-- 지역 -->
+        <div id="reviewRegionList">
+            <div class="border mx-2">
+                <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
+            </div>
+        </div>
 
-<div data-th-replace="region :: list" class="box" >지역 리스트</div>
-<div data-th-replace="themeList :: themelist" data-th-object="${themeId}">테마</div>
+        <!-- 게시판 -->
+        <div class="d-flex flex-column col-7 border p-2" style="min-width: 700px">
 
-<p><a data-th-href="@{form}" href="form.html">새 글</a></p>
-<ul>
-  <div class="container">
-    <tr data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
-      <div style='border: 1px solid black; float:left'>
-        <a data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-          <div style='border: 1px solid black; flex'>
-            <img data-th-if="*{photos[0].photo}" alt="여행 사진" data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-            <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;" data-th-src="@{/img/default-review-photo.png}" src="/static/img/default-review-photo.png" alt="여행 사진">
-          </div>
-          <div class="work-info" style='border: 1px solid black; float:none'>
-            <h3 data-th-text="*{title}">제목입니다</h3>
-            <p data-th-text="*{regionName}">지역</p>
-            조회수: <span data-th-text="*{views}">조회수</span><br>
-            좋아요수: <span data-th-text="*{likeCount}">좋아요수</span><br>
-            <span data-th-text="*{writer.nickname}">홍길동</span>
-            <p data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</p>
-          </div>
-        </a>
-      </div>
-    </tr>
-  </div>
-</ul>
+            <p class="text-center fs-2 fw-bold pt-4 pb-3">여행 후기게시판</p>
 
- 검색
-<div>
-  <form method="get" action="list.html" data-th-action="@{list}">
-    <input type="hidden" name="regionId" data-th-value="${regionId}">
-    <input type="hidden" name="themeId" data-th-value="${themeId}">
-    <label for="filter"></label>
-    <select name="filter" id="filter">
-      <option value="title">제목</option>
-      <option value="content">내용</option>
-      <option value="nickname">작성자</option>
-    </select>
-    <input type="search" name="keyword" data-th-value="${keyword}">
-    <input type="submit" data-th-value="검색">
-  </form>
+            <!-- 테마 -->
+            <div class="d-flex justify-content-center">
+                <div data-th-replace="review/reviewTheme :: reviewThemeList" data-th-object="${themeId}">
+                    테마
+                </div>
+            </div>
+            <!-- 리스트 -->
+            <div>
+                <div class="row row-cols-1 row-cols-md-3 g-3">
+                    <div class="col" data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
+                        <a class="text-decoration-none link-dark" data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
+                            <div class="card border-0">
+                                <!-- 사진 -->
+                                <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
+                                     data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                                <!-- 기본 사진 -->
+                                <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"
+                                     data-th-src="@{/img/default-review-photo.png}"
+                                     src="/static/img/default-review-photo.png" alt="여행 사진">
+                                <!-- 카드 내용 -->
+                                <div class="card-header text-muted d-flex justify-content-between">
+                                    <span data-th-text="*{regionName}" class="mt-1">지역</span>
+                                </div>
+
+                                <div class="card-body">
+                                    <h5 data-th-text="*{title}">제목입니다</h5>
+                                    <span class="d-flex justify-content-between">
+                    <span data-th-text="*{writer.nickname}">닉네임</span>
+                  </span>
+                                    <span class="d-flex justify-content-between">
+                    <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
+                    <span>조회수 <span data-th-text="*{views}">조회수</span></span>
+                  </span>
+
+                                    <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 페이징 -->
+            <div class="d-flex justify-content-center py-3">
+                <nav aria-label="Page navigation">
+                    <ul class="pagination">
+                        <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
+                                class="page-link">Previous</a></li>
+                        <li class="page-item">
+                            <a class="page-link"
+                               data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                               data-th-if="${pageNo > 1}">Previous</a></li>
+                        <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
+                        <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}">
+                            <a class="page-link"
+                               href="#"
+                               data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                               data-th-text="${pageButton}"></a>
+                        </li>
+                        <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
+                        </li>
+                        <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
+                                                                                    data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+
+            <!-- 검색 및 글쓰기 -->
+            <div class="d-flex flex-row justify-content-between pb-3">
+                <div style="width: 50px"></div>
+                <div class="w-50">
+                    <form method="get" action="list.html" data-th-action="@{list}">
+                        <input type="hidden" name="regionId" data-th-value="${regionId}">
+                        <input type="hidden" name="themeId" data-th-value="${themeId}">
+                        <div class="d-flex flex-row">
+                            <label for="filter"></label>
+                            <select class="form-select w-25 m-1" name="filter" id="filter">
+                                <option value="title">제목</option>
+                                <option value="content">내용</option>
+                                <option value="nickname">작성자</option>
+                            </select>
+                            <input class="form-control w-100 m-1" type="text" name="keyword" data-th-value="${keyword}">
+                            <input type="submit" class="btn btn-primary m-1" data-th-value="검색">
+                        </div>
+                    </form>
+                </div>
+                <div>
+                    <a class="btn btn-primary m-1 w-100" data-th-href="@{form}" href="form.html">글쓰기</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- 우측 여백 -->
+        <div class="col-1"></div>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="row">
+        <div data-th-replace="footer :: footer">꼬리말</div>
+    </div>
 </div>
-
-<span>
-  [<a data-th-if="${pageNo <= 1}">이전</a>
-  <a data-th-href="@{list(pageNo=${pageNo}-1,pageSize=${pageSize},regionId=${regionId}, themeId=${themeId},keyword=${keyword},filter=${filter})}"
-     data-th-if="${pageNo > 1}"
-     href="list.html" >이전</a>]
-  [<a data-th-if="${pageNo >= numOfPage}">다음</a>
-  <a data-th-href="@{list(pageNo=${pageNo}+1,pageSize=${pageSize},regionId=${regionId}, themeId=${themeId},keyword=${keyword},filter=${filter})}"
-     data-th-if="${pageNo < numOfPage}"
-     href="list.html">다음</a>]
-</span>
-
-
-<div data-th-replace="footer :: footer">꼬리말</div>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-  let dropdown = document.getElementById("filter");
-  let condition = "[[${filter}]]";
-
-  switch (condition) {
-    case "title":
-      dropdown.value = "title";
-      break;
-    case "content":
-      dropdown.value = "content";
-      break;
-    case "nickname":
-      dropdown.value = "nickname";
-      break;
-    default:
-      dropdown.value = "title";
-      break;
-  }
-});
-</script>
-
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        let dropdown = document.getElementById("filter");
+        let condition = "[[${filter}]]";
+        document.addEventListener("DOMContentLoaded", function () {
+            let dropdown = document.getElementById("filter");
+            let condition = "[[${filter}]]";
+
+            switch (condition) {
+                case "title":
+                    dropdown.value = "title";
+                    break;
+                case "content":
+                    dropdown.value = "content";
+                    break;
+                case "nickname":
+                    dropdown.value = "nickname";
+                    break;
+                default:
+                    dropdown.value = "title";
+                    break;
+            }
+        });
+    });
+</script>
 </body>
 </html>

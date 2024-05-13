@@ -1,893 +1,326 @@
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 <head>
-  <script src="/docs/5.3/assets/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>모여</title>
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicons -->
+    <!-- <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png"
+          sizes="180x180">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32"
+          type="image/png">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16"
+          type="image/png">
+    <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
+    <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
+    <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
+    <meta name="theme-color" content="#712cf9"> -->
 
-  <meta name="description" content="">
-  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
-  <meta name="generator" content="Hugo 0.122.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+          crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 
-  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
+    <style>
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
-
-  <!-- Favicons -->
-  <link rel="apple-touch-icon" href="/docs/5.3/assets/img/favicons/apple-touch-icon.png"
-        sizes="180x180">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-32x32.png" sizes="32x32"
-        type="image/png">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon-16x16.png" sizes="16x16"
-        type="image/png">
-  <link rel="manifest" href="/docs/5.3/assets/img/favicons/manifest.json">
-  <link rel="mask-icon" href="/docs/5.3/assets/img/favicons/safari-pinned-tab.svg" color="#712cf9">
-  <link rel="icon" href="/docs/5.3/assets/img/favicons/favicon.ico">
-  <meta name="theme-color" content="#712cf9">
-
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-        rel="stylesheet"
-        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-        crossorigin="anonymous">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-          crossorigin="anonymous"></script>
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <style>
-    .footer {
-      position: static;
-      left: 0;
-      bottom: 0;
-      width: 100%;
-    }
-
-    .bd-placeholder-img {
-        font-size: 1.125rem;
-        text-anchor: middle;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        user-select: none;
-      }
-
-      @media (min-width: 768px) {
-        .bd-placeholder-img-lg {
-          font-size: 3.5rem;
+        /*@font-face {*/
+        /*    font-family: 'LINESeedKR-Bd';*/
+        /*    src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_11-01@1.0/LINESeedKR-Bd.woff2') format('woff2');*/
+        /*    font-weight: 700;*/
+        /*    font-style: normal;*/
+        /*}*/
+        @font-face {
+            font-family: 'LINESeedKR-Rg';
+            src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+            src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+            font-style: normal;
         }
-      }
+        * {
+            font-family: 'LINESeedKR-Rg';
+        }
 
-      .b-example-divider {
-        width: 100%;
-        height: 3rem;
-        background-color: rgba(0, 0, 0, .1);
-        border: solid rgba(0, 0, 0, .15);
-        border-width: 1px 0;
-        box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-      }
+        .footer {
+            position: static;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+        }
 
-      .b-example-vr {
-        flex-shrink: 0;
-        width: 1.5rem;
-        height: 100vh;
-      }
+        .info-img {
+            margin-top: 10px;
+            margin-bottom: 20px;
+            width: 120px;
+        }
 
-      .bi {
-        vertical-align: -.125em;
-        fill: currentColor;
-      }
+        .board-thumbnail img{
+            width:250px;
+            height:260px;
+        }
 
-      .nav-scroller {
-        position: relative;
-        z-index: 2;
-        height: 2.75rem;
-        overflow-y: hidden;
-      }
+        .card{
+            cursor : pointer;
+        }
 
-      .nav-scroller .nav {
-        display: flex;
-        flex-wrap: nowrap;
-        padding-bottom: 1rem;
-        margin-top: -1px;
-        overflow-x: auto;
-        text-align: center;
-        white-space: nowrap;
-        -webkit-overflow-scrolling: touch;
-      }
+        th, td {
+            text-align: center;
+        }
 
-      .btn-bd-primary {
-        --bd-violet-bg: #712cf9;
-        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+        .newrecruit-title {
+            text-align: left;
+            max-width: 360px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-        --bs-btn-font-weight: 600;
-        --bs-btn-color: var(--bs-white);
-        --bs-btn-bg: var(--bd-violet-bg);
-        --bs-btn-border-color: var(--bd-violet-bg);
-        --bs-btn-hover-color: var(--bs-white);
-        --bs-btn-hover-bg: #6528e0;
-        --bs-btn-hover-border-color: #6528e0;
-        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-        --bs-btn-active-color: var(--bs-btn-hover-color);
-        --bs-btn-active-bg: #5a23c8;
-        --bs-btn-active-border-color: #5a23c8;
-      }
+        .review-title {
+            /*text-align: center;*/
+            /*width: 40%;*/
+            /*max-width: 300px;*/
+            /*min-width: 40%;*/
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
 
-      .bd-mode-toggle {
-        z-index: 1500;
-      }
-
-      .bd-mode-toggle .dropdown-menu .active .bi {
-        display: block !important;
-      }
-
-  </style>
+    </style>
 </head>
 
 <div data-th-replace="header :: header">머리말</div>
 
 <body>
 
+<div class="container">
+    <img
+        style="width: 100%; height: 100%; top: 0; left: 0; z-index: -1; object-fit: cover; position: fixed;"
+        class="long-image"
+        data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/back2.jpg?type=m&w=3000&h=3000'}">
 
-<img
-    style="width: 100%; height: 100%; top: 0; left: 0; z-index: -1; object-fit: cover; position: fixed;"
-    class="long-image"
-    data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/back2.jpg?type=m&w=3000&h=3000'}">
-<!--  <img style="background-image: url('https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/back2.jpg?type=w&w=3000'); background-size: cover; background-position: center; background-repeat: no-repeat; height: 100vh;">-->
-
-
-<svg xmlns="http://www.w3.org/2000/svg" class="d-none">
-  <symbol id="check2" viewBox="0 0 16 16">
-    <path
-        d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-  </symbol>
-  <symbol id="circle-half" viewBox="0 0 16 16">
-    <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
-  </symbol>
-  <symbol id="moon-stars-fill" viewBox="0 0 16 16">
-    <path
-        d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/>
-    <path
-        d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/>
-  </symbol>
-  <symbol id="sun-fill" viewBox="0 0 16 16">
-    <path
-        d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/>
-  </symbol>
-</svg>
-
-<!--<div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">-->
-<!--  <div class="carousel-indicators">-->
-<!--    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active"-->
-<!--            aria-current="true" aria-label="Slide 1"></button>-->
-<!--    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1"-->
-<!--            aria-label="Slide 2"></button>-->
-<!--    <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2"-->
-<!--            aria-label="Slide 3"></button>-->
-<!--  </div>-->
-<!--  <div class="carousel-inner">-->
-<!--    <div class="carousel-item active">-->
-<!--      <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
-<!--           aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
-<!--        <rect width="100%" height="100%" fill="var(&#45;&#45;bs-secondary-color)"/>-->
-<!--      </svg>-->
-<!--      <div class="container">-->
-<!--        <div class="carousel-caption text-start">-->
-<!--          <h1></h1>-->
-<!--          <p class="opacity-75"></p>-->
-<!--          <p><a class="btn btn-lg btn-primary" href="#">가입하기</a></p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="carousel-item">-->
-<!--      <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
-<!--           aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
-<!--        <rect width="100%" height="100%" fill="var(&#45;&#45;bs-secondary-color)"/>-->
-<!--      </svg>-->
-<!--      <div class="container">-->
-<!--        <div class="carousel-caption">-->
-<!--          <h1></h1>-->
-<!--          <p></p>-->
-<!--          <p><a class="btn btn-lg btn-primary" href="#">더 알아보기</a></p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--    <div class="carousel-item">-->
-<!--      <svg class="bd-placeholder-img" width="100%" height="100%" xmlns="http://www.w3.org/2000/svg"-->
-<!--           aria-hidden="true" preserveAspectRatio="xMidYMid slice" focusable="false">-->
-<!--        <rect width="100%" height="100%" fill="var(&#45;&#45;bs-secondary-color)"/>-->
-<!--      </svg>-->
-<!--      <div class="container">-->
-<!--        <div class="carousel-caption text-end">-->
-<!--          <h1></h1>-->
-<!--          <p></p>-->
-<!--          <p><a class="btn btn-lg btn-primary" href="#">둘러보기</a></p>-->
-<!--        </div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-<!--  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel"-->
-<!--          data-bs-slide="prev">-->
-<!--    <span class="carousel-control-prev-icon" aria-hidden="true"></span>-->
-<!--    <span class="visually-hidden">Previous</span>-->
-<!--  </button>-->
-<!--  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel"-->
-<!--          data-bs-slide="next">-->
-<!--    <span class="carousel-control-next-icon" aria-hidden="true"></span>-->
-<!--    <span class="visually-hidden">Next</span>-->
-<!--  </button>-->
-<!--</div>-->
-
-
-<!-- Marketing messaging and featurettes
-  ================================================== -->
-<!-- Wrap the rest of the page in another container to center all the content. -->
-
-<div class="container marketing">
-
-  <div class="ms-5">
-    <!-- Three columns of text below the carousel -->
-    <div class="row">
-      <div class="col-lg-4">
-        <img class="rounded-circle"
-             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/camera2.jpg?type=m&w=140&h=140'}">
-
-        <!--      <svg class="bd-placeholder-img rounded-circle" width="140" height="140"-->
-        <!--           xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder"-->
-        <!--           preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title>-->
-        <!--        <rect width="100%" height="100%" fill="var(&#45;&#45;bs-secondary-color)"/>-->
-        <!--      </svg>-->
-        <h2 class="fw-normal" style="color: #ffffff;">후기작성</h2>
-        <p style="color: #ffffff;">여행을 다녀온 뒤에 작성한 후기를 공유해보세요.</p>
-        <!--      <p><a class="btn btn-secondary" href="#">더 알아보기 &raquo;</a></p>-->
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <img class="rounded-circle"
-             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/shakehand2.jpg?type=m&w=140&h=140'}">
-        <h2 class="fw-normal" style="color: #ffffff;">모집하기</h2>
-        <p style="color: #ffffff;">함께 여행할 사람들을 모아보세요.</p>
-        <!--      <p><a class="btn btn-secondary" href="#">더 알아보기 &raquo;</a></p>-->
-      </div><!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <img class="rounded-circle"
-             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/calendar3.jpg?type=m&w=140&h=140'}">
-        <h2 class="fw-normal" style="color: #ffffff;">일정관리</h2>
-        <p style="color: #ffffff;">여행 계획을 함께 세워보세요.</p>
-        <!--      <p><a class="btn btn-secondary" href="#">더 알아보기 &raquo;</a></p>-->
-      </div><!-- /.col-lg-4 -->
-    </div><!-- /.row -->
-  </div>
-<br>
-  <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center"
-            id="bd-theme"
-            type="button"
-            aria-expanded="false"
-            data-bs-toggle="dropdown"
-            aria-label="Toggle theme (auto)">
-      <svg class="bi my-1 theme-icon-active" width="1em" height="1em">
-        <use href="#circle-half"></use>
-      </svg>
-      <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center"
-                data-bs-theme-value="light" aria-pressed="false">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em">
-            <use href="#sun-fill"></use>
-          </svg>
-          Light
-          <svg class="bi ms-auto d-none" width="1em" height="1em">
-            <use href="#check2"></use>
-          </svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center"
-                data-bs-theme-value="dark" aria-pressed="false">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em">
-            <use href="#moon-stars-fill"></use>
-          </svg>
-          Dark
-          <svg class="bi ms-auto d-none" width="1em" height="1em">
-            <use href="#check2"></use>
-          </svg>
-        </button>
-      </li>
-      <li>
-        <button type="button" class="dropdown-item d-flex align-items-center active"
-                data-bs-theme-value="auto" aria-pressed="true">
-          <svg class="bi me-2 opacity-50" width="1em" height="1em">
-            <use href="#circle-half"></use>
-          </svg>
-          Auto
-          <svg class="bi ms-auto d-none" width="1em" height="1em">
-            <use href="#check2"></use>
-          </svg>
-        </button>
-      </li>
-    </ul>
-  </div>
-
-  <div class="album py-5 bg-body-tertiary">
-    <div class="container">
-      <!--      <tr data-th-each="reviewBoard : ${listByLimit3}" data-th-object="${reviewBoard}">-->
-      <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3" id="cardContainer">
-        <div class="col" data-th-each="reviewBoard : ${listByLimit3}"
-             data-th-object="${reviewBoard}">
-          <div class="card shadow-sm">
-            <img data-th-if="*{photos[0].photo}" alt="여행 사진"
-                 data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-            <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
-                 data-th-src="@{/img/default-review-photo.png}"
-                 src="/static/img/default-review-photo.png" alt="여행 사진">
-            <div class="card-body">
-              <div class="card-text">
-                <p data-th-text="*{title}"
-                   style="text-align: center; margin-bottom: 0px; font-size: 24px;"></p>
-                <div style="text-align: right;">
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성자 : <span
-                      data-th-text="*{writer.nickname}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성일 : <span
-                      data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">조회수 : <span
-                      data-th-text="*{views}"></span></p>
+    <!-- site info -->
+    <div class="w-100">
+        <div class="d-flex justify-content-between mx-5">
+            <div class="d-flex flex-column justify-content-center ms-5">
+                <div class="d-flex justify-content-center align-items-center rounded-circle pt-2 mb-3" style="background-color: white; width: 140px; height:140px;">
+                    <img class="info-img p-3"
+                         data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/photo_camera_40dp_FILL0_wght400_GRAD200_opsz40.png?type=f&w=140&h=140'}">
                 </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a data-th-href="@{review/views(reviewBoardId=*{reviewBoardId})}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">게시글보기</button>
-                  </a>
-                  <a data-th-href="@{review/listByCreatedDate}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">후기게시판으로 이동
-                    </button>
-                  </a>
-                </div>
-                <!--                  <small class="text-body-secondary">9 mins</small>-->
-              </div>
+                <h3 class="fw-normal" style="color: #ffffff;">후기 작성</h3>
+                <p style="color: #ffffff;">작성한 여행 후기를 공유해보세요.</p>
             </div>
-          </div>
-        </div>
-
-        <div class="col" data-th-each="reviewBoard : ${listByLikeCountLimit3}"
-             data-th-object="${reviewBoard}">
-          <div class="card shadow-sm">
-            <img data-th-if="*{photos[0].photo}" alt="여행 사진"
-                 data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-            <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
-                 data-th-src="@{/img/default-review-photo.png}"
-                 src="/static/img/default-review-photo.png" alt="여행 사진">
-            <div class="card-body">
-              <div class="card-text">
-                <p data-th-text="*{title}"
-                   style="text-align: center; margin-bottom: 0px; font-size: 24px;"></p>
-                <div style="text-align: right;">
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성자 : <span
-                      data-th-text="*{writer.nickname}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성일 : <span
-                      data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">좋아요 : <span
-                      data-th-text="*{likeCount}"></span></p>
+            <div class="d-flex flex-column justify-content-center">
+                <div class="d-flex justify-content-center align-items-center rounded-circle pt-3 mb-3" style="background-color: white; width: 140px; height:140px;">
+                    <img class="info-img p-3"
+                         data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/handshake_40dp_FILL0_wght400_GRAD200_opsz40.png?type=f&w=140&h=140'}">
                 </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a data-th-href="@{review/views(reviewBoardId=*{reviewBoardId})}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">게시글보기</button>
-                  </a>
-                  <a data-th-href="@{review/listByLikeCount}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">후기게시판으로 이동
-                    </button>
-                  </a>
-                </div>
-              </div>
+                <h3 class="fw-normal" style="color: #ffffff;">모집하기</h3>
+                <p style="color: #ffffff;">함께 여행할 사람들을 모아보세요.</p>
             </div>
-          </div>
-        </div>
-
-        <div class="col" data-th-each="reviewBoard : ${listByViewsLimit3}"
-             data-th-object="${reviewBoard}">
-          <div class="card shadow-sm">
-            <img data-th-if="*{photos[0].photo}" alt="여행 사진"
-                 data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-            <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
-                 data-th-src="@{/img/default-review-photo.png}"
-                 src="/static/img/default-review-photo.png" alt="여행 사진">
-            <div class="card-body">
-              <div class="card-text">
-                <p data-th-text="*{title}"
-                   style="text-align: center; margin-bottom: 0px; font-size: 24px;"></p>
-                <div style="text-align: right;">
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성자 : <span
-                      data-th-text="*{writer.nickname}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">작성일 : <span
-                      data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span></p>
-                  <p style="font-size: 16px; color: gray; margin: 0;">조회수 : <span
-                      data-th-text="*{views}"></span></p>
+            <div class="d-flex flex-column justify-content-center me-5">
+                <div class="d-flex justify-content-center align-items-center rounded-circle pt-2 mb-3" style="background-color: white; width: 140px; height:140px;">
+                    <img class="info-img p-3"
+                         data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/calendar_month_40dp_FILL0_wght400_GRAD200_opsz40.png?type=f&w=140&h=140'}">
                 </div>
-              </div>
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="btn-group">
-                  <a data-th-href="@{review/views(reviewBoardId=*{reviewBoardId})}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">게시글보기</button>
-                  </a>
-                  <a data-th-href="@{review/listByViews}">
-                    <button type="button" class="btn btn-sm btn-outline-secondary">후기게시판으로 이동
-                    </button>
-                  </a>
-                </div>
-              </div>
+                <h3 class="fw-normal" style="color: #ffffff;">일정 관리</h3>
+                <p style="color: #ffffff;">여행 계획을 함께 세워보세요.</p>
             </div>
-          </div>
         </div>
-
-
-      </div>
-      <!--      </tr>-->
     </div>
-  </div>
 
 
-  <!--          <div class="col">-->
-  <!--            <div class="card shadow-sm">-->
-  <!--              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--              <div class="card-body">-->
-  <!--                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--                <div class="d-flex justify-content-between align-items-center">-->
-  <!--                  <div class="btn-group">-->
-  <!--                    <a data-th-href="@{review/listByCreatedDate}">-->
-  <!--                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                    </a>-->
-  <!--                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                  </div>-->
-  <!--                  <small class="text-body-secondary">9 mins</small>-->
-  <!--                </div>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--        <div class="col">-->
-  <!--          <div class="card shadow-sm">-->
-  <!--            <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>-->
-  <!--            <div class="card-body">-->
-  <!--              <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>-->
-  <!--              <div class="d-flex justify-content-between align-items-center">-->
-  <!--                <div class="btn-group">-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">View</button>-->
-  <!--                  <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>-->
-  <!--                </div>-->
-  <!--                <small class="text-body-secondary">9 mins</small>-->
-  <!--              </div>-->
-  <!--            </div>-->
-  <!--          </div>-->
-  <!--        </div>-->
-  <!--      </div>-->
-  <!--      </tr>-->
-  <!--    </div>-->
-  <!--  </div>-->
-
-
-  <div class="mt-6 row">
-    <div class="col-md-12 col-12">
-      <div class="card">
-        <div class="bg-white  py-4 card-header">
-          <h4 class="mb-0">최근 멤버 모집글</h4>
+    <!-- 최신순 후기 -->
+    <div class="album px-3 py-4 pt-5 bg-body-tertiary">
+        <div class="ms-3 d-flex flex-row justify-content-between">
+            <h4 class="me-3">최신 후기</h4>
+            <span class="more-new-review border-1 mb-2 me-3" style="cursor: pointer">
+                더보기 ▶
+            </span>
         </div>
-        <div class="table-responsive">
-          <table class="text-nowrap mb-0 table">
-            <thead class="table-light">
-            <tr>
-              <th>게시글 제목</th>
-              <th>여행시작일</th>
-              <th>여행종료일</th>
-              <th>여행테마</th>
-              <th>여행멤버</th>
-              <th>모집현황</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr data-th-each="recruitBoard : ${listByCurrentLimit6}"
-                data-th-object="${recruitBoard}">
-              <td class="align-middle">
-                <div class="d-flex align-items-center">
-                  <!--                  <div>-->
-                  <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-white">-->
-                  <!--                      <img src="/images/brand/dropbox-logo.svg" alt="" class="">-->
-                  <!--                    </div>-->
-                  <!--                  </div>-->
-                  <div class="ms-3 lh-1">
-                    <h5 class=" mb-1">
-                      <a class="text-inherit"
-                         data-th-href="@{recruit/view(recruitBoardId=*{recruitBoardId})}" href="/#">
-                        <p data-th-text="*{title}"></p>
-                      </a>
-                    </h5>
-                  </div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+                <div class="col" data-th-each="reviewBoard : ${listByLimit3}" data-th-object="${reviewBoard}">
+                    <div class="card shadow-sm border-0">
+                        <input type="hidden" class="reviewBoardId" data-th-value="*{reviewBoardId}">
+                        <img data-th-if="*{photos[0].photo}" alt="여행 사진" class="rounded-3"
+                             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/'
+                              + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                        <img data-th-unless="*{photos[0].photo}" class="rounded-3" style="width:250;height:260;"
+                             data-th-src="@{/img/default-review-photo.png}"
+                             src="/static/img/default-review-photo.png" alt="여행 사진">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p class="review-title" data-th-text="*{title}" style="margin-bottom: 0px; font-size: 20px;"></p>
+                                <div>
+                                    <p style="font-size: 14px; margin: 0;"><span data-th-text="*{writer.nickname}"></span></p>
+                                    <p class="d-flex justify-content-between" style="font-size: 14px; margin: 0;">
+                                        <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                                        <span>조회수 <span data-th-text="*{views}"></span></span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </td>
-              <td class="align-middle" data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">34
-              </td>
-              <td class="align-middle" data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">34
-              </td>
-              <td class="align-middle">
-                <span class="badge bg-warning" data-th-text="*{theme.themeName}">Medium</span>
-              </td>
-              <td class="align-middle">
-                <div class="avatar-group">
-                <span class="avatar avatar-sm" data-th-each="recruitMember : *{applicants}"
-                      data-th-object="${recruitMember}">
-                  <img alt="avatar"
-                       data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=m,w=40,h=40,ttype=jpg)}"
-                       class="rounded-circle">
-                </span>
-                  <!--                  <span class="avatar avatar-sm">-->
-                  <!--                  <img alt="avatar" src="images/avatar/avatar-2.jpg" class="rounded-circle">-->
-                  <!--                </span>-->
-                  <!--                  <span class="avatar avatar-sm">-->
-                  <!--                  <img alt="avatar" src="images/avatar/avatar-3.jpg" class="rounded-circle">-->
-                  <!--                </span>-->
-                  <!--                  <span class="avatar avatar-sm avatar-primary">-->
-                  <!--                  <span class="avatar-initials rounded-circle fs-6">+5</span>-->
-                  <!--                </span>-->
-                </div>
-              </td>
-
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">15&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:15%"-->
-              <!--                         aria-valuenow="15" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-
-              <td class="align-middle text-dark">
-                <div class="float-start me-3">
-                  <p data-th-text="|*{current} / *{recruitTotal}|">1 / 4</p>
-                </div>
-              </td>
-
-
-              <!--            <tr>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="d-flex align-items-center">-->
-              <!--                  <div>-->
-              <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-white">-->
-              <!--                      <img src="/images/brand/slack-logo.svg" alt="" class="">-->
-              <!--                    </div>-->
-              <!--                  </div>-->
-              <!--                  <div class="ms-3 lh-1">-->
-              <!--                    <h5 class=" mb-1">-->
-              <!--                      <a class="text-inherit" href="/#">Slack Team UI Design</a>-->
-              <!--                    </h5>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">47</td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <span class="badge bg-danger">High</span>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="avatar-group">-->
-              <!--                  <span class="avatar avatar-sm">-->
-              <!--                    <img alt="avatar" src="images/avatar/avatar-4.jpg" class="rounded-circle">-->
-              <!--                  </span>-->
-              <!--                  <span class="avatar avatar-sm">-->
-              <!--                    <img alt="avatar" src="images/avatar/avatar-5.jpg" class="rounded-circle">-->
-              <!--                  </span>-->
-              <!--                  <span class="avatar avatar-sm">-->
-              <!--                    <img alt="avatar" src="images/avatar/avatar-6.jpg" class="rounded-circle">-->
-              <!--                  </span>-->
-              <!--                  <span class="avatar avatar-sm avatar-primary">-->
-              <!--                    <span class="avatar-initials rounded-circle fs-6">+5</span>-->
-              <!--                  </span>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">35&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:35%"-->
-              <!--                         aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--            </tr>-->
-              <!--            <tr>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="d-flex align-items-center">-->
-              <!--                  <div>-->
-              <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-white">-->
-              <!--                      <img src="/images/brand/github-logo.svg" alt="" class="">-->
-              <!--                    </div>-->
-              <!--                  </div>-->
-              <!--                  <div class="ms-3 lh-1"><h5 class=" mb-1"><a class="text-inherit" href="/#">GitHub-->
-              <!--                    Satellite</a></h5></div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">120</td>-->
-              <!--              <td class="align-middle"><span class="badge bg-info">Low</span></td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="avatar-group"><span class="avatar avatar-sm"><img alt="avatar"-->
-              <!--                                                                              src="images/avatar/avatar-7.jpg"-->
-              <!--                                                                              class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-8.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-9.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm avatar-primary"><span-->
-              <!--                    class="avatar-initials rounded-circle fs-6">+5</span></span></div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">75&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:75%"-->
-              <!--                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--            </tr>-->
-              <!--            <tr>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="d-flex align-items-center">-->
-              <!--                  <div>-->
-              <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-white"><img-->
-              <!--                        src="/images/brand/3dsmax-logo.svg" alt="" class=""></div>-->
-              <!--                  </div>-->
-              <!--                  <div class="ms-3 lh-1"><h5 class=" mb-1"><a class="text-inherit" href="/#">3D-->
-              <!--                    Character Modelling</a></h5></div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">89</td>-->
-              <!--              <td class="align-middle"><span class="badge bg-warning">Medium</span></td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="avatar-group"><span class="avatar avatar-sm"><img alt="avatar"-->
-              <!--                                                                              src="images/avatar/avatar-10.jpg"-->
-              <!--                                                                              class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-11.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-12.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm avatar-primary"><span-->
-              <!--                    class="avatar-initials rounded-circle fs-6">+5</span></span></div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">63&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:63%"-->
-              <!--                         aria-valuenow="63" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--            </tr>-->
-              <!--            <tr>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="d-flex align-items-center">-->
-              <!--                  <div>-->
-              <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-primary"><img-->
-              <!--                        src="/images/brand/layers-logo.svg" alt="" class=""></div>-->
-              <!--                  </div>-->
-              <!--                  <div class="ms-3 lh-1"><h5 class=" mb-1"><a class="text-inherit" href="/#">Webapp-->
-              <!--                    Design System</a></h5></div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">108</td>-->
-              <!--              <td class="align-middle"><span class="badge bg-success">Track</span></td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="avatar-group"><span class="avatar avatar-sm"><img alt="avatar"-->
-              <!--                                                                              src="images/avatar/avatar-13.jpg"-->
-              <!--                                                                              class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-14.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-15.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm avatar-primary"><span-->
-              <!--                    class="avatar-initials rounded-circle fs-6">+5</span></span></div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">100&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:100%"-->
-              <!--                         aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--            </tr>-->
-              <!--            <tr>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="d-flex align-items-center">-->
-              <!--                  <div>-->
-              <!--                    <div class="icon-shape icon-md border p-4 rounded-1 bg-white"><img-->
-              <!--                        src="/images/brand/github-logo.svg" alt="" class=""></div>-->
-              <!--                  </div>-->
-              <!--                  <div class="ms-3 lh-1"><h5 class=" mb-1"><a class="text-inherit" href="/#">Github-->
-              <!--                    Event Design</a></h5></div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle">120</td>-->
-              <!--              <td class="align-middle"><span class="badge bg-info">Low</span></td>-->
-              <!--              <td class="align-middle">-->
-              <!--                <div class="avatar-group"><span class="avatar avatar-sm"><img alt="avatar"-->
-              <!--                                                                              src="images/avatar/avatar-16.jpg"-->
-              <!--                                                                              class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-17.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm"><img alt="avatar" src="images/avatar/avatar-18.jpg"-->
-              <!--                                                  class="rounded-circle"></span><span-->
-              <!--                    class="avatar avatar-sm avatar-primary"><span-->
-              <!--                    class="avatar-initials rounded-circle fs-6">+5</span></span></div>-->
-              <!--              </td>-->
-              <!--              <td class="align-middle text-dark">-->
-              <!--                <div class="float-start me-3">75&lt;!&ndash; &ndash;&gt; %</div>-->
-              <!--                <div class="mt-2">-->
-              <!--                  <div style="height:5px" class="progress">-->
-              <!--                    <div role="progressbar" class="progress-bar" style="width:75%"-->
-              <!--                         aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>-->
-              <!--                  </div>-->
-              <!--                </div>-->
-              <!--              </td>-->
-              <!--            </tr>-->
-            </tbody>
-          </table>
+            </div>
         </div>
-        <!--        <div class="bg-white text-center card-footer"><a class="link-primary" data-th-href="@{recruit/listByCurrent}">모집 중인 글 모두 보기</a></div>-->
-      </div>
     </div>
-  </div>
 
-  <div data-th-replace="footer :: footer">꼬리말</div>
+    <!-- 좋아요순 후기 -->
+    <div class="album px-3 py-4 bg-body-tertiary">
+
+        <div class="ms-3 d-flex flex-row justify-content-between">
+            <h4 class="me-3">인기 많은 후기</h4>
+            <span class="more-like-review border-1 mb-2 me-3" style="cursor: pointer">
+                더보기 ▶
+            </span>
+        </div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+                <div class="col" data-th-each="reviewBoard : ${listByLikeCountLimit3}" data-th-object="${reviewBoard}">
+                    <div class="card shadow-sm border-0">
+                        <input type="hidden" class="reviewBoardId" data-th-value="*{reviewBoardId}">
+                        <img data-th-if="*{photos[0].photo}" alt="여행 사진"  class="rounded-3"
+                             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                        <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;" class="rounded-3"
+                             data-th-src="@{/img/default-review-photo.png}"
+                             src="/static/img/default-review-photo.png" alt="여행 사진">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p class="review-title" data-th-text="*{title}" style="margin-bottom: 0px; font-size: 20px;"></p>
+                                <p style="font-size: 16px; margin: 0;"><span data-th-text="*{writer.nickname}"></span></p>
+                                <p class="d-flex justify-content-between" style="font-size: 14px; margin: 0;">
+                                    <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                                    <span>좋아요 <span data-th-text="*{likeCount}"></span></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 조회순 후기 -->
+    <div class="album px-3 py-4 bg-body-tertiary">
+        <div class="ms-3 d-flex flex-row justify-content-between">
+            <h4 class="me-3">많이 본 후기</h4>
+            <span class="more-hot-review border-1 mb-2 me-3" style="cursor: pointer">
+                더보기 ▶
+            </span>
+        </div>
+        <div class="container">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-5 g-3">
+                <div class="col" data-th-each="reviewBoard : ${listByViewsLimit3}" data-th-object="${reviewBoard}">
+                    <div class="card shadow-sm border-0">
+                        <input type="hidden" class="reviewBoardId" data-th-value="*{reviewBoardId}">
+                        <img data-th-if="*{photos[0].photo}" alt="여행 사진" class="rounded-3"
+                             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                        <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;" class="rounded-3"
+                             data-th-src="@{/img/default-review-photo.png}"
+                             src="/static/img/default-review-photo.png" alt="여행 사진">
+                        <div class="card-body">
+                            <div class="card-text">
+                                <p class="review-title" data-th-text="*{title}" style="margin-bottom: 0px; font-size: 20px;"></p>
+                                <p style="font-size: 16px; margin: 0;"><span data-th-text="*{writer.nickname}"></span></p>
+                                <p class="d-flex justify-content-between" style="font-size: 14px; margin: 0;">
+                                    <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}"></span>
+                                    <span>조회수 <span data-th-text="*{views}"></span></span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 최신 모집글 -->
+    <div class="px-3 pb-3 mb-5 bg-body-tertiary">
+        <div class="mb-5 row border-0">
+            <div class="col-md-12 col-12">
+                <div class="recruit-card">
+                    <div class="bg-white py-4 card-header">
+                        <h4 class="ms-3 mb-0">최근 멤버 모집글</h4>
+                    </div>
+                    <div class="table-responsive mx-2">
+                        <table class="text-nowrap mb-0 table">
+                            <thead class="table-light">
+                            <tr>
+                                <th>번호</th>
+                                <th>게시글 제목</th>
+                                <th>여행시작일</th>
+                                <th>여행종료일</th>
+                                <th>여행테마</th>
+                                <!-- <th>여행멤버</th>-->
+                                <th>모집현황</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            <tr class="recruit-selector" data-th-each="recruitBoard : ${listByCurrentLimit6}" data-th-object="${recruitBoard}" style="cursor: pointer">
+                                <td class="recruitBoardId" data-th-text="*{recruitBoardId}"></td>
+                                <td class="newrecruit-title" data-th-text="*{title}">제목</td>
+                                <td class="align-middle" data-th-text="*{#dates.format(startDate, 'yyyy-MM-dd')}">시작일자</td>
+                                <td class="align-middle" data-th-text="*{#dates.format(endDate, 'yyyy-MM-dd')}">마감일자</td>
+                                <td class="align-middle">
+                                    <span class="badge bg-warning" data-th-text="*{theme.themeName}">테마이름</span>
+                                </td>
+                                <!--                            <td class="align-middle">-->
+                                <!--                                <div class="avatar-group">-->
+                                <!--                                    <span class="avatar avatar-sm" data-th-each="recruitMember : *{applicants}"-->
+                                <!--                                          data-th-object="${recruitMember}">-->
+                                <!--                                      <img alt="avatar"-->
+                                <!--                                           data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=m,w=40,h=40,ttype=jpg)}"-->
+                                <!--                                           class="rounded-circle">-->
+                                <!--                                    </span>-->
+                                <!--                                </div>-->
+                                <!--                            </td>-->
+                                <td class="align-middle text-dark" data-th-text="|*{current} / *{recruitTotal}|">1 / 4</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div data-th-replace="footer :: footer">꼬리말</div>
 </body>
 
 <script>
-  var = repeatCount = 3;
+    // 각 카드 누르면 해당 링크로 이동
+    $('.card').each(function() {
+        $(this).click(function() {
+            window.location.href = '/review/views?reviewBoardId='+ $(this).find('.reviewBoardId').val();
+        });
+    });
 
-  var cardContent = `
-    <div class="col">
-            <div class="card shadow-sm">
-              <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg>
-              <div class="card-body">
-                <p class="card-text">This is a wider card with supporting text below as a natural lead-in to additional content. This content is a little bit longer.</p>
-                <div class="d-flex justify-content-between align-items-center">
-                  <div class="btn-group">
-                    <a data-th-href="@{review/listByCreatedDate}">
-                      <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-                    </a>
-                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
-                  </div>
-                  <small class="text-body-secondary">9 mins</small>
-                </div>
-              </div>
-            </div>
-    </div>
+    // 각 카드 누르면 해당 링크로 이동
+    $('.more-new-review').click(function() {
+        window.location.href = '/review/list';
+    });
 
-  `;
+    // 각 카드 누르면 해당 링크로 이동
+    $('.more-like-review').click(function() {
+        window.location.href = '/review/listByLikeCount';
+    });
 
-  function createAndAppendCards() {
-    var = cardContainer = document.getElementById('cardContainer');
-    for (var i = 0; i < repeatCount; i++) {
-      cardContainer.innerHTML += cardContent;
-    }
-  }
+    // 각 카드 누르면 해당 링크로 이동
+    $('.more-hot-review').click(function() {
+        window.location.href = 'review/listByViews';
+    });
 
-
-  window.onload = function() {
-    createAndAppendCards();
-  };
-
+    $(document).ready(function(){
+        $('.recruit-selector').click(function(){
+            window.location.href = '/recruit/view?recruitBoardId='+ $(this).find('.recruitBoardId').text();
+        });
+    });
 </script>
-
-<!--<div class="footer" data-th-replace="footer :: footer">꼬리말</div>-->
-
 </html>

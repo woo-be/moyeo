@@ -55,8 +55,8 @@ public class DefaultMemberService implements MemberService {
 
   // 회원 탈퇴
   @Override
-  public int delete(int no) {
-    return memberDao.delete(no);
+  public int delete(Member member) {
+    return memberDao.delete(member);
   }
 
 

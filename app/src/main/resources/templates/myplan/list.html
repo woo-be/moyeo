@@ -39,7 +39,9 @@
 
 <div class="d-flex justify-content-around pb-3">
 <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-<div id='calendar' value="캘린더"></div>
+
+<div id='calendar'></div>
+
 </div>
 <!--<div class="container">-->
 <!--  <tr data-th-each="recruitboard : ${list}" data-th-object="${recruitboard}">-->
@@ -62,6 +64,7 @@
 <script type="text/javascript">
   var calendarEl = document.getElementById('calendar');
   var calendar = new FullCalendar.Calendar(calendarEl, {
+    locale: 'kr', // 언어를 한국어로 바꾸는 옵션
     events: function(info, successCallback) {
 
       // 일정 리스트 불러오기
@@ -83,6 +86,19 @@
         }
         successCallback(events); // 3이벤트 데이터를 FullCalendar에 전달
       });
+    },
+      dayCellContent: function (info) { // 1일 -> 1로 바꾸는 옵션
+        var number = document.createElement("a");
+        number.classList.add("fc-daygrid-day-number");
+        number.innerHTML = info.dayNumberText.replace("일", '').replace("日","");
+        if (info.view.type === "dayGridMonth") {
+          return {
+            html: number.outerHTML
+          };
+        }
+        return {
+          domNodes: []
+        };
     }
   });
 

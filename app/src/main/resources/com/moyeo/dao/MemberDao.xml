@@ -26,8 +26,17 @@
 
 
   <!-- 회원 정보 삭제 (회원탈퇴) -->
-  <delete id="delete" parameterType="int">
-    delete from member where member_id=#{value}
+  <delete id="delete" parameterType="Member">
+    update member set
+      email=#{email},
+      password=#{password},
+      name=#{name},
+      introduce=#{introduce},
+      photo=#{photo},
+      phone_number=#{phoneNumber},
+      birth_date=#{birthdate}
+    where
+      member_id=#{memberId}
   </delete>
 
 

@@ -448,7 +448,7 @@ public class ReviewBoardController {
       pageNo = numOfPage;
     }
 
-    model.addAttribute("list", reviewBoardService.findByLikeCount(pageNo, pageSize, regionId, themeId, filter, keyword));
+    model.addAttribute("list", reviewBoardService.findByViews(pageNo, pageSize, regionId, themeId, filter, keyword));
     model.addAttribute("filter", filter);
     model.addAttribute("keyword", keyword);
     model.addAttribute("regionId", regionId);
