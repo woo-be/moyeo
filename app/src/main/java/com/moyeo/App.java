@@ -57,6 +57,7 @@ public class App {
     @GetMapping("/homedemo2")
     public void homedemo2() {
 
+    }
     @GetMapping("/originalhome")
     public void newhome(Model model) {
 
