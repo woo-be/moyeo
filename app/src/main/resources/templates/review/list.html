@@ -85,6 +85,13 @@
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
     }
+    .title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
 
   </style>
 </head>
@@ -138,7 +145,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 data-th-text="*{title}">제목입니다</h5>
+                  <h5 class="title" data-th-text="*{title}">제목입니다</h5>
                   <span class="d-flex justify-content-between">
                     <span data-th-text="*{writer.nickname}">닉네임</span>
                   </span>
