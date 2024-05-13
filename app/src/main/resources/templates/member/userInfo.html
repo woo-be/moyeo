@@ -27,37 +27,68 @@
   .footer {
     position: static;
   }
+  .card {
+    width: 70%;
+    padding: 1%;
+    padding-bottom: 20px;
+    border: 1px solid #ccc;
+    text-align: center;
+  }
   </style>
 </head>
 
 <body>
 <div data-th-replace="header :: header">머리말</div>
 
-
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-3">
-      <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-    </div>
-    <div class="col-md-9">
-      <div class="myInfo">
-        <h1>회원 정보 수정</h1>
-        <form action="#" data-th-action="@{update}" data-th-object="${session.loginUser}"
-              enctype='multipart/form-data'
-              method='post'>
-          <div class="table-responsive" data-th-if="${session.loginUser != null}">
-              <div class="form-group">
-                <strong>사진</strong>
-                <div id="image_container">
-                <a data-th-if="${session.loginUser.photo != null}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
-                  <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=300,h=300,align=4,ttype=jpg)}">
-                </a><br>
-                <a data-th-unless="${session.loginUser.photo != null}" href='/img/default-photo.jpeg'>
-                  <img height='80px' src='/img/default-photo.jpeg'>
-                </a><br>
-                </div>
-                <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file">
+<div class="d-flex justify-content-around pb-3">
+  <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+  <div class="card">
+    <div class="myInfo">
+      <h1>회원 정보 수정</h1>
+      <form action="#" data-th-action="@{update}" data-th-object="${session.loginUser}"
+            enctype='multipart/form-data'
+            method='post'>
+        <div class="table-responsive" data-th-if="${session.loginUser != null}">
+            <div class="form-group">
+              <strong>사진</strong>
+              <div id="image_container">
+              <a data-th-if="${session.loginUser.photo != null}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
+                <img data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/member/' + *{photo}(type=f,w=300,h=300,align=4,ttype=jpg)}">
+              </a><br>
+              <a data-th-unless="${session.loginUser.photo != null}" href='/img/default-photo.jpeg'>
+                <img height='80px' src='/img/default-photo.jpeg'>
+              </a><br>
               </div>
+              <input type="file" id="file" accept="image/*" onchange="setThumbnail(event);" name="file">
+            </div>
+              <div class="form-group">
+                <input type="hidden" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
+              </div>
+              <div class="form-group">
+                <strong>이메일</strong>
+                <input type="text" name="email" data-th-value="*{email}" class="form-control" style="width:300px;" readonly>
+              </div>
+              <div class="form-group">
+                <strong>이름</strong>
+                <input type="text" name="name" data-th-value="*{name}" class="form-control" style="width:300px;">
+              </div>
+              <div class="form-group">
+                <strong>닉네임</strong>
+                <input type="text" name="nickname" data-th-value="*{nickname}" class="form-control" style="width:300px;">
+              </div>
+              <div class="form-group">
+                <strong>휴대폰 번호</strong>
+                <input type="text" name="phoneNumber" data-th-value="*{phoneNumber}" class="form-control" style="width:300px;">
+              </div>
+              <div class="form-group">
+                <strong>생일</strong>
+                <input type="text" name="birthdate" data-th-value="*{birthdate}" class="form-control" style="width:300px;">
+              </div>
+              <div class="form-group">
+                <strong>자기소개</strong>
+                <input type="text" name="introduce" data-th-value="*{introduce}" class="form-control" style="width:300px;">
+              </div>
+
                 <div class="form-group">
                   <input type="hidden" id="memberId" name="memberId" data-th-value="*{memberId}" class="form-control" style="width:300px;" readonly>
                 </div>
@@ -94,21 +125,20 @@
             <p>No member information found.</p>
           </div>
 
-          <script>
-            function setThumbnail(event) {
-                var reader = new FileReader();
-                reader.onload = function(event) {
-                    var img = document.createElement("img");
-                    img.setAttribute("src", event.target.result);
-                    img.setAttribute("style", "width: 300px; height: 300;");
-                    document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
-                    document.getElementById("image_container").appendChild(img);
-                };
-                reader.readAsDataURL(event.target.files[0]);
-            }
-          </script>
-        </form>
-      </div>
+        <script>
+          function setThumbnail(event) {
+              var reader = new FileReader();
+              reader.onload = function(event) {
+                  var img = document.createElement("img");
+                  img.setAttribute("src", event.target.result);
+                  img.setAttribute("style", "width: 300px; height: 300;");
+                  document.getElementById("image_container").innerHTML = '';    // 이전에 업로드된 이미지 삭제
+                  document.getElementById("image_container").appendChild(img);
+              };
+              reader.readAsDataURL(event.target.files[0]);
+          }
+        </script>
+      </form>
     </div>
   </div>
 </div>
