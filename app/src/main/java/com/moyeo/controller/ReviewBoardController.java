@@ -103,7 +103,7 @@ public class ReviewBoardController {
   public void list(
       @RequestParam(required = false) String filter,
       @RequestParam(required = false) String keyword,
-      @RequestParam(defaultValue = "6") int pageSize,
+      @RequestParam(defaultValue = "8") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
       @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
