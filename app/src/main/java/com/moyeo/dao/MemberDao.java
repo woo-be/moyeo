@@ -12,8 +12,8 @@ public interface MemberDao {
   // 회원가입 데이터 넣을때
   void add(Member member);
 
-  // memberid 찾을때
-  int delete(int no);
+  // 회원 삭제
+  int delete(Member member);
 
   // xml에서 select list 받을때
   List<Member> findAll();

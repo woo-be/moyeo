@@ -24,8 +24,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
     body {
       padding-left: 10px;
+      font-family: 'LINESeedKR-Rg';
     }
     #title{
       padding-bottom: 10px;
@@ -69,41 +76,42 @@
         <input id="recruitBoardId" data-th-value="*{recruitBoardId}" readonly name='recruitBoardId' type='hidden' value='100'>
 
         <!-- 가운데정렬 -->
-        <div class="d-flex justify-content-center w-100 border border-2 p-3">
+        <div class="d-flex justify-content-center w-100 p-3">
 
           <!-- 세로정렬 -->
           <div class="d-flex w-75 flex-column">
 
             <!-- title -->
-            <div id="title" class="d-flex flex-row bd-highlight border-bottom align-items-center pt-3 pb-3">
-              <!-- left -->
-              <div class="d-flex flex-row bd-highlight mb-3 me-auto p-1 align-items-center w-75 mw-75">
-                <div class="ps-4 me-2">
-                  <h1 class="text-break" data-th-text="*{title}">제목</h1>
+            <div id="title" class="d-flex flex-column bd-highlight border-bottom py-2">
+              <!-- top -->
+              <div class="d-flex flex-row bd-highlight mb-2 me-auto p-1 align-items-center w-75 mw-75">
+                <div class="ps-4 me-3">
+                  <h3 class="text-break" data-th-text="*{title}">제목</h3>
                 </div>
-                <div class="border border-2 rounded-3 ms-3 p-2 align-items-center">
-                  <span data-th-if="*{state == true}">모집중</span>
-                  <span data-th-if="*{state == false}">모집완료</span>
+                <div class="mb-3">
+                  <span class="text-center column-state badge bg-warning" data-th-if="*{state == true}">모집중</span>
+                  <span class="text-center column-state badge bg-secondary" data-th-if="*{state == false}">모집완료</span>
                 </div>
               </div>
 
-              <!-- right -->
-              <div class="d-flex flex-column bd-highlight me-4">
-                <div class="d-flex flex-column justify-content-end bd-highlight me-2">
-                  <div class="text-end" style="width:150px">
-                    작성일: <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+              <!-- bottom -->
+              <div class="ps-4 ms-2 me-3 d-flex flex-row justify-content-between bd-highlight me-4">
+                <div class="d-flex flex-row bd-highlight me-2 mt-2">
+                  <div class="me-2" style="font-size: 14px;">
+                    <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
                   </div>
-                  <div class="text-end">
-                    조회수: <span data-th-text="*{views}"></span>
+                  <div style="font-size: 14px;">
+                    조회수 <span data-th-text="*{views}"></span>
                   </div>
                 </div>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex">
                   <div class="d-flex flex-row bd-highlight">
-                    <div class="d-flex flex-row bd-highlight p-1">
-                      <button class="btn btn-primary m-1" >수정</button>
+                    <div class="d-flex flex-row bd-highlight">
+                      <button class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
                     </div>
-                    <div class="d-flex flex-row bd-highlight p-1">
-                      <button type="button" class="btn btn-danger m-1" data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
+                    <div class="d-flex flex-row bd-highlight">
+                      <button type="button" class="btn btn-danger m-1 h-75" style="font-size: 14px;"
+                              data-th-onclick="'deleteRecruit(' + *{recruitBoardId} + ')'">삭제</button>
                     </div>
                   </div>
                 </div>
@@ -148,7 +156,7 @@
             </div>
 
             <!-- buttons -->
-            <div class="d-flex flex-row bd-highlight mb-3 justify-content-center">
+            <div class="d-flex flex-row bd-highlight mt-4 pb-5 justify-content-center border-bottom border-2">
               <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
                 <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
                   <button type="button" class="btn btn-primary m-1" data-th-onclick="applyModal()">신청하기</button></a>
@@ -161,7 +169,7 @@
               </div>
               <div class="m-1">
                 <!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
-                <a type="button" class="btn btn-primary m-1" data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" href="scrap.html">즐겨찾기</a>
+                <a type="button" class="btn btn-primary m-1" data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" style="font-size: 14px;" href="scrap.html">즐겨찾기</a>
               </div>
             </div>
 
@@ -170,7 +178,7 @@
       </form>
     </div>
 
-    <div class="d-flex justify-content-center bd-highlight border border-2 p-4 mt-4">
+    <div class="d-flex justify-content-center bd-highlight p-2">
       <div class="w-75">
         <div class="d-flex flex-column">
           <!-- view comment -->
@@ -187,8 +195,8 @@
                       <div class="d-flex flex-row bd-highlight mb-1">
                         <div class="bd-highlight me-auto" data-th-replace="recruit/commentform :: commentusername"></div>
                         <div class="d-flex flex-row bd-highlight ms-auto" data-th-if="*{member.memberId} == ${loginUser.memberId}">
-                          <button id="editBtn" class="editBtn btn btn-primary m-1">수정</button>
-                          <button id="deleteBtn" class="deleteBtn btn btn-danger m-1">삭제</button>
+                          <button id="editBtn" class="editBtn btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
+                          <button id="deleteBtn" class="deleteBtn btn btn-danger m-1 h-75" style="font-size: 14px;">삭제</button>
                         </div>
                       </div>
                       <div class="d-flex flex-row bd-highlight">
@@ -212,8 +220,8 @@
                           <textarea id="comment-update" class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break" data-th-text="*{content}" name="content"></textarea>
                         </div>
                         <div class="d-flex flex-row h-50">
-                          <button id="submitBtn" type="submit" class="btn btn-primary m-1">전송</button>
-                          <button id="cancelBtn" type="button" class="btn btn-danger m-1">취소</button>
+                          <button id="submitBtn" type="submit" class="btn btn-primary m-1 h-75" style="font-size: 14px;">전송</button>
+                          <button id="cancelBtn" type="button" class="btn btn-danger m-1 h-75" style="font-size: 14px;">취소</button>
                         </div>
                       </div>
                     </div>
@@ -225,7 +233,7 @@
 
           <!-- add comment -->
           <form id="commentForm" data-th-action="@{/recruit/comment/add}" action="view.html" data-th-object="${loginUser}" method='post'>
-            <div class="d-flex flex-row bd-highlight border border-2 p-3 ms-2">
+            <div class="d-flex flex-row bd-highlight p-3 ms-2">
               <input data-th-value="${recruitboard.recruitBoardId}" name='recruitBoardId' type="hidden">
               <div class="p-2 bd-highlight">
                 <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
@@ -242,8 +250,8 @@
                 </div>
                 <div class="d-flex flex-row d-flex bd-highlight" >
                   <textarea id="content" class="d-flex p-2 flex-grow-1 bd-highlight form-control text-break me-1" name="content" type="text"></textarea>
-                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center mt-5 mb-5" data-th-onclick="addRecruitComment()" >
-                    <span class="ms-1 me-1">전송</span>
+                  <button id="submit" type="button" class="p-2 bd-highlight btn btn-primary ms-1 align-items-center" style="height: 40px" data-th-onclick="addRecruitComment()" >
+                    <span class="ms-1 me-1" style="font-size: 14px;">전송</span>
                   </button>
                 </div>
               </div>

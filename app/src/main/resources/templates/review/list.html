@@ -10,25 +10,35 @@
 <!--  <script src="/webjars/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>-->
 
   <!-- Bootstrap core CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <!-- JQuery -->
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
   <style>
+
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
+    body {
+      font-family: 'LINESeedKR-Rg';
+    }
+
     aside #reviewTheme {
       display:flex;
       justify-content:space-between;
       flex-wrap:wrap;
-      width: 700px;
+      width: 640px;
       margin-right: 35px;
     }
     aside #reviewTheme li{
       display:flex;
       justify-content:center;
 
-      width: 90px;
+      width: 80px;
       border: 1px solid rgb(184, 184, 184) ;
       padding: 3px 7px 3px 7px;
       border-radius: 45px;
@@ -36,6 +46,9 @@
 
       margin-left: 10px;
       margin-right: 10px;
+    }
+    aside #reviewTheme li a{
+      font-size: 14px;
     }
     aside #reviewRegion li {
       margin-top: 10px;
@@ -49,16 +62,18 @@
     /* 지역, 테마 활성화 클래스 */
     a.active {
       color: blue;
-      text-decoration: underline;
+      /*text-decoration: underline;*/
     }
     #reviewRegionList{
       width:10%;
+      min-width: 150px;
+      max-width: 150px;
     }
 
     .card {
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 효과 */
       transition: 0.3s; /* 애니메이션 효과를 위한 transition */
-      border-radius: 20px; /* 모서리 둥글기 조절 */
+      /*border-radius: 20px; !* 모서리 둥글기 조절 *!*/
     }
 
     /* 마우스 오버 시 그림자 강조 */
@@ -83,19 +98,19 @@
   </div>
 
   <!-- 컨텐트 -->
-  <div class="d-flex p-3 justify-content-center align-items-start">
+  <div class="d-flex justify-content-center align-items-start py-3">
 
     <!-- 지역 -->
     <div id="reviewRegionList">
-      <div class="border rounded-3 mx-2">
+      <div class="border mx-2">
         <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column border rounded-3 p-2 col-7">
+    <div class="d-flex flex-column col-7 border p-2" style="min-width: 700px">
 
-      <p class="text-center fs-2 fw-bold pt-4 pb-3">여행 후기게시판</p>
+      <h4 class="text-center fw-bold pt-4 pb-3">여행 후기 게시판</h4>
 
       <!-- 테마 -->
       <div class="d-flex justify-content-center">
@@ -109,23 +124,31 @@
         <div class="row row-cols-1 row-cols-md-3 g-3">
           <div class="col" data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">
             <a class="text-decoration-none link-dark" data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-          <div class="card">
+              <div class="card border-0">
                 <!-- 사진 -->
-                <img class="card-img-top border-bottom" data-th-if="*{photos[0].photo}" alt="여행 사진"
+                <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
                          data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
                 <!-- 기본 사진 -->
-                <img class="card-img-top border-bottom" data-th-unless="*{photos[0].photo}"
+                <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"
                          data-th-src="@{/img/default-review-photo.png}"
                          src="/static/img/default-review-photo.png" alt="여행 사진">
                 <!-- 카드 내용 -->
+                <div class="card-header text-muted d-flex justify-content-between">
+                  <span data-th-text="*{regionName}" class="mt-1">지역</span>
+                </div>
+
                 <div class="card-body">
                   <h5 data-th-text="*{title}">제목입니다</h5>
-                    <span data-th-text="*{regionName}">지역</span><br>
-                    조회수: <span data-th-text="*{views}">조회수</span><br>
-                    좋아요수: <span data-th-text="*{likeCount}">좋아요수</span><br>
-                  작성자: <span data-th-text="*{writer.nickname}">홍길동</span><br>
-                  작성일: <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
-                  </div>
+                  <span class="d-flex justify-content-between">
+                    <span data-th-text="*{writer.nickname}">닉네임</span>
+                  </span>
+                  <span class="d-flex justify-content-between">
+                    <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
+                    <span>조회수 <span data-th-text="*{views}">조회수</span></span>
+                  </span>
+
+                  <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>
+                </div>
               </div>
             </a>
           </div>
@@ -138,14 +161,16 @@
           <ul class="pagination">
             <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
                 class="page-link">Previous</a></li>
-            <li class="page-item"><a class="page-link"
-                                     data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
-                                     data-th-if="${pageNo > 1}">Previous</a></li>
+            <li class="page-item">
+              <a class="page-link"
+              data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+              data-th-if="${pageNo > 1}">Previous</a></li>
             <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
-            <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}"><a class="page-link"
-                                                                                                                href="#"
-                                                                                                                data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
-                                                                                                                data-th-text="${pageButton}"></a>
+            <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}">
+              <a class="page-link"
+              href="#"
+              data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+              data-th-text="${pageButton}"></a>
             </li>
             <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
             </li>

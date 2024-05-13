@@ -16,18 +16,29 @@
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
   <style>
+
+    @font-face {
+        font-family: 'LINESeedKR-Rg';
+        src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+        src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+        font-style: normal;
+    }
+    body {
+      font-family: 'LINESeedKR-Rg';
+    }
+
     aside #recruitTheme {
       display:flex;
       justify-content:space-between;
       flex-wrap:wrap;
-      width: 700px;
+      width: 640px;
       margin-right: 35px;
     }
     aside #recruitTheme li{
       display:flex;
       justify-content:center;
 
-      width: 90px;
+      width: 80px;
       border: 1px solid rgb(184, 184, 184) ;
       padding: 3px 7px 3px 7px;
       border-radius: 45px;
@@ -35,6 +46,9 @@
 
       margin-left: 10px;
       margin-right: 10px;
+    }
+    aside #recruitTheme li a{
+      font-size: 14px;
     }
     aside #recruitRegion li {
       margin-top: 10px;
@@ -51,7 +65,7 @@
       white-space: nowrap;
     }
     .column-title {
-      text-align: center;
+      /*text-align: center;*/
       width: 40%;
       max-width: 300px;
       min-width: 40%;
@@ -78,14 +92,17 @@
       white-space: nowrap;
     }
 
+    #recruitRegionList{
+      width:10%;
+      min-width: 150px;
+      max-width: 150px;
+    }
+
     /* 지역, 테마 활성화 클래스 */
     a.active {
       color: blue;
+      /*text-decoration: underline;*/
     }
-    #recruitRegionList{
-      width:10%;
-    }
-
     a {
       color: rgb(78, 78, 78);
       text-decoration-line: none;
@@ -93,12 +110,12 @@
   </style>
 </head>
 
-<body class="d-flex flex-column">
+<body class="container-fluid">
 
-<!-- 헤더 -->
-<div>
-  <div data-th-replace="header :: header">머리말</div>
-</div>
+  <!-- 헤더 -->
+  <div class="row">
+    <div data-th-replace="header :: header">머리말</div>
+  </div>
 
   <!-- 컨텐트 -->
   <div class="d-flex justify-content-center align-items-start py-3">
@@ -106,22 +123,19 @@
     <!-- 지역 -->
     <div id="recruitRegionList">
       <div class="border mx-2">
-          <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
+        <div data-th-replace="recruit/recruitRegion :: recruitRegionList">지역</div>
       </div>
     </div>
 
     <!-- 게시판 -->
-    <div class="d-flex flex-column col-7 border p-2">
+    <div class="d-flex flex-column col-7 border p-2" style="min-width: 700px">
 
-      <p class="text-center fs-2 fw-bold pt-4 pb-3">멤버 모집게시판</p>
+      <h4 class="text-center fw-bold pt-4 pb-3">멤버 모집 게시판</h4>
 
       <!-- 테마 -->
       <div class="d-flex justify-content-center">
-        <div fName="regionTheme" class="d-flex mx-2">
-          <div class="m-2">
-            <div class="recruitThemeList" data-th-replace="recruit/recruitTheme :: recruitThemeList">테마</div>
-          </div>
-        </div>
+        <div class="recruitThemeList" data-th-replace="recruit/recruitTheme :: recruitThemeList">테마</div>
+
       </div>
 
       <!-- 리스트 -->
@@ -133,7 +147,7 @@
           <th class="col-1 text-center column-writer">작성자</th>
           <th class="col-1 text-center column-present">모집현황</th>
           <th class="col-1 text-center column-state">모집상태</th>
-          <th class="col-1 text-center column-createdDate">작성일자</th>
+<!--          <th class="col-1 text-center column-createdDate">작성일자</th>-->
           <th class="col-1 text-center column-hits">조회수</th>
         </tr>
         </thead>
@@ -142,8 +156,8 @@
           <td class="text-center column-no" data-th-text="*{recruitBoardId}">1</td>
           <!--son, 04.09 , data-th-href를 viewCountUp으로 요청하게 끔 변경.-->
           <!-- viewCountUp에서 조회수를 증가시키고 view페이지로 리다이렉트하게끔 함 -->
-          <td class="text-center">
-            <a class="d-flex justify-content-center" data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" href="view.html">
+          <td>
+            <a class="d-flex " data-th-href="@{viewCountUp(recruitBoardId=*{recruitBoardId})}" href="view.html">
               <span class="column-title w-100" data-th-text="*{title}"></span>
             </a>
           </td>
@@ -155,7 +169,7 @@
               <span class="w-75 text-center column-state badge bg-secondary" data-th-if="*{state == false}">모집완료</span>
             </div>
           </td>
-          <td class="text-center column-createdDate col-2 text-truncate" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>
+<!--          <td class="text-center column-createdDate col-2 text-truncate" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>-->
           <!--data-th-value => data-th-text -->
           <td class="text-center column-hits" data-th-text="*{views}">12</td>
         </tr>

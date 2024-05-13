@@ -7,27 +7,41 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
   <style>
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
+    body {
+      padding-left: 10px;
+      font-family: 'LINESeedKR-Rg';
+    }
     .container {
       width: 70%;
       margin-bottom:10px;
     }
+    /*a {*/
+    /*  color: rgb(78, 78, 78);*/
+    /*  text-decoration-line: none;*/
+    /*}*/
   </style>
 </head>
 <body style="text-align: center;">
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="container">
+<div class="py-3 container">
   <div class="mt-n22 px-6 container-fluid">
     <div class="mt-6 row">
       <div class="col-md-12 col-12">
-        <div class="card">
-          <div class="bg-white  py-4 card-header"><h4 class="mb-0">일정 관리</h4></div>
+        <div class="border border-1">
+          <h4 class="text-center fw-bold pt-4 pb-3 my-2">여행 후기 게시판</h4>
           <div class="table-responsive">
             <table class="text-nowrap mb-0 table">
               <thead class="table-light">
               <tr>
-                <th>게시물 번호</th>
+                <th>번호</th>
                 <th>제목</th>
                 <th>작성자</th>
                 <th>여행일자</th>
@@ -41,12 +55,10 @@
                   <td data-th-text="*{recruitBoardId}">1</td>
                   <td class="align-middle">
                     <div class="d-flex align-items-center">
-                      <a data-th-href="@{/recruitMember/calendar(recruitBoardId=*{recruitBoardId})}" href="calendar.html">
-                        <div class="work-info" style='board: 1px solid black; float:none'>
-                          <h4 data-th-text="*{title}">게시글제목</h4>
-                        </div>
-                      </a>
+                      <a data-th-href="@{/recruitMember/calendar(recruitBoardId=*{recruitBoardId})}"
+                         data-th-text="*{title}" href="calendar.html" style="font-size: 18px">게시글제목</a>
                     </div>
+
                   </td>
                   <td class="align-middle" data-th-text="*{writer.nickname}">작성자</td>
                   <td class="align-middle" data-th-text="*{startDate} +' ~ '+ *{endDate}" >여행일자</td>
@@ -72,4 +84,14 @@
         crossorigin="anonymous">
 </script>
 </body>
+<script>
+  $(document).ready(function() {
+
+    /* 현재 페이지에 해당하는 페이지 버튼을 찾아서 그 버튼의 클래스에 active를 추가,
+    현재 페이지가 어디인지 시각적으로 보이게 함. */
+    var link = document.getElementById("page[[${pageNo}]]");
+    console.log(link);
+    link.classList.add('active');
+  })
+</script>
 </html>
