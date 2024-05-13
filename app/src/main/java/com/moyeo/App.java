@@ -53,6 +53,10 @@ public class App {
 
     }
 
+
+    @GetMapping("/homedemo2")
+    public void homedemo2() {
+
     @GetMapping("/originalhome")
     public void newhome(Model model) {
 
@@ -67,5 +71,6 @@ public class App {
         model.addAttribute("listByLikeCountLimit3", reviewBoardService.findByLikeCountByLimit3());
         model.addAttribute("listByViewsLimit3", reviewBoardService.findByViewsByLimit3());
         model.addAttribute("listByCurrentLimit6", list);
+
     }
 }
