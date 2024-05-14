@@ -56,4 +56,6 @@ public interface ReviewBoardService {
   int updateComment(ReviewComment reviewComment);
 
   int deleteComment(int commentId);
+
+  List<ReviewBoard> findByCreatedDate2();
 }

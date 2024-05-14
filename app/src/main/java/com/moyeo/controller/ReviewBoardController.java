@@ -57,7 +57,7 @@ public class ReviewBoardController {
     model.addAttribute("themeId", 0);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    log.debug(loginUser);
+//    log.debug(loginUser);
     if (loginUser == null) {
       throw new MoyeoError("로그인 해주세요", "/auth/form");
     }
@@ -82,7 +82,7 @@ public class ReviewBoardController {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -246,7 +246,7 @@ public class ReviewBoardController {
     model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
-    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
+//    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
@@ -262,7 +262,7 @@ public class ReviewBoardController {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -282,7 +282,6 @@ public class ReviewBoardController {
   @PostMapping("updateForm")
   public void updateForm(ReviewBoard reviewBoard, Model model, HttpSession session)
       throws MoyeoError {
-    model.addAttribute("updateReviewBoard", reviewBoard);
 
     Member loginUser = (Member) session.getAttribute("loginUser");
     if (loginUser == null) {
@@ -293,13 +292,14 @@ public class ReviewBoardController {
     if (old == null) {
       throw new MoyeoError("번호가 유효하지 않습니다.", "/home");
     } else if (old.getWriter().getMemberId() != loginUser.getMemberId()) {
-      log.debug(old.getWriter());
       throw new MoyeoError("권한이 없습니다.", "view?reviewBoardId=" + reviewBoard.getReviewBoardId());
     }
-    log.debug(old.getTitle());
+
+    model.addAttribute("updateReviewBoard", reviewBoard);
 
     model.addAttribute("regionId", reviewBoard.getRegionId());
     model.addAttribute("old", old);
+    model.addAttribute("updateReviewBoard", old);
     model.addAttribute("themeId", reviewBoard.getThemeId());
   }
 
