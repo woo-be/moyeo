@@ -87,7 +87,7 @@
     }
     .title {
       overflow: hidden;
-      text-overflow: ellipsis;
+      text-overflow: ellipsis;  // 말줄임표 출력
       display: -webkit-box;
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -98,14 +98,10 @@
     }
   </style>
 </head>
+<div data-th-replace="header :: header">머리말</div>
 <body>
 
 <div class="container-fluid">
-
-  <!-- 헤더 -->
-  <div class="row">
-    <div data-th-replace="header :: header">머리말</div>
-  </div>
 
   <!-- 컨텐트 -->
   <div class="d-flex justify-content-center align-items-start py-3">

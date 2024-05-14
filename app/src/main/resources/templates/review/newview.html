@@ -31,14 +31,6 @@
       padding-left: 10px;
       font-family: 'LINESeedKR-Rg';
     }
-    body {
-        padding-left: 0px;
-    }
-
-<!--    .div-class {-->
-<!--      margin: 0 auto;-->
-<!--    }-->
-
     #content {
       display: flex;
       justify-content: center;
@@ -47,33 +39,10 @@
       height: 30%;
       margin: 0 auto;
     }
-
-    #comment-hr {
-      border: 1px solid black;
-      width:900px;
-      margin: 0 auto;
-    }
-
-<!--    #map {-->
-<!--      margin: 0 auto;-->
-<!--      width: 50%;-->
-<!--      height:400px;-->
-<!--      }-->
-
     #title{
       padding-bottom: 10px;
       margin-bottom: 20px;
     }
-
-    h6, span, button, a {
-      white-space: nowrap;
-    }
-
-    .maincontent {
-      width: 100%;
-      height: 100%;
-    }
-
     .form-item-div {
       margin-top: 5px;
       margin-bottom: 10px;
@@ -85,19 +54,29 @@
       padding-right:10px;
       margin-right:10px;
     }
+    h6, span, button, a {
+      white-space: nowrap;
+    }
+    .maincontent {
+      width: 100%;
+      height: 100%;
+    }
+    #summernote {
+      word-wrap:break-word;
+    }
+    .form-item-div-addr {
+      width:100px;
+    }
 
   </style>
 
 </head>
-<!--<body>-->
 <div data-th-replace="header :: header">머리말</div>
-
 <body data-th-object="${reviewBoard}">
 
 <div class="d-flex container-fluid bd-highlight mb-3 justify-content-center">
   <div class="w-75 justify-content-center" style="min-width:900px">
     <div class="d-flex flex-column bd-highlight">
-
       <form action="updateForm.html" data-th-action="@{updateForm}"
             enctype='multipart/form-data' method='post'>
         <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
@@ -165,14 +144,16 @@
                     </div>
                     <div class="d-flex flex-row">
                       <h6 class="form-item-div-name">주소</h6>
-                      <h6 style="width:150px" data-th-text="*{address}"></h6>
-                      <input id="addr" readonly type="hidden" name="address" >
+                      <h6 class="form-item-div-addr" data-th-text="*{address}"></h6>
+                      <!--                      <h6>-->
+                      <!--                        <input id="addr" readonly type="text" name="address">-->
+                      <!--                      </h6>-->
                     </div>
                   </div>
                   <div class="p-2 bd-highlight me-2 ms-auto">
                     <div id="map" style="width:300px;height:250px;"></div>
-                      <input id="latitude" readonly type="hidden" placeholder="검색한 위도" name="latitude">
-                      <input id="longitude" readonly type="hidden" placeholder="검색한 경도" name="longitude"><br>
+                    <input class="latitude" readonly type="hidden" placeholder="검색한 위도" name="latitude">
+                    <input class="longitude" readonly type="hidden" placeholder="검색한 경도" name="longitude"><br>
                   </div>
                 </div>
               </div>
@@ -195,7 +176,6 @@
             </div>
           </div>
         </div>
-
       </form>
     </div>
 
@@ -291,6 +271,15 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
+
+<script>
+  $(document).ready(function() {
+    let latitude = $('.latitude');
+    let longitude = $('.longitude');
+    console.log('latitude: ', latitude.val());
+    console.log('longitude: ', longitude.val());
+  });
+</script>
 <script>
   // 모든 editBtn 요소 찾기
   var editBtns = document.querySelectorAll("#editBtn");
@@ -397,7 +386,6 @@
   }
 
 </script>
-
 <script>
 
   // summernote 사용 설정
@@ -589,37 +577,37 @@
 
 </script>
 <script>
-// 후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청
-  function reviewDelete(reviewBoardId){
-    var reply = confirm("후기를 삭제 하겠습니까?");
-    if (reply) {
-      $.ajax({
-        url: "delete?reviewBoardId="+reviewBoardId,
-        type: 'GET',
-        contentType: false,
-        processData: false
-      })
-      .done(function(responseUrl) {
-        // 권한을 체크
-        if(responseUrl == '-1'){
-          window.alert("로그인이 필요합니다.");
-          window.location.href = '/auth/form';
-        }else if(responseUrl == '-2'){
-          window.alert("번호가 옳지 않습니다.");
-          window.location.href = 'view?reviewBoardId='+reviewBoardId;
-        }else if(responseUrl == '-3'){
-          window.alert("권한이 없습니다.");
-          window.location.href = 'view?reviewBoardId='+reviewBoardId;
-        }else{
-          window.alert("삭제되었습니다.");
-          window.location.href = responseUrl;
-        }
-      })
+  // 후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청
+    function reviewDelete(reviewBoardId){
+      var reply = confirm("후기를 삭제 하겠습니까?");
+      if (reply) {
+        $.ajax({
+          url: "delete?reviewBoardId="+reviewBoardId,
+          type: 'GET',
+          contentType: false,
+          processData: false
+        })
+        .done(function(responseUrl) {
+          // 권한을 체크
+          if(responseUrl == '-1'){
+            window.alert("로그인이 필요합니다.");
+            window.location.href = '/auth/form';
+          }else if(responseUrl == '-2'){
+            window.alert("번호가 옳지 않습니다.");
+            window.location.href = 'view?reviewBoardId='+reviewBoardId;
+          }else if(responseUrl == '-3'){
+            window.alert("권한이 없습니다.");
+            window.location.href = 'view?reviewBoardId='+reviewBoardId;
+          }else{
+            window.alert("삭제되었습니다.");
+            window.location.href = responseUrl;
+          }
+        })
+      }
     }
-  }
-<!--  function addReviewComment(){-->
-<!--    alert('댓글이 등록되었습니다.');-->
-<!--  }-->
+  <!--  function addReviewComment(){-->
+  <!--    alert('댓글이 등록되었습니다.');-->
+  <!--  }-->
 </script>
 
 

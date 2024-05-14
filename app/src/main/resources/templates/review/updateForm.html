@@ -33,7 +33,6 @@
       margin-top: 5px;
       margin-bottom: 10px;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgb(206, 206, 206);
     }
     .form-item-div-name {
       margin-left:20px;
@@ -47,7 +46,7 @@
 <div data-th-replace="header :: header">머리말</div>
 
 <div class="d-flex container-fluid justify-content-center">
-  <div class="d-flex flex-column border border-2 w-75" style="min-width:900px">
+  <div class="d-flex flex-column w-75" style="min-width:900px">
     <!-- 페이지 제목 -->
     <div class="d-flex justify-content-center border-bottom border-2 pt-3 pb-3 mt-2 mb-4">
       <h2>후기 수정</h2>
@@ -59,8 +58,8 @@
               method='post' enctype='multipart/form-data'>
           <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
           <div class="form-item-div d-flex flex-row align-items-center pb-2">
-            <h6 class="form-item-div-name">제목</h6>
-            <input class="form-control w-50" id="title" name="title" type="text" data-th-value="${old.title}" value="제목입니당.">
+            <h6 class="form-item-div-name mt-2">제목</h6>
+            <input class="form-control w-50" id="title" name="title" type="text" data-th-value="*{title}" value="제목입니당.">
           </div>
           <div data-th-replace="review/regionList :: regionList">지역리스트</div>
           <div data-th-replace="review/themeList :: themeList">테마리스트</div>
@@ -86,12 +85,24 @@
             <textarea id="summernote" name="content" data-th-text="*{content}" style="display: none;"></textarea>
           </div>
 
-          <div class="d-flex justify-content-center">
-            <button class="btn btn-primary m-2">변경</button>
-            <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}">
-              <button type="button" class="btn btn-danger m-2">취소</button>
-            </a>
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+              <button id="updateBtn" class="btn btn-primary m-2">변경</button>
+              <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}">
+                <button type="button" class="btn btn-danger m-2">취소</button>
+              </a>
+            </div>
+            <div class="d-flex justify-content-center">
+              <div>
+                <div id="title-error" class="invalid-feedback"></div>
+                <div id="region-error" class="invalid-feedback"></div>
+                <div id="theme-error" class="invalid-feedback"></div>
+                <div id="addr-error" class="invalid-feedback"></div>
+                <div id="content-error" class="invalid-feedback"></div>
+              </div>
+            </div>
           </div>
+
         </form>
       </div>
     </div>
@@ -102,39 +113,71 @@
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 
+<script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
+  var btn = document.getElementById("updateBtn");
+
+  var title = document.getElementById("title");
+  var region = document.getElementById("regionId");
+  var theme = document.getElementById("themeId");
+  var addr = document.getElementById("addr");
+  var content = document.getElementById("summernote");
+
+  var titleError = document.getElementById("title-error");
+  var regionError = document.getElementById("region-error");
+  var themeError = document.getElementById("theme-error");
+  var addrError = document.getElementById("addr-error");
+  var contentError = document.getElementById("content-error");
+
+  function err(data, dataError, event, msg) {
+    if(data.value === '' || data.value == 0) {
+      dataError.innerHTML = msg;
+      dataError.style.display = "block";
+      event.preventDefault();
+    }else {
+      dataError.innerHTML = ""; // 오류 메세지 지우기
+      dataError.style.display = "none"; // 오류 메세지 숨기기
+    }
+  }
+
+  btn.addEventListener('click', function(event) {
+    err(title, titleError, event, "제목을 입력하세요!");
+    err(theme, themeError, event, "테마를 선택하세요!");
+    err(region, regionError, event, "지역을 선택하세요!");
+    err(addr, addrError, event, "주소를 입력하세요!");
+    err(content, contentError, event, "내용을 입력하세요!");
+  });
+</script>
+
 <script>
 
   $(document).ready(function() {
   $('#summernote').summernote({
-      height: 600,
-      width: 850,
-  callbacks: {
-    onInit: function() {
-      console.log('Summernote is launched');
-    },
-    onImageUpload: function(photos) {
-      let data = new FormData();
-      for (const photo of photos) {
-        data.append("photos", photo);
-        }
-        $.ajax({
-          url: 'photo/upload',
-          type: 'POST',
-          dataType: 'json',
-          contentType: false,
-          processData: false,
-          data: data
-        })
-        .done(function(result) {
-           for (const reviewPhoto of result.reviewPhotos) {
-              $('#summernote').summernote('insertImage',
-                'https://kr.object.ncloudstorage.com/moyeo-bucket/review/'
-                + reviewPhoto.photo);
+    height: 600,
+    width: 850,
+    callbacks: {
+      onImageUpload: function(photos) {
+        let data = new FormData();
+        for (const photo of photos) {
+          data.append("photos", photo);
           }
-        });
+          $.ajax({
+            url: 'photo/upload',
+            type: 'POST',
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            data: data
+          })
+          .done(function(result) {
+             for (const reviewPhoto of result.reviewPhotos) {
+                $('#summernote').summernote('insertImage',
+                  'https://kr.object.ncloudstorage.com/moyeo-bucket/review/'
+                  + reviewPhoto.photo);
+            }
+          });
+        }
       }
-    }
-  });
+    });
   });
 
 </script>
@@ -229,7 +272,7 @@
 
           infoWindow.setContent([
               '<div style="padding:10px;min-width:350px;width:350px;line-height:150%;">',
-              '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
+              '<h5 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',
               htmlAddresses.join('<br />'),
               '</div>'
           ].join('\n'));
@@ -240,6 +283,9 @@
   }
 
   function initGeocoder() {
+
+      searchAddressToCoordinate('[[${reviewBoard.address}]]');
+
       map.addListener('click', function(e) {
           searchCoordinateToAddress(e.coord);
       });
@@ -257,8 +303,6 @@
 
           searchAddressToCoordinate($('#address').val());
       });
-
-      searchAddressToCoordinate('[[${reviewBoard.address}]]');
   }
 
   function makeAddress(item) {
@@ -336,14 +380,7 @@
   }
 
   naver.maps.onJSContentLoaded = initGeocoder;
-  <!--  -->
-</script>
 
-<script>
-  var title = document.getElementById("title");
-  console.log(title.value);
 </script>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>
