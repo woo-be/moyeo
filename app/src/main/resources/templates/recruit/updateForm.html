@@ -455,7 +455,7 @@
     let e = err(theme, themeError, event, "테마를 선택하세요!");
     let f = err(region, regionError, event, "지역을 선택하세요!");
     let sum = a+b+c+d+e+f;
-    if(sum > 5){
+    if(sum == 6){
       updateRecruit([[${board.recruitBoardId}]]);
     }
   });

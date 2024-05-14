@@ -26,6 +26,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -237,11 +238,13 @@ public class ReviewBoardController {
   }
 
   @PostMapping("update")
+  @ResponseBody
   public String update(
-      ReviewBoard reviewBoard,
+      @RequestBody ReviewBoard reviewBoard,
       HttpSession session,
       Model model,
       SessionStatus sessionStatus) throws Exception {
+    log.debug("업데이트 실행됨!!!!!!!!!!!!!!");
 
     model.addAttribute("updateReviewBoard", reviewBoard);
 
@@ -253,7 +256,7 @@ public class ReviewBoardController {
       reviewPhotos = new ArrayList<>();
     }
 
-    if (old.getPhotos().getFirst().getPhoto() != null) {
+    if (old.getPhotos().size() > 0) {
       reviewPhotos.addAll(old.getPhotos());
     }
 
@@ -272,11 +275,14 @@ public class ReviewBoardController {
       }
     }
 
+    log.debug("업데이트 됨111!!!!! ");
     reviewBoardService.update(reviewBoard);
+    log.debug("업데이트 됨2222!!!!! ");
 
     sessionStatus.setComplete();
 
-    return "redirect:view?reviewBoardId=" + reviewBoard.getReviewBoardId();
+//    return "view?reviewBoardId=" + reviewBoard.getReviewBoardId();
+    return "1";
   }
 
   @PostMapping("updateForm")
