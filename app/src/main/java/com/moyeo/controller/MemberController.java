@@ -3,6 +3,7 @@ package com.moyeo.controller;
 import com.moyeo.service.MemberService;
 import com.moyeo.service.StorageService;
 import com.moyeo.vo.Member;
+import com.moyeo.vo.MoyeoError;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -70,7 +71,12 @@ public class MemberController implements InitializingBean{
   // 회원가입 폼 제출
   @PostMapping("add")
   public String add(Member member, MultipartFile file) throws Exception {
-    log.debug("asdasdasdasdasdasd");
+
+    Member existingMember = memberService.get(member.getEmail());
+    if (existingMember != null) {
+      // 이미 존재하는 이메일이면 에러 메시지 추가
+      throw new MoyeoError("이미 존재하는 회원입니다.", "../auth/form");
+    }
 
     if (file.getSize() > 0) {
       String filename = storageService.upload(this.bucketName, this.uploadDir, file);
@@ -79,9 +85,8 @@ public class MemberController implements InitializingBean{
 
     // spring-security에서 비밀번호를 암호화해서 넣어준다.
     member.setPassword(passwordEncoder.encode(member.getPassword()));
-    
+
     memberService.add(member);
-    log.debug("asdasdasdasdasdasd");
     // 메인페이지로 이동
     return "redirect:../index.html";
   }
@@ -155,10 +160,7 @@ public class MemberController implements InitializingBean{
   //  /member/delete.html 에서
   @PostMapping("delete")
   @ResponseBody
-  public String delete(@RequestParam("id") Integer no, HttpSession session) throws Exception {
-    if (no == null) {
-      throw new IllegalArgumentException("회원번호가 유효하지 않습니다!!!!");
-    }
+  public String delete(@RequestParam("id") int no, HttpSession session) throws Exception {
 
     Member member = memberService.get(no);
 
@@ -179,6 +181,7 @@ public class MemberController implements InitializingBean{
     member.setName("user" + member.getMemberId());
     member.setBirthdate(Date.valueOf(currentDate));
     member.setPhoto("NULL");
+    member.setNickname("(알수없음)");
     member.setPhoneNumber("delete" + member.getMemberId());
     member.setIntroduce("탈퇴 한 계정");
 
@@ -188,9 +191,10 @@ public class MemberController implements InitializingBean{
     return "/index.html";
   }
 
+  // 세션에서 회원 정보 가져오기
   @GetMapping("mypage")
   public String mypage(HttpSession session, Model model) {
-    // 세션에서 회원 정보 가져오기
+
     Member member = (Member) session.getAttribute("loginUser");
 
     if (member != null) {
@@ -211,14 +215,18 @@ public class MemberController implements InitializingBean{
   }
 
   @PostMapping("findByEmail")
-  public void findByEmail(Member member, Model model) {
+  public void findByEmail(Member member, Model model) throws Exception{
     Member findMember = memberService.get(member.getPhoneNumber(), member.getName(), member.getBirthdate());
 
     log.debug(String.format("%s     %s        %S",member.getPhoneNumber(), member.getName(), member.getBirthdate()));
 
+    if(findMember == null) {
+      // 회원이 존재하지 않으면 로그인페이지로 이동
+      throw new MoyeoError("존재하지 않은 회원입니다", "../auth/form");
+    }
     model.addAttribute("findMember", findMember);
-
   }
+
 
   // 비밀번호 update하기위해 개인정보입력 form 출력
   @GetMapping("findPassword")
@@ -231,13 +239,13 @@ public class MemberController implements InitializingBean{
                               @RequestParam("phoneNumber") String phoneNumber,
                               @RequestParam("name") String name,
                               @RequestParam("birthdate") Date birthdate,
-                              Model model, HttpSession session) {
+                              Model model, HttpSession session) throws Exception {
     Member updatedMember = memberService.findBy(email, name, phoneNumber, birthdate);
+
     if(updatedMember == null){
-      // 에러
+      throw new MoyeoError("존재하지 않은 회원입니다.", "../auth/form");
     }
     session.setAttribute("updatedMember", updatedMember);
-
     return "redirect:/member/updatePassword";
   }
 
