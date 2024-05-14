@@ -31,5 +31,4 @@ public interface MemberService {
   // 구글 로그인을 하기위해 DB에 같은 email이 저장되어있는지 확인
   Member getByEmail(String email);
 
-
 }
