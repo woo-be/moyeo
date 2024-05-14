@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,10 +15,6 @@
           crossorigin="anonymous">
 
     <style>
-<!--        .img1 {-->
-<!--            width : 100%;-->
-<!--            height : 200px;-->
-<!--        }-->
 
         .image-container {
             text-align: center;
@@ -57,21 +53,21 @@
             font-weight: bold; /* 글자 두껍게 설정 */
             font-family: Arial, sans-serif; /* 폰트 설정 */
             color: #333; /* 글자 색상 설정 */
-<!--            text-align: center; /* 텍스트 가운데 정렬 */-->
             text-decoration: underline; /* 텍스트에 밑줄 추가 */
         }
 
+        /* CSS 스타일 */
         .card-container {
             display: flex;
             flex-wrap: nowrap;
-            overflow-x: auto;
-            scrollbar-width: none; /* 가로 스크롤바 숨기기 (Firefox) */
-            -ms-overflow-style: none; /* 가로 스크롤바 숨기기 (IE/Edge) */
+            overflow-x: hidden; /* 가로 스크롤 막기 */
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             margin-bottom: 20px;
         }
 
         .card {
-            flex: 0 0 calc(33.333% - 20px); /* 카드 3개를 가로로 나열 */
+            flex: 0 0 calc(33.333% - 20px);
             margin-right: 20px;
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -104,10 +100,20 @@
             color: #666;
         }
 
+        .views {
+            text-align: right;
+            color: #666;
+        }
+
+        .like-count {
+            text-align: right;
+            color: #666;
+        }
+
         .arrow-container {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 20px;
+<!--            margin-bottom: 20px;-->
         }
 
         .arrow {
@@ -123,8 +129,6 @@
 </head>
 <body>
 <div data-th-replace="header :: header">머리말</div>
-
-<!--<img class="img1" data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_1.jpg?type=f&w=1080&h=220'}">-->
 
 <div class="image-container">
     <img id="random-image" src="" alt="Random Image">
@@ -160,32 +164,53 @@
 
 <div class="arrow-container">
     <div class="arrow" onclick="moveLeft()">&#10094;</div>
+    <p>후기게시글 최근순</p>
     <div class="arrow" onclick="moveRight()">&#10095;</div>
 </div>
 
 <div class="card-container">
-    <div class="card">
-        <div class="thumbnail">
-            <img src="thumbnail1.jpg" alt="Thumbnail 1">
-        </div>
-        <div class="details">
-            <div class="title">제목 1</div>
-            <div class="author">작성자 1</div>
-        </div>
-    </div>
+    <!-- 여기에 JavaScript로 생성될 카드가 들어갈 것입니다. -->
 
-    <div class="card">
-        <div class="thumbnail">
-            <img src="thumbnail2.jpg" alt="Thumbnail 2">
-        </div>
-        <div class="details">
-            <div class="title">제목 2</div>
-            <div class="author">작성자 2</div>
-        </div>
-    </div>
+<!--    <div>-->
+<!--        <div class="row row-cols-1 row-cols-md-3 g-3">-->
+<!--            <div class="col" data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}">-->
+<!--                <a class="text-decoration-none link-dark" data-th-href="@{views(reviewBoardId=*{reviewBoardId})}" href="view.html">-->
+<!--                    <div class="card border-0">-->
+<!--                        &lt;!&ndash; 사진 &ndash;&gt;-->
+<!--                        <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"-->
+<!--                             data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">-->
+<!--                        &lt;!&ndash; 기본 사진 &ndash;&gt;-->
+<!--                        <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"-->
+<!--                             data-th-src="@{/img/default-review-photo.png}"-->
+<!--                             src="/static/img/default-review-photo.png" alt="여행 사진">-->
+<!--                        &lt;!&ndash; 카드 내용 &ndash;&gt;-->
+<!--                        <div class="card-header text-muted d-flex justify-content-between">-->
+<!--                            <span data-th-text="*{regionName}" class="mt-1">지역</span>-->
+<!--                        </div>-->
 
-    <!-- 추가 카드들 -->
+<!--                        <div class="card-body">-->
+<!--                            <h5 data-th-text="*{title}">제목입니다</h5>-->
+<!--                            <span class="d-flex justify-content-between">-->
+<!--                    <span data-th-text="*{writer.nickname}">닉네임</span>-->
+<!--                  </span>-->
+<!--                            <span class="d-flex justify-content-between">-->
+<!--                    <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>-->
+<!--                    <span>조회수 <span data-th-text="*{views}">조회수</span></span>-->
+<!--                  </span>-->
+
+<!--                            <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </a>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+
 </div>
+
+
+
+<div class="list" data-th-each="reviewBoard : ${list}" data-th-object="${reviewBoard}"></div>
 
 
 <div data-th-replace="footer :: footer">꼬리말</div>
@@ -193,53 +218,162 @@
 </body>
 
 <script>
-    // 이미지 URL 배열
-    const imageUrls = [
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_1.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_2.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_4.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_5.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_6.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_8.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_9.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_10.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_11.jpg?type=f&w=1080&h=220',
-      'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_12.jpg?type=f&w=1080&h=220'
+// 이미지 URL 배열
+const imageUrls = [
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_1.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_2.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_4.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_5.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_6.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_8.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_9.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_10.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_11.jpg?type=f&w=1080&h=220',
+  'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/main/img_19694_12.jpg?type=f&w=1080&h=220'
 
-      // 추가 이미지 URL 추가 가능
-    ];
+  // 추가 이미지 URL 추가 가능
+];
 
-    // 페이지 로드시 이미지 변경
-    window.onload = changeImage;
+// 페이지 로드시 이미지 변경
+window.onload = changeImage;
 
-    // 이미지 변경 함수
-    function changeImage() {
-      // 이미지 요소 가져오기
-      const imageElement = document.getElementById('random-image');
-      // 랜덤 인덱스 생성
-      const randomIndex = Math.floor(Math.random() * imageUrls.length);
-      // 랜덤 이미지 URL 선택
-      const randomImageUrl = imageUrls[randomIndex];
-      // 이미지 변경
-      imageElement.src = randomImageUrl;
-    }
+// 이미지 변경 함수
+function changeImage() {
+  // 이미지 요소 가져오기
+  const imageElement = document.getElementById('random-image');
+  // 랜덤 인덱스 생성
+  const randomIndex = Math.floor(Math.random() * imageUrls.length);
+  // 랜덤 이미지 URL 선택
+  const randomImageUrl = imageUrls[randomIndex];
+  // 이미지 변경
+  imageElement.src = randomImageUrl;
+}
 
-    // 5초마다 이미지 변경
-    setInterval(changeImage, 5000);
+// 5초마다 이미지 변경
+setInterval(changeImage, 5000);
 </script>
 
-<script>
-    let scrollContainer = document.querySelector('.card-container');
+<script type="text/javascript"  th:inline="javascript">
+    // JavaScript 코드
+    let cardContainer = document.querySelector('.card-container');
+    let currentIndex = 0;
+    let dataList=[[${list}]];
+    console.log(dataList);
+<!--    let previousScrollPosition = 0; // 이전 스크롤 위치 저장-->
+
+
+    // 페이지 로딩 시 초기 카드 렌더링
+    renderCards();
+
+    function renderCards() {
+        // 스크롤 위치를 이전 위치로 조절
+<!--        window.scrollTo({ top: previousScrollPosition, behavior: 'auto' });-->
+
+        cardContainer.innerHTML = ''; // 기존 카드 삭제
+
+        for (let i = currentIndex; i < currentIndex + 3 && i < dataList.length; i++) {
+            let card = document.createElement('div');
+            card.classList.add('card');
+
+            let thumbnail = document.createElement('div');
+            thumbnail.classList.add('thumbnail');
+            thumbnail.innerHTML = `<img src="${dataList[i].photos[0].photo}" alt="Thumbnail">`;
+
+            let details = document.createElement('div');
+            details.classList.add('details');
+            details.innerHTML = `
+                <div class="title">${dataList[i].title}</div>
+                <div class="author">${dataList[i].writer.nickname}</div>
+                <div class="views">조회수 : ${dataList[i].views}</div>
+<!--                <div class="like-count">좋아요 : ${dataList[i].likeCount}</div>-->
+
+
+            `;
+
+            card.appendChild(thumbnail);
+            card.appendChild(details);
+            cardContainer.appendChild(card);
+        }
+    }
 
     function moveLeft() {
-      scrollContainer.scrollLeft -= scrollContainer.offsetWidth;
+        if (currentIndex > 0) {
+            currentIndex -= 3;
+            renderCards();
+        }
     }
 
     function moveRight() {
-      scrollContainer.scrollLeft += scrollContainer.offsetWidth;
+        if (currentIndex + 3 < dataList.length) {
+            currentIndex += 3;
+            renderCards();
+        }
     }
+
+<!--    dataList = [-->
+<!--        { thumbnail: 'thumbnail1.jpg', title: '제목 1', author: '작성자 1' },-->
+<!--        { thumbnail: 'thumbnail2.jpg', title: '제목 2', author: '작성자 2' },-->
+<!--        { thumbnail: 'thumbnail3.jpg', title: '제목 3', author: '작성자 3' },-->
+<!--        // 나머지 항목들...-->
+<!--    ];-->
 </script>
 
+<!--<script>-->
+<!--    console.log("ok");-->
+
+<!-- const dataList = [-->
+<!--      { thumbnail: 'thumbnail1.jpg', title: '제목 1', author: '작성자 1' },-->
+<!--      { thumbnail: 'thumbnail2.jpg', title: '제목 2', author: '작성자 2' },-->
+<!--      { thumbnail: 'thumbnail3.jpg', title: '제목 3', author: '작성자 3' },-->
+<!--      // 나머지 항목들...-->
+<!--    ];-->
+
+<!--    // JavaScript 코드-->
+<!--    let cardContainer = document.querySelector('.card-container');-->
+<!--    let currentIndex = 0;-->
+<!--&lt;!&ndash;    let dataList = [${list}];&ndash;&gt;-->
+
+<!--    // 페이지 로딩 시 초기 카드 렌더링-->
+<!--        renderCards();-->
+
+<!--    function renderCards() {-->
+<!--      cardContainer.innerHTML = ''; // 기존 카드 삭제-->
+
+<!--      for (let i = currentIndex; i < currentIndex + 3 && i < dataList.length; i++) {-->
+<!--        let card = document.createElement('div');-->
+<!--        card.classList.add('card');-->
+
+<!--        let thumbnail = document.createElement('div');-->
+<!--        thumbnail.classList.add('thumbnail');-->
+<!--        thumbnail.innerHTML = `<img src="${dataList[i].thumbnail}" alt="Thumbnail">`;-->
+
+<!--        let details = document.createElement('div');-->
+<!--        details.classList.add('details');-->
+<!--        details.innerHTML = `-->
+<!--          <div class="title">${dataList[i].title}</div>-->
+<!--          <div class="author">${dataList[i].author}</div>-->
+<!--        `;-->
+
+<!--        card.appendChild(thumbnail);-->
+<!--        card.appendChild(details);-->
+<!--        cardContainer.appendChild(card);-->
+<!--      }-->
+<!--    }-->
+
+<!--    function moveLeft() {-->
+<!--      if (currentIndex > 0) {-->
+<!--        currentIndex -= 3;-->
+<!--        renderCards();-->
+<!--      }-->
+<!--    }-->
+
+<!--    function moveRight() {-->
+<!--      if (currentIndex + 3 < dataList.length) {-->
+<!--        currentIndex += 3;-->
+<!--        renderCards();-->
+<!--      }-->
+<!--    }-->
+<!--</script>-->
 
 
 </html>
