@@ -138,7 +138,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end" data-th-if="*{writer.memberId} == ${loginUser.memberId}">
                   <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex flex-row bd-highlight p-1">
                       <button class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
@@ -226,7 +226,7 @@
                       </div>
                       <div  class="d-flex flex-row bd-highlight">
                         <div class="w-100">
-                          <div class="w-75 text-break" data-th-text="*{content}"></div>
+                          <div class="w-75 text-break" style="white-space:pre;" data-th-text="*{content}"></div>
                         </div>
                       </div>
                     </div>
@@ -260,6 +260,7 @@
           <!-- add comment -->
           <form id="commentForm" data-th-action="@{/review/comment/add2}" action="view.html" data-th-object="${loginUser}" method='post'>
             <div class="d-flex flex-row bd-highlight p-3 ms-2">
+              <input class="loginUserId" data-th-value="${loginUser.memberId}" type="hidden">
               <input data-th-value="${reviewBoard.reviewBoardId}" name='reviewBoardId' type="hidden">
               <div class="p-2 bd-highlight">
                 <a data-th-if="*{photo}" data-th-href="@{'https://kr.object.ncloudstorage.com/moyeo-bucket/member/' + *{photo}}">
@@ -332,7 +333,16 @@
     });
   }
 </script>
-
+<script>
+  // 댓글 폼 눌렀을 때 로그인 정보 없으면 로그인해주세요 경고창
+  let loginUserId = $('.loginUserId')
+  $('#content').click(function(){
+    if (loginUserId.val() == 0){
+      alert("로그인 후 이용해주세요.");
+      window.location.href = '/auth/form';
+    }
+  });
+</script>
 <script>
   /* 삭제 버튼 클릭시 호출되는 함수,
   삭제 여부를 묻고 확인/취소 여부에 따라 ajax로 재요청하는 함수 */
@@ -366,7 +376,6 @@
 
     // id가 commentForm인 form 태그의 <name value> 값을 저장하는 객체
     var formData = new FormData(commentForm);
-
     if (formData.get("content") == '') {
       alert("내용을 입력해 주세요.");
     } else {
@@ -403,11 +412,7 @@
 
     $('#summernote').summernote(options).summernote("disable");
     // $('#summernote').summernote(options).summernote('fullscreen.isFullscreen');
-
-
   });
-
-
 </script>
 
 <script>
@@ -428,192 +433,191 @@
 
   function searchCoordinateToAddress(latlng) {
 
-      infoWindow.close();
+    infoWindow.close();
 
-      naver.maps.Service.reverseGeocode({
-          coords: latlng,
-          orders: [
-              naver.maps.Service.OrderType.ADDR,
-              naver.maps.Service.OrderType.ROAD_ADDR
-          ].join(',')
-      }, function(status, response) {
-          if (status === naver.maps.Service.Status.ERROR) {
-              return alert('Something Wrong!');
-          }
+    naver.maps.Service.reverseGeocode({
+      coords: latlng,
+      orders: [
+          naver.maps.Service.OrderType.ADDR,
+          naver.maps.Service.OrderType.ROAD_ADDR
+      ].join(',')
+    }, function(status, response) {
+      if (status === naver.maps.Service.Status.ERROR) {
+          return alert('Something Wrong!');
+      }
 
-          var items = response.v2.results,
-              address = '',
-              htmlAddresses = [];
+      var items = response.v2.results,
+        address = '',
+        htmlAddresses = [];
 
-          for (var i=0, ii=items.length, item, addrType; i<ii; i++) {
-              item = items[i];
-              address = makeAddress(item) || '';
-              addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '[지번 주소]';
+      for (var i=0, ii=items.length, item, addrType; i<ii; i++) {
+        item = items[i];
+        address = makeAddress(item) || '';
+        addrType = item.name === 'roadaddr' ? '[도로명 주소]' : '[지번 주소]';
 
-              htmlAddresses.push((i+1) +'. '+ addrType +' '+ address);
-          }
+        htmlAddresses.push((i+1) +'. '+ addrType +' '+ address);
+      }
 
-          infoWindow.setContent([
-              '<div style="padding:10px;min-width:200px;line-height:150%;">',
-              '<h4 style="margin-top:5px;">검색 좌표</h4><br />',
-              htmlAddresses.join('<br />'),
-              '</div>'
-          ].join('\n'));
+      infoWindow.setContent([
+        '<div style="padding:10px;min-width:200px;line-height:150%;">',
+        '<h4 style="margin-top:5px;">검색 좌표</h4><br />',
+        htmlAddresses.join('<br />'),
+        '</div>'
+      ].join('\n'));
 
-          infoWindow.open(map, latlng);
-      });
+      infoWindow.open(map, latlng);
+    });
   }
 
   function searchAddressToCoordinate(address) {
-      naver.maps.Service.geocode({
-          query: address
-      }, function(status, response) {
-          if (status === naver.maps.Service.Status.ERROR) {
-              return alert('Something Wrong!');
-          }
+    naver.maps.Service.geocode({
+      query: address
+    }, function(status, response) {
+      if (status === naver.maps.Service.Status.ERROR) {
+          return alert('Something Wrong!');
+      }
 
-          if (response.v2.meta.totalCount === 0) {
-              return alert('totalCount' + response.v2.meta.totalCount);
-          }
+      if (response.v2.meta.totalCount === 0) {
+          return alert('totalCount' + response.v2.meta.totalCount);
+      }
 
-          var htmlAddresses = [],
-              item = response.v2.addresses[0],
-              point = new naver.maps.Point(item.x, item.y);
+      var htmlAddresses = [],
+      item = response.v2.addresses[0],
+      point = new naver.maps.Point(item.x, item.y);
 
-          document.getElementById("addr").value = item.roadAddress;
-          document.getElementById("latitude").value = item.y;
-          document.getElementById("longitude").value = item.x;
+      document.getElementById("addr").value = item.roadAddress;
+      document.getElementById("latitude").value = item.y;
+      document.getElementById("longitude").value = item.x;
 
-          if (item.roadAddress) {
-              htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
-          }
+      if (item.roadAddress) {
+        htmlAddresses.push('[도로명 주소] ' + item.roadAddress);
+      }
 
-          if (item.jibunAddress) {
-              htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
-          }
+      if (item.jibunAddress) {
+        htmlAddresses.push('[지번 주소] ' + item.jibunAddress);
+      }
 
 
-          infoWindow.setContent([
-              '<div style="padding:10px;min-width:200px;line-height:150%;">',
-<!--              '<h4 style="margin-top:5px;">검색 주소 : '+ address +'</h4><br />',-->
-              htmlAddresses.join('<br />'),
-              '</div>'
-          ].join('\n'));
+      infoWindow.setContent([
+        '<div style="padding:10px;min-width:200px;line-height:150%;">',
+        htmlAddresses.join('<br />'),
+        '</div>'
+      ].join('\n'));
 
-          map.setCenter(point);
-          infoWindow.open(map, point);
-      });
+      map.setCenter(point);
+      infoWindow.open(map, point);
+    });
   }
 
   function initGeocoder() {
-      searchAddressToCoordinate('[[${reviewBoard.address}]]');
+    searchAddressToCoordinate('[[${reviewBoard.address}]]');
   }
 
   function makeAddress(item) {
-      if (!item) {
-          return;
+    if (!item) {
+        return;
+    }
+
+    var name = item.name,
+        region = item.region,
+        land = item.land,
+        isRoadAddress = name === 'roadaddr';
+
+    var sido = '', sigugun = '', dongmyun = '', ri = '', rest = '';
+
+    if (hasArea(region.area1)) {
+        sido = region.area1.name;
+    }
+
+    if (hasArea(region.area2)) {
+        sigugun = region.area2.name;
+    }
+
+    if (hasArea(region.area3)) {
+        dongmyun = region.area3.name;
+    }
+
+    if (hasArea(region.area4)) {
+        ri = region.area4.name;
+    }
+
+    if (land) {
+      if (hasData(land.number1)) {
+        if (hasData(land.type) && land.type === '2') {
+          rest += '산';
+        }
+
+        rest += land.number1;
+
+        if (hasData(land.number2)) {
+          rest += ('-' + land.number2);
+        }
       }
 
-      var name = item.name,
-          region = item.region,
-          land = item.land,
-          isRoadAddress = name === 'roadaddr';
+      if (isRoadAddress === true) {
+        if (checkLastString(dongmyun, '면')) {
+          ri = land.name;
+        } else {
+          dongmyun = land.name;
+          ri = '';
+        }
 
-      var sido = '', sigugun = '', dongmyun = '', ri = '', rest = '';
-
-      if (hasArea(region.area1)) {
-          sido = region.area1.name;
+        if (hasAddition(land.addition0)) {
+          rest += ' ' + land.addition0.value;
+        }
       }
+    }
 
-      if (hasArea(region.area2)) {
-          sigugun = region.area2.name;
-      }
-
-      if (hasArea(region.area3)) {
-          dongmyun = region.area3.name;
-      }
-
-      if (hasArea(region.area4)) {
-          ri = region.area4.name;
-      }
-
-      if (land) {
-          if (hasData(land.number1)) {
-              if (hasData(land.type) && land.type === '2') {
-                  rest += '산';
-              }
-
-              rest += land.number1;
-
-              if (hasData(land.number2)) {
-                  rest += ('-' + land.number2);
-              }
-          }
-
-          if (isRoadAddress === true) {
-              if (checkLastString(dongmyun, '면')) {
-                  ri = land.name;
-              } else {
-                  dongmyun = land.name;
-                  ri = '';
-              }
-
-              if (hasAddition(land.addition0)) {
-                  rest += ' ' + land.addition0.value;
-              }
-          }
-      }
-
-      return [sido, sigugun, dongmyun, ri, rest].join(' ');
+    return [sido, sigugun, dongmyun, ri, rest].join(' ');
   }
 
   function hasArea(area) {
-      return !!(area && area.name && area.name !== '');
+    return !!(area && area.name && area.name !== '');
   }
 
   function hasData(data) {
-      return !!(data && data !== '');
+    return !!(data && data !== '');
   }
 
   function checkLastString (word, lastString) {
-      return new RegExp(lastString + '$').test(word);
+    return new RegExp(lastString + '$').test(word);
   }
 
   function hasAddition (addition) {
-      return !!(addition && addition.value);
+    return !!(addition && addition.value);
   }
 
   naver.maps.onJSContentLoaded = initGeocoder;
 
 </script>
 <script>
-<!--  후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청 -->
+// 후기 상세보기에서 삭제 버튼을 눌렀을 때 확인창을 띄우고 리스트로 재요청
   function reviewDelete(reviewBoardId){
-      var reply = confirm("후기를 삭제 하겠습니까?");
-      if (reply) {
-          $.ajax({
-              url: "delete?reviewBoardId="+reviewBoardId,
-              type: 'GET',
-              contentType: false,
-              processData: false
-          })
-          .done(function(responseUrl) {
-              // 권한을 체크
-              if(responseUrl == '-1'){
-                window.alert("로그인이 필요합니다.");
-                window.location.href = '/auth/form';
-              }else if(responseUrl == '-2'){
-                window.alert("번호가 옳지 않습니다.");
-                window.location.href = 'view?reviewBoardId='+reviewBoardId;
-              }else if(responseUrl == '-3'){
-                window.alert("권한이 없습니다.");
-                window.location.href = 'view?reviewBoardId='+reviewBoardId;
-              }else{
-                window.alert("삭제되었습니다.");
-                window.location.href = responseUrl;
-              }
-          })
-      }
+    var reply = confirm("후기를 삭제 하겠습니까?");
+    if (reply) {
+      $.ajax({
+        url: "delete?reviewBoardId="+reviewBoardId,
+        type: 'GET',
+        contentType: false,
+        processData: false
+      })
+      .done(function(responseUrl) {
+        // 권한을 체크
+        if(responseUrl == '-1'){
+          window.alert("로그인이 필요합니다.");
+          window.location.href = '/auth/form';
+        }else if(responseUrl == '-2'){
+          window.alert("번호가 옳지 않습니다.");
+          window.location.href = 'view?reviewBoardId='+reviewBoardId;
+        }else if(responseUrl == '-3'){
+          window.alert("권한이 없습니다.");
+          window.location.href = 'view?reviewBoardId='+reviewBoardId;
+        }else{
+          window.alert("삭제되었습니다.");
+          window.location.href = responseUrl;
+        }
+      })
+    }
   }
 <!--  function addReviewComment(){-->
 <!--    alert('댓글이 등록되었습니다.');-->

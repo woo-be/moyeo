@@ -19,14 +19,20 @@
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 
   <style>
+    @font-face {
+      font-family: 'LINESeedKR-Rg';
+      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
+      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
+      font-style: normal;
+    }
     body {
-        padding-left: 10px;
+      padding-left: 10px;
+      font-family: 'LINESeedKR-Rg';
     }
     .form-item-div {
       margin-top: 5px;
       margin-bottom: 10px;
       padding-bottom: 10px;
-      border-bottom: 1px solid rgb(206, 206, 206);
     }
     .form-item-div-name {
       margin-left:20px;
@@ -41,21 +47,22 @@
 
 
 <div class="d-flex container-fluid justify-content-center">
-  <div class="d-flex flex-column border border-2 w-75" style="min-width:900px">
+  <div class="d-flex flex-column w-75" style="min-width:900px">
     <!-- 페이지 제목 -->
     <div class="d-flex justify-content-center border-bottom border-2 pt-3 pb-3 mt-2 mb-4">
       <h2>후기 작성</h2>
     </div>
     <!-- 가운데 정렬 -->
     <div class="d-flex justify-content-center">
-      <div class="w-75 pt-4 pb-4 ps-5 pe-5">
+      <div class="w-75 pt-2 pb-4 ps-5 pe-5">
         <form action="add" data-th-action="@{add}" method='post' enctype='multipart/form-data'>
           <div class="form-item-div d-flex flex-row align-items-center pb-2">
-            <h6 class="form-item-div-name">제목</h6>
+            <h6 class="form-item-div-name mt-2">제목</h6>
             <input class="form-control w-50" placeholder="제목을 입력하세요." id="title" name="title" type="text">
           </div>
 
           <div class="form-item-div" data-th-replace="review/regionList :: regionList">지역리스트</div>
+
           <div class="form-item-div" data-th-replace="review/themeList :: themeList">테마리스트</div>
 
           <div class="form-item-div d-flex flex-row align-items-center">
@@ -79,9 +86,22 @@
             <textarea name='content' id="summernote"></textarea>
           </div>
 <!--          <div data-th-replace="theme :: themeList">테마 체크박스</div>-->
-          <div class="d-flex justify-content-center">
-            <button class="btn btn-primary m-2">등록</button>
+
+          <div class="d-flex flex-column">
+            <div class="d-flex justify-content-center">
+              <button id="addBtn" class="btn btn-primary m-2">등록</button>
+            </div>
+            <div  class="d-flex justify-content-center">
+              <div>
+                <div id="title-error" class="invalid-feedback"></div>
+                <div id="region-error" class="invalid-feedback"></div>
+                <div id="theme-error" class="invalid-feedback"></div>
+                <div id="address-error" class="invalid-feedback"></div>
+                <div id="content-error" class="invalid-feedback"></div>
+              </div>
+            </div>
           </div>
+
         </form>
       </div>
     </div>
@@ -92,6 +112,39 @@
 <div data-th-replace="footer :: footer">꼬리말</div>
 
 
+<script>
+  let addBtn = $('#addBtn');
+
+  let title = $('#title');
+  let region = $('#regionId');
+  let theme = $('#themeId');
+  let addr = $('#addr');
+  let content = $('#summernote');
+
+  let titleError = $('#title-error');
+  let regionError = $('#region-error');
+  let themeError = $('#theme-error');
+  let addressError = $('#address-error');
+  let contentError = $('#content-error');
+
+  function err(data, dataError, event, msg) {
+    if ($(data).val() === '' || $(data).val() == 0) {
+      $(dataError).html(msg);
+      $(dataError).css("display", "block");
+      event.preventDefault();
+    } else {
+      $(dataError).html(""); // 오류 메세지 지우기
+      $(dataError).css("display", "none"); // 오류 메세지 숨기기
+    }
+  }
+  addBtn.click(function(event) {
+    err(title, titleError, event, "제목을 입력하세요!");
+    err(theme, themeError, event, "테마를 선택하세요!");
+    err(region, regionError, event, "지역을 선택하세요!");
+    err(addr, addressError, event, "주소를 입력하세요!");
+    err(content, contentError, event, "내용을 입력하세요!");
+  });
+</script>
 <script>
   $(document).ready(function() {
 
