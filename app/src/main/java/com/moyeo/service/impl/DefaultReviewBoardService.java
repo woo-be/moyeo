@@ -104,7 +104,7 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   @Override
   public int update(ReviewBoard reviewBoard) {
     int count = reviewBoardDao.update(reviewBoard);
-//    reviewPhotoDao.deleteAll(reviewBoard.getReviewBoardId());
+    reviewPhotoDao.deleteAll(reviewBoard.getReviewBoardId());
 
     if (reviewBoard.getPhotos() != null && reviewBoard.getPhotos().size() > 0) {
       for (ReviewPhoto reviewPhoto : reviewBoard.getPhotos()) {
