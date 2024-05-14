@@ -15,18 +15,10 @@
   <!-- JQuery -->
   <script  src="http://code.jquery.com/jquery-latest.min.js"></script>
 
+  <!-- 폰트 적용-->
+  <link rel="stylesheet" href="/style/fontstyle.css">
+
   <style>
-
-    @font-face {
-        font-family: 'LINESeedKR-Rg';
-        src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
-        src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
-        font-style: normal;
-    }
-    body {
-      font-family: 'LINESeedKR-Rg';
-    }
-
     aside #recruitTheme {
       display:flex;
       justify-content:space-between;
@@ -109,13 +101,8 @@
     }
   </style>
 </head>
-
+<div data-th-replace="header :: header">머리말</div>
 <body class="container-fluid">
-
-  <!-- 헤더 -->
-  <div class="row">
-    <div data-th-replace="header :: header">머리말</div>
-  </div>
 
   <!-- 컨텐트 -->
   <div class="d-flex justify-content-center align-items-start py-3">
