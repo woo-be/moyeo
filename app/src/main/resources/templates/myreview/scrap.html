@@ -19,22 +19,24 @@
       padding: 1%;
       padding-bottom: 20px;
       border: 1px solid #ccc;
-      text-align: center;
-    }
-    .myReview {
-      border: 1px solid black;
-      float:right;
-      text-align: center;
     }
 
-    .container {
-      position:absolution;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      top: 20%;
-      left: 10%;
+    .card {
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* 그림자 효과 */
+      transition: 0.3s; /* 애니메이션 효과를 위한 transition */
+      /*border-radius: 20px; !* 모서리 둥글기 조절 *!*/
     }
+
+    /* 마우스 오버 시 그림자 강조 */
+    .card:hover {
+      box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+      border-top-left-radius: 20px;
+      border-top-right-radius: 20px;
+    }
+
   </style>
 </head>
 <body>
@@ -43,28 +45,45 @@
 
 <div class="d-flex justify-content-around pb-3">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-    <div class="myscrap">
-    <h2>즐겨찾기</h2><br>
-    <div class="container">
-      <div class="myReview" data-th-each="reviewBoard : ${scrapList}" data-th-object="${reviewBoard}">
-        <a data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-          <img data-th-if="*{photos[0].photo}" alt="여행 사진"
-               data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-          <img data-th-unless="*{photos[0].photo}" style="width:250;height:260;"
-               data-th-src="@{/img/default-review-photo.png}" src="/static/img/default-review-photo.png"
-               alt="여행 사진">
-          <h3 data-th-text="*{title}">제목입니다</h3>
-        </a>
-          <span data-th-text="*{regionName}">지역</span>
-        <div>
-          <span>
-            조회수: <span data-th-text="*{views}">조회수</span>
-            좋아요: <span data-th-text="*{likeCount}">좋아요</span>
-          </span>
+  <div class="myscrap">
+    <h2 class="text-center">즐겨찾기</h2><br>
+    <div class="px-5">
+
+      <div>
+        <div class="row row-cols-1 row-cols-md-4 g-2">
+          <div class="col" data-th-each="reviewBoard : ${scrapList}" data-th-object="${reviewBoard}">
+            <a class="text-decoration-none link-dark" data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
+              <div class="card border-0">
+                <!-- 사진 -->
+                <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
+                     data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                <!-- 기본 사진 -->
+                <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"
+                     data-th-src="@{/img/default-review-photo.png}"
+                     src="/static/img/default-review-photo.png" alt="여행 사진">
+                <!-- 카드 내용 -->
+                <div class="card-header text-muted d-flex justify-content-between">
+                  <span data-th-text="*{regionName}" class="mt-1">지역</span>
+                </div>
+
+                <div class="card-body">
+                  <h5 data-th-text="*{title}">제목입니다</h5>
+                  <span class="d-flex justify-content-between">
+                    <span data-th-text="*{writer.nickname}">닉네임</span>
+                  </span>
+                  <span class="d-flex justify-content-between">
+                    <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
+                    <span>조회수 <span data-th-text="*{views}">조회수</span></span>
+                  </span>
+
+                  <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>
+                </div>
+              </div>
+            </a>
+          </div>
         </div>
-          닉네임: <span data-th-text="*{writer.nickname}">홍길동</span><br>
-          <h5><span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span></h5>
       </div>
+
     </div>
   </div>
 </div>

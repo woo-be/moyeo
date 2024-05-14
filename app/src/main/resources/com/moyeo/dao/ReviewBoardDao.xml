@@ -145,28 +145,60 @@
       review_board_id=#{reviewBoardId}
   </update>
   
+<!--  <select id="reviewList" resultMap="ReviewBoardMap" parameterType="int">-->
+<!--    select-->
+<!--      rb.review_board_id,-->
+<!--      rb.title,-->
+<!--      rb.content,-->
+<!--      rb.created_date,-->
+<!--      rb.views,-->
+<!--      c,-->
+<!--      m.member_id,-->
+<!--      m.nickname,-->
+<!--      r.region_name,-->
+<!--      rp.photo-->
+<!--    from-->
+<!--      member m-->
+<!--      inner join review_board rb on m.member_id=rb.member_id-->
+<!--      inner join region r on r.region_id=rb.region_id-->
+<!--      left outer join review_photo rp on rb.review_board_id=rp.review_board_id-->
+<!--      left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id-->
+<!--    where-->
+<!--      m.member_id = #{memberId}-->
+<!--    order by-->
+<!--      rb.review_board_id desc-->
+<!--    limit #{pageSize} offset #{offset}-->
+<!--  </select>-->
+
   <select id="reviewList" resultMap="ReviewBoardMap" parameterType="int">
     select
-    rb.review_board_id,
-    rb.title,
-    rb.content,
-    rb.created_date,
-    rb.views,
-    c,
-    m.member_id,
-    m.nickname,
-    r.region_name,
-    rp.photo
+      rb.review_board_id,
+      rb.title,
+      m.member_id,
+      m.nickname,
+      r.region_name,
+      rb.created_date,
+      rb.views,
+      count(rl.member_id) as member_count,
+      rp.photo
     from
-    member m
-    inner join review_board rb on m.member_id=rb.member_id
-    inner join region r on r.region_id=rb.region_id
-    left outer join review_photo rp on rb.review_board_id=rp.review_board_id
-    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+      review_board rb
+      left join member m on rb.member_id = m.member_id
+      left join region r on r.region_id = rb.region_id
+      left join review_like rl on rb.review_board_id = rl.review_board_id
+      left join review_photo rp on rp.review_board_id = rb.review_board_id
     where
-    m.member_id = #{memberId}
+      rb.member_id =#{memberId}
+    group by
+      rb.review_board_id,
+      rb.title,
+      m.member_id,
+      m.nickname,
+      r.region_name,
+      rb.created_date,
+      rb.views
     order by
-    rb.review_board_id desc
+      rb.review_board_id desc
     limit #{pageSize} offset #{offset}
   </select>
 
@@ -181,25 +213,34 @@
 
   <select id="scrapList" resultMap="ReviewBoardMap" parameterType="int">
     select
-    rs.review_board_id,
-    rb.title,
-    rb.created_date,
-    rb.views,
-    r.region_name,
-    c,
-    m.member_id,
-    m.nickname
+      rs.review_board_id,
+      rb.title,
+      r.region_name,
+      m.member_id,
+      m.nickname,
+      rb.created_date,
+      rb.views,
+      count(rl.member_id) as c,
+      rp.photo
     from
-    review_scrap rs
-    inner join review_board rb on rb.review_board_id=rs.review_board_id
-    inner join member m on m.member_id=rb.member_id
-    inner join region r on r.region_id=rb.region_id
-    left outer join review_photo rp on rb.review_board_id=rp.review_board_id
-    left outer join (select review_board_id, count(member_id) c from review_like group by review_board_id) as rl on rl.review_board_id=rb.review_board_id
+      review_scrap rs
+      left join review_board rb on rs.review_board_id = rb.review_board_id
+      left join member m on rb.member_id = m.member_id
+      left join region r on rb.region_id = r.region_id
+      left join review_like rl on rl.review_board_id = rs.review_board_id
+      left join review_photo rp on rp.review_board_id = rs.review_board_id
     where
-    rs.member_id=#{memberId}
+      rs.member_id=#{memberId}
+    group by
+      rs.review_board_id,
+      rb.title,
+      r.region_name,
+      m.member_id,
+      m.nickname,
+      rb.created_date,
+      rb.views
     order by
-    rb.review_board_id desc
+      rb.review_board_id desc
     limit #{pageSize} offset #{offset}
   </select>
 
