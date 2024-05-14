@@ -52,5 +52,5 @@ public interface ReviewBoardDao {
   List<ReviewBoard> findByViews(@Param("offset") int offset, @Param("rowCount") int rowCount,
       @Param("regionId")int regionId, @Param("themeId")int themeId, @Param("filter")String filter, @Param("keyword")String keyword);
 
-
+  List<ReviewBoard> findByCreatedDate2();
 }

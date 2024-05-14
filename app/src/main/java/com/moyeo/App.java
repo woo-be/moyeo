@@ -6,6 +6,8 @@ import com.moyeo.service.ReviewBoardService;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitMember;
 import java.util.List;
+
+import com.moyeo.vo.ReviewBoard;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -55,8 +57,9 @@ public class App {
 
 
     @GetMapping("/homedemo2")
-    public void homedemo2() {
-
+    public void homedemo2(
+            Model model) {
+        model.addAttribute("list", reviewBoardService.findByCreatedDate2());
     }
     @GetMapping("/originalhome")
     public void newhome(Model model) {

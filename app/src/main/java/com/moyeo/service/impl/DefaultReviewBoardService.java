@@ -201,4 +201,9 @@ public class DefaultReviewBoardService implements ReviewBoardService {
   public int deleteComment(int commentId) {
     return reviewCommentDao.delete(commentId);
   }
+
+  @Override
+  public List<ReviewBoard> findByCreatedDate2() {
+    return reviewBoardDao.findByCreatedDate2();
+  }
 }
