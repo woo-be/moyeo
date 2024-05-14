@@ -78,12 +78,15 @@ public class ReviewBoardController {
     reviewBoard.setWriter(writer);
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
+    if(reviewPhotos == null){
+      reviewPhotos = new ArrayList<>();
+    }
+
     if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -244,17 +247,16 @@ public class ReviewBoardController {
       HttpSession session,
       Model model,
       SessionStatus sessionStatus) throws Exception {
-    log.debug("업데이트 실행됨!!!!!!!!!!!!!!");
 
     model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
-//    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
       reviewPhotos = new ArrayList<>();
     }
+
 
     if (old.getPhotos().size() > 0) {
       reviewPhotos.addAll(old.getPhotos());
@@ -265,7 +267,7 @@ public class ReviewBoardController {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -275,13 +277,10 @@ public class ReviewBoardController {
       }
     }
 
-    log.debug("업데이트 됨111!!!!! ");
     reviewBoardService.update(reviewBoard);
-    log.debug("업데이트 됨2222!!!!! ");
 
     sessionStatus.setComplete();
 
-//    return "view?reviewBoardId=" + reviewBoard.getReviewBoardId();
     return "1";
   }
 
