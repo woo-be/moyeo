@@ -85,11 +85,6 @@ public class MypageReviewController {
 
     List<ReviewBoard> scrapList = reviewBoardService.scrapList(loginUser.getMemberId(), pageNo, pageSize);
 
-    for(ReviewBoard reviewBoard : scrapList){
-      log.debug("............................");
-      log.debug(reviewBoard.getPhotos());
-    }
-
     model.addAttribute("scrapList", scrapList);
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
@@ -101,13 +96,13 @@ public class MypageReviewController {
   @GetMapping("posted")
   public void reviewList(
       @RequestParam(required = false, defaultValue = "1") int pageNo,
-      @RequestParam(required = false, defaultValue = "6") int pageSize,
+      @RequestParam(required = false, defaultValue = "8") int pageSize,
       HttpSession session,
       Model model) {
     Member loginUser = (Member) session.getAttribute("loginUser");
 
-    if (pageSize < 6 || pageSize > 20) {
-      pageSize = 6;
+    if (pageSize < 8 || pageSize > 20) {
+      pageSize = 8;
     }
     if (pageNo < 1) {
       pageNo = 1;
