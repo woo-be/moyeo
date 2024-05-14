@@ -56,7 +56,7 @@
       <div class="w-75 pt-4 pb-4 ps-5 pe-5">
         <form action="update" data-th-action="@{update}" data-th-object="${updateReviewBoard}"
               method='post' enctype='multipart/form-data'>
-          <input data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
+          <input id="reviewBoardId" data-th-value="*{reviewBoardId}" name='reviewBoardId' type='hidden'>
           <div class="form-item-div d-flex flex-row align-items-center pb-2">
             <h6 class="form-item-div-name mt-2">제목</h6>
             <input class="form-control w-50" id="title" name="title" type="text" data-th-value="*{title}" value="제목입니당.">
@@ -87,8 +87,7 @@
 
           <div class="d-flex flex-column">
             <div class="d-flex justify-content-center">
-              <button id="updateBtn" class="btn btn-primary m-2">변경</button>
-              <a data-th-href="@{view(reviewBoardId=*{reviewBoardId})}">
+              <button type="button" id="updateBtn" class="btn btn-primary m-2">변경</button>
                 <button type="button" class="btn btn-danger m-2">취소</button>
               </a>
             </div>
@@ -116,6 +115,7 @@
 <script> <!--제목, 마감일, 여행시작일, 여행종료일, 지역을 입력 받지 않았을 경우 처리.-->
   var btn = document.getElementById("updateBtn");
 
+  var reviewBoardId = document.getElementById("reviewBoardId");
   var title = document.getElementById("title");
   var region = document.getElementById("regionId");
   var theme = document.getElementById("themeId");
@@ -133,19 +133,69 @@
       dataError.innerHTML = msg;
       dataError.style.display = "block";
       event.preventDefault();
+      return 0;
     }else {
       dataError.innerHTML = ""; // 오류 메세지 지우기
       dataError.style.display = "none"; // 오류 메세지 숨기기
+      return 1;
     }
   }
 
   btn.addEventListener('click', function(event) {
-    err(title, titleError, event, "제목을 입력하세요!");
-    err(theme, themeError, event, "테마를 선택하세요!");
-    err(region, regionError, event, "지역을 선택하세요!");
-    err(addr, addrError, event, "주소를 입력하세요!");
-    err(content, contentError, event, "내용을 입력하세요!");
+    let a = err(title, titleError, event, "제목을 입력하세요!");
+    let b = err(theme, themeError, event, "테마를 선택하세요!");
+    let c = err(region, regionError, event, "지역을 선택하세요!");
+    let d = err(addr, addrError, event, "주소를 입력하세요!");
+    let e = err(content, contentError, event, "내용을 입력하세요!");
+    let sum = a+b+c+d+e;
+    if(sum == 5){
+      updateReview(reviewBoardId.value);
+    }
   });
+
+  function updateReview(reviewBoardId) {
+    var reply = confirm("수정하시겠습니까?");
+
+    if (reply) {
+
+      const reviewBoard = prepareReviewBoard(); // 현재 페이지의 정보를 담은 객체를 리턴하는 함수
+      console.log(reviewBoard);
+      console.log(reviewBoard.regionId);
+      $.ajax({
+        url: "update",
+        type: "POST",
+        data: JSON.stringify(reviewBoard), // 데이터의 포맷을 json으로 하여 요청.
+        processData: false,
+        contentType: 'application/json', // 데이터의 포맷을 json으로 하여 요청.
+      })
+      .done(function(response) {
+        if (response == 1) {
+          alert("수정되었습니다");
+          console.log(reviewBoardId);
+          window.location.href = '/review/view?reviewBoardId=' + reviewBoardId;
+        } else {
+          alert("에러");
+          console.log(reviewBoardId);
+          window.location.href = '/review/view?reviewBoardId=' + reviewBoardId;
+        }
+      })
+    }
+  }
+
+  /* 현재 페이지의 정보를 담은 객체를 리턴하는 함수 */
+  function prepareReviewBoard() {
+
+    const reviewBoard = {
+    reviewBoardId: document.getElementById('reviewBoardId').value,
+    title: document.getElementById("title").value,
+    content: document.getElementById("summernote").value,
+    addr: document.getElementById('addr').value,
+    themeId: document.getElementById('themeId').value,
+    regionId: document.getElementById('regionId').value
+    };
+
+    return reviewBoard;
+  }
 </script>
 
 <script>
