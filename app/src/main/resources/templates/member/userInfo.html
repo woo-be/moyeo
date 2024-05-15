@@ -18,7 +18,7 @@
     width: 60%;
     padding: 1%;
     padding-bottom: 20px;
-    border: 1px solid #ccc;
+    /*border: 1px solid #ccc;*/
     margin-bottom: 50px;
     text-align: center;
   }
@@ -34,7 +34,8 @@
     width: 70%;
     padding: 1%;
     padding-bottom: 20px;
-    border: 1px solid #ccc;
+    border:0px;
+    /*border: 1px solid #ccc;*/
     text-align: center;
   }
   </style>
@@ -47,7 +48,7 @@
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="card">
     <div class="myInfo">
-      <h1>회원 정보 수정</h1>
+      <h3 class="mb-4 pb-3 border-bottom">회원 정보 수정</h3>
       <form action="#" data-th-action="@{update}" data-th-object="${session.loginUser}"
             enctype='multipart/form-data'
             method='post'>
