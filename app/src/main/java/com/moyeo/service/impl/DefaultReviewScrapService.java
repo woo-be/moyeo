@@ -20,4 +20,9 @@ public class DefaultReviewScrapService implements ReviewScrapService {
   public int get(int memberId, int reviewBoardId) {
     return reviewScrapDao.checked(memberId, reviewBoardId);
   }
+
+  @Override
+  public int delete(int memberId, int reviewBoardId) {
+    return reviewScrapDao.delete(memberId, reviewBoardId);
+  }
 }
