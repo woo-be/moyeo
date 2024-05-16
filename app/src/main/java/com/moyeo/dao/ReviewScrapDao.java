@@ -11,4 +11,6 @@ public interface ReviewScrapDao {
   int deleteAll(int reviewBoardId);
   int checked(@Param("memberId")int memberId, @Param("reviewBoardId")int reviewBoardId);
 
+  int delete(@Param("memberId")int memberId, @Param("reviewBoardId")int reviewBoardId);
+
 }
