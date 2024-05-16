@@ -25,4 +25,14 @@ public class DefaultReviewScrapService implements ReviewScrapService {
   public int delete(int memberId, int reviewBoardId) {
     return reviewScrapDao.delete(memberId, reviewBoardId);
   }
+
+  @Override
+  public int deleteAll(int[] reviewBoardIdList, int memberId) {
+
+    for(int reviewBoardId : reviewBoardIdList){
+      reviewScrapDao.delete(memberId, reviewBoardId);
+    }
+
+    return 1;
+  }
 }
