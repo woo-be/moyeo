@@ -56,8 +56,8 @@
       <div>
         <div class="row row-cols-1 row-cols-md-4 g-2">
           <div class="col" data-th-each="reviewBoard : ${scrapList}" data-th-object="${reviewBoard}">
-            <a class="text-decoration-none link-dark" data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
               <div class="card border-0">
+                <input type="checkbox" data-th-onclick="'scrapChecked('+*{reviewBoardId}+')'">
                 <!-- 사진 -->
                 <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
                      data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
@@ -66,6 +66,7 @@
                      data-th-src="@{/img/default-review-photo.png}"
                      src="/static/img/default-review-photo.png" alt="여행 사진">
                 <!-- 카드 내용 -->
+                <a class="text-decoration-none link-dark" data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
                 <div class="card-header text-muted d-flex justify-content-between">
                   <span data-th-text="*{regionName}" class="mt-1">지역</span>
                 </div>
@@ -89,6 +90,7 @@
       </div>
 
     </div>
+  <button type="button" data-th-onclick="scrapDelete()">삭제</button>
   </div>
 </div>
 
@@ -129,5 +131,40 @@
     console.log(link);
     link.classList.add('active');
   })
+</script>
+
+<script>
+  var checkedList = {};
+  function scrapChecked(reviewBoardId){
+
+    if(checkedList[reviewBoardId] === undefined || checkedList[reviewBoardId] === false){
+      checkedList[reviewBoardId] = true;
+    }else if(checkedList[reviewBoardId] === true){
+      checkedList[reviewBoardId] = false;
+    }
+  }
+
+  function scrapDelete(){
+    let reviewBoardIdList = new FormData();
+    for (var reviewBoardId in checkedList) {
+      if(checkedList[reviewBoardId] === true){
+        reviewBoardIdList.append("reviewBoardIdList", reviewBoardId);
+      }
+    }
+
+    // deleteAll 요청
+    $.ajax({
+      url: '/scrap/deleteAll',
+      type: 'POST',
+      dataType: 'json',
+      contentType: false,
+      processData: false,
+      data: reviewBoardIdList
+    })
+    .done(function(response) {
+      window.location.href = response.url;
+    });
+  }
+
 </script>
 </html>
