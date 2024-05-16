@@ -18,16 +18,12 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.css">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.20/dist/summernote-lite.min.js"></script>
 
+  <!-- 폰트 적용-->
+  <link rel="stylesheet" href="/style/fontstyle.css">
+
   <style>
-    @font-face {
-      font-family: 'LINESeedKR-Rg';
-      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
-      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
-      font-style: normal;
-    }
     body {
       padding-left: 10px;
-      font-family: 'LINESeedKR-Rg';
     }
     .form-item-div {
       margin-top: 5px;
@@ -88,8 +84,7 @@
           <div class="d-flex flex-column">
             <div class="d-flex justify-content-center">
               <button type="button" id="updateBtn" class="btn btn-primary m-2">변경</button>
-                <button type="button" class="btn btn-danger m-2">취소</button>
-              </a>
+              <a class="btn btn-danger m-2" data-th-href="@{view(reviewBoardId=*{reviewBoardId})}" type="button" href="view.html">취소</a>
             </div>
             <div class="d-flex justify-content-center">
               <div>
@@ -189,7 +184,7 @@
     reviewBoardId: document.getElementById('reviewBoardId').value,
     title: document.getElementById("title").value,
     content: document.getElementById("summernote").value,
-    addr: document.getElementById('addr').value,
+    address: document.getElementById('addr').value,
     themeId: document.getElementById('themeId').value,
     regionId: document.getElementById('regionId').value
     };

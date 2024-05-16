@@ -78,12 +78,15 @@ public class ReviewBoardController {
     reviewBoard.setWriter(writer);
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
 
+    if(reviewPhotos == null){
+      reviewPhotos = new ArrayList<>();
+    }
+
     if (reviewPhotos != null) {
       for (int i = reviewPhotos.size() - 1; i >= 0; i--) {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -244,17 +247,16 @@ public class ReviewBoardController {
       HttpSession session,
       Model model,
       SessionStatus sessionStatus) throws Exception {
-    log.debug("업데이트 실행됨!!!!!!!!!!!!!!");
 
     model.addAttribute("updateReviewBoard", reviewBoard);
 
     ReviewBoard old = reviewBoardService.get(reviewBoard.getReviewBoardId());
-//    log.debug(String.format("%s~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~", old.getPhotos().getFirst().getPhoto()));
 
     List<ReviewPhoto> reviewPhotos = (List<ReviewPhoto>) session.getAttribute("reviewPhotos");
     if (reviewPhotos == null) {
       reviewPhotos = new ArrayList<>();
     }
+
 
     if (old.getPhotos().size() > 0) {
       reviewPhotos.addAll(old.getPhotos());
@@ -265,7 +267,7 @@ public class ReviewBoardController {
         ReviewPhoto reviewPhoto = reviewPhotos.get(i);
         if (reviewBoard.getContent().indexOf(reviewPhoto.getPhoto()) == -1) {
           storageService.delete(this.bucketName, this.uploadDir, reviewPhoto.getPhoto());
-//          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
+          log.debug(String.format("%s 파일 삭제!", reviewPhoto.getPhoto()));
           reviewPhotos.remove(i);
         }
       }
@@ -275,13 +277,10 @@ public class ReviewBoardController {
       }
     }
 
-    log.debug("업데이트 됨111!!!!! ");
     reviewBoardService.update(reviewBoard);
-    log.debug("업데이트 됨2222!!!!! ");
 
     sessionStatus.setComplete();
 
-//    return "view?reviewBoardId=" + reviewBoard.getReviewBoardId();
     return "1";
   }
 
@@ -405,7 +404,7 @@ public class ReviewBoardController {
       @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
       Model model) {
 
-    if (pageSize < 3 || pageSize > 20) {
+    if (pageSize < 12 || pageSize > 20) {
       pageSize = 3;
     }
     if (pageNo < 1) {
@@ -414,11 +413,43 @@ public class ReviewBoardController {
 
     int numOfPage = 1;
     int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
     }
+
+    /* 페이징 페이지 숫자 버튼 */
+    int[] pageButtons; // 페이징 페이지 숫자 버튼
+
+    if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,
+      pageButtons = new int[5]; // 페이지 숫자 버튼의 개수를 5개로 함.
+
+      if (pageNo <= 3) { // 1. 현재 페이지가 시작페이지에서 3페이지 이내의 페이지일 때,
+        for (int i = 0; i < 5; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+          pageButtons[i] = i + 1;
+        }
+      } else if (pageNo >= (numOfPage - 2)) { // 2. 현재 페이지가 끝페이지에서 3페이지 이내의 페이지일 때,
+        int temp = numOfPage;
+        for (int i = 4; i >= 0; i--) { // 숫자 버튼이 끝페이지 -4 부터 시작하도록 함.
+          pageButtons[i] = temp--;
+        }
+      } else { // 3. 그 외의 경우,
+        int temp = pageNo - 2;
+        for (int i = 0; i < 5; i++) { // 숫자 버튼의 가운데 버튼이 현재페이지를 가리키도록 함.
+          pageButtons[i] = temp++;
+        }
+      }
+    } else { // b. 게시판 페이지가 5개 미만일 때,
+      pageButtons = new int[numOfPage]; // 페이지 숫자 버튼의 개수를 전체 페이지 개수로 함.
+      for (int i = 0; i < numOfPage; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+        pageButtons[i] = i + 1;
+      }
+    }
+
 
     model.addAttribute("list", reviewBoardService.findByLikeCount(pageNo, pageSize, regionId, themeId, filter, keyword));
     model.addAttribute("filter", filter);
@@ -427,6 +458,8 @@ public class ReviewBoardController {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("pageButtons", pageButtons); // 페이지 숫자 버튼
+
   }
 
   @GetMapping("listByViews")
@@ -439,7 +472,7 @@ public class ReviewBoardController {
       @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
       Model model) {
 
-    if (pageSize < 3 || pageSize > 20) {
+    if (pageSize < 12 || pageSize > 20) {
       pageSize = 3;
     }
     if (pageNo < 1) {
@@ -448,10 +481,41 @@ public class ReviewBoardController {
 
     int numOfPage = 1;
     int numOfRecord = reviewBoardService.countAll(regionId, themeId, filter, keyword);
-    numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+
+    if (numOfRecord != 0) { // 해당하는 데이터가 하나라도 있다면,
+      numOfPage = numOfRecord / pageSize + (numOfRecord % pageSize > 0 ? 1 : 0);
+    }
 
     if (pageNo > numOfPage) {
       pageNo = numOfPage;
+    }
+
+    /* 페이징 페이지 숫자 버튼 */
+    int[] pageButtons; // 페이징 페이지 숫자 버튼
+
+    if (numOfPage >= 5) { // a. 게시판 페이지가 5개 이상일 때,
+      pageButtons = new int[5]; // 페이지 숫자 버튼의 개수를 5개로 함.
+
+      if (pageNo <= 3) { // 1. 현재 페이지가 시작페이지에서 3페이지 이내의 페이지일 때,
+        for (int i = 0; i < 5; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+          pageButtons[i] = i + 1;
+        }
+      } else if (pageNo >= (numOfPage - 2)) { // 2. 현재 페이지가 끝페이지에서 3페이지 이내의 페이지일 때,
+        int temp = numOfPage;
+        for (int i = 4; i >= 0; i--) { // 숫자 버튼이 끝페이지 -4 부터 시작하도록 함.
+          pageButtons[i] = temp--;
+        }
+      } else { // 3. 그 외의 경우,
+        int temp = pageNo - 2;
+        for (int i = 0; i < 5; i++) { // 숫자 버튼의 가운데 버튼이 현재페이지를 가리키도록 함.
+          pageButtons[i] = temp++;
+        }
+      }
+    } else { // b. 게시판 페이지가 5개 미만일 때,
+      pageButtons = new int[numOfPage]; // 페이지 숫자 버튼의 개수를 전체 페이지 개수로 함.
+      for (int i = 0; i < numOfPage; i++) { // 숫자 버튼이 1부터 시작하도록 함.
+        pageButtons[i] = i + 1;
+      }
     }
 
     model.addAttribute("list", reviewBoardService.findByViews(pageNo, pageSize, regionId, themeId, filter, keyword));
@@ -461,6 +525,8 @@ public class ReviewBoardController {
     model.addAttribute("pageNo", pageNo);
     model.addAttribute("pageSize", pageSize);
     model.addAttribute("numOfPage", numOfPage);
+    model.addAttribute("pageButtons", pageButtons); // 페이지 숫자 버튼
+
   }
 
 }

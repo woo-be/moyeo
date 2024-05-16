@@ -6,13 +6,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+  <!-- 폰트 적용-->
+  <link rel="stylesheet" href="/style/fontstyle.css">
+
   <style>
     .myInfo {
       margin-left: 10%;
       width: 60%;
       padding: 1%;
       padding-bottom: 20px;
-      border: 1px solid #ccc;
+      /*border: 1px solid #ccc;*/
       margin-bottom: 50px;
       text-align: center;
     }
@@ -28,7 +32,8 @@
       width: 70%;
       padding: 1%;
       padding-bottom: 20px;
-      border: 1px solid #ccc;
+      border: 0px;
+      /*border: 1px solid #ccc;*/
       text-align: center;
     }
   </style>
@@ -42,7 +47,7 @@
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="card">
     <div class="myInfo">
-      <h1>회원 정보</h1>
+      <h3 class="mb-4 pb-3 border-bottom">회원 정보</h3>
       <form data-th-object="${session.loginUser}" enctype='multipart/form-data' method='post'>
         <div class="table-responsive"  data-th-if="${session.loginUser != null }">
           <div class="form-group">

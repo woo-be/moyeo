@@ -31,6 +31,8 @@ public class ReviewScrapController {
 
     if(checked != 1) {
       reviewScrapService.add(loginUser.getMemberId(), reviewBoardId);
+    }else{
+      reviewScrapService.delete(loginUser.getMemberId(), reviewBoardId);
     }
 
     return "redirect:/review/view?reviewBoardId=" + reviewBoardId;

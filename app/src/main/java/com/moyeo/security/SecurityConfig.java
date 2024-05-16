@@ -1,7 +1,6 @@
 package com.moyeo.security;
 
 import com.moyeo.service.MemberService;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.context.annotation.Bean;
@@ -13,8 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
-import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 
 
 @Configuration
@@ -38,7 +35,7 @@ public class SecurityConfig {
             // 로그인 없이 들어갈수 있는 곳
             .mvcMatchers("/review/list", "/home", "/index", "/", "/img/**", "/member/signup", "/member/add", "/review/view*", "/recruit/list", "/recruit/view*",
                 "/member/findEmail", "/member/findPassword","/member/findByEmail","/member/updatePassword","/auth/**","/api/**","/login/**","/api/v1/oauth2/google/**",
-                "/review/listByCreatedDate", "/review/listByLikeCount", "/review/listByViews", "/originalhome", "/review/listByViews"
+                "/review/listByCreatedDate", "/review/listByLikeCount", "/review/listByViews", "/originalhome", "/review/listByViews", "/style/**"
 
             ).permitAll()
             .anyRequest().authenticated()

@@ -20,16 +20,12 @@
         rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.js"></script>
 
+  <!-- 폰트 적용-->
+  <link rel="stylesheet" href="/style/fontstyle.css">
+
   <style>
-    @font-face {
-      font-family: 'LINESeedKR-Rg';
-      src: url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.eot');
-      src:url('https://cdn.jsdelivr.net/gh/wizfile/font/LINESeedKR-Rg.woff') format('woff');
-      font-style: normal;
-    }
     body {
       padding-left: 10px;
-      font-family: 'LINESeedKR-Rg';
     }
     body {
         padding-left: 0px;
@@ -85,7 +81,11 @@
       padding-right:10px;
       margin-right:10px;
     }
-
+    /*.address-content {*/
+    /*  max-width: 150px; !* 원하는 최대 너비 설정 *!*/
+    /*  word-wrap: break-word; !* 긴 단어가 너비를 넘으면 줄바꿈 *!*/
+    /*  overflow-wrap: break-word; !* 긴 단어가 너비를 넘으면 줄바꿈 *!*/
+    /*}*/
   </style>
 
 </head>
@@ -163,9 +163,9 @@
                       <h6 class="form-item-div-name">테마</h6>
                       <h6 data-th-text="*{themeName}"></h6>
                     </div>
-                    <div class="d-flex flex-row">
-                      <h6 class="form-item-div-name">주소</h6>
-                      <h6 style="width:150px" data-th-text="*{address}"></h6>
+                    <div class="d-flex flex-row w-100">
+<!--                      <h6 class="form-item-div-name">주소</h6>-->
+<!--                      <h6 class="address-content" data-th-text="*{address}"></h6>-->
                       <input id="addr" readonly type="hidden" name="address" >
                     </div>
                   </div>
@@ -199,12 +199,12 @@
       </form>
     </div>
 
-    <div class="d-flex justify-content-center bd-highlight p-4 mt-4">
+    <div class="d-flex justify-content-center bd-highlight p-4 mt-2">
       <div class="w-75">
         <div class="d-flex flex-column">
           <!-- view comment -->
           <div>
-            <h4 class="mt-4 ms-4 mb-4">댓글</h4>
+            <h4 class="ms-4 mb-4">댓글</h4>
             <ul data-th-if="*{commentList}" style="list-style: none;">
               <li data-th-each="comment : *{commentList}" data-th-object="${comment}">
                 <div class="commentviewform"> <!-- 댓글 조회 지정용 -->
