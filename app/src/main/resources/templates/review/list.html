@@ -89,6 +89,14 @@
       content: "\A\A";
       white-space: pre;
     }
+
+    /* 제목 줄바꿈 ... 처리 */
+    .review-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
   </style>
 </head>
 <div data-th-replace="header :: header">머리말</div>
@@ -137,7 +145,7 @@
                 </div>
 
                 <div class="card-body d-flex flex-column">
-                  <h6 class="title mb-1" data-th-text="*{title}">제목입니다</h6>
+                  <h6 class="title mb-1 review-title" data-th-text="*{title}">제목입니다</h6>
                   <span class="d-flex justify-content-between mb-1">
                     <span data-th-text="*{writer.nickname}" style="font-size: 14px;">닉네임</span>
                   </span>
