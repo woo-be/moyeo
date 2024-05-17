@@ -75,7 +75,9 @@
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
   }
-
+  .minvh {
+    min-height: 63.5vh;
+  }
   </style>
 </head>
 
@@ -83,7 +85,7 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around pb-3">
+<div class="d-flex justify-content-around pb-3 minvh">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="myreview">
     <h2 class="text-center">작성 후기</h2><br>

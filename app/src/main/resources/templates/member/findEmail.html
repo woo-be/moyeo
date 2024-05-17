@@ -25,11 +25,14 @@
       margin-top: 6%;
       width: 100%;
     }
+    .minvh {
+      min-height: 61vh;
+    }
   </style>
 </head>
 <div data-th-replace="header :: header">머리말</div>
 <body>
-<main>
+<main class="minvh">
   <form action="findEmail" data-th-action="@{findByEmail}" method='post'>
     <div class="container">
       <div class="row justify-content-center">

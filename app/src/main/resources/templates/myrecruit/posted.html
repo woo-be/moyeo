@@ -29,8 +29,11 @@
   footer {
     position: relative;
     padding: 10px;
-    margin-top: 14%;
+<!--    margin-top: 14%;-->
     width: 100%;
+  }
+  .minvh {
+    min-height: 63.5vh;
   }
   </style>
 </head>
@@ -39,7 +42,7 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around pb-3">
+<div class="d-flex justify-content-around pb-3 minvh">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
     <div class="card">
       <div class="bg-white py-4 card-header"><h3 class="mb-0">작성한 모집글</h3></div>
