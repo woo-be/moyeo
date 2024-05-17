@@ -20,9 +20,9 @@
   <delete id="delete" parameterType="int">
     delete
     from
-    review_scrap
+      review_scrap
     where
-    review_board_id=#{reviewBoardId} and member_id=#{memberId}
+      review_board_id=#{reviewBoardId} and member_id=#{memberId}
   </delete>
 
   <select id="checked" parameterType="int" resultType="int">

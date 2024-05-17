@@ -7,4 +7,6 @@ public interface ReviewScrapService {
   int get(int memberId, int reviewBoardId);
 
   int delete(int memberId, int reviewBoardId);
+
+  int deleteAll(int[] reviewBoardIdList, int memberId);
 }
