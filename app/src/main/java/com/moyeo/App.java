@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 @SpringBootApplication
 @EnableTransactionManagement
 @PropertySource({
-    "classpath:config/ncp.properties",
-    "classpath:config/ncp-secret.properties"
+    "file:${user.home}/moyeoconfig/jdbc.properties",
+    "file:${user.home}/moyeoconfig/ncp.properties",
+    "file:${user.home}/moyeoconfig/ncp-secret.properties",
+    "file:${user.home}/moyeoconfig/application-oauth.properties"
 })
 @Controller
 public class App {
