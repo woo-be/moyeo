@@ -40,88 +40,110 @@
       border-top-left-radius: 20px;
       border-top-right-radius: 20px;
     }
+
+    /* 컨텐츠 최소 높이 */
     .minvh {
     min-height: 63.5vh;
     }
+
+    /* 체크박스를 사진 위에 올리는 css */
+    .position-relative {
+      z-index: 1;
+    }
+    .z-index-2 {
+      z-index: 2;
+    }
+
+    /* 체크박스 크기 */
+    .enlarged-checkbox {
+      transform: scale(1.2);
+    }
+
+    /* 제목 줄바꿈 ... 처리 */
+    .review-title {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
 
   </style>
 </head>
 <body>
 
-<div data-th-replace="header :: header">머리말</div>
+  <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around pb-3 minvh">
-  <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
-  <div class="myscrap">
-    <h2 class="text-center">즐겨찾기</h2><br>
-    <div class="px-5">
-
-      <div>
-        <div class="row row-cols-1 row-cols-md-4 g-2">
-          <div class="col" data-th-each="reviewBoard : ${scrapList}" data-th-object="${reviewBoard}">
+  <div class="d-flex justify-content-around pb-3 minvh">
+    <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
+    <div class="myscrap">
+      <h2 class="text-center">즐겨찾기</h2><br>
+      <div class="px-5">
+        <!-- 카드 리스트 -->
+        <div>
+          <div class="row row-cols-1 row-cols-md-4 g-2">
+            <div class="col" data-th-each="reviewBoard : ${scrapList}" data-th-object="${reviewBoard}">
               <div class="card border-0">
-                <input type="checkbox" data-th-onclick="'scrapChecked('+*{reviewBoardId}+')'">
-                <!-- 사진 -->
-                <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
-                     data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
-                <!-- 기본 사진 -->
-                <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"
-                     data-th-src="@{/img/default-review-photo.png}"
-                     src="/static/img/default-review-photo.png" alt="여행 사진">
-                <!-- 카드 내용 -->
+                <div class="position-relative">
+                  <input type="checkbox" data-th-onclick="'scrapChecked('+*{reviewBoardId}+')'" class="position-absolute top-0 start-0 mt-2 ms-2 z-index-2 enlarged-checkbox">
+                  <!-- 사진 -->
+                  <img class="card-img-top border-bottom rounded-3" data-th-if="*{photos[0].photo}" alt="여행 사진"
+                       data-th-src="@{'https://3at17w9w2829.edge.naverncp.com/zUFv73XfHj/review/' + *{photos[0].photo}(type=f,w=250,h=250,ttype=jpg)}">
+                  <!-- 기본 사진 -->
+                  <img class="card-img-top border-bottom rounded-3" data-th-unless="*{photos[0].photo}"
+                       data-th-src="@{/img/default-review-photo.png}"
+                       src="/static/img/default-review-photo.png" alt="여행 사진">
+                </div>
                 <a class="text-decoration-none link-dark" data-th-href="@{/review/views(reviewBoardId=*{reviewBoardId})}" href="view.html">
-                <div class="card-header text-muted d-flex justify-content-between">
-                  <span data-th-text="*{regionName}" class="mt-1">지역</span>
-                </div>
+                  <div class="card-body">
+                    <h5 data-th-text="*{title}" class="review-title">제목입니다</h5>
+                    <span class="d-flex justify-content-between">
+                      <span data-th-text="*{writer.nickname}">닉네임</span>
+                    </span>
+                    <span class="d-flex justify-content-between">
+                      <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
+                      <span>조회수 <span data-th-text="*{views}">조회수</span></span>
+                    </span>
 
-                <div class="card-body">
-                  <h5 data-th-text="*{title}">제목입니다</h5>
-                  <span class="d-flex justify-content-between">
-                    <span data-th-text="*{writer.nickname}">닉네임</span>
-                  </span>
-                  <span class="d-flex justify-content-between">
-                    <span data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-03-27</span>
-                    <span>조회수 <span data-th-text="*{views}">조회수</span></span>
-                  </span>
-
-                  <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>
-                </div>
+                    <span>좋아요 <span data-th-text="*{likeCount}">좋아요수</span></span>
+                  </div>
+                </a>
               </div>
-            </a>
+            </div>
           </div>
         </div>
+
       </div>
-
+      <div class="d-flex justify-content-end">
+        <button type="button" class="btn btn-danger" data-th-onclick="scrapDelete()">삭제</button>
+      </div>
     </div>
-  <button type="button" data-th-onclick="scrapDelete()">삭제</button>
   </div>
-</div>
 
-<div class="paging">
-  <nav aria-label="Page navigation">
-    <ul class="pagination">
-      <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
-          class="page-link">Previous</a></li>
-      <li class="page-item"><a class="page-link"
-                               data-th-href="@{scrap(pageNo=${pageNo}-1,pageSize=${pageSize})}"
-                               data-th-if="${pageNo > 1}">Previous</a></li>
-      <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
-      <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}">
-        <a class="page-link"
-           href="#"
-           data-th-href="@{scrap(pageNo=${pageButton},pageSize=${pageSize})}"
-           data-th-text="${pageButton}"></a>
-      </li>
-      <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
-      </li>
-      <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
-                                                                  data-th-href="@{scrap(pageNo=${pageNo}+1,pageSize=${pageSize})}">Next</a>
-      </li>
-    </ul>
-  </nav>
-</div>
+  <div class="paging">
+    <nav aria-label="Page navigation">
+      <ul class="pagination">
+        <li class="page-item disabled" data-th-if="${pageNo <= 1}"><a
+            class="page-link">Previous</a></li>
+        <li class="page-item"><a class="page-link"
+                                 data-th-href="@{scrap(pageNo=${pageNo}-1,pageSize=${pageSize})}"
+                                 data-th-if="${pageNo > 1}">Previous</a></li>
+        <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
+        <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}">
+          <a class="page-link"
+             href="#"
+             data-th-href="@{scrap(pageNo=${pageButton},pageSize=${pageSize})}"
+             data-th-text="${pageButton}"></a>
+        </li>
+        <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
+        </li>
+        <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
+                                                                    data-th-href="@{scrap(pageNo=${pageNo}+1,pageSize=${pageSize})}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
 
-<div class="footer" data-th-replace="footer :: footer">꼬리말</div>
+  <div class="footer" data-th-replace="footer :: footer">꼬리말</div>
 
 </body>
 
