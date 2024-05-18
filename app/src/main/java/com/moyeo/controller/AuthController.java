@@ -39,6 +39,7 @@ public class AuthController {
       @AuthenticationPrincipal MemberUserDetails principal,
       String saveEmail,
       HttpServletResponse response,
+      Model model,
       HttpSession session) throws MoyeoError {
 
     log.debug("로그인 성공!!!");
@@ -61,16 +62,19 @@ public class AuthController {
       session.setAttribute("loginUser", principal.getMember());
       session.setAttribute("loginedMemberId", member.getMemberId());
       log.debug(String.format("컨텐트======================================\n%s", member.getIntroduce()));
+      // 로그인 성공 시 home.html로 리디렉션
+      return "redirect:/home";
 
     } else {
       // 로그인 실패 시 로그인 페이지로 다시 이동
       // 구현후 로그인이 실패되었습니다 메세지 나오게 설정하기!!
       // 여기 수정ㅇㄻㄴㅇㄻ
-      throw new MoyeoError("아이디 또는 비밀번호가 일치하지 않습니다.","/auth/form");
+      model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
+      // 로그인 실패 시 auth/form 으로 리디렉션
+      return "redirect:/auth/form";
     }
 
-    // 로그인 성공 시 home.html로 리디렉션
-    return "redirect:/home";
+
   }
 
   @GetMapping("/logout")
