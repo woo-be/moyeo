@@ -37,18 +37,10 @@ public class SocialLoginController {
 
 
 //  로컬용 구글 소셜 로그인
-//  로컬용 구글 소셜 로그인
-//  @PostMapping("/auth/login/google")
-//  public void loginUrlGoogle(HttpServletResponse response) throws IOException {
-//    String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-//        + "&redirect_uri=http://localhost:8888/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
-//    response.sendRedirect(reqUrl);
-//  }
-
   @PostMapping("/auth/login/google")
   public void loginUrlGoogle(HttpServletResponse response) throws IOException {
     String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-        + "&redirect_uri=https://moyeo.p-e.kr/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+        + "&redirect_uri=http://localhost:8888/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     response.sendRedirect(reqUrl);
   }
 
@@ -93,11 +85,8 @@ public class SocialLoginController {
         .clientId(googleClientId)
         .clientSecret(googleClientPw)
         .code(authCode)
-        .redirectUri("https://moyeo.p-e.kr/api/v1/oauth2/google")
 //        로컬용 소셜로그인
-//        로컬용 소셜로그인
-//        로컬용 소셜로그인
-//        .redirectUri("http://localhost:8888/api/v1/oauth2/google")
+        .redirectUri("http://localhost:8888/api/v1/oauth2/google")
         .grantType("authorization_code").build();
     ResponseEntity<GoogleResponse> resultEntity = restTemplate.postForEntity(
         "https://oauth2.googleapis.com/token",
