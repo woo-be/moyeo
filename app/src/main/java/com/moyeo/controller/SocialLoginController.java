@@ -11,6 +11,7 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -34,6 +35,8 @@ public class SocialLoginController {
 
   @Autowired
   private MemberService memberService;
+  @Autowired
+  private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
 //  로컬용 구글 소셜 로그인
@@ -75,13 +78,12 @@ public class SocialLoginController {
     } else {
       // 모달 창을 닫고 AJAX 요청 보내기
       String email = existingMember.getEmail();
-      String password = existingMember.getPassword();
       String script = "<script>"
           + "var xhr = new XMLHttpRequest();"
           + "xhr.open('POST', '/auth/login', true);"
           + "var formData = new FormData();"
           + "formData.append('email', '" + email + "');"
-          + "formData.append('password', '" + password + "');"
+          + "formData.append('password', '" + bCryptPasswordEncoder.encode(existingMember.getPassword()) + "');"
           + "xhr.onreadystatechange = function() {"
           + "  if (xhr.readyState === XMLHttpRequest.DONE) {"
           + "    if (xhr.status === 200) {"
