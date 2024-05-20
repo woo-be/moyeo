@@ -35,8 +35,8 @@ public class SecurityConfig {
             // 로그인 없이 들어갈수 있는 곳
             .mvcMatchers("/review/list", "/home", "/index", "/", "/img/**", "/member/signup", "/member/add", "/review/view*", "/recruit/list", "/recruit/view*",
                 "/member/findEmail", "/member/findPassword","/member/findByEmail","/member/updatePassword","/auth/**","/api/**","/login/**","/api/v1/oauth2/google/**",
-                "/review/listByCreatedDate", "/review/listByLikeCount", "/review/listByViews", "/originalhome", "/review/listByViews", "/style/**"
-
+                "/review/listByCreatedDate", "/review/listByLikeCount", "/review/listByViews", "/originalhome", "/review/listByViews", "/style/**",
+                "//accounts/**"
             ).permitAll()
             .anyRequest().authenticated()
         )
