@@ -398,13 +398,13 @@ public class ReviewBoardController {
   public void findByLikeCount(
       @RequestParam(required = false) String filter,
       @RequestParam(required = false) String keyword,
-      @RequestParam(defaultValue = "12") int pageSize,
+      @RequestParam(defaultValue = "8") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
       @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
       Model model) {
 
-    if (pageSize < 12 || pageSize > 20) {
+    if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
     }
     if (pageNo < 1) {
@@ -466,13 +466,13 @@ public class ReviewBoardController {
   public void findByViews(
       @RequestParam(required = false) String filter,
       @RequestParam(required = false) String keyword,
-      @RequestParam(defaultValue = "12") int pageSize,
+      @RequestParam(defaultValue = "8") int pageSize,
       @RequestParam(defaultValue = "1") int pageNo,
       @RequestParam(defaultValue = "0") int regionId, // 원하는 지역 id를 요청
       @RequestParam(defaultValue = "0") int themeId, // 원하는 테마 id를 요청
       Model model) {
 
-    if (pageSize < 12 || pageSize > 20) {
+    if (pageSize < 3 || pageSize > 20) {
       pageSize = 3;
     }
     if (pageNo < 1) {
