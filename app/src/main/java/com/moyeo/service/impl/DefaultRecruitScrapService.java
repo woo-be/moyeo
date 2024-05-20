@@ -45,4 +45,15 @@ public class DefaultRecruitScrapService implements RecruitScrapService {
   public int countAll(@Param("memberId") int memberId){
     return recruitScrapDao.countAll(memberId);
   }
+
+  @Override
+  public int deleteAll(int[] recruitBoardIdList, int memberId) {
+
+    for(int recruitBoardId : recruitBoardIdList){
+      RecruitScrap recruitScrap = new RecruitScrap(recruitBoardId, memberId);
+      recruitScrapDao.delete(recruitScrap);
+    }
+
+    return 1;
+  }
 }

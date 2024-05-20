@@ -76,7 +76,11 @@
   <div class="d-flex justify-content-around pb-3 minvh">
     <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
     <div class="myscrap">
-      <h2 class="text-center">즐겨찾기</h2><br>
+      <div class="bg-white py-4 card-header d-flex flex-row justify-content-between">
+        <div style="width:9%"></div>
+        <h3 class="text-center">즐겨찾기한 후기글</h3>
+        <button type="button" class="btn btn-danger me-3" data-th-onclick="scrapDelete()">삭제</button>
+      </div>
       <div class="px-5">
         <!-- 카드 리스트 -->
         <div>
@@ -112,9 +116,6 @@
           </div>
         </div>
 
-      </div>
-      <div class="d-flex justify-content-end">
-        <button type="button" class="btn btn-danger" data-th-onclick="scrapDelete()">삭제</button>
       </div>
     </div>
   </div>

@@ -26,7 +26,7 @@
   let recruitBoardId = document.getElementById("recruitBoardId").value;
 
   // 서버 ip주소를 등록해야함
-  const socket = new WebSocket("ws://192.168.0.8:8888/chat?recruitBoardId=" + recruitBoardId);
+  const socket = new WebSocket("ws://moyeo.p-e.kr/chat?recruitBoardId=" + recruitBoardId);
 
   // open: 커넥션이 제대로 만들어졌을 때 발생
   socket.onopen = function(event) {

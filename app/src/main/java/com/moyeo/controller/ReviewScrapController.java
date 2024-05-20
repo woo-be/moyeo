@@ -49,7 +49,6 @@ public class ReviewScrapController {
   public Map<String, String> deleteAll(int[] reviewBoardIdList, /*@LoginUser Member loginUser*/ HttpSession session){
 
     Member loginUser = (Member) session.getAttribute("loginUser");
-    log.debug(reviewBoardIdList);
 
     reviewScrapService.deleteAll(reviewBoardIdList, loginUser.getMemberId());
 
