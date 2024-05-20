@@ -70,12 +70,22 @@
   .card:hover {
     box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
   }
-
   .card-img-top {
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
   }
 
+  /* 컨텐츠 최소 높이 */
+  .minvh {
+    min-height: 63.5vh;
+  }
+
+  /* 제목 줄바꿈 ... 처리 */
+  .review-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
   </style>
 </head>
 
@@ -83,7 +93,7 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around pb-3">
+<div class="d-flex justify-content-around pb-3 minvh">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="myreview">
     <h2 class="text-center">작성 후기</h2><br>
@@ -106,7 +116,7 @@
                 </div>
 
                 <div class="card-body">
-                  <h5 data-th-text="*{title}">제목입니다</h5>
+                  <h5 data-th-text="*{title}" class="review-title">제목입니다</h5>
                   <span class="d-flex justify-content-between">
                     <span data-th-text="*{writer.nickname}">닉네임</span>
                   </span>

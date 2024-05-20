@@ -119,6 +119,9 @@
     <if test="regionId > 0">
       and rb.region_id=#{regionId}
     </if>
+    <if test="themeId > 0">
+      and rb.theme_id=#{themeId}
+    </if>
   </select>
 
 

@@ -72,6 +72,11 @@
                   <a class="small mb-0" href="../../member/findPassword">비밀번호 찾기</a>
                   <a class="small mb-0" href="../../member/signup">회원가입</a>
                 </div>
+                <script data-th-if="${param.error}">
+                      window.onload = function() {
+                          alert("로그인 실패하였습니다.");
+                      }
+                </script>
               </form>
             </div>
           </div>
@@ -106,7 +111,10 @@
       passwordError.style.display = "none"; // 오류 메세지 숨기기
     }
   });
+
+
 </script>
+
 
 <div data-th-replace="footer :: footer">꼬리말</div>
 

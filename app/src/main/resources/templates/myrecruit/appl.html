@@ -26,7 +26,9 @@
       border: 1px solid #ccc;
       text-align: center;
     }
-
+    .minvh {
+      min-height: 72.5vh;
+    }
   </style>
 </head>
 
@@ -34,7 +36,7 @@
 
 <div data-th-replace="header :: header">머리말</div>
 
-<div class="d-flex justify-content-around">
+<div class="d-flex justify-content-around pb-3 minvh">
   <div data-th-replace="mypagenav :: sidebar">마이 페이지</div>
   <div class="card">
     <div class="bg-white  py-4 card-header"><h3 class="mb-0">신청자 확인</h3></div>
