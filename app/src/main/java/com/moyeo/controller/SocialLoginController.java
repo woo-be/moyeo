@@ -83,7 +83,7 @@ public class SocialLoginController {
           + "formData.append('password', '" + existingMember.getPassword() + "');"
           + "xhr.onreadystatechange = function() {"
           + "  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {"
-          + "     window.close();"
+          + "     console.log('asd');"
           + "  }"
           + "};"
           + "xhr.send(formData);"
