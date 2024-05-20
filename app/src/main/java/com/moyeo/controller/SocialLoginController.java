@@ -11,7 +11,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -35,8 +34,6 @@ public class SocialLoginController {
 
   @Autowired
   private MemberService memberService;
-  @Autowired
-  private BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
 
 
 //  로컬용 구글 소셜 로그인
@@ -51,9 +48,10 @@ public class SocialLoginController {
   @PostMapping("/auth/login/google")
   public void loginUrlGoogle(HttpServletResponse response) throws IOException {
     String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-        + "&redirect_uri=http://moyeo.p-e.kr/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+        + "&redirect_uri=http://223.130.152.224/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     response.sendRedirect(reqUrl);
   }
+
 
 
 
@@ -65,10 +63,9 @@ public class SocialLoginController {
     GoogleInfResponse userInfo = getUserInfoFromToken(jwtToken);
     Member member = createMemberFromUserInfo(userInfo);
     Member existingMember = memberService.getByEmail(member.getEmail());
-
     if (existingMember == null) {
       session.setAttribute("newMember", member);
-      // 모달 창을 닫고 회원가입 페이지로 이동
+      // modal 창을 닫고 회원가입 페이지로 이동(추가적인 정보 필요)
       String script = "<script>"
           + "window.close();"
           + "window.opener.location.href='/member/signup';"
@@ -76,25 +73,11 @@ public class SocialLoginController {
       response.setContentType("text/html");
       response.getWriter().println(script);
     } else {
-      // 모달 창을 닫고 AJAX 요청 보내기
-      String email = existingMember.getEmail();
+      session.setAttribute("loginUser", existingMember);
+      // modal 창을 닫고 홈으로 이동
       String script = "<script>"
-          + "var xhr = new XMLHttpRequest();"
-          + "xhr.open('POST', '/auth/login', true);"
-          + "var formData = new FormData();"
-          + "formData.append('email', '" + email + "');"
-          + "formData.append('password', '" + bCryptPasswordEncoder.encode(existingMember.getPassword()) + "');"
-          + "xhr.onreadystatechange = function() {"
-          + "  if (xhr.readyState === XMLHttpRequest.DONE) {"
-          + "    if (xhr.status === 200) {"
-          + "      window.opener.location.href = '/home';" // 홈 페이지로 이동"
-          + "    } else {"
-          + "      console.error('로그인 요청 실패:', xhr.status, xhr.statusText);"
-          + "    }"
-          + "    window.close();"
-          + "  }"
-          + "};"
-          + "xhr.send(formData);"
+          + "window.close();"
+          + "window.opener.location.href='/home';"
           + "</script>";
       response.setContentType("text/html");
       response.getWriter().println(script);
@@ -111,7 +94,7 @@ public class SocialLoginController {
         .code(authCode)
 //        로컬용 소셜로그인
 //        .redirectUri("http://localhost:8888/api/v1/oauth2/google")
-        .redirectUri("http://moyeo.p-e.kr/api/v1/oauth2/google")
+        .redirectUri("http://223.130.152.224/api/v1/oauth2/google")
         .grantType("authorization_code").build();
     ResponseEntity<GoogleResponse> resultEntity = restTemplate.postForEntity(
         "https://oauth2.googleapis.com/token",
