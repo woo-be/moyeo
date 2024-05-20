@@ -75,15 +75,22 @@ public class SocialLoginController {
     } else {
       session.setAttribute("loginUser", existingMember);
       // 모달 창을 닫고 AJAX 요청 보내기
+      String email = existingMember.getEmail();
+      String password = existingMember.getPassword();
       String script = "<script>"
           + "var xhr = new XMLHttpRequest();"
           + "xhr.open('POST', '/auth/login', true);"
           + "var formData = new FormData();"
-          + "formData.append('email', '" + existingMember.getEmail() + "');"
-          + "formData.append('password', '" + existingMember.getPassword() + "');"
+          + "formData.append('email', '" + email + "');"
+          + "formData.append('password', '" + password + "');"
           + "xhr.onreadystatechange = function() {"
-          + "  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {"
-          + "     console.log('asd');"
+          + "  if (xhr.readyState === XMLHttpRequest.DONE) {"
+          + "    if (xhr.status === 200) {"
+          + "      window.opener.location.href = '/home';" // 홈 페이지로 이동"
+          + "    } else {"
+          + "      console.error('로그인 요청 실패:', xhr.status, xhr.statusText);"
+          + "    }"
+          + "    window.close();"
           + "  }"
           + "};"
           + "xhr.send(formData);"
