@@ -73,7 +73,6 @@ public class SocialLoginController {
       response.setContentType("text/html");
       response.getWriter().println(script);
     } else {
-      session.setAttribute("loginUser", existingMember);
       // 모달 창을 닫고 AJAX 요청 보내기
       String email = existingMember.getEmail();
       String password = existingMember.getPassword();
