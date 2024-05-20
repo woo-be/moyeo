@@ -4,6 +4,7 @@ import com.moyeo.security.MemberUserDetails;
 import com.moyeo.service.MemberService;
 import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
+import java.util.HashMap;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,13 +36,15 @@ public class AuthController {
 
   // templates의 auth파일에서 login.html 에서 로그인성공 폼을 가져온다.
   @PostMapping("loginSuccess")
-  public String login(
+  @ResponseBody
+  public HashMap<String, String> login(
       String email,
       @AuthenticationPrincipal MemberUserDetails principal,
       String saveEmail,
       HttpServletResponse response,
       Model model,
       HttpSession session) throws MoyeoError {
+    HashMap<String, String> map = new HashMap<>();
 
     log.debug("로그인 성공!!!");
 
@@ -56,25 +60,8 @@ public class AuthController {
       cookie.setMaxAge(0);
       response.addCookie(cookie);
     }
-
-    Member member = memberService.get(email);
-    if (member != null) {
-      session.setAttribute("loginUser", principal.getMember());
-      session.setAttribute("loginedMemberId", member.getMemberId());
-      log.debug(String.format("컨텐트======================================\n%s", member.getIntroduce()));
-      // 로그인 성공 시 home.html로 리디렉션
-      return "redirect:/home";
-
-    } else {
-      // 로그인 실패 시 로그인 페이지로 다시 이동
-      // 구현후 로그인이 실패되었습니다 메세지 나오게 설정하기!!
-      // 여기 수정ㅇㄻㄴㅇㄻ
-      model.addAttribute("error", "아이디 또는 비밀번호가 일치하지 않습니다.");
-      // 로그인 실패 시 auth/form 으로 리디렉션
-      return "redirect:/auth/form";
-    }
-
-
+    map.put("login","success");
+    return map;
   }
 
   @GetMapping("/logout")
