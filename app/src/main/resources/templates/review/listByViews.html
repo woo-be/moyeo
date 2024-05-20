@@ -171,19 +171,19 @@
                                 class="page-link">Previous</a></li>
                         <li class="page-item">
                             <a class="page-link"
-                               data-th-href="@{list(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                               data-th-href="@{listByViews(pageNo=${pageNo - 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
                                data-th-if="${pageNo > 1}">Previous</a></li>
                         <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
                         <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}">
                             <a class="page-link"
                                href="#"
-                               data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                               data-th-href="@{listByViews(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
                                data-th-text="${pageButton}"></a>
                         </li>
                         <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
                         </li>
                         <li data-th-if="${pageNo < numOfPage}" class="page-item"><a class="page-link"
-                                                                                    data-th-href="@{list(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}">Next</a>
+                                                                                    data-th-href="@{listByViews(pageNo=${pageNo + 1},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}">Next</a>
                         </li>
                     </ul>
                 </nav>
