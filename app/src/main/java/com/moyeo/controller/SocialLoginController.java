@@ -80,14 +80,10 @@ public class SocialLoginController {
           + "window.close();"
           + "var xhr = new XMLHttpRequest();"
           + "xhr.open('POST', '/auth/login', true);"
-          + "xhr.setRequestHeader('Content-Type', 'application/json');"
-          + "xhr.onreadystatechange = function() {"
-          + "  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {"
-          + "    window.opener.location.href = '/home';" // 홈 페이지로 이동
-          + "  }"
-          + "};"
-          + "var existingMemberJson = JSON.stringify(" + existingMember + ");"
-          + "xhr.send(existingMemberJson);"
+          + "var existingMember = new FormData()"
+          + "existingMember.append('email',"+existingMember.getEmail()+" )"
+          + "existingMember.append('password',"+existingMember.getPassword()+" )"
+          + "xhr.send(existingMember);"
           + "</script>";
       response.setContentType("text/html");
       response.getWriter().println(script);
