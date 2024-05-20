@@ -103,7 +103,7 @@
                     조회수 <span data-th-text="*{views}"></span>
                   </div>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex" data-th-if="*{writer.memberId} == ${loginUser.memberId}">
                   <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex flex-row bd-highlight">
                       <button class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
@@ -156,7 +156,7 @@
 
             <!-- buttons -->
             <div class="d-flex flex-row bd-highlight mt-4 pb-5 justify-content-center border-bottom border-2">
-              <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}" style="display:inline"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
+              <div class="m-1" data-th-if="${loginUser.memberId != 0 && recruitboard.state == true}"> <!--로그인상태이면서 게시글 상태가 모집중 일 때,,-->
                 <a data-th-if="${recruitMember} == null" data-th-href="@{../recruitMember/add(recruitBoardId=*{recruitBoardId})}" href="apply.html">
                   <button type="button" class="btn btn-primary m-1" data-th-onclick="applyModal()">신청하기</button></a>
                 <div data-th-if="${recruitMember} != null" style="display:inline">
@@ -168,7 +168,7 @@
               </div>
               <div class="m-1">
                 <!--            <button type="button" data-th-onclick="'scrapRecruit(' + *{recruitBoardId} + ')'">즐겨찾기</button>-->
-                <a type="button" class="btn btn-primary m-1" data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}" style="font-size: 14px;" href="scrap.html">즐겨찾기</a>
+                <a type="button" class="btn btn-primary m-1" data-th-href="@{../myrecruit/scrap/add(recruitBoardId=*{recruitBoardId})}"  href="scrap.html">즐겨찾기</a>
               </div>
             </div>
 

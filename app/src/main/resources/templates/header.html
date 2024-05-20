@@ -9,6 +9,10 @@
         rel="stylesheet"
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
         crossorigin="anonymous">
+
+  <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
 <!--  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
 <!--          integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"-->
 <!--          crossorigin="anonymous"></script>-->
@@ -81,7 +85,7 @@
   <div class="col-md-3 text-end">
     <span data-th-if="${session.loginUser != null}">[[${session.loginUser.name}]] 님 환영합니다.</span>
     <a data-th-if="${session.loginUser != null}" data-th-href="@{/auth/logout}" href="auth/logout">
-      <button type="button" class="btn btn-primary me-2" onclick="showMessage('로그아웃되었습니다!')">로그아웃</button>
+      <button type="button" class="btn btn-primary me-2" onclick="showMessage('로그아웃 되었습니다!')">로그아웃</button>
     </a>
   <div class="d-flex justify-content-end" data-th-unless="${session.loginUser != null}">
     <a data-th-href="@{/auth/form}">
@@ -143,10 +147,10 @@
         // 알림 리스트 출력
         for (const alarm of response) {
           console.log(alarmModalBody);
-          $('<tr>').addClass('alarmRow')  // 클래스명 추가
-          .append($('<td>').html(alarm.content))  // 링크+내용
+          $('<tr>').addClass('alarmRow text-start')  // 클래스명 추가
+          .append($('<td>').addClass('text-start').html(alarm.content))  // 링크+내용
           .append($('<td>').html(alarm.checked ? 'o':'x'))  // 읽음여부
-          .append($('<td>').html('<button onclick="alarmDelete(this,' + alarm.alarmId + ')">x</button>'))  // 삭제 버튼
+          .append($('<td>').html('<button class="btn btn-danger btn-sm" onclick="alarmDelete(this,' + alarm.alarmId + ')">x</button>'))  // 삭제 버튼
           .appendTo(alarmModalBody);  // tbody에 자식 태그 추가
         }
       });
