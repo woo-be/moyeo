@@ -48,7 +48,7 @@ public class SocialLoginController {
   @PostMapping("/auth/login/google")
   public void loginUrlGoogle(HttpServletResponse response) throws IOException {
     String reqUrl = "https://accounts.google.com/o/oauth2/v2/auth?client_id=" + googleClientId
-        + "&redirect_uri=http://223.130.152.224:80/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
+        + "&redirect_uri=https://223.130.152.224:80/api/v1/oauth2/google&response_type=code&scope=email%20profile%20openid&access_type=offline";
     response.sendRedirect(reqUrl);
   }
 
@@ -93,7 +93,7 @@ public class SocialLoginController {
         .clientId(googleClientId)
         .clientSecret(googleClientPw)
         .code(authCode)
-        .redirectUri("http://223.130.152.224:80/api/v1/oauth2/google")
+        .redirectUri("https://223.130.152.224:80/api/v1/oauth2/google")
 //        로컬용 소셜로그인
 //        로컬용 소셜로그인
 //        로컬용 소셜로그인
