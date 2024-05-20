@@ -103,7 +103,7 @@
                     조회수 <span data-th-text="*{views}"></span>
                   </div>
                 </div>
-                <div class="d-flex">
+                <div class="d-flex" data-th-if="*{writer.memberId} == ${loginUser.memberId}">
                   <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex flex-row bd-highlight">
                       <button class="btn btn-primary m-1 h-75" style="font-size: 14px;">수정</button>
