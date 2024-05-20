@@ -63,6 +63,7 @@ public class SocialLoginController {
     GoogleInfResponse userInfo = getUserInfoFromToken(jwtToken);
     Member member = createMemberFromUserInfo(userInfo);
     Member existingMember = memberService.getByEmail(member.getEmail());
+
     if (existingMember == null) {
       session.setAttribute("newMember", member);
       // modal 창을 닫고 회원가입 페이지로 이동(추가적인 정보 필요)
@@ -74,10 +75,19 @@ public class SocialLoginController {
       response.getWriter().println(script);
     } else {
       session.setAttribute("loginUser", existingMember);
-      // modal 창을 닫고 홈으로 이동
+      // modal 창을 닫고 AJAX 요청 보내기
       String script = "<script>"
           + "window.close();"
-          + "window.opener.location.href='/home';"
+          + "var xhr = new XMLHttpRequest();"
+          + "xhr.open('POST', '/auth/login', true);"
+          + "xhr.setRequestHeader('Content-Type', 'application/json');"
+          + "xhr.onreadystatechange = function() {"
+          + "  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {"
+          + "    window.opener.location.href = '/home';" // 홈 페이지로 이동
+          + "  }"
+          + "};"
+          + "var existingMemberJson = JSON.stringify(" + existingMember + ");"
+          + "xhr.send(existingMemberJson);"
           + "</script>";
       response.setContentType("text/html");
       response.getWriter().println(script);
