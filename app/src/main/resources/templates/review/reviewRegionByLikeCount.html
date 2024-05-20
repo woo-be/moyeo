@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>모여</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="/webjars/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+<aside data-th-fragment="reviewRegionListByLikeCount">
+  <div class="border-bottom border-1 pt-3 pb-2 d-flex justify-content-center">
+    <h5 class="fw-bold">지역</h5>
+  </div>
+  <input data-th-value="${regionId}" type="hidden">
+  <ul class="mt-2" id="reviewRegion" style="list-style: none;">
+    <li><a data-th-href="@{listByLikeCount(themeId=${themeId})}" data-th-classappend="${regionId == 0 || regionId == null} ? 'active' : ''">전체</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=1,themeId=${themeId})}" data-th-classappend="${regionId == 1} ? 'active' : ''">서울특별시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=2,themeId=${themeId})}" data-th-classappend="${regionId == 2} ? 'active' : ''">부산광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=3,themeId=${themeId})}" data-th-classappend="${regionId == 3} ? 'active' : ''">대구광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=4,themeId=${themeId})}" data-th-classappend="${regionId == 4} ? 'active' : ''">인천광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=5,themeId=${themeId})}" data-th-classappend="${regionId == 5} ? 'active' : ''">광주광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=6,themeId=${themeId})}" data-th-classappend="${regionId == 6} ? 'active' : ''">대전광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=7,themeId=${themeId})}" data-th-classappend="${regionId == 7} ? 'active' : ''">울산광역시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=8,themeId=${themeId})}" data-th-classappend="${regionId == 8} ? 'active' : ''">세종특별시</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=9,themeId=${themeId})}" data-th-classappend="${regionId == 9} ? 'active' : ''">경기도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=10,themeId=${themeId})}" data-th-classappend="${regionId == 10} ? 'active' : ''">충청북도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=11,themeId=${themeId})}" data-th-classappend="${regionId == 11} ? 'active' : ''">충청남도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=12,themeId=${themeId})}" data-th-classappend="${regionId == 12} ? 'active' : ''">강원도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=13,themeId=${themeId})}" data-th-classappend="${regionId == 13} ? 'active' : ''">전라북도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=14,themeId=${themeId})}" data-th-classappend="${regionId == 14} ? 'active' : ''">전라남도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=15,themeId=${themeId})}" data-th-classappend="${regionId == 15} ? 'active' : ''">경상북도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=16,themeId=${themeId})}" data-th-classappend="${regionId == 16} ? 'active' : ''">경상남도</a></li>
+    <li><a data-th-href="@{listByLikeCount(regionId=17,themeId=${themeId})}" data-th-classappend="${regionId == 17} ? 'active' : ''">제주도</a></li>
+  </ul>
+</aside>
+</body>
+</html>
+
+
+

@@ -110,7 +110,7 @@
         <!-- 지역 -->
         <div id="reviewRegionList">
             <div class="border mx-2">
-                <div data-th-replace="review/reviewRegion :: reviewRegionList">지역 리스트</div>
+                <div data-th-replace="review/reviewRegionByLikeCount :: reviewRegionListByLikeCount">지역 리스트</div>
             </div>
         </div>
 
@@ -121,7 +121,7 @@
 
             <!-- 테마 -->
             <div class="d-flex justify-content-center">
-                <div data-th-replace="review/reviewTheme :: reviewThemeList" data-th-object="${themeId}">
+                <div data-th-replace="review/reviewThemeByLikeCount :: reviewThemeListByLikeCount" data-th-object="${themeId}">
                     테마
                 </div>
             </div>
@@ -193,7 +193,7 @@
             <div class="d-flex flex-row justify-content-between pb-3">
                 <div style="width: 50px"></div>
                 <div class="w-50">
-                    <form method="get" action="list.html" data-th-action="@{list}">
+                    <form method="get" action="list.html" data-th-action="@{listByLikeCount}">
                         <input type="hidden" name="regionId" data-th-value="${regionId}">
                         <input type="hidden" name="themeId" data-th-value="${themeId}">
                         <div class="d-flex flex-row">

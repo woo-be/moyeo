@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>모여</title>
+</head>
+<body>
+<aside data-th-fragment="reviewThemeListByLikeCount">
+  <ul class="d-flex justify-content-between flex-wrap" id="reviewTheme" style="list-style: none;">
+    <li><a data-th-href="@{listByLikeCount(regionId=${regionId})}" data-th-classappend="${themeId == 0 || themeId == null} ? 'active' : ''">전체</a></li>
+    <li><a data-th-href="@{listByLikeCount(themeId=1,regionId=${regionId})}" data-th-classappend="${themeId == 1} ? 'active' : ''">힐링</a></li>
+    <li><a data-th-href="@{listByLikeCount(themeId=2,regionId=${regionId})}" data-th-classappend="${themeId == 2} ? 'active' : ''">캠핑</a></li>
+    <li><a data-th-href="@{listByLikeCount(themeId=3,regionId=${regionId})}" data-th-classappend="${themeId == 3} ? 'active' : ''">액티비티</a></li>
+    <li><a data-th-href="@{listByLikeCount(themeId=4,regionId=${regionId})}" data-th-classappend="${themeId == 4} ? 'active' : ''">집콕</a></li>
+    <li><a data-th-href="@{listByLikeCount(themeId=5,regionId=${regionId})}" data-th-classappend="${themeId == 5} ? 'active' : ''">바다</a></li>
+  </ul>
+</aside>
+</body>
+</html>
