@@ -54,7 +54,6 @@ public class SocialLoginController {
 
 
 
-
   @GetMapping("/api/v1/oauth2/google")
   public void googleLogin(@RequestParam("code") String authCode,
       HttpSession session,
@@ -66,7 +65,7 @@ public class SocialLoginController {
 
     if (existingMember == null) {
       session.setAttribute("newMember", member);
-      // modal 창을 닫고 회원가입 페이지로 이동(추가적인 정보 필요)
+      // 모달 창을 닫고 회원가입 페이지로 이동
       String script = "<script>"
           + "window.close();"
           + "window.opener.location.href='/member/signup';"
@@ -75,15 +74,19 @@ public class SocialLoginController {
       response.getWriter().println(script);
     } else {
       session.setAttribute("loginUser", existingMember);
-      // modal 창을 닫고 AJAX 요청 보내기
+      // 모달 창을 닫고 AJAX 요청 보내기
       String script = "<script>"
-          + "window.close();"
           + "var xhr = new XMLHttpRequest();"
           + "xhr.open('POST', '/auth/login', true);"
-          + "var existingMember = new FormData()"
-          + "existingMember.append('email',"+existingMember.getEmail()+" )"
-          + "existingMember.append('password',"+existingMember.getPassword()+" )"
-          + "xhr.send(existingMember);"
+          + "var formData = new FormData();"
+          + "formData.append('email', '" + existingMember.getEmail() + "');"
+          + "formData.append('password', '" + existingMember.getPassword() + "');"
+          + "xhr.onreadystatechange = function() {"
+          + "  if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {"
+          + "     window.close();"
+          + "  }"
+          + "};"
+          + "xhr.send(formData);"
           + "</script>";
       response.setContentType("text/html");
       response.getWriter().println(script);
