@@ -7,6 +7,8 @@ import com.moyeo.vo.Member;
 import com.moyeo.vo.MoyeoError;
 import com.moyeo.vo.RecruitBoard;
 import com.moyeo.vo.RecruitScrap;
+import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.logging.Log;
@@ -14,8 +16,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -134,32 +138,19 @@ public class RecruitScrapController {
   }
 
   // 즐겨찾기 삭제 - 선택된 즐겨찾기 항목 삭제
-  @GetMapping("scrap/delete")
-  public String delete(String scrapRecruitBoardIds, // 삭제할 즐겨찾기 모집게시글 번호들을 담는 문자열
+  @PostMapping("scrap/deleteAll")
+  @ResponseBody
+  public Map<String, String> delete(int[] recruitBoardIdList,
       HttpSession session) throws Exception {
-
-    // 아무것도 선택하지 않았다면 예외 발생
-    if(scrapRecruitBoardIds == null || scrapRecruitBoardIds.isEmpty()) {
-      throw new MoyeoError(ErrorName.SELECT_REQUIRED, "/myrecruit/scrap");
-    }
-
-    // 각 번호들을 ','를 기준으로 분리하여 배열로 저장한다.
-    String[] scrapRecruitBoardIdArr = scrapRecruitBoardIds.split(",");
 
     Member loginUser = (Member) session.getAttribute("loginUser");
 
-    // 각 번호마다 recruitScrap 객체를 생성하여 해당 객체를 recruit_scrap에서 삭제한다.
-    for (String scrapRecruitBoardId : scrapRecruitBoardIdArr) {
-      RecruitScrap recruitScrap = RecruitScrap.builder().
-          recruitBoardId(Integer.parseInt(scrapRecruitBoardId)).
-          memberId(loginUser.getMemberId()).
-          build();
+    recruitScrapService.deleteAll(recruitBoardIdList, loginUser.getMemberId());
 
-      // 해당 recruitBoardId를 가진 즐겨찾기를 제거.
-      recruitScrapService.delete(recruitScrap);
-    }
+    Map<String, String> map = new HashMap<>();
+    map.put("url", "/myrecruit/scrap");
 
     // list로 리다이렉트(임시), 추후에 마이페이지에서 사용.
-    return "redirect:";
+    return map;
   }
 }

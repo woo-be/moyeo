@@ -19,4 +19,6 @@ public interface RecruitScrapService {
   int isExist(RecruitScrap recruitScrap); // 해당 scrap 객체가 테이블상에 존재하면 1, 아니면 0
 
   int countAll(@Param("memberId") int memberId);
+
+  int deleteAll(int[] recruitBoardIdList, int memberId);
 }
