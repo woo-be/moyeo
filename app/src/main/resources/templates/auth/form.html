@@ -26,6 +26,14 @@
       bottom: 0;
       width: 100%;
     }
+    .card-body {
+      width: 400px;
+      height: 400px;
+    }
+    .form-check {
+      margin-left: -10px;
+      transform: scale(1.05);
+    }
   </style>
 </head>
 
@@ -41,29 +49,29 @@
           <div class="card mb-3">
             <div class="card-body">
               <div class="pt-4 pb-2">
-                <h5 class="card-title text-center pb-0 fs-4">로그인 하십시오</h5>
-                <p class="text-center small">사이트를 이용 하시려면 사용자의 아이디와 비밀번호를 입력해 주세요.</p>
+                <h5 class="card-title text-center pb-0 fs-4">로그인</h5><br>
+<!--                <p class="text-center small">사이트를 이용 하시려면 사용자의 아이디와 비밀번호를 입력해 주세요.</p>-->
               </div>
               <form class="row g-3 needs-validation" novalidate="">
                 <div class="col-12">
-                  <label class="form-label">아이디 : </label>
+                  <label class="form-label">아이디  </label>
                   <div class="input-group has-validation">
                     <input data-th-value='${email}' class="form-control" name='email' placeholder="이메일" id="email" type='text' value="hong@test.com" style="width:100%;">
                     <div id="email-error" class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-12">
-                  <label class="form-label">비밀번호 : </label>
+                  <label class="form-label" style="margin-top:10px;">비밀번호  </label>
                   <div class="input-group has-validation">
                     <input name='password' id="password" class="form-control" placeholder="비밀번호" type='password' style="width:100%;">
                     <div id="password-error" class="invalid-feedback"></div>
                   </div>
                 </div>
                 <div class="col-12">
-                  <div class="form-check" style="margin-top:5px;">
+                  <div class="form-check" style="margin-top:10px;">
                     <input name='saveEmail' type='checkbox'> 이메일 저장
                   </div>
-                </div>
+                </div><br>
                 <div class="col-12" style="margin-top:5px;">
                   <button class="btn btn-primary w-100" id="loginBtn" type="submit">로그인</button>
                 </div>
