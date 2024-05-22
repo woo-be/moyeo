@@ -158,6 +158,7 @@
       rb.theme_id,
       th.theme_name,
       rb.member_id,
+      m.nickname,
       rb.views,
       rb.address
     from
@@ -165,6 +166,7 @@
       left join region reg on rb.region_id=reg.region_id
       left join recruit_photo rbp on rb.recruit_board_id=rbp.recruit_id
       left join theme th on rb.theme_id = th.theme_id
+      left outer join member m on m.member_id=rb.member_id
     where
       rb.recruit_board_id = #{value}
   </select>
