@@ -33,13 +33,6 @@
     console.log("WebSocket 연결이 열렸습니다.");
   };
 
-  socket.onclose = function(event) {
-        console.log("WebSocket is closed now. Attempting to reconnect...");
-        setTimeout(function() {
-            socket = createWebSocket();
-        }, 1000); // 1초 후에 재연결 시도
-    };
-
   <!--  이전에 메세지들을 불러와서 출력한다.  -->
   $.ajax({
       url: '/chat/list?recruitBoardId='+recruitBoardId,
