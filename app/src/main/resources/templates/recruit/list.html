@@ -102,7 +102,9 @@
   </style>
 </head>
 <div data-th-replace="header :: header">머리말</div>
-<body class="container-fluid">
+<body>
+
+<div class="container-fluid">
 
   <!-- 컨텐트 -->
   <div class="d-flex justify-content-center align-items-start py-3">
@@ -134,7 +136,7 @@
           <th class="col-1 text-center column-writer">작성자</th>
           <th class="col-1 text-center column-present">모집현황</th>
           <th class="col-1 text-center column-state">모집상태</th>
-<!--          <th class="col-1 text-center column-createdDate">작성일자</th>-->
+          <!--          <th class="col-1 text-center column-createdDate">작성일자</th>-->
           <th class="col-1 text-center column-hits">조회수</th>
         </tr>
         </thead>
@@ -156,7 +158,7 @@
               <span class="w-75 text-center column-state badge bg-secondary" data-th-if="*{state == false}">모집완료</span>
             </div>
           </td>
-<!--          <td class="text-center column-createdDate col-2 text-truncate" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>-->
+          <!--          <td class="text-center column-createdDate col-2 text-truncate" data-th-text="*{#dates.format(createdDate,'yyyy-MM-dd')}">2024-04-02</td>-->
           <!--data-th-value => data-th-text -->
           <td class="text-center column-hits" data-th-text="*{views}">12</td>
         </tr>
@@ -174,9 +176,9 @@
                                      data-th-if="${pageNo > 1}">Previous</a></li>
             <!-- 반복(th-each)을 돌면서 페이지 버튼을 만듦. -->
             <li class="page-item" data-th-each="pageButton : ${pageButtons}" data-th-id="page+${pageButton}"><a class="page-link"
-                href="#"
-                data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
-                data-th-text="${pageButton}"></a>
+                                                                                                                href="#"
+                                                                                                                data-th-href="@{list(pageNo=${pageButton},pageSize=${pageSize},regionId=${regionId},themeId=${themeId},filter=${filter}, keyword=${keyword})}"
+                                                                                                                data-th-text="${pageButton}"></a>
             </li>
             <li data-th-if="${pageNo >= numOfPage}" class="page-item disabled"><a class="page-link">Next</a>
             </li>
@@ -213,17 +215,18 @@
         </div>
       </div>
     </div>
-    
+
     <!-- 우측 여백 -->
     <div class="col-1">
     </div>
 
-</div>
+  </div>
 
-<!-- 푸터 -->
+  <!-- 푸터 -->
   <div>
     <div class="row sticky-bottoms" data-th-replace="footer :: footer">꼬리말</div>
   </div>
+</div>
 </body>
 
 <!-- 부트스트랩 -->

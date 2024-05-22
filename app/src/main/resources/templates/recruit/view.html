@@ -28,7 +28,7 @@
 
   <style>
     body {
-      padding-left: 10px;
+      padding-left: 0px;
     }
     #title{
       padding-bottom: 10px;
@@ -95,14 +95,20 @@
 
               <!-- bottom -->
               <div class="ps-4 ms-2 me-3 d-flex flex-row justify-content-between bd-highlight me-4">
-                <div class="d-flex flex-row bd-highlight me-2 mt-2">
-                  <div class="me-2" style="font-size: 14px;">
-                    <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                <div class="d-flex flex-column bd-highlight me-2" style="font-size: 14px;">
+                  <div>
+                    작성자 <span data-th-text="*{writer.nickname}"></span>
                   </div>
-                  <div style="font-size: 14px;">
-                    조회수 <span data-th-text="*{views}"></span>
+                  <div class="d-flex flex-row bd-highlight me-2">
+                    <div class="me-2" style="font-size: 14px;">
+                      <span data-th-text="*{#dates.format(createdDate, 'yyyy-MM-dd')}">게시일</span>
+                    </div>
+                    <div style="font-size: 14px;">
+                      조회수 <span data-th-text="*{views}"></span>
+                    </div>
                   </div>
                 </div>
+
                 <div class="d-flex" data-th-if="*{writer.memberId} == ${loginUser.memberId}">
                   <div class="d-flex flex-row bd-highlight">
                     <div class="d-flex flex-row bd-highlight">
