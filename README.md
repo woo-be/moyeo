@@ -1,4 +1,24 @@
-## Prototype History
+<img src="https://github.com/woo-be/moyeo/blob/main/app/src/main/resources/static/img/logo.png" width="40%" height="30%" title="px(픽셀) 크기 설정" alt="0229.1"></img>
+---
+
+## 서비스 개요
+#### Moyeo - 모두의 여행, 여행의 모든 것
+모여는 ~~ 제공합니다.
+#### 주요기능
+여행 후기를 기록하고 게시하여, 여행지에 대한 정보를 공유할 수 있습니다.  또한 같이 갈 여행 인원들을 모집하거나 다른 사람의 여행에 참가해보세요. 그 이후에, 온라인에서 여행 동행자들과 실시간으로 여행을 계획할 수 있습니다.
+## 프로젝트 일정
+
+## ERD
+
+## 사이트 맵
+
+## 기술 스택
+
+## 팀 소개
+
+## 
+
+> Prototype History
 ### 0차 
 - 프로토타입 제작 시작 (3월 4일)
 - 각 기능별 페이지 제작 완료 (3월 6일)
