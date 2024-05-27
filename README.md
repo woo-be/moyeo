@@ -43,10 +43,10 @@
 </details>
 
 ## ERD
-(./project_img/DB_ERD.png)
+![](./project_img/DB_ERD.png)
 
 ## 사이트 맵
-(./project_img/Site_Map.png)
+![](./project_img/Site_Map.png)
 
 ## 기술 스택
 ### Front-End
